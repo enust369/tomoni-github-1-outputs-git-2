@@ -3,9 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="TOMONIは、ふたりの関係を穏やかに育てるためのコミュニケーションアプリです。">
-  <meta name="theme-color" content="#fffdf8">
-  <title>TOMONI | ふたりの関係を、もっと穏やかに</title>
+  <title>TOMONI MVP</title>
   <style>
     :root {
       color-scheme: light;
@@ -32,6 +30,8 @@
     * {
       box-sizing: border-box;
     }
+
+    [hidden] { display: none !important; }
 
     html {
       scroll-behavior: smooth;
@@ -792,6 +792,10 @@
     .verification-row { display: grid; grid-template-columns: 1fr auto; gap: 10px; align-items: end; }
     .check-row { display: flex; align-items: flex-start; gap: 10px; color: var(--ink); }
     .check-row input { width: 20px; height: 20px; margin-top: 3px; flex: 0 0 auto; }
+    .onboarding-points { display: grid; gap: 12px; margin: 22px 0; }
+    .onboarding-points .check-row { padding: 14px; border: 1px solid var(--line); border-radius: 14px; background: rgba(237,244,241,.58); }
+    .safety-page-grid { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 16px; margin-top: 24px; }
+    .safety-page-grid article { border-top: 1px solid var(--line); padding-top: 18px; }
 
     .listing-card {
       display: grid;
@@ -1036,6 +1040,8 @@
       .after-options {
         grid-template-columns: 1fr;
       }
+
+      .safety-page-grid { grid-template-columns: 1fr; }
 
       .listing-summary,
       .region-controls {
@@ -1497,6 +1503,36 @@
         </div>
       </section>
 
+      <section id="safety-guide-page">
+        <article class="card utility-page">
+          <p class="eyebrow">安全ガイド</p>
+          <h2>安心して会うために。</h2>
+          <p style="margin-top:12px">少し慎重なくらいで大丈夫です。違和感があれば、予定の前でも途中でも断れます。</p>
+          <div class="safety-page-grid">
+            <article><h3>会う前に</h3><p class="meta">初回は昼間を選び、家族や身近な人に行き先と終了予定を伝えましょう。住所や連絡先は急いで共有しないでください。</p></article>
+            <article><h3>場所を選ぶ</h3><p class="meta">駅近く、カフェ、公園入口、公共施設など、人のいる場所を選びます。個人宅やホテルには行かず、相手の車にも乗らないでください。</p></article>
+            <article><h3>会っている間</h3><p class="meta">無理に話す必要はありません。予定を変える提案や勧誘に違和感があれば、その場を離れて大丈夫です。</p></article>
+            <article><h3>困ったとき</h3><p class="meta">プロフィールや募集の通報・ブロックを使えます。身の危険を感じた場合は、周囲の人や警察へ助けを求めてください。</p></article>
+          </div>
+          <div class="actions"><button class="btn primary" data-jump="home">ホームへ戻る</button><button class="btn" data-jump="contact">お問い合わせ</button></div>
+        </article>
+      </section>
+
+      <section id="prohibited">
+        <article class="card utility-page">
+          <p class="eyebrow">禁止事項</p>
+          <h2>安心を守るために、しないこと。</h2>
+          <p style="margin-top:12px">以下の行為はTOMONIでは認めていません。見かけた場合は、無理に対応せず通報してください。</p>
+          <div class="safety-page-grid">
+            <article><h3>勧誘・営業</h3><p class="meta">営業、宗教勧誘、ネットワークビジネス、投資や副業への勧誘。</p></article>
+            <article><h3>目的の違う利用</h3><p class="meta">ナンパや恋愛目的のみでの利用、サービスの趣旨と異なる集客。</p></article>
+            <article><h3>相手を傷つける行為</h3><p class="meta">暴言、威圧、嫌がらせ、差別的な言動、同意のない接触や撮影。</p></article>
+            <article><h3>安全を損なう行為</h3><p class="meta">なりすまし、虚偽の登録、個人宅や車への誘導、個人情報を無理に聞くこと。</p></article>
+          </div>
+          <div class="notice" style="margin-top:24px">違反が確認された場合は、募集の非表示や利用停止など、必要な対応を行います。</div>
+        </article>
+      </section>
+
       <section id="terms">
         <article class="card utility-page"><p class="eyebrow">利用規約</p><h2>TOMONI 利用規約</h2><p class="meta">最終更新日：2026年7月2日</p><h3>安心して過ごすために</h3><p>TOMONIは、18歳以上の方が、同性同士で安心して心地よい時間を過ごすためのサービスです。相手の意思と距離感を尊重し、無理な会話や参加を求めないでください。</p><h3>禁止事項</h3><p>営業目的、宗教勧誘、ネットワークビジネス、投資勧誘、ナンパ目的、恋愛目的のみでの利用、嫌がらせ、なりすまし、危険な場所への誘導を禁止します。</p><h3>安全について</h3><p>初回は昼間の公共の場所を選び、個人情報を急いで伝えないでください。違和感がある場合は、その場を離れ、通報・ブロック機能を利用できます。</p><h3>サービスの変更</h3><p>安全性や運営上の必要に応じて内容を変更することがあります。重要な変更は分かりやすくお知らせします。</p></article>
       </section>
@@ -1527,7 +1563,7 @@
 
     <footer class="footer">
       <p>TOMONI MVP / 目の前の一人を大切にする。今日が少し良い日になれば、それで十分。</p>
-      <div class="footer-links"><button data-jump="terms">利用規約</button><button data-jump="privacy">プライバシーポリシー</button><button data-jump="contact">お問い合わせ</button></div>
+      <div class="footer-links"><button data-jump="safety-guide-page">安全ガイド</button><button data-jump="prohibited">禁止事項</button><button data-jump="terms">利用規約</button><button data-jump="privacy">プライバシーポリシー</button><button data-jump="contact">お問い合わせ</button></div>
     </footer>
   </div>
 
@@ -1737,8 +1773,9 @@
     let latestRankedListings = [];
     let todayOpen = true;
     let editingListingId = null;
+    let safetyGateActive = false;
     const storageKey = "tomoni-public-preview-v1";
-    const defaultState = { user: null, registeredAccount: null, saved: [], blocked: [], customListings: [], moderation: { reports: [], blockCount: 0 }, feedbackHistory: [], profile: { nickname: "あなた", age: "30代", bio: "静かな時間を大切にしています。" } };
+    const defaultState = { user: null, registeredAccount: null, safetyOnboardingAccepted: false, saved: [], blocked: [], customListings: [], moderation: { reports: [], blockCount: 0 }, feedbackHistory: [], profile: { nickname: "あなた", age: "30代", bio: "静かな時間を大切にしています。" } };
     let appState = loadState();
     listings.forEach((item, index) => { item.id = item.id || `sample-${index + 1}`; });
     appState.customListings.forEach((item) => { if (!listings.some((existing) => existing.id === item.id)) listings.unshift(item); });
@@ -2167,13 +2204,21 @@
       modalBody.innerHTML = content;
       modalBackdrop.classList.add("open");
       modalBackdrop.setAttribute("aria-hidden", "false");
+      modalBackdrop.querySelector('[data-action="close-modal"]').hidden = false;
       modalBackdrop.querySelector("input, select, textarea, button")?.focus();
     }
 
     function closeModal() {
+      if (safetyGateActive) return;
       modalBackdrop.classList.remove("open");
       modalBackdrop.setAttribute("aria-hidden", "true");
       modalBody.innerHTML = "";
+    }
+
+    function openSafetyOnboarding() {
+      safetyGateActive = true;
+      openModal("TOMONIを始める前に", `<p>安心して同じ時間を過ごすために、最初に三つだけ確認してください。</p><div class="onboarding-points"><label class="check-row"><input type="checkbox" data-safety-confirm><span><strong>18歳以上です</strong><br><span class="meta">TOMONIは18歳未満の方は利用できません。</span></span></label><label class="check-row"><input type="checkbox" data-safety-confirm><span><strong>利用規約に同意します</strong><br><span class="meta">相手の意思と距離感を尊重します。</span></span></label><label class="check-row"><input type="checkbox" data-safety-confirm><span><strong>公共の場所で会います</strong><br><span class="meta">初回は昼間のカフェ、公園、公共施設などを選びます。</span></span></label></div><button class="btn primary" type="button" data-action="confirm-safety-start" disabled>TOMONIを始める</button><p class="meta" style="margin-top:14px">安全ガイド・利用規約・プライバシーポリシーは、いつでもフッターから確認できます。</p>`);
+      modalBackdrop.querySelector('[data-action="close-modal"]').hidden = true;
     }
 
     function updateAccountUI() {
@@ -2285,6 +2330,9 @@
       if (!button) return;
       const action = button.dataset.action;
       if (action === "close-modal") closeModal();
+      if (action === "confirm-safety-start") {
+        appState.safetyOnboardingAccepted = true; saveState(); safetyGateActive = false; closeModal(); toast("確認ありがとうございます。安心して始めましょう。");
+      }
       if (action === "open-auth") openModal("ログイン", authMarkup("login"));
       if (action === "show-register") { modalTitle.textContent = "会員登録"; modalBody.innerHTML = authMarkup("register"); }
       if (action === "show-login") { modalTitle.textContent = "ログイン"; modalBody.innerHTML = authMarkup("login"); }
@@ -2322,6 +2370,12 @@
 
     modalBackdrop.addEventListener("click", (event) => { if (event.target === modalBackdrop) closeModal(); });
     document.addEventListener("keydown", (event) => { if (event.key === "Escape" && modalBackdrop.classList.contains("open")) closeModal(); });
+    modalBackdrop.addEventListener("change", (event) => {
+      if (!event.target.matches("[data-safety-confirm]")) return;
+      const confirmations = [...modalBackdrop.querySelectorAll("[data-safety-confirm]")];
+      const startButton = modalBackdrop.querySelector('[data-action="confirm-safety-start"]');
+      if (startButton) startButton.disabled = !confirmations.every((item) => item.checked);
+    });
     window.addEventListener("hashchange", () => {
       const id = location.hash.slice(1);
       if (!id) return;
@@ -2353,6 +2407,7 @@
     renderListings();
     renderRegionalProfiles();
     updateDiagnosis();
+    if (!appState.safetyOnboardingAccepted) setTimeout(openSafetyOnboarding, 180);
   </script>
 </body>
 </html>
