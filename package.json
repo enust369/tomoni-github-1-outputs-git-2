@@ -1,0 +1,14 @@
+{
+  "name": "tomoni",
+  "version": "1.0.0",
+  "private": true,
+  "description": "ふたりの関係を穏やかに育てるコミュニケーションアプリ",
+  "scripts": {
+    "dev": "node scripts/server.mjs",
+    "build": "node scripts/build.mjs",
+    "preview": "node scripts/server.mjs dist"
+  },
+  "engines": {
+    "node": ">=20.0.0"
+  }
+}

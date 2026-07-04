@@ -1,0 +1,2358 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="TOMONIは、ふたりの関係を穏やかに育てるためのコミュニケーションアプリです。">
+  <meta name="theme-color" content="#fffdf8">
+  <title>TOMONI | ふたりの関係を、もっと穏やかに</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --ink: #243028;
+      --muted: #6b766e;
+      --line: rgba(196, 211, 190, .68);
+      --line-strong: #bfceb9;
+      --paper: #fffdf8;
+      --soft: #f7f4ec;
+      --sage: #dfe9dc;
+      --sage-strong: #8aa582;
+      --leaf: #506f53;
+      --leaf-deep: #3f5c42;
+      --cream: #fbf6ea;
+      --sky: #edf4f1;
+      --shadow: 0 24px 60px rgba(62, 79, 61, .10);
+      --shadow-soft: 0 8px 28px rgba(62, 79, 61, .08);
+      --focus: 0 0 0 4px rgba(80, 111, 83, .16);
+      --ease: cubic-bezier(.2, .72, .24, 1);
+      --radius: 20px;
+      font-family: -apple-system, BlinkMacSystemFont, "Hiragino Sans", "Yu Gothic", "YuGothic", "Noto Sans JP", sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+      text-size-adjust: 100%;
+    }
+
+    body {
+      margin: 0;
+      background:
+        radial-gradient(circle at 12% 8%, rgba(223, 233, 220, .64), transparent 30rem),
+        radial-gradient(circle at 88% 12%, rgba(237, 244, 241, .72), transparent 28rem),
+        linear-gradient(145deg, #fffdf8 0%, #f8f5ee 47%, #eef5ef 100%);
+      color: var(--ink);
+      line-height: 1.78;
+      letter-spacing: 0;
+      -webkit-font-smoothing: antialiased;
+      text-rendering: optimizeLegibility;
+    }
+
+    button,
+    input,
+    select,
+    textarea {
+      font: inherit;
+    }
+
+    button {
+      cursor: pointer;
+      -webkit-tap-highlight-color: transparent;
+      touch-action: manipulation;
+    }
+
+    button:disabled { cursor: not-allowed; opacity: .58; transform: none !important; }
+
+    .app {
+      min-height: 100vh;
+    }
+
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 13px clamp(18px, 4vw, 46px);
+      background: rgba(255, 253, 248, .76);
+      border-bottom: 1px solid rgba(219, 226, 214, .58);
+      backdrop-filter: blur(24px) saturate(1.18);
+      box-shadow: 0 1px 0 rgba(255, 255, 255, .72) inset;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: 700;
+      letter-spacing: .08em;
+    }
+
+    .brand-mark {
+      width: 31px;
+      height: 31px;
+      display: grid;
+      place-items: center;
+      border-radius: 50%;
+      background: var(--sage);
+      color: var(--leaf);
+      font-size: 17px;
+      line-height: 1;
+      box-shadow: 0 1px 0 rgba(255, 255, 255, .88) inset, 0 8px 20px rgba(80, 111, 83, .10);
+    }
+
+    .nav {
+      display: flex;
+      flex: 1 1 auto;
+      gap: 8px;
+      max-width: 100%;
+      overflow-x: auto;
+      scrollbar-width: none;
+    }
+
+    .nav::-webkit-scrollbar {
+      display: none;
+    }
+
+    .nav button {
+      min-height: 38px;
+      padding: 7px 13px;
+      border: 1px solid transparent;
+      border-radius: 999px;
+      background: transparent;
+      color: var(--muted);
+      white-space: nowrap;
+      transition: background .28s var(--ease), border-color .28s var(--ease), color .28s var(--ease), transform .2s var(--ease);
+    }
+
+    .nav button:hover,
+    .nav button.active {
+      color: var(--ink);
+      background: rgba(255, 255, 255, .82);
+      border-color: var(--line);
+    }
+
+    .nav button:active {
+      transform: scale(.97);
+    }
+
+    .account-button {
+      flex: 0 0 auto;
+      min-height: 42px;
+      padding: 8px 14px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: rgba(255,255,255,.8);
+      color: var(--leaf);
+    }
+
+    main {
+      width: min(1160px, calc(100% - 32px));
+      margin: 0 auto;
+    }
+
+    section {
+      padding: clamp(54px, 8vw, 104px) 0;
+      scroll-margin-top: 78px;
+    }
+
+    main section {
+      opacity: 0;
+      transform: translateY(18px);
+      transition: opacity .85s var(--ease), transform .85s var(--ease);
+    }
+
+    main section.is-visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .hero {
+      min-height: calc(100vh - 66px);
+      display: grid;
+      align-items: center;
+      padding: 48px 0 76px;
+    }
+
+    .hero-inner {
+      display: grid;
+      grid-template-columns: minmax(0, 1.02fr) minmax(320px, .98fr);
+      gap: clamp(34px, 7vw, 84px);
+      align-items: center;
+    }
+
+    .hero h1 {
+      margin: 0 0 22px;
+      font-size: clamp(54px, 9vw, 112px);
+      line-height: .95;
+      letter-spacing: .08em;
+      font-weight: 680;
+      text-wrap: balance;
+    }
+
+    .lead {
+      max-width: 610px;
+      margin: 0;
+      font-size: clamp(20px, 3vw, 32px);
+      line-height: 1.58;
+      text-wrap: balance;
+    }
+
+    .sublead {
+      max-width: 620px;
+      margin: 28px 0 0;
+      color: var(--muted);
+      font-size: 16.5px;
+    }
+
+    .actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 13px;
+      margin-top: 36px;
+    }
+
+    .btn {
+      min-height: 48px;
+      border: 1px solid var(--line-strong);
+      border-radius: 999px;
+      padding: 10px 20px;
+      background: rgba(255, 255, 255, .84);
+      color: var(--ink);
+      box-shadow: var(--shadow-soft), 0 1px 0 rgba(255, 255, 255, .86) inset;
+      transition: transform .22s var(--ease), box-shadow .22s var(--ease), background .22s var(--ease), border-color .22s var(--ease);
+    }
+
+    .btn:hover {
+      transform: translateY(-2px);
+      border-color: rgba(138, 165, 130, .88);
+      box-shadow: 0 16px 34px rgba(62, 79, 61, .13), 0 1px 0 rgba(255, 255, 255, .9) inset;
+    }
+
+    .btn:active {
+      transform: translateY(0) scale(.985);
+      box-shadow: 0 6px 18px rgba(62, 79, 61, .10), 0 1px 0 rgba(255, 255, 255, .7) inset;
+    }
+
+    .btn.primary {
+      background: var(--leaf);
+      border-color: var(--leaf);
+      color: #fff;
+      box-shadow: 0 14px 34px rgba(80, 111, 83, .24), 0 1px 0 rgba(255, 255, 255, .18) inset;
+    }
+
+    .btn.primary:hover {
+      background: var(--leaf-deep);
+      border-color: var(--leaf-deep);
+    }
+
+    .btn.ghost {
+      box-shadow: 0 1px 0 rgba(255, 255, 255, .82) inset;
+      background: rgba(255, 255, 255, .54);
+    }
+
+    .btn.small {
+      min-height: 38px;
+      padding: 7px 13px;
+      font-size: 14px;
+    }
+
+    .hero-visual {
+      position: relative;
+      min-height: 430px;
+      border-radius: 32px;
+      overflow: hidden;
+      background:
+        linear-gradient(rgba(255, 253, 248, .05), rgba(255, 253, 248, .18)),
+        url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 720 820'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' x2='1' y1='0' y2='1'%3E%3Cstop stop-color='%23dfe9dc'/%3E%3Cstop offset='.55' stop-color='%23fbf6ea'/%3E%3Cstop offset='1' stop-color='%23edf4f1'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='720' height='820' fill='url(%23g)'/%3E%3Cpath d='M0 610c95-50 168-74 254-52 86 23 132 91 227 85 79-5 154-62 239-50v227H0z' fill='%23f9fbf5'/%3E%3Cpath d='M0 645c118-37 166-29 248 5 88 37 164 25 242-18 89-49 152-49 230-19v207H0z' fill='%23d3e2d0'/%3E%3Cpath d='M103 478h514' stroke='%2394a98f' stroke-width='8' stroke-linecap='round' opacity='.55'/%3E%3Cpath d='M162 531h396' stroke='%23fbf6ea' stroke-width='34' stroke-linecap='round' opacity='.85'/%3E%3Ccircle cx='264' cy='410' r='54' fill='%23fffdf8'/%3E%3Ccircle cx='461' cy='410' r='54' fill='%23fffdf8'/%3E%3Cpath d='M264 465v104M461 465v104' stroke='%2358765b' stroke-width='18' stroke-linecap='round'/%3E%3Cpath d='M213 540c54 28 103 29 153 0M410 540c42 25 85 26 129 0' stroke='%2358765b' stroke-width='18' stroke-linecap='round' fill='none'/%3E%3Ccircle cx='264' cy='388' r='31' fill='%2358765b' opacity='.88'/%3E%3Ccircle cx='461' cy='388' r='31' fill='%2358765b' opacity='.88'/%3E%3Cpath d='M235 360c26-28 63-24 82 3M434 360c28-25 63-21 82 5' stroke='%2328332c' stroke-width='10' stroke-linecap='round' opacity='.18' fill='none'/%3E%3Cpath d='M231 279c57-35 106-35 162 0M348 251c52-32 105-31 161 1' stroke='%23fffdf8' stroke-width='18' stroke-linecap='round' opacity='.68' fill='none'/%3E%3C/svg%3E");
+      background-size: cover;
+      box-shadow: var(--shadow), 0 1px 0 rgba(255, 255, 255, .72) inset;
+      transform: translateZ(0);
+      animation: settle 1.1s var(--ease) both;
+    }
+
+    .quiet-card {
+      position: absolute;
+      left: 22px;
+      right: 22px;
+      bottom: 22px;
+      padding: 20px;
+      border: 1px solid rgba(255, 255, 255, .8);
+      border-radius: 22px;
+      background: rgba(255, 253, 248, .78);
+      backdrop-filter: blur(22px) saturate(1.08);
+      box-shadow: 0 18px 40px rgba(62, 79, 61, .11), 0 1px 0 rgba(255, 255, 255, .84) inset;
+    }
+
+    .quiet-card strong {
+      display: block;
+      margin-bottom: 6px;
+      font-size: 21px;
+    }
+
+    .assurance-note {
+      max-width: 660px;
+      margin-top: 28px;
+      border: 1px solid rgba(191, 206, 185, .72);
+      border-radius: 18px;
+      background: rgba(255, 253, 248, .68);
+      padding: 16px 18px;
+      color: var(--muted);
+      box-shadow: 0 12px 32px rgba(62, 79, 61, .07), 0 1px 0 rgba(255, 255, 255, .82) inset;
+      backdrop-filter: blur(14px);
+    }
+
+    .assurance-note strong {
+      display: block;
+      margin-bottom: 4px;
+      color: var(--leaf);
+      font-weight: 680;
+    }
+
+    .section-head {
+      display: flex;
+      align-items: end;
+      justify-content: space-between;
+      gap: 18px;
+      margin-bottom: 28px;
+    }
+
+    .eyebrow {
+      margin: 0 0 8px;
+      color: var(--leaf);
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: .04em;
+    }
+
+    h2 {
+      margin: 0;
+      font-size: clamp(28px, 4vw, 46px);
+      line-height: 1.25;
+      font-weight: 680;
+      text-wrap: balance;
+    }
+
+    h3 {
+      margin: 0;
+      font-size: 21px;
+      line-height: 1.35;
+      font-weight: 680;
+    }
+
+    p {
+      margin: 0;
+    }
+
+    .grid {
+      display: grid;
+      gap: 20px;
+    }
+
+    .grid.two {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .grid.three {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    .card {
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: rgba(255, 253, 248, .74);
+      box-shadow: var(--shadow);
+      padding: 24px;
+      backdrop-filter: blur(10px);
+      transition: transform .28s var(--ease), box-shadow .28s var(--ease), border-color .28s var(--ease), background .28s var(--ease);
+    }
+
+    .card:hover {
+      transform: translateY(-2px);
+      border-color: rgba(138, 165, 130, .52);
+      background: rgba(255, 253, 248, .86);
+      box-shadow: 0 28px 68px rgba(62, 79, 61, .12);
+    }
+
+    .card.soft {
+      background: rgba(246, 243, 234, .86);
+    }
+
+    .mood-row {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 16px;
+      align-items: center;
+    }
+
+    .mood-options,
+    .chips,
+    .same-gender-toggle {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 9px;
+    }
+
+    .chip,
+    .option {
+      border: 1px solid var(--line-strong);
+      border-radius: 999px;
+      background: rgba(255, 255, 255, .82);
+      color: var(--ink);
+      min-height: 40px;
+      padding: 7px 14px;
+      box-shadow: 0 1px 0 rgba(255, 255, 255, .8) inset;
+      transition: transform .2s var(--ease), background .24s var(--ease), border-color .24s var(--ease), box-shadow .24s var(--ease);
+    }
+
+    .same-gender-toggle {
+      margin-top: 14px;
+    }
+
+    .route-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 14px;
+      margin-top: 18px;
+    }
+
+    .route-card {
+      min-height: 168px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 14px;
+    }
+
+    .soft-switch {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      border: 1px solid var(--line-strong);
+      border-radius: 999px;
+      background: rgba(255, 255, 255, .78);
+      padding: 7px 12px 7px 7px;
+      color: var(--ink);
+      transition: transform .22s var(--ease), border-color .22s var(--ease), background .22s var(--ease);
+    }
+
+    .soft-switch::before {
+      content: "";
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background: var(--sage-strong);
+      box-shadow: 0 8px 18px rgba(80, 111, 83, .18), 0 1px 0 rgba(255, 255, 255, .7) inset;
+    }
+
+    .soft-switch.off::before {
+      background: #c7cec4;
+    }
+
+    .soft-switch:active {
+      transform: scale(.985);
+    }
+
+    .profile-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 16px;
+      margin-bottom: 22px;
+    }
+
+    .recommend-card {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 20px;
+      align-items: center;
+      margin-top: 26px;
+    }
+
+    .recommend-card .actions {
+      margin-top: 0;
+    }
+
+    .home-flow {
+      display: grid;
+      gap: 16px;
+    }
+
+    .flow-number {
+      display: inline-grid;
+      place-items: center;
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      background: var(--sage);
+      color: var(--leaf);
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    .listing-summary {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 10px;
+      margin-top: 16px;
+    }
+
+    .listing-summary div {
+      padding: 10px 12px;
+      border-radius: 14px;
+      background: rgba(237, 244, 241, .72);
+    }
+
+    .listing-summary small,
+    .meter-labels {
+      display: block;
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .clamp {
+      display: -webkit-box;
+      overflow: hidden;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+    }
+
+    .comfort-mark {
+      display: inline-flex;
+      gap: 4px;
+      color: var(--sage-strong);
+      letter-spacing: 0;
+    }
+
+    .comfort-mark i {
+      width: 9px;
+      height: 9px;
+      border-radius: 50%;
+      background: currentColor;
+    }
+
+    .comfort-mark i:last-child {
+      opacity: .25;
+    }
+
+    .region-controls {
+      display: grid;
+      grid-template-columns: 1fr 1fr auto;
+      gap: 12px;
+      align-items: end;
+      margin-bottom: 20px;
+    }
+
+    .meters {
+      display: grid;
+      gap: 16px;
+      margin-top: 22px;
+    }
+
+    .meter-head,
+    .meter-labels {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .meter-track {
+      height: 8px;
+      margin-top: 7px;
+      overflow: hidden;
+      border-radius: 999px;
+      background: #e7ebe4;
+    }
+
+    .meter-fill {
+      height: 100%;
+      border-radius: inherit;
+      background: linear-gradient(90deg, #9bb397, #678468);
+    }
+
+    .quiet-action {
+      color: var(--muted);
+      box-shadow: none;
+      background: transparent;
+    }
+
+    .chip:hover,
+    .option:hover,
+    .category-list button:hover {
+      border-color: rgba(138, 165, 130, .82);
+      background: rgba(255, 255, 255, .94);
+      transform: translateY(-1px);
+    }
+
+    .chip:active,
+    .option:active,
+    .category-list button:active {
+      transform: scale(.985);
+    }
+
+    .chip.selected,
+    .option.selected {
+      background: var(--sage);
+      border-color: var(--sage-strong);
+      box-shadow: 0 8px 20px rgba(80, 111, 83, .10), 0 1px 0 rgba(255, 255, 255, .62) inset;
+    }
+
+    .diagnosis {
+      display: grid;
+      grid-template-columns: minmax(0, .92fr) minmax(0, 1.08fr);
+      gap: 20px;
+      align-items: start;
+    }
+
+    .question {
+      padding: 20px 0;
+      border-top: 1px solid var(--line);
+    }
+
+    .question:first-child {
+      border-top: 0;
+      padding-top: 0;
+    }
+
+    .question-title {
+      margin-bottom: 11px;
+      font-weight: 700;
+    }
+
+    .result {
+      position: sticky;
+      top: 94px;
+      background: rgba(255, 255, 255, .82);
+    }
+
+    .result-text {
+      margin-top: 12px;
+      font-size: 20px;
+      line-height: 1.7;
+      text-wrap: balance;
+    }
+
+    .activities {
+      display: grid;
+      grid-template-columns: 240px minmax(0, 1fr);
+      gap: 22px;
+      align-items: start;
+    }
+
+    .category-list {
+      position: sticky;
+      top: 94px;
+      display: grid;
+      gap: 8px;
+    }
+
+    .category-list button {
+      width: 100%;
+      min-height: 42px;
+      text-align: left;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      background: rgba(255, 255, 255, .72);
+      padding: 9px 13px;
+      color: var(--muted);
+      transition: transform .2s var(--ease), background .24s var(--ease), border-color .24s var(--ease), color .24s var(--ease);
+    }
+
+    .category-list button.active {
+      color: var(--ink);
+      background: var(--sage);
+      border-color: var(--sage-strong);
+    }
+
+    .activity-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 16px;
+    }
+
+    .activity-card {
+      min-height: 154px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 14px;
+      border-radius: 18px;
+      padding: 20px;
+      border: 1px solid var(--line);
+      background: rgba(255, 253, 248, .78);
+      box-shadow: 0 12px 34px rgba(62, 79, 61, .07);
+      transition: transform .28s var(--ease), box-shadow .28s var(--ease), border-color .28s var(--ease), background .28s var(--ease);
+    }
+
+    .activity-card:hover {
+      transform: translateY(-3px);
+      border-color: rgba(138, 165, 130, .58);
+      background: rgba(255, 253, 248, .92);
+      box-shadow: 0 22px 48px rgba(62, 79, 61, .11);
+    }
+
+    .activity-card.featured {
+      background: linear-gradient(135deg, rgba(255, 253, 248, .96), rgba(231, 240, 228, .90));
+      border-color: var(--sage-strong);
+    }
+
+    .meta {
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.7;
+    }
+
+    .form {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 18px;
+    }
+
+    .field {
+      display: grid;
+      gap: 7px;
+    }
+
+    .field.full {
+      grid-column: 1 / -1;
+    }
+
+    label {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--leaf);
+    }
+
+    input,
+    select,
+    textarea {
+      width: 100%;
+      border: 1px solid var(--line-strong);
+      border-radius: 14px;
+      background: rgba(255, 255, 255, .86);
+      color: var(--ink);
+      padding: 12px 13px;
+      outline: none;
+      box-shadow: 0 1px 0 rgba(255, 255, 255, .88) inset;
+      transition: border-color .22s var(--ease), box-shadow .22s var(--ease), background .22s var(--ease);
+    }
+
+    textarea {
+      min-height: 128px;
+      resize: vertical;
+    }
+
+    input:focus,
+    select:focus,
+    textarea:focus {
+      border-color: var(--leaf);
+      background: #fff;
+      box-shadow: var(--focus), 0 1px 0 rgba(255, 255, 255, .9) inset;
+    }
+
+    button:focus-visible,
+    .btn:focus-visible,
+    .chip:focus-visible,
+    .option:focus-visible,
+    .category-list button:focus-visible {
+      outline: none;
+      box-shadow: var(--focus), 0 8px 24px rgba(62, 79, 61, .08);
+    }
+
+    .notice {
+      border-radius: 18px;
+      border: 1px solid #e2d8bf;
+      background: rgba(255, 249, 234, .78);
+      padding: 16px;
+      color: #6f6448;
+      box-shadow: 0 1px 0 rgba(255, 255, 255, .78) inset;
+    }
+
+    .notice p + p {
+      margin-top: 8px;
+    }
+
+    .safety-guide {
+      border: 1px solid rgba(138,165,130,.62);
+      border-radius: 18px;
+      background: rgba(237,244,241,.76);
+      padding: 18px;
+      color: var(--ink);
+    }
+
+    .safety-guide h3 { color: var(--leaf); margin-bottom: 10px; }
+    .safety-guide ul { margin: 0; padding-left: 1.25em; }
+    .safety-guide li + li { margin-top: 5px; }
+    .safety-check { margin-top: 10px; padding: 12px 14px; border-radius: 14px; background: var(--soft); color: var(--muted); font-size: 13px; }
+    .safety-check.caution { background: #f4ead7; color: #755f39; border: 1px solid #dfcfac; }
+    .verification-row { display: grid; grid-template-columns: 1fr auto; gap: 10px; align-items: end; }
+    .check-row { display: flex; align-items: flex-start; gap: 10px; color: var(--ink); }
+    .check-row input { width: 20px; height: 20px; margin-top: 3px; flex: 0 0 auto; }
+
+    .listing-card {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 18px;
+      align-items: center;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      width: fit-content;
+      border-radius: 999px;
+      border: 1px solid var(--line-strong);
+      background: rgba(255, 255, 255, .78);
+      color: var(--leaf);
+      padding: 5px 10px;
+      font-size: 13px;
+      font-weight: 700;
+      box-shadow: 0 1px 0 rgba(255, 255, 255, .78) inset;
+    }
+
+    .badge.muted {
+      color: var(--muted);
+      font-weight: 500;
+    }
+
+    .profile {
+      display: grid;
+      grid-template-columns: minmax(0, .9fr) minmax(0, 1.1fr);
+      gap: 18px;
+      align-items: stretch;
+    }
+
+    .person-block {
+      display: grid;
+      place-items: center;
+      text-align: center;
+      background: linear-gradient(135deg, rgba(237, 244, 241, .95), rgba(255, 253, 248, .96));
+    }
+
+    .avatar {
+      width: 96px;
+      height: 96px;
+      margin: 0 auto 14px;
+      display: grid;
+      place-items: center;
+      border-radius: 50%;
+      background: var(--sage);
+      color: var(--leaf);
+      font-size: 42px;
+      box-shadow: 0 18px 34px rgba(80, 111, 83, .14), 0 1px 0 rgba(255, 255, 255, .8) inset;
+    }
+
+    .detail {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 320px;
+      gap: 18px;
+      align-items: start;
+    }
+
+    .detail-title {
+      font-size: clamp(26px, 4vw, 44px);
+      line-height: 1.35;
+      margin-bottom: 16px;
+      text-wrap: balance;
+    }
+
+    .safety-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 18px;
+    }
+
+    .after-options {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 10px;
+    }
+
+    .thanks {
+      text-align: center;
+      padding: clamp(36px, 6vw, 62px);
+    }
+
+    .thanks h2 {
+      margin-bottom: 12px;
+    }
+
+    .footer {
+      width: min(1160px, calc(100% - 32px));
+      margin: 0 auto;
+      padding: 34px 0 54px;
+      color: var(--muted);
+      border-top: 1px solid var(--line);
+    }
+
+    .footer-links { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 14px; }
+    .footer-links button { border: 0; background: transparent; color: var(--leaf); padding: 4px 0; margin-right: 16px; }
+    .field-error { min-height: 18px; color: #8a5e55; font-size: 12px; }
+    [aria-invalid="true"] { border-color: #b98578; box-shadow: 0 0 0 4px rgba(185,133,120,.13); }
+    .empty-state { grid-column: 1 / -1; padding: 34px 20px; text-align: center; color: var(--muted); }
+    .utility-page { max-width: 820px; margin-inline: auto; }
+    .utility-page h3 { margin-top: 28px; margin-bottom: 8px; }
+    .utility-page p + p { margin-top: 12px; }
+    .account-layout { display: grid; grid-template-columns: 280px minmax(0,1fr); gap: 20px; align-items: start; }
+    .account-menu { display: grid; gap: 8px; }
+    .account-menu button { text-align: left; }
+    .managed-listing { display: grid; grid-template-columns: minmax(0,1fr) auto; gap: 16px; align-items: center; }
+    .modal-backdrop { position: fixed; inset: 0; z-index: 80; display: grid; place-items: center; padding: 20px; background: rgba(36,48,40,.34); backdrop-filter: blur(12px); opacity: 0; visibility: hidden; transition: opacity .25s var(--ease), visibility .25s var(--ease); }
+    .modal-backdrop.open { opacity: 1; visibility: visible; }
+    .modal { width: min(520px,100%); max-height: min(720px,calc(100vh - 40px)); overflow: auto; border: 1px solid var(--line); border-radius: 24px; background: var(--paper); box-shadow: 0 40px 100px rgba(36,48,40,.24); padding: clamp(22px,5vw,34px); transform: translateY(12px) scale(.985); transition: transform .28s var(--ease); }
+    .modal-backdrop.open .modal { transform: none; }
+    .modal-head { display: flex; align-items: center; justify-content: space-between; gap: 16px; margin-bottom: 20px; }
+    .icon-button { width: 42px; height: 42px; border: 1px solid var(--line); border-radius: 50%; background: rgba(255,255,255,.84); color: var(--ink); font-size: 22px; line-height: 1; }
+    .toast-region { position: fixed; z-index: 100; right: 20px; bottom: 20px; display: grid; gap: 10px; width: min(360px,calc(100% - 40px)); }
+    .toast { padding: 14px 16px; border: 1px solid var(--line-strong); border-radius: 16px; background: rgba(255,253,248,.96); box-shadow: var(--shadow); animation: toast-in .35s var(--ease) both; }
+    .loading-layer { position: fixed; inset: 0; z-index: 90; display: none; place-items: center; background: rgba(255,253,248,.72); backdrop-filter: blur(8px); }
+    .loading-layer.visible { display: grid; }
+    .spinner { width: 34px; height: 34px; border: 3px solid var(--sage); border-top-color: var(--leaf); border-radius: 50%; animation: spin .8s linear infinite; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    @keyframes toast-in { from { opacity: 0; transform: translateY(10px); } }
+
+    @keyframes settle {
+      from {
+        opacity: 0;
+        transform: translateY(16px) scale(.985);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      html {
+        scroll-behavior: auto;
+      }
+
+      *,
+      *::before,
+      *::after {
+        animation-duration: .001ms !important;
+        animation-iteration-count: 1 !important;
+        scroll-behavior: auto !important;
+        transition-duration: .001ms !important;
+      }
+
+      main section {
+        opacity: 1;
+        transform: none;
+      }
+    }
+
+    @media (max-width: 920px) {
+      .hero-inner,
+      .diagnosis,
+      .activities,
+      .profile,
+      .detail,
+      .account-layout {
+        grid-template-columns: 1fr;
+      }
+
+      .hero {
+        min-height: auto;
+      }
+
+      .hero-visual {
+        min-height: 360px;
+      }
+
+      .category-list,
+      .result {
+        position: static;
+      }
+
+      .category-list {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .grid.three,
+      .route-grid,
+      .after-options {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+
+    @media (max-width: 680px) {
+      :root { --radius: 16px; }
+      .topbar {
+        flex-wrap: wrap;
+        gap: 10px;
+        padding: 10px 12px;
+      }
+
+      .nav {
+        order: 3;
+        width: calc(100vw - 24px);
+      }
+
+      .brand { font-size: 14px; }
+      .brand-mark { width: 28px; height: 28px; }
+      .account-button { min-height: 38px; padding: 6px 11px; }
+
+      main,
+      .footer {
+        width: min(100% - 24px, 1160px);
+      }
+
+      section { padding: 46px 0; scroll-margin-top: 112px; }
+      .hero { padding-top: 34px; }
+      .hero h1 { font-size: 52px; }
+
+      .lead {
+        font-size: 22px;
+      }
+
+      .hero-visual {
+        min-height: 320px;
+        border-radius: 24px;
+      }
+
+      .section-head,
+      .mood-row,
+      .listing-card,
+      .recommend-card {
+        align-items: stretch;
+        flex-direction: column;
+        display: flex;
+      }
+
+      .grid.two,
+      .grid.three,
+      .route-grid,
+      .profile-grid,
+      .activity-grid,
+      .form,
+      .after-options {
+        grid-template-columns: 1fr;
+      }
+
+      .listing-summary,
+      .region-controls {
+        grid-template-columns: 1fr;
+      }
+
+      .category-list {
+        grid-template-columns: 1fr;
+      }
+
+      .card,
+      .activity-card {
+        padding: 18px;
+      }
+
+      .actions { gap: 9px; margin-top: 24px; }
+      .actions .btn { flex: 1 1 auto; }
+      .btn { min-height: 46px; padding-inline: 16px; }
+      .btn.small { min-height: 42px; }
+      .managed-listing { grid-template-columns: 1fr; }
+      .toast-region { right: 12px; bottom: 12px; width: calc(100% - 24px); }
+    }
+
+    @media (max-width: 390px) {
+      .hero h1 { font-size: 44px; }
+      .lead { font-size: 20px; }
+      .nav button { padding-inline: 11px; }
+      .card, .activity-card { padding: 16px; }
+      .modal-backdrop { padding: 10px; }
+      .modal { max-height: calc(100vh - 20px); border-radius: 18px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <header class="topbar">
+      <div class="brand"><span class="brand-mark">と</span><span>TOMONI</span></div>
+      <nav class="nav" aria-label="画面">
+        <button class="active" data-jump="top">トップ</button>
+        <button data-jump="home">ホーム</button>
+        <button data-jump="diagnosis">診断</button>
+        <button data-jump="activities">過ごし方</button>
+        <button data-jump="create">募集作成</button>
+        <button data-jump="region">地域から探す</button>
+        <button data-jump="listings">募集一覧</button>
+        <button data-jump="profile">人柄カード</button>
+        <button data-jump="detail">詳細</button>
+        <button data-jump="after">会った後</button>
+      </nav>
+      <button class="account-button" id="accountButton" type="button" data-action="open-auth">登録・ログイン</button>
+    </header>
+
+    <main>
+      <section class="hero" id="top">
+        <div class="hero-inner">
+          <div>
+            <h1>TOMONI</h1>
+            <p class="lead">無理に話さなくていい。<br>一緒に静かな時間を過ごすサービスです。</p>
+            <p class="sublead">散歩でも、ベンチでも、何もしなくても大丈夫。<br>ここなら、無理をしなくていい。</p>
+            <div class="actions">
+              <button class="btn primary" data-jump="home">はじめる</button>
+              <button class="btn ghost" data-jump="activities">今日の過ごし方を見る</button>
+            </div>
+            <div class="assurance-note">
+              <strong>安心を大切にする設計</strong>
+              <p>安心して人と会える時間を大切にするため、TOMONIは同性同士で一緒に過ごす時間を基本としています。</p>
+            </div>
+            <article class="card recommend-card" id="topRecommendation"></article>
+          </div>
+          <div class="hero-visual" aria-label="公園のベンチで静かに過ごす二人のイメージ">
+            <div class="quiet-card">
+              <strong>何もしない 15分</strong>
+              <p>話さなくても大丈夫です。同じ場所で、ただ静かに過ごしましょう。</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="home">
+        <div class="section-head">
+          <div>
+            <p class="eyebrow">ホーム</p>
+            <h2>今日の気分に合わせて、少しだけ。</h2>
+          </div>
+          <button class="btn primary" data-jump="create">今日の過ごし方を作る</button>
+        </div>
+
+        <article class="card soft" style="margin-bottom:18px">
+          <span class="badge">今日の一言</span>
+          <p class="result-text" id="dailyMessage">話さなくても大丈夫です。</p>
+          <div class="actions">
+            <button class="soft-switch" id="todayOpenToggle" type="button">今日は会えます：ON</button>
+          </div>
+          <p class="meta" style="margin-top:10px">ONの間だけ、地域から探す画面とAIの紹介に表示されます。OFFにすると静かに非表示になります。</p>
+        </article>
+
+        <div class="home-flow">
+          <article class="card" id="homeRecommendation"></article>
+          <article class="card">
+            <span class="flow-number">2</span>
+            <h3 style="margin-top:12px">近くで募集中</h3>
+            <div class="profile-grid" id="homeListings" style="margin-top:16px;margin-bottom:0"></div>
+            <div class="actions"><button class="btn small" data-jump="region">地域から探す</button></div>
+          </article>
+          <div class="grid two">
+            <article class="card"><span class="flow-number">3</span><h3 style="margin-top:12px">今日の募集を作る</h3><p class="meta">時間と場所を決めて、そっと募集を置けます。</p><div class="actions"><button class="btn small primary" data-jump="create">作る</button></div></article>
+            <article class="card"><span class="flow-number">4</span><h3 style="margin-top:12px">心地よい時間診断</h3><p class="meta">迷ったときだけ、今の気分を聞かせてください。</p><div class="actions"><button class="btn small" data-jump="diagnosis">診断する</button></div></article>
+          </div>
+          <article class="card">
+            <span class="badge muted">安心のために</span>
+            <h3 style="margin-top:12px">TOMONIは同性同士が安心して過ごすためのサービスです。</h3>
+            <p class="meta">表示される募集は、登録した性別と同じ方のものだけです。</p>
+            <div class="same-gender-toggle" id="genderToggle" aria-label="登録時の性別">
+              <button class="chip selected" data-gender="女性">女性として見る</button>
+              <button class="chip" data-gender="男性">男性として見る</button>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <section id="diagnosis">
+        <div class="section-head">
+          <div>
+            <p class="eyebrow">心地よい時間診断</p>
+            <h2>今日は、どんな空気が安心ですか。</h2>
+            <p class="meta" style="margin-top:10px">AIが会話量・空気感・心地よい距離感を見て、一緒にいて疲れにくい時間を提案します。</p>
+          </div>
+        </div>
+        <div class="diagnosis">
+          <div class="card">
+            <div class="question" data-question="talk">
+              <p class="question-title">今日は話したいですか？</p>
+              <div class="chips">
+                <button class="option">たくさん話したい</button>
+                <button class="option selected">自然に話せたらいい</button>
+                <button class="option">あまり話さなくてもいい</button>
+              </div>
+            </div>
+            <div class="question" data-question="style">
+              <p class="question-title">今日はどんな過ごし方が心地よさそうですか？</p>
+              <div class="chips">
+                <button class="option selected">静かに過ごす</button>
+                <button class="option">歩く</button>
+                <button class="option">軽く体を動かす</button>
+                <button class="option">語れるものを話す</button>
+                <button class="option">一人では行きづらい場所に行く</button>
+              </div>
+            </div>
+            <div class="question" data-question="air" data-multiple="true">
+              <p class="question-title">あなたが自然体でいられる空気は？</p>
+              <p class="meta" style="margin-bottom:11px">複数選べます。</p>
+              <div class="chips">
+                <button class="option selected">静かで落ち着いた空気</button>
+                <button class="option">よく笑う空気</button>
+                <button class="option selected">のんびりした空気</button>
+                <button class="option">一緒に何かをする空気</button>
+                <button class="option">元気で行動的な空気</button>
+                <button class="option">その時々で変わる</button>
+              </div>
+            </div>
+            <div class="question" data-question="selfAir" data-multiple="true">
+              <p class="question-title">あなた自身はどんな雰囲気ですか？</p>
+              <p class="meta" style="margin-bottom:11px">近いものをいくつか選んでください。</p>
+              <div class="chips">
+                <button class="option selected">穏やか</button>
+                <button class="option">よく笑う</button>
+                <button class="option selected">聞く方が心地よい</button>
+                <button class="option">自然と話す方</button>
+                <button class="option selected">のんびり</button>
+                <button class="option">行動派</button>
+                <button class="option">一つのことを深く話す</button>
+                <button class="option">いろいろな話題を楽しむ</button>
+              </div>
+            </div>
+            <div class="question" data-question="withPerson" data-multiple="true">
+              <p class="question-title">一緒に過ごしたい人は？</p>
+              <p class="meta" style="margin-bottom:11px">今日の気分で選んでください。</p>
+              <div class="chips">
+                <button class="option selected">穏やかな人</button>
+                <button class="option">よく笑う人</button>
+                <button class="option selected">聞き上手な人</button>
+                <button class="option">話す時間を楽しむ人</button>
+                <button class="option selected">のんびりした人</button>
+                <button class="option">行動的な人</button>
+                <button class="option">特にこだわらない</button>
+              </div>
+            </div>
+            <div class="question" data-question="time">
+              <p class="question-title">時間はどれくらいが安心ですか？</p>
+              <div class="chips">
+                <button class="option">5分</button>
+                <button class="option">10分</button>
+                <button class="option selected">15分</button>
+                <button class="option">20分</button>
+                <button class="option">30分</button>
+              </div>
+            </div>
+            <div class="question" data-question="person">
+              <p class="question-title">似た人と過ごしたいですか？</p>
+              <div class="chips">
+                <button class="option selected">似た人</button>
+                <button class="option">違う価値観の人</button>
+                <button class="option">どちらでもいい</button>
+              </div>
+            </div>
+          </div>
+          <aside class="card result">
+            <span class="badge">診断結果</span>
+            <p class="meta" style="margin-top:12px">回答の細かな推定は表示せず、今日の過ごしやすさだけをそっと反映します。</p>
+            <p class="result-text" id="diagnosisResult">今日のあなたには、<br>「静かな散歩」や「何もしない15分」が合いそうです。</p>
+            <div class="actions">
+              <button class="btn small primary" data-jump="activities">過ごし方を見る</button>
+              <button class="btn small" data-fill-quiet>何もしない15分で作る</button>
+            </div>
+            <div id="diagnosisPerson" style="margin-top:20px"></div>
+          </aside>
+        </div>
+      </section>
+
+      <section id="activities">
+        <div class="section-head">
+          <div>
+            <p class="eyebrow">今日の過ごし方一覧</p>
+            <h2>気持ちに合う時間を選ぶ。</h2>
+          </div>
+        </div>
+        <div class="activities">
+          <div class="category-list" id="categoryList"></div>
+          <div class="activity-grid" id="activityGrid"></div>
+        </div>
+      </section>
+
+      <section id="create">
+        <div class="section-head">
+          <div>
+            <p class="eyebrow">募集作成</p>
+            <h2>一緒に過ごす時間をそっと置く。</h2>
+          </div>
+        </div>
+        <div class="grid two">
+          <form class="card form" id="createForm" novalidate>
+            <div class="field full">
+              <label for="activity">今日の過ごし方</label>
+              <select id="activity" required>
+                <option>何もしない 15分</option>
+                <option selected>静かな散歩 20分</option>
+                <option>ベンチでのんびり 10分</option>
+                <option>漫画の話 30分</option>
+                <option>公園掃除 20分</option>
+              </select>
+            </div>
+            <div class="field">
+              <label for="place">場所</label>
+              <input id="place" value="新宿御苑の入口近く" required><span class="field-error"></span>
+            </div>
+            <div class="field">
+              <label for="date">日時</label>
+              <input id="date" type="datetime-local" value="2026-07-02T15:00" required><span class="field-error"></span>
+            </div>
+            <div class="field">
+              <label for="duration">所要時間</label>
+              <select id="duration">
+                <option>5分</option>
+                <option>10分</option>
+                <option>15分</option>
+                <option selected>20分</option>
+                <option>30分</option>
+              </select>
+            </div>
+            <div class="field">
+              <label for="talk">話す量</label>
+              <select id="talk">
+                <option>たくさん話したい</option>
+                <option selected>自然に話せたらいい</option>
+                <option>話さなくても大丈夫</option>
+              </select>
+            </div>
+            <div class="field">
+              <label for="registeredGender">登録時の性別</label>
+              <select id="registeredGender">
+                <option>女性</option>
+                <option>男性</option>
+              </select>
+            </div>
+            <div class="field">
+              <label for="age">年代</label>
+              <select id="age">
+                <option>20代</option>
+                <option>30代</option>
+                <option>40代</option>
+                <option selected>特にこだわらない</option>
+              </select>
+            </div>
+            <div class="field full">
+              <label for="note">ひとこと</label>
+              <textarea id="note" maxlength="160" required>会話は自由です。
+最初に自己紹介だけして、あとは歩きましょう。
+話したくなったら話しましょう。</textarea>
+              <div class="safety-check" id="safetyCheck" role="status">公開前に、場所・募集文の安全性を確認します。</div>
+            </div>
+            <div class="field full">
+              <span class="field-error"></span><button class="btn primary" type="submit" id="previewButton">募集一覧に反映する</button>
+            </div>
+          </form>
+          <aside class="card">
+            <div class="safety-guide">
+              <h3>安心して過ごすためのお約束</h3>
+              <ul><li>初回は昼間に会いましょう</li><li>公共施設やカフェ、公園など人のいる場所を利用してください</li><li>個人宅へ行かない</li><li>車へ乗らない</li><li>違和感を感じたら断ってください</li><li>個人情報は慎重に共有してください</li></ul>
+            </div>
+            <p class="notice" style="margin-top:14px">勧誘・営業目的は禁止です。</p>
+            <div class="chips" style="margin-top:14px">
+              <span class="badge muted">SMS認証 準備中</span>
+              <span class="badge muted">本人確認書類 準備中</span>
+              <span class="badge muted">通報</span>
+              <span class="badge muted">ブロック</span>
+            </div>
+          </aside>
+        </div>
+      </section>
+
+      <section id="region">
+        <div class="section-head"><div><p class="eyebrow">地域から探す</p><h2>近くで、今日過ごせる人。</h2><p class="meta" style="margin-top:10px">登録した性別と同じ方だけが表示されます。</p></div></div>
+        <div class="card region-controls">
+          <div class="field"><label for="prefecture">都道府県</label><select id="prefecture"><option>東京都</option></select></div>
+          <div class="field"><label for="city">市区町村</label><select id="city"><option value="all">すべて</option><option>新宿</option><option>渋谷</option><option>代々木</option><option>中野</option><option>吉祥寺</option><option>杉並</option></select></div>
+          <button class="btn small" id="distanceSort">近い順に見る</button>
+        </div>
+        <div class="profile-grid" id="regionalGrid"></div>
+      </section>
+
+      <section id="listings">
+        <div class="section-head">
+          <div>
+            <p class="eyebrow">募集一覧</p>
+            <h2>今日、安心して過ごせる人と時間。</h2>
+          </div>
+        </div>
+        <div class="grid" id="listingGrid"></div>
+      </section>
+
+      <section id="profile">
+        <div class="section-head">
+          <div>
+            <p class="eyebrow">人柄カード</p>
+            <h2>初めて会う人が、安心するために。</h2>
+          </div>
+        </div>
+        <div class="profile">
+          <article class="card person-block">
+            <div>
+              <div class="avatar">ゆ</div>
+              <h3 id="profileDisplayName">ゆう</h3>
+              <p class="meta" id="profileDisplayMeta">30代 / 今日の気分：穏やか</p>
+              <div class="chips" style="justify-content:center;margin-top:14px">
+                <span class="badge">本人確認済み</span>
+                <span class="badge muted">敬語希望</span>
+              </div>
+              <div class="actions" style="justify-content:center"><button class="btn small" data-action="report" data-person="ゆう" data-source="profile">通報</button><button class="btn small quiet-action" data-action="block" data-person="ゆう">ブロック</button></div>
+            </div>
+          </article>
+          <article class="card">
+            <div class="grid two">
+              <div>
+                <h3>話し方</h3>
+                <p class="meta">相手に合わせる / 自然に話せたらいい</p>
+              </div>
+              <div>
+                <h3>よく選ぶ過ごし方</h3>
+                <p class="meta">静かな散歩、朝散歩、写真散歩</p>
+              </div>
+              <div>
+                <h3>あなたの日常</h3>
+                <p class="meta">植物を育てている / 一人時間が落ち着く / 朝散歩が日課</p>
+              </div>
+              <div>
+                <h3>配慮してほしいこと</h3>
+                <p class="meta">ゆっくり話してほしい / 静かな場所が安心 / 歩く速度はゆっくり</p>
+              </div>
+            </div>
+            <div class="meters">
+              <div><div class="meter-head"><strong>安心して過ごせる目安</strong><span class="meta">穏やか</span></div><div class="meter-track"><div class="meter-fill" style="width:86%"></div></div></div>
+              <div><div class="meter-head"><strong>会話テンポ</strong><span class="meta">ゆっくり</span></div><div class="meter-track"><div class="meter-fill" style="width:34%"></div></div><div class="meter-labels"><span>ゆっくり</span><span>軽やか</span></div></div>
+              <div><div class="meter-head"><strong>一人時間の心地よさ</strong><span class="meta">大切にする</span></div><div class="meter-track"><div class="meter-fill" style="width:78%"></div></div></div>
+              <div><div class="meter-head"><strong>笑顔の多さ</strong><span class="meta">自然</span></div><div class="meter-track"><div class="meter-fill" style="width:64%"></div></div></div>
+              <div><div class="meter-head"><strong>過ごし方のタイプ</strong><span class="meta">合わせる</span></div><div class="meter-track"><div class="meter-fill" style="width:72%"></div></div><div class="meter-labels"><span>リードする</span><span>合わせる</span></div></div>
+              <div><div class="meter-head"><strong>雰囲気の傾向</strong><span class="meta">中性的でやわらか</span></div><div class="meter-track"><div class="meter-fill" style="width:52%"></div></div><div class="meter-labels"><span>中性的</span><span>女性的</span></div></div>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <section id="detail">
+        <div class="detail">
+          <article class="card">
+            <p class="eyebrow">詳細</p>
+            <p class="detail-title" id="detailTitle">ゆうさんと<br>静かな散歩 20分</p>
+            <p id="detailCopy">会話は自由です。<br>話さなくても大丈夫。<br>最初だけ自己紹介をして、一緒に歩きましょう。</p>
+            <div class="chips" id="detailBadges" style="margin-top:18px">
+              <span class="badge">本人確認済み</span>
+              <span class="badge muted">終了予定：15:20</span>
+              <span class="badge muted">新宿御苑の入口近く</span>
+            </div>
+            <div class="actions">
+              <button class="btn primary" data-action="invite">一緒に過ごしませんか？</button>
+              <button class="btn" id="detailSave" data-action="save-listing" data-id="sample-1">保存する</button>
+              <button class="btn quiet-action" id="detailLater" data-action="save-listing" data-id="sample-1">あとで見る</button>
+            </div>
+          </article>
+          <aside class="card">
+            <div class="safety-guide"><h3>安心して過ごすためのお約束</h3><ul><li>初回は昼間に会いましょう</li><li>公共施設やカフェ、公園など人のいる場所を利用してください</li><li>個人宅へ行かない</li><li>車へ乗らない</li><li>違和感を感じたら断ってください</li><li>個人情報は慎重に共有してください</li></ul></div>
+            <div class="safety-actions">
+              <button class="btn small" data-action="report" data-person="ゆう" data-source="detail" data-id="sample-1">通報する</button>
+              <button class="btn small" data-action="block" data-person="ゆう">ブロックする</button>
+            </div>
+            <div class="notice" style="margin-top:16px"><p>正確な待ち合わせ位置は、一緒に過ごすことが決まった後に共有されます。</p></div>
+            <div class="actions">
+              <button class="btn small primary" data-action="accept-invite">一緒に過ごしたい</button>
+              <button class="btn small" data-action="decline">また今度お願いします</button>
+              <button class="btn small quiet-action" data-action="decline">今日は難しい</button>
+            </div>
+          </aside>
+        </div>
+      </section>
+
+      <section id="after">
+        <article class="card thanks">
+          <p class="eyebrow">会った後</p>
+          <h2>今日はありがとうございました。</h2>
+          <p class="lead" style="max-width:none;font-size:24px">今日の時間はどうでしたか？</p>
+          <div class="after-options" id="afterOptions" style="margin-top:24px">
+            <button class="option selected">安心して過ごせた</button>
+            <button class="option">また会いたい</button>
+            <button class="option">今回はここまでで十分</button>
+            <button class="option">また紹介してほしい</button>
+          </div>
+          <div class="field" style="margin-top:24px;text-align:left">
+            <label for="goodPoint">コメント（任意）</label>
+            <textarea id="goodPoint" maxlength="300" placeholder="安心できたことなど、伝えたいことがあれば"></textarea>
+          </div>
+          <div class="actions" style="justify-content:center">
+            <button class="btn primary" id="feedbackSubmit">ありがとうございました</button>
+          </div>
+          <p class="meta" id="feedbackNote" style="margin-top:16px">「安心して過ごせた」は、次の紹介を心地よくするために反映されます。「また会いたい」は、お二人が選んだときだけ大切な人として保存されます。</p>
+        </article>
+      </section>
+
+      <section id="account">
+        <div class="section-head"><div><p class="eyebrow">アカウント</p><h2>安心して使うための設定。</h2></div></div>
+        <div class="account-layout">
+          <aside class="card account-menu">
+            <div class="notice" id="verificationStatus"><strong>本人確認</strong><p class="meta">登録後に確認状況を表示します。</p></div>
+            <button class="btn small" data-action="edit-profile">プロフィールを編集</button>
+            <button class="btn small" data-action="show-saved">保存した募集</button>
+            <button class="btn small" data-action="show-managed">自分の募集</button>
+            <button class="btn small quiet-action" data-action="logout">ログアウト</button>
+            <div class="chips"><span class="badge muted">SMS認証 準備中</span><span class="badge muted">本人確認書類 準備中</span></div>
+          </aside>
+          <div class="grid" id="accountContent"><article class="card empty-state">ログインすると、プロフィールや募集をここで管理できます。</article></div>
+        </div>
+      </section>
+
+      <section id="terms">
+        <article class="card utility-page"><p class="eyebrow">利用規約</p><h2>TOMONI 利用規約</h2><p class="meta">最終更新日：2026年7月2日</p><h3>安心して過ごすために</h3><p>TOMONIは、18歳以上の方が、同性同士で安心して心地よい時間を過ごすためのサービスです。相手の意思と距離感を尊重し、無理な会話や参加を求めないでください。</p><h3>禁止事項</h3><p>営業目的、宗教勧誘、ネットワークビジネス、投資勧誘、ナンパ目的、恋愛目的のみでの利用、嫌がらせ、なりすまし、危険な場所への誘導を禁止します。</p><h3>安全について</h3><p>初回は昼間の公共の場所を選び、個人情報を急いで伝えないでください。違和感がある場合は、その場を離れ、通報・ブロック機能を利用できます。</p><h3>サービスの変更</h3><p>安全性や運営上の必要に応じて内容を変更することがあります。重要な変更は分かりやすくお知らせします。</p></article>
+      </section>
+
+      <section id="privacy">
+        <article class="card utility-page"><p class="eyebrow">プライバシーポリシー</p><h2>大切な情報の扱い方。</h2><p class="meta">最終更新日：2026年7月2日</p><h3>取得する情報</h3><p>登録情報、プロフィール、募集内容、サービス内の操作、会った後の回答、お問い合わせ内容を取得します。</p><h3>利用目的</h3><p>本人確認、安全な表示、心地よい時間の提案、通報対応、サービス改善のために利用します。会った後の回答は、次の提案を穏やかに整えるために使います。</p><h3>第三者提供</h3><p>法令に基づく場合を除き、本人の同意なく第三者へ提供しません。</p><h3>削除とお問い合わせ</h3><p>登録情報の確認・修正・削除は、お問い合わせから申請できます。</p></article>
+      </section>
+
+      <section id="contact">
+        <div class="section-head"><div><p class="eyebrow">お問い合わせ</p><h2>困ったときは、ここから。</h2></div></div>
+        <form class="card form utility-page" id="contactForm" novalidate>
+          <div class="field full"><label for="contactName">お名前</label><input id="contactName" name="name" autocomplete="name" required><span class="field-error"></span></div>
+          <div class="field full"><label for="contactEmail">メールアドレス</label><input id="contactEmail" name="email" type="email" autocomplete="email" required><span class="field-error"></span></div>
+          <div class="field full"><label for="contactType">お問い合わせ内容</label><select id="contactType" name="type"><option>サービスについて</option><option>安全について</option><option>登録情報について</option><option>その他</option></select></div>
+          <div class="field full"><label for="contactMessage">メッセージ</label><textarea id="contactMessage" name="message" minlength="10" required></textarea><span class="field-error"></span></div>
+          <div class="field full"><button class="btn primary" type="submit">送信する</button></div>
+        </form>
+      </section>
+
+      <section id="error">
+        <article class="card thanks utility-page"><p class="eyebrow">エラー</p><h2>うまく読み込めませんでした。</h2><p>少し時間をおいて、もう一度お試しください。入力した内容はこの端末に残しています。</p><div class="actions" style="justify-content:center"><button class="btn primary" data-action="retry">もう一度試す</button><button class="btn" data-jump="home">ホームへ戻る</button></div></article>
+      </section>
+
+      <section id="not-found">
+        <article class="card thanks utility-page"><p class="eyebrow">404</p><h2>ページが見つかりません。</h2><p>移動したか、現在は表示できないページです。</p><div class="actions" style="justify-content:center"><button class="btn primary" data-jump="home">ホームへ戻る</button></div></article>
+      </section>
+    </main>
+
+    <footer class="footer">
+      <p>TOMONI MVP / 目の前の一人を大切にする。今日が少し良い日になれば、それで十分。</p>
+      <div class="footer-links"><button data-jump="terms">利用規約</button><button data-jump="privacy">プライバシーポリシー</button><button data-jump="contact">お問い合わせ</button></div>
+    </footer>
+  </div>
+
+  <div class="modal-backdrop" id="modalBackdrop" aria-hidden="true"><div class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle"><div class="modal-head"><h2 id="modalTitle">アカウント</h2><button class="icon-button" type="button" data-action="close-modal" aria-label="閉じる">×</button></div><div id="modalBody"></div></div></div>
+  <div class="loading-layer" id="loadingLayer" aria-live="polite"><div><div class="spinner" aria-hidden="true"></div><p class="meta" style="margin-top:10px">少しお待ちください</p></div></div>
+  <div class="toast-region" id="toastRegion" aria-live="polite" aria-atomic="true"></div>
+
+  <script>
+    const categories = [
+      {
+        name: "静かな時間",
+        items: [
+          ["何もしない 15分", "話さなくても大丈夫です。同じ場所で、ただ静かに過ごしましょう。気が向いたら少し話す。それだけで十分です。"],
+          ["静かな散歩 20分", "会話は自由です。歩きながら、自然に話せたら話しましょう。"],
+          ["ベンチでのんびり 10分", "同じ景色を見ながら、短い時間だけ過ごします。"],
+          ["東屋で5分", "まずは短く、屋根のある場所で落ち着いて過ごします。"],
+          ["景色を眺める 15分", "気になる景色の前で、静かな時間を共有します。"]
+        ]
+      },
+      {
+        name: "散歩",
+        items: [
+          ["公園散歩", "緑のある場所を、急がず歩きます。"],
+          ["神社散歩", "落ち着いた場所を選んで、ゆっくり歩きます。"],
+          ["商店街散歩", "気になるお店を眺めながら歩きます。"],
+          ["川沿い散歩", "水辺の道を、静かに歩きます。"],
+          ["朝散歩", "一日のはじまりに、軽く外へ出ます。"]
+        ]
+      },
+      {
+        name: "スポーツ",
+        items: [
+          ["キャッチボール", "無理なく、短い時間だけ体を動かします。"],
+          ["バドミントン", "勝ち負けより、軽く動くことを大切にします。"],
+          ["フリスビー", "広い場所で気楽に投げ合います。"],
+          ["ランニング", "会話できるくらいのペースで走ります。"],
+          ["サイクリング", "安全な道を選んで少し走ります。"]
+        ]
+      },
+      {
+        name: "カフェ",
+        items: [
+          ["静かなカフェ 20分", "落ち着く席で、短い時間を一緒に過ごします。"],
+          ["朝のコーヒー 15分", "一日のはじまりに、少しだけ外で過ごします。"],
+          ["本のあるカフェ", "読んだものの話は、少しだけでも大丈夫です。"],
+          ["甘いもの休憩", "気になるお店で、無理なく休みます。"]
+        ]
+      },
+      {
+        name: "食事",
+        items: [
+          ["新店舗に行く", "気になっていた場所へ、短い時間だけ行きます。"],
+          ["焼肉", "一人だと入りづらいお店へ行きます。"],
+          ["定食屋に行く", "落ち着いて食事をする時間を共有します。"],
+          ["新しいお店巡り", "気になるお店を一つだけ試してみます。"]
+        ]
+      },
+      {
+        name: "街を楽しむ",
+        items: [
+          ["ブラタモリ風まち歩き", "地形や歴史を少し気にしながら歩きます。"],
+          ["古本屋巡り", "気になる棚をゆっくり見ます。"],
+          ["パン屋巡り", "気になるパン屋をいくつか回ります。"],
+          ["神社巡り", "近くの神社を静かに回ります。"],
+          ["写真散歩", "気になる景色を撮りながら歩きます。"]
+        ]
+      },
+      {
+        name: "ボランティア",
+        items: [
+          ["ゴミ拾い", "短い時間だけ、身近な場所を整えます。"],
+          ["公園掃除", "無理のない範囲で公園をきれいにします。"],
+          ["地域散歩", "地域の様子を見ながら歩きます。"]
+        ]
+      }
+    ];
+
+    categories.push({
+      name: "語れるもの",
+      items: [
+        ["漫画の話", "印象に残っている場面や作品の話をします。"],
+        ["小説の話", "最近読んだ本や忘れられない一冊を話します。"],
+        ["音楽の話", "最近よく聴く曲や心に残る曲の話をします。"],
+        ["応援しているものの話", "人や作品の話を、無理のない範囲で。"]
+      ]
+    });
+
+    const dailyMessages = [
+      "今日は少し歩いてみませんか。",
+      "話さなくても大丈夫です。",
+      "沈黙も大切な時間です。",
+      "ありがとうございました。その一言だけでも十分です。"
+    ];
+
+    const listings = [
+      {
+        person: "ゆう",
+        gender: "女性",
+        activity: "静かな散歩 20分",
+        duration: "20分",
+        place: "新宿御苑の入口近く",
+        talk: "自然に話せたらいい",
+        verified: true,
+        note: "会話は自由です。最初に自己紹介だけして、あとは歩きましょう。",
+        air: ["静かで落ち着いた空気", "のんびりした空気"],
+        traits: ["穏やかな人", "聞き上手な人", "のんびりした人"],
+        pace: "slow",
+        activityType: "walk",
+        area: "新宿",
+        distance: 5,
+        availableToday: true,
+        active: true
+      },
+      {
+        person: "まこと",
+        gender: "女性",
+        activity: "何もしない 15分",
+        duration: "15分",
+        place: "代々木公園のベンチ",
+        talk: "話さなくても大丈夫",
+        verified: true,
+        note: "同じ場所で、ただ静かに過ごしましょう。",
+        air: ["静かで落ち着いた空気", "のんびりした空気"],
+        traits: ["穏やかな人", "聞き上手な人", "のんびりした人"],
+        pace: "still",
+        activityType: "quiet",
+        area: "代々木",
+        distance: 8,
+        availableToday: true,
+        active: true
+      },
+      {
+        person: "あい",
+        gender: "女性",
+        activity: "ベンチでのんびり 10分",
+        duration: "10分",
+        place: "近所の公園",
+        talk: "話さなくても大丈夫",
+        verified: true,
+        note: "今日は募集は出していませんが、短い時間なら過ごせます。",
+        air: ["静かで落ち着いた空気", "のんびりした空気"],
+        traits: ["穏やかな人", "のんびりした人"],
+        pace: "still",
+        activityType: "quiet",
+        area: "渋谷",
+        distance: 12,
+        availableToday: true,
+        active: false
+      },
+      {
+        person: "そう",
+        gender: "男性",
+        activity: "小説の話 30分",
+        duration: "30分",
+        place: "駅前の静かなカフェ",
+        talk: "たくさん話したい",
+        verified: false,
+        note: "最近読んだ本の話ができたらうれしいです。",
+        air: ["一緒に何かをする空気", "のんびりした空気"],
+        traits: ["話す時間を楽しむ人", "一つのことを深く話す"],
+        pace: "deep",
+        activityType: "talk",
+        area: "中野",
+        distance: 18,
+        availableToday: true,
+        active: true
+      },
+      {
+        person: "はる",
+        gender: "男性",
+        activity: "街歩き 20分",
+        duration: "20分",
+        place: "駅前の商店街",
+        talk: "自然に話せたらいい",
+        verified: true,
+        note: "募集は出していませんが、今日は近くで少し歩けます。",
+        air: ["一緒に何かをする空気", "のんびりした空気"],
+        traits: ["穏やかな人", "聞き上手な人"],
+        pace: "slow",
+        activityType: "walk",
+        area: "吉祥寺",
+        distance: 24,
+        availableToday: true,
+        active: false
+      },
+      {
+        person: "けん",
+        gender: "男性",
+        activity: "キャッチボール 20分",
+        duration: "20分",
+        place: "区立公園の広場",
+        talk: "自然に話せたらいい",
+        verified: true,
+        note: "軽く体を動かして、気が向いたら少し話しましょう。",
+        air: ["元気で行動的な空気", "一緒に何かをする空気"],
+        traits: ["行動的な人", "よく笑う人"],
+        pace: "active",
+        activityType: "move",
+        area: "杉並",
+        distance: 16,
+        availableToday: false,
+        active: true
+      }
+    ];
+
+    let currentGender = "女性";
+    let latestRankedListings = [];
+    let todayOpen = true;
+    let editingListingId = null;
+    const storageKey = "tomoni-public-preview-v1";
+    const defaultState = { user: null, registeredAccount: null, saved: [], blocked: [], customListings: [], moderation: { reports: [], blockCount: 0 }, feedbackHistory: [], profile: { nickname: "あなた", age: "30代", bio: "静かな時間を大切にしています。" } };
+    let appState = loadState();
+    listings.forEach((item, index) => { item.id = item.id || `sample-${index + 1}`; });
+    appState.customListings.forEach((item) => { if (!listings.some((existing) => existing.id === item.id)) listings.unshift(item); });
+
+    function loadState() {
+      try {
+        const stored = JSON.parse(localStorage.getItem(storageKey) || "{}");
+        return { ...defaultState, ...stored, saved: Array.isArray(stored.saved) ? stored.saved : [], blocked: Array.isArray(stored.blocked) ? stored.blocked : [], customListings: Array.isArray(stored.customListings) ? stored.customListings : [], feedbackHistory: Array.isArray(stored.feedbackHistory) ? stored.feedbackHistory : [], moderation: { ...defaultState.moderation, ...(stored.moderation || {}), reports: Array.isArray(stored.moderation?.reports) ? stored.moderation.reports : [] }, profile: { ...defaultState.profile, ...(stored.profile || {}) } };
+      }
+      catch { return { ...defaultState }; }
+    }
+
+    function saveState() { localStorage.setItem(storageKey, JSON.stringify(appState)); }
+    function esc(value = "") { const node = document.createElement("div"); node.textContent = String(value); return node.innerHTML; }
+    function isAdult(value) {
+      if (!value) return false;
+      const birth = new Date(`${value}T00:00:00`);
+      const today = new Date();
+      let age = today.getFullYear() - birth.getFullYear();
+      const beforeBirthday = today.getMonth() < birth.getMonth() || (today.getMonth() === birth.getMonth() && today.getDate() < birth.getDate());
+      if (beforeBirthday) age -= 1;
+      return age >= 18;
+    }
+
+    function ageLabel(value) {
+      const age = new Date().getFullYear() - new Date(`${value}T00:00:00`).getFullYear();
+      if (age < 30) return "20代";
+      if (age < 40) return "30代";
+      if (age < 50) return "40代";
+      return "50代以上";
+    }
+
+    function containsPrivateInfo(value) {
+      return /(\b[\w.+-]+@[\w.-]+\.[a-z]{2,}\b|\b0\d{1,4}[-ー]?\d{1,4}[-ー]?\d{3,4}\b|instagram|line\s?id|@[a-z0-9_]{3,}|住所)/i.test(value);
+    }
+
+    function analyzeSafety() {
+      const text = `${document.getElementById("place").value} ${document.getElementById("note").value}`;
+      const checkedText = text.replace(/車いす/g, "");
+      const dangerWords = ["家", "自宅", "送迎", "車", "ホテル", "稼げる", "副業", "投資", "宗教"];
+      const hits = dangerWords.filter((word) => checkedText.includes(word));
+      const hasPrivateInfo = containsPrivateInfo(checkedText);
+      const place = document.getElementById("place").value;
+      const isCoarsePlace = /(駅|公園|カフェ|公共施設|入口|近く|前|広場)/.test(place);
+      const blocked = hits.length > 0 || hasPrivateInfo || (place.trim() && !isCoarsePlace);
+      const message = hits.length ? `「${hits.join("・")}」を含むため公開できません。公共の場所へ変更してください。` : hasPrivateInfo ? "連絡先・住所・SNSは公開できません。削除してください。" : !isCoarsePlace && place.trim() ? "待ち合わせ場所は「駅近く」「公園入口」「カフェ前」程度にしてください。" : "安全に配慮された内容です。正確な位置は予定が決まった後に共有されます。";
+      const status = document.getElementById("safetyCheck");
+      status.textContent = message;
+      status.classList.toggle("caution", blocked);
+      return { blocked, message, hits, hasPrivateInfo };
+    }
+
+    const jumpTo = (id) => document.getElementById(id)?.scrollIntoView({ behavior: "smooth", block: "start" });
+
+    document.querySelectorAll("[data-jump]").forEach((button) => {
+      button.addEventListener("click", () => jumpTo(button.dataset.jump));
+    });
+
+    const setSelected = (button) => {
+      const group = button.parentElement;
+      const question = button.closest(".question");
+      if (question?.dataset.multiple === "true") {
+        button.classList.toggle("selected");
+        if (!group.querySelector(".selected")) button.classList.add("selected");
+        return;
+      }
+      group.querySelectorAll("button").forEach((item) => item.classList.remove("selected"));
+      button.classList.add("selected");
+    };
+
+    document.querySelectorAll(".chips .option, .mood-options .chip, #afterOptions .option").forEach((button) => {
+      button.addEventListener("click", () => {
+        setSelected(button);
+        updateDiagnosis();
+      });
+    });
+
+    const categoryList = document.getElementById("categoryList");
+    const activityGrid = document.getElementById("activityGrid");
+    let activeCategory = categories[0].name;
+
+    function renderCategories() {
+      categoryList.innerHTML = categories.map((category) => `
+        <button class="${category.name === activeCategory ? "active" : ""}" data-category="${category.name}">${category.name}</button>
+      `).join("");
+      categoryList.querySelectorAll("button").forEach((button) => {
+        button.addEventListener("click", () => {
+          activeCategory = button.dataset.category;
+          renderCategories();
+          renderActivities();
+        });
+      });
+    }
+
+    function renderDailyMessage() {
+      const index = new Date().getDate() % dailyMessages.length;
+      document.getElementById("dailyMessage").textContent = dailyMessages[index];
+    }
+
+    function syncTodayOpen() {
+      const toggle = document.getElementById("todayOpenToggle");
+      toggle.textContent = `今日は会えます：${todayOpen ? "ON" : "OFF"}`;
+      toggle.classList.toggle("off", !todayOpen);
+    }
+
+    function renderActivities() {
+      const category = categories.find((item) => item.name === activeCategory);
+      activityGrid.innerHTML = category.items.map(([title, body]) => `
+        <article class="activity-card ${title === "何もしない 15分" ? "featured" : ""}">
+          <div>
+            <h3>${title}</h3>
+            <p class="meta">${body}</p>
+          </div>
+          <button class="btn small" data-activity="${title}">この過ごし方で作る</button>
+        </article>
+      `).join("");
+      activityGrid.querySelectorAll("[data-activity]").forEach((button) => {
+        button.addEventListener("click", () => fillActivity(button.dataset.activity));
+      });
+    }
+
+    function fillActivity(activity) {
+      document.getElementById("activity").value = [...document.getElementById("activity").options].some((option) => option.value === activity)
+        ? activity
+        : "何もしない 15分";
+      if (activity === "何もしない 15分") {
+        document.getElementById("duration").value = "15分";
+        document.getElementById("talk").value = "話さなくても大丈夫";
+        document.getElementById("note").value = "話さなくても大丈夫です。\n同じ場所で、ただ静かに過ごしましょう。\n気が向いたら少し話す。それだけで十分です。";
+      }
+      jumpTo("create");
+    }
+
+    function updateDiagnosis() {
+      const selected = [...document.querySelectorAll("#diagnosis .option.selected")].map((item) => item.textContent.trim());
+      const style = selected.find((item) => ["静かに過ごす", "歩く", "軽く体を動かす", "語れるものを話す", "一人では行きづらい場所に行く"].includes(item));
+      const time = selected.find((item) => item.endsWith("分")) || "15分";
+      const profile = buildComfortProfile();
+      const ranked = rankListings();
+      const suggested = ranked[0];
+      let primary = "静かな散歩";
+      let secondary = "何もしない15分";
+      if (style === "静かに過ごす") {
+        primary = "何もしない15分";
+        secondary = `景色を眺める${time}`;
+      } else if (style === "歩く") {
+        primary = "静かな散歩";
+        secondary = `川沿い散歩${time}`;
+      } else if (style === "軽く体を動かす") {
+        primary = "フリスビー";
+        secondary = "キャッチボール";
+      } else if (style === "語れるものを話す") {
+        primary = "小説の話";
+        secondary = "音楽の話";
+      } else if (style === "一人では行きづらい場所に行く") {
+        primary = "展示会";
+        secondary = "新店舗に行く";
+      }
+      const personLine = suggested
+        ? `<br><br>${suggested.person}さんの「${suggested.activity}」は、今日の距離感に近そうです。`
+        : "";
+      document.getElementById("diagnosisResult").innerHTML = `今日のあなたには、<br>「${primary}」や「${secondary}」が合いそうです。<br><br>${profile.summary}${personLine}`;
+      document.getElementById("diagnosisPerson").innerHTML = suggested ? `
+        <div class="notice">
+          <span class="badge">今日のあなたなら</span>
+          ${suggested.verified ? `<span class="badge">本人確認済み</span>` : ""}
+          <h3 style="margin-top:12px">${suggested.person}さん</h3>
+          <p class="meta">${suggested.activity} / ${suggested.talk}</p>
+          <div class="comfort-mark" aria-label="安心して過ごせそう"><i></i><i></i><i></i><i></i><i></i></div>
+          <p style="margin-top:8px">自然に過ごせそうです。</p>
+          <div class="actions"><button class="btn small primary" data-action="open-detail" data-id="${suggested.id}">詳しく見る</button><button class="btn small quiet-action" data-action="report" data-person="${esc(suggested.person)}" data-source="recommendation" data-id="${suggested.id}">通報</button></div>
+        </div>` : "";
+      bindJumpButtons(document.getElementById("diagnosisPerson"));
+      renderRecommendations();
+      renderListings();
+      renderRegionalProfiles();
+    }
+
+    function selectedValues(questionName) {
+      return [...document.querySelectorAll(`[data-question="${questionName}"] .option.selected`)].map((item) => item.textContent.trim());
+    }
+
+    function buildComfortProfile() {
+      const air = selectedValues("air");
+      const selfAir = selectedValues("selfAir");
+      const withPerson = selectedValues("withPerson");
+      const talk = selectedValues("talk")[0] || "自然に話せたらいい";
+      const style = selectedValues("style")[0] || "静かに過ごす";
+      const person = selectedValues("person")[0] || "似た人";
+      const quietScore = air.includes("静かで落ち着いた空気") || selfAir.includes("聞く方が心地よい") ? 2 : 0;
+      const activeScore = air.includes("元気で行動的な空気") || selfAir.includes("行動派") ? 2 : 0;
+      const smileScore = air.includes("よく笑う空気") || withPerson.includes("よく笑う人") ? 1 : 0;
+      const distance = quietScore > activeScore ? "ゆっくり近づける距離感" : activeScore > quietScore ? "一緒に動きながら近づく距離感" : "自然に合わせられる距離感";
+      return {
+        air,
+        selfAir,
+        withPerson,
+        talk,
+        style,
+        person,
+        quietScore,
+        activeScore,
+        smileScore,
+        distance,
+        summary: `空気感は「${distance}」を大切にすると、疲れにくく過ごせそうです。`
+      };
+    }
+
+    function listingScore(item, profile) {
+      const airHits = item.air.filter((value) => profile.air.includes(value)).length;
+      const traitHits = item.traits.filter((value) => profile.withPerson.includes(value)).length;
+      const talkHit = item.talk === profile.talk ? 2 : item.talk === "自然に話せたらいい" ? 1 : 0;
+      const styleHit =
+        (profile.style === "静かに過ごす" && item.activityType === "quiet") ||
+        (profile.style === "歩く" && item.activityType === "walk") ||
+        (profile.style === "軽く体を動かす" && item.activityType === "move") ||
+        (profile.style === "語れるものを話す" && item.activityType === "talk") ? 2 : 0;
+      const calmFit = profile.quietScore && ["still", "slow", "deep"].includes(item.pace) ? 1 : 0;
+      const activeFit = profile.activeScore && item.pace === "active" ? 1 : 0;
+      const variety = profile.person === "違う価値観の人" ? Math.max(0, 2 - traitHits) : 0;
+      return airHits * 3 + traitHits * 2 + talkHit + styleHit + calmFit + activeFit + variety;
+    }
+
+    function rankListings() {
+      const profile = buildComfortProfile();
+      latestRankedListings = listings
+        .filter((item) => item.gender === currentGender && item.availableToday && !appState.blocked.includes(item.person))
+        .map((item) => ({ ...item, comfortScore: listingScore(item, profile) }))
+        .sort((a, b) => b.comfortScore - a.comfortScore);
+      return latestRankedListings;
+    }
+
+    function bindJumpButtons(root = document) {
+      root.querySelectorAll("[data-jump]").forEach((button) => {
+        if (button.dataset.bound) return;
+        button.dataset.bound = "true";
+        button.addEventListener("click", () => jumpTo(button.dataset.jump));
+      });
+    }
+
+    function comfortDots() {
+      return `<span class="comfort-mark" aria-label="安心して過ごせそう"><i></i><i></i><i></i><i></i><i></i></span>`;
+    }
+
+    function shortCard(item, number = "") {
+      return `<div>
+        ${number ? `<span class="flow-number">${number}</span>` : `<span class="badge">今日おすすめ</span>`} ${item.verified ? `<span class="badge">本人確認済み</span>` : ""}
+        <h3 style="margin-top:10px">${esc(item.activity)}</h3>
+        <p class="meta">${esc(item.person)}さん / 徒歩${item.distance}分 / ${esc(item.talk)}</p>
+        <div style="margin-top:8px">${comfortDots()}</div>
+      </div><div class="actions"><button class="btn small primary" data-action="open-detail" data-id="${item.id}">詳しく見る</button><button class="btn small quiet-action" data-action="report" data-person="${esc(item.person)}" data-source="recommendation" data-id="${item.id}">通報</button></div>`;
+    }
+
+    function renderRecommendations() {
+      const recommended = rankListings().find((item) => item.active) || rankListings()[0];
+      if (!recommended) return;
+      document.getElementById("topRecommendation").innerHTML = shortCard(recommended);
+      document.getElementById("homeRecommendation").innerHTML = shortCard(recommended, "1");
+      const nearby = rankListings().filter((item) => item.active).slice(0, 3);
+      document.getElementById("homeListings").innerHTML = nearby.map((item) => `
+        <div class="notice"><strong>${esc(item.person)}さん</strong><p class="meta">徒歩${item.distance}分 / ${esc(item.activity)}</p><button class="btn small" style="margin-top:10px" data-action="open-detail" data-id="${item.id}">見る</button></div>
+      `).join("");
+      bindJumpButtons(document.getElementById("topRecommendation"));
+      bindJumpButtons(document.getElementById("homeRecommendation"));
+      bindJumpButtons(document.getElementById("homeListings"));
+    }
+
+    function renderRegionalProfiles() {
+      const grid = document.getElementById("regionalGrid");
+      const city = document.getElementById("city")?.value || "all";
+      const profiles = rankListings()
+        .filter((item) => city === "all" || item.area === city)
+        .sort((a, b) => a.distance - b.distance);
+      grid.innerHTML = profiles.map((item) => `
+        <article class="card">
+          <div class="chips">
+            <span class="badge">今日は会えます</span>
+            <span class="badge muted">${esc(item.gender)}同士</span>
+            <span class="badge muted">${esc(item.area)}</span>
+            <span class="badge muted">徒歩${item.distance}分</span>
+            ${item.verified ? `<span class="badge">本人確認済み</span>` : ""}
+          </div>
+          <h3 style="margin-top:12px">${esc(item.person)}さん</h3>
+          <p class="meta">${esc(item.activity)} / ${esc(item.talk)}</p>
+          <p style="margin-top:8px">今日のあなたと心地よい時間を過ごせそうです。</p>
+          <div class="actions">
+            <button class="btn small primary" data-action="open-detail" data-id="${item.id}">一緒に過ごしませんか？</button>
+            <button class="btn small quiet-action" data-action="decline">また今度</button>
+            <button class="btn small quiet-action" data-action="report" data-person="${esc(item.person)}" data-source="region" data-id="${item.id}">通報</button>
+          </div>
+        </article>
+      `).join("");
+      bindJumpButtons(grid);
+    }
+
+    function renderListings() {
+      const grid = document.getElementById("listingGrid");
+      const visibleListings = rankListings().filter((item) => item.active);
+      grid.innerHTML = visibleListings.map((item) => `
+        <article class="card listing-card">
+          <div>
+            <div class="chips">
+              <span class="badge">今日会えます</span>
+              <span class="badge">${item.verified ? "本人確認済み" : "本人確認欄あり"}</span>
+            </div>
+            <h3 style="margin-top:12px">${esc(item.person)}さん</h3>
+            <p class="meta">徒歩${item.distance}分 / ${esc(item.place)}</p>
+            <h3 style="margin-top:10px">${esc(item.activity)}</h3>
+            <div class="listing-summary">
+              <div><small>安心の目安</small>${comfortDots()}</div>
+              <div><small>話す量</small>${item.talk === "自然に話せたらいい" ? "自然でOK" : esc(item.talk)}</div>
+              <div><small>空気感</small>${esc(item.air[0].replace("な空気", ""))}</div>
+            </div>
+            <p class="clamp" style="margin-top:12px">${esc(item.note)}</p>
+          </div>
+          <div class="actions" style="margin-top:0">
+            <button class="btn small" data-action="open-detail" data-id="${item.id}">詳しく見る</button>
+            <button class="btn small primary" data-action="invite" data-id="${item.id}">一緒に過ごしたい</button>
+            <button class="btn small quiet-action" data-action="save-listing" data-id="${item.id}">${appState.saved.includes(item.id) ? "保存済み" : "保存"}</button>
+            <button class="btn small quiet-action" data-action="decline">今日は難しい</button>
+            <button class="btn small quiet-action" data-action="report" data-person="${esc(item.person)}" data-source="listing" data-id="${item.id}">通報</button>
+          </div>
+        </article>
+      `).join("");
+      bindJumpButtons(grid);
+    }
+
+    function addCurrentListing() {
+      const newListing = {
+        id: editingListingId || `own-${Date.now()}`,
+        person: appState.profile.nickname,
+        gender: document.getElementById("registeredGender").value,
+        activity: document.getElementById("activity").value,
+        duration: document.getElementById("duration").value,
+        place: document.getElementById("place").value,
+        talk: document.getElementById("talk").value,
+        verified: Boolean(appState.user?.verified),
+        note: document.getElementById("note").value.split("\n")[0],
+        air: selectedValues("air"),
+        traits: selectedValues("withPerson"),
+        pace: selectedValues("style")[0] === "軽く体を動かす" ? "active" : "slow",
+        activityType: selectedValues("style")[0] === "歩く" ? "walk" : selectedValues("style")[0] === "軽く体を動かす" ? "move" : selectedValues("style")[0] === "語れるものを話す" ? "talk" : "quiet",
+        area: "現在地周辺",
+        distance: 3,
+        availableToday: todayOpen,
+        active: true,
+        owner: true
+      };
+      if (editingListingId) {
+        const listingIndex = listings.findIndex((item) => item.id === editingListingId);
+        if (listingIndex >= 0) listings.splice(listingIndex, 1, newListing);
+        const storedIndex = appState.customListings.findIndex((item) => item.id === editingListingId);
+        if (storedIndex >= 0) appState.customListings.splice(storedIndex, 1, newListing);
+      } else {
+        listings.unshift(newListing);
+        appState.customListings.unshift(newListing);
+      }
+      editingListingId = null;
+      document.getElementById("previewButton").textContent = "募集一覧に反映する";
+      saveState();
+      currentGender = document.getElementById("registeredGender").value;
+      syncGenderControls();
+      renderListings();
+      renderRecommendations();
+      jumpTo("listings");
+    }
+
+    function syncGenderControls() {
+      document.getElementById("registeredGender").value = currentGender;
+      document.querySelectorAll("[data-gender]").forEach((button) => {
+        button.classList.toggle("selected", button.dataset.gender === currentGender);
+      });
+    }
+
+    document.querySelector("[data-fill-quiet]").addEventListener("click", () => fillActivity("何もしない 15分"));
+    document.getElementById("todayOpenToggle").addEventListener("click", () => {
+      todayOpen = !todayOpen;
+      syncTodayOpen();
+    });
+    document.getElementById("city").addEventListener("change", renderRegionalProfiles);
+    document.getElementById("distanceSort").addEventListener("click", renderRegionalProfiles);
+    document.getElementById("distanceSort").addEventListener("click", () => toast("近い順に並べました。"));
+    document.getElementById("feedbackSubmit").addEventListener("click", () => {
+      const selected = document.querySelector("#afterOptions .option.selected")?.textContent.trim();
+      appState.feedbackHistory.push({ answer: selected, comment: document.getElementById("goodPoint").value || null, createdAt: new Date().toISOString() });
+      saveState();
+      document.getElementById("feedbackNote").textContent = selected === "また会いたい"
+        ? "ありがとうございます。お二人が同じ気持ちを選んだときだけ、大切な人として保存されます。"
+        : "ありがとうございます。この時間の感じ方を、次の穏やかな紹介に反映します。";
+    });
+    [document.getElementById("place"), document.getElementById("note")].forEach((field) => field.addEventListener("input", analyzeSafety));
+    document.getElementById("registeredGender").addEventListener("change", (event) => {
+      currentGender = event.target.value;
+      syncGenderControls();
+      renderRecommendations();
+      renderListings();
+      renderRegionalProfiles();
+    });
+    document.querySelectorAll("[data-gender]").forEach((button) => {
+      button.addEventListener("click", () => {
+        currentGender = button.dataset.gender;
+        syncGenderControls();
+        renderRecommendations();
+        renderListings();
+        renderRegionalProfiles();
+      });
+    });
+
+    const modalBackdrop = document.getElementById("modalBackdrop");
+    const modalBody = document.getElementById("modalBody");
+    const modalTitle = document.getElementById("modalTitle");
+
+    function toast(message) {
+      const item = document.createElement("div");
+      item.className = "toast";
+      item.textContent = message;
+      document.getElementById("toastRegion").appendChild(item);
+      setTimeout(() => item.remove(), 3200);
+    }
+
+    function setLoading(visible) { document.getElementById("loadingLayer").classList.toggle("visible", visible); }
+    function withLoading(callback) { setLoading(true); setTimeout(() => { setLoading(false); callback(); }, 450); }
+
+    function openModal(title, content) {
+      modalTitle.textContent = title;
+      modalBody.innerHTML = content;
+      modalBackdrop.classList.add("open");
+      modalBackdrop.setAttribute("aria-hidden", "false");
+      modalBackdrop.querySelector("input, select, textarea, button")?.focus();
+    }
+
+    function closeModal() {
+      modalBackdrop.classList.remove("open");
+      modalBackdrop.setAttribute("aria-hidden", "true");
+      modalBody.innerHTML = "";
+    }
+
+    function updateAccountUI() {
+      const button = document.getElementById("accountButton");
+      button.textContent = appState.user ? `${appState.profile.nickname}さん` : "登録・ログイン";
+      button.dataset.action = appState.user ? "open-account" : "open-auth";
+      document.getElementById("profileDisplayName").textContent = "ゆう";
+      document.getElementById("profileDisplayMeta").textContent = "30代 / 今日の気分：穏やか";
+      document.getElementById("verificationStatus").innerHTML = appState.user?.verified ? `<strong>本人確認済み</strong><p class="meta">メール確認・年齢確認・規約同意・プロフィール入力済み</p>` : `<strong>本人確認</strong><p class="meta">登録後に確認状況を表示します。</p>`;
+    }
+
+    function authMarkup(mode = "login") {
+      const registering = mode === "register";
+      return `<form class="form" id="authForm" data-mode="${mode}" novalidate>
+        ${registering ? `<div class="field full"><label for="authNickname">ニックネーム</label><input id="authNickname" name="nickname" maxlength="20" required><span class="field-error"></span></div><div class="field full"><label for="authBirthdate">生年月日</label><input id="authBirthdate" name="birthdate" type="date" required><span class="field-error"></span><p class="meta">18歳未満の方は利用できません。</p></div><div class="field full"><label for="authGender">登録する性別</label><select id="authGender" name="gender"><option>女性</option><option>男性</option></select><p class="meta">TOMONIは同性同士が安心して過ごすためのサービスです。</p></div><div class="field full"><label for="authBio">安心してもらうためのひとこと</label><textarea id="authBio" name="bio" maxlength="120" required></textarea><span class="field-error"></span></div>` : ""}
+        <div class="field full"><label for="authEmail">メールアドレス</label><input id="authEmail" name="email" type="email" autocomplete="email" required><span class="field-error"></span></div>
+        ${registering ? `<div class="field full"><button class="btn" type="button" data-action="send-email-code">確認コードを送る</button><p class="meta">この試作画面では、送信後に表示される確認コードを入力します。</p></div><div class="field full"><label for="authCode">メール確認コード</label><input id="authCode" name="emailCode" inputmode="numeric" pattern="[0-9]{6}" maxlength="6" required disabled><span class="field-error"></span></div>` : ""}
+        <div class="field full"><label for="authPassword">パスワード</label><input id="authPassword" name="password" type="password" minlength="8" autocomplete="${registering ? "new-password" : "current-password"}" required><span class="field-error"></span></div>
+        ${registering ? `<div class="field full"><label class="check-row"><input id="termsAgreement" name="termsAgreement" type="checkbox" required><span><button class="btn quiet-action" type="button" data-action="open-terms">利用規約</button>とプライバシーポリシーに同意します</span></label><span class="field-error"></span></div>` : ""}
+        <div class="field full"><button class="btn primary" type="submit">${registering ? "会員登録する" : "ログインする"}</button></div>
+      </form><button class="btn quiet-action" style="margin-top:12px" data-action="${registering ? "show-login" : "show-register"}">${registering ? "ログインへ" : "初めての方は会員登録"}</button>`;
+    }
+
+    function validateForm(form) {
+      let valid = true;
+      form.querySelectorAll("input, textarea, select").forEach((field) => {
+        const error = field.parentElement.querySelector(".field-error");
+        let message = "";
+        if (field.required && field.type === "checkbox" && !field.checked) message = "同意が必要です。";
+        else if (field.required && !field.value.trim()) message = "入力してください。";
+        else if (field.type === "email" && field.value && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(field.value)) message = "メールアドレスを確認してください。";
+        else if (field.minLength > 0 && field.value.length < field.minLength) message = `${field.minLength}文字以上で入力してください。`;
+        else if (field.id === "authCode" && field.value !== "123456") message = "確認コードが一致しません。";
+        else if (field.id === "authBirthdate" && !isAdult(field.value)) message = "18歳以上の方のみ利用できます。";
+        else if (["authNickname", "authBio", "profileNickname", "profileBio"].includes(field.id) && containsPrivateInfo(field.value)) message = "電話番号・メール・住所・SNSは公開プロフィールに入力できません。";
+        field.setAttribute("aria-invalid", message ? "true" : "false");
+        if (error) error.textContent = message;
+        if (message) valid = false;
+      });
+      form.querySelector('[aria-invalid="true"]')?.focus();
+      return valid;
+    }
+
+    function renderSaved() {
+      const saved = listings.filter((item) => appState.saved.includes(item.id));
+      document.getElementById("accountContent").innerHTML = saved.length ? saved.map((item) => `<article class="card managed-listing"><div><span class="badge">保存済み</span><h3 style="margin-top:10px">${esc(item.activity)}</h3><p class="meta">${esc(item.person)}さん / ${esc(item.place)}</p></div><div class="actions"><button class="btn small" data-jump="detail">詳しく見る</button><button class="btn small quiet-action" data-action="save-listing" data-id="${item.id}">保存を外す</button></div></article>`).join("") : `<article class="card empty-state">保存した募集はまだありません。</article>`;
+      bindJumpButtons(document.getElementById("accountContent"));
+    }
+
+    function renderManaged() {
+      const own = appState.customListings;
+      document.getElementById("accountContent").innerHTML = own.length ? own.map((item) => `<article class="card managed-listing"><div><span class="badge">公開中</span><h3 style="margin-top:10px">${esc(item.activity)}</h3><p class="meta">${esc(item.place)} / ${esc(item.duration)}</p></div><div class="actions"><button class="btn small" data-action="edit-listing" data-id="${item.id}">編集</button><button class="btn small quiet-action" data-action="delete-listing" data-id="${item.id}">削除</button></div></article>`).join("") : `<article class="card empty-state">作成した募集はまだありません。</article>`;
+    }
+
+    function openListingDetail(id) {
+      const item = listings.find((listing) => listing.id === id);
+      if (!item) { jumpTo("not-found"); return; }
+      document.getElementById("detailTitle").innerHTML = `${esc(item.person)}さんと<br>${esc(item.activity)}`;
+      document.getElementById("detailCopy").textContent = item.note;
+      document.getElementById("detailBadges").innerHTML = `<span class="badge">${item.verified ? "本人確認済み" : "本人確認欄あり"}</span><span class="badge muted">${esc(item.duration)}</span><span class="badge muted">${esc(item.place)}</span>`;
+      document.getElementById("detailSave").dataset.id = item.id;
+      document.getElementById("detailLater").dataset.id = item.id;
+      document.querySelectorAll('#detail [data-action="report"], #detail [data-action="block"]').forEach((button) => { button.dataset.person = item.person; button.dataset.id = item.id; button.dataset.source = "detail"; });
+      jumpTo("detail");
+    }
+
+    function showProfileEditor() {
+      openModal("プロフィール編集", `<form class="form" id="profileForm" novalidate><div class="field full"><label for="profileNickname">ニックネーム</label><input id="profileNickname" name="nickname" maxlength="20" value="${esc(appState.profile.nickname)}" required><span class="field-error"></span></div><div class="field full"><label for="profileAge">年代</label><select id="profileAge" name="age"><option ${appState.profile.age === "20代" ? "selected" : ""}>20代</option><option ${appState.profile.age === "30代" ? "selected" : ""}>30代</option><option ${appState.profile.age === "40代" ? "selected" : ""}>40代</option><option ${appState.profile.age === "50代以上" ? "selected" : ""}>50代以上</option></select></div><div class="field full"><label for="profileBio">安心してもらうためのひとこと</label><textarea id="profileBio" name="bio" maxlength="120" required>${esc(appState.profile.bio)}</textarea><span class="field-error"></span></div><div class="field full"><button class="btn primary" type="submit">保存する</button></div></form>`);
+    }
+
+    document.addEventListener("submit", (event) => {
+      const form = event.target;
+      if (!["createForm", "contactForm", "authForm", "profileForm", "reportForm"].includes(form.id)) return;
+      event.preventDefault();
+      if (!validateForm(form)) { toast("入力内容を確認してください。"); return; }
+      if (form.id === "createForm") {
+        if (!appState.user) { openModal("ログイン", authMarkup("login")); toast("募集の作成にはログインが必要です。"); return; }
+        if (!appState.user.verified) { toast("本人確認を完了してから募集を作成してください。"); jumpTo("account"); return; }
+        const safety = analyzeSafety();
+        if (safety.blocked) { toast("安全のため、この内容では公開できません。"); document.getElementById("safetyCheck").scrollIntoView({ behavior: "smooth", block: "center" }); return; }
+        const wasEditing = Boolean(editingListingId);
+        withLoading(() => { addCurrentListing(); toast(wasEditing ? "募集を更新しました。" : "募集を公開しました。"); renderManaged(); });
+      }
+      if (form.id === "contactForm") withLoading(() => { form.reset(); toast("お問い合わせを受け付けました。"); });
+      if (form.id === "authForm") withLoading(() => {
+        const data = Object.fromEntries(new FormData(form));
+        const registering = form.dataset.mode === "register";
+        if (!registering && (!appState.registeredAccount || appState.registeredAccount.email !== data.email)) {
+          const emailField = document.getElementById("authEmail"); emailField.setAttribute("aria-invalid", "true"); emailField.parentElement.querySelector(".field-error").textContent = "登録済みのメールアドレスを確認してください。"; toast("登録情報を確認できませんでした。"); return;
+        }
+        const verifiedUser = registering ? { email: data.email, verified: true, emailVerified: true, ageConfirmed: true, termsAcceptedAt: new Date().toISOString(), profileComplete: true } : { ...appState.registeredAccount };
+        appState.user = verifiedUser;
+        if (registering) { appState.registeredAccount = verifiedUser; appState.profile.nickname = data.nickname; appState.profile.bio = data.bio; appState.profile.age = ageLabel(data.birthdate); currentGender = data.gender; }
+        saveState(); updateAccountUI(); closeModal(); syncGenderControls(); renderRecommendations(); renderListings(); renderRegionalProfiles(); toast(form.dataset.mode === "register" ? "会員登録が完了しました。" : "ログインしました。");
+      });
+      if (form.id === "profileForm") {
+        const data = Object.fromEntries(new FormData(form));
+        appState.profile = { ...appState.profile, ...data }; saveState(); updateAccountUI(); closeModal(); toast("プロフィールを保存しました。");
+      }
+      if (form.id === "reportForm") withLoading(() => {
+        const data = Object.fromEntries(new FormData(form));
+        appState.moderation.reports.push({ id: `report-${Date.now()}`, person: form.dataset.person, source: form.dataset.source, targetId: form.dataset.targetId || null, reason: data.reason, detail: data.detail || "", createdAt: new Date().toISOString(), status: "received" });
+        saveState(); closeModal(); toast("ご報告ありがとうございます。内容を確認し必要に応じて対応します。");
+      });
+    });
+
+    document.addEventListener("click", (event) => {
+      const button = event.target.closest("[data-action]");
+      if (!button) return;
+      const action = button.dataset.action;
+      if (action === "close-modal") closeModal();
+      if (action === "open-auth") openModal("ログイン", authMarkup("login"));
+      if (action === "show-register") { modalTitle.textContent = "会員登録"; modalBody.innerHTML = authMarkup("register"); }
+      if (action === "show-login") { modalTitle.textContent = "ログイン"; modalBody.innerHTML = authMarkup("login"); }
+      if (action === "send-email-code") {
+        const email = document.getElementById("authEmail");
+        if (!email.value || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.value)) { email.setAttribute("aria-invalid", "true"); email.parentElement.querySelector(".field-error").textContent = "メールアドレスを確認してください。"; return; }
+        const code = document.getElementById("authCode"); code.disabled = false; code.value = "123456"; code.focus(); toast("確認コードを送信しました。");
+      }
+      if (action === "open-terms") { closeModal(); jumpTo("terms"); toast("内容を確認後、登録画面へ戻って同意してください。"); }
+      if (action === "open-account") { jumpTo("account"); renderManaged(); }
+      if (action === "open-detail") openListingDetail(button.dataset.id);
+      if (action === "edit-profile") { if (!appState.user) openModal("ログイン", authMarkup("login")); else showProfileEditor(); }
+      if (action === "show-saved") renderSaved();
+      if (action === "show-managed") renderManaged();
+      if (action === "logout") { appState.user = null; saveState(); updateAccountUI(); document.getElementById("accountContent").innerHTML = `<article class="card empty-state">ログアウトしました。またいつでも戻ってきてください。</article>`; toast("ログアウトしました。"); }
+      if (action === "save-listing") {
+        const id = button.dataset.id;
+        appState.saved = appState.saved.includes(id) ? appState.saved.filter((item) => item !== id) : [...appState.saved, id];
+        saveState(); renderListings(); if (document.getElementById("account").classList.contains("is-visible")) renderSaved(); toast(appState.saved.includes(id) ? "あとで見られるよう保存しました。" : "保存を外しました。");
+      }
+      if (action === "invite") { if (!appState.user) openModal("ログイン", authMarkup("login")); else withLoading(() => { jumpTo("after"); toast("気持ちを送りました。返事は急がなくて大丈夫です。"); }); }
+      if (action === "accept-invite") { withLoading(() => { jumpTo("after"); toast("一緒に過ごす予定に追加しました。"); }); }
+      if (action === "decline") toast("今回は見送りました。相手にはやさしく伝わります。");
+      if (action === "report") openModal("通報する", `<p class="meta" style="margin-bottom:18px">安全確認のため、気になったことを教えてください。</p><form class="form" id="reportForm" data-person="${esc(button.dataset.person || "")}" data-source="${esc(button.dataset.source || "profile")}" data-target-id="${esc(button.dataset.id || "")}" novalidate><div class="field full"><label for="reportReason">通報理由</label><select id="reportReason" name="reason"><option>迷惑行為</option><option>勧誘</option><option>営業目的</option><option>宗教</option><option>恋愛目的</option><option>暴言</option><option>危険を感じた</option><option>その他</option></select></div><div class="field full"><label for="reportDetail">詳しい内容（任意）</label><textarea id="reportDetail" name="detail" maxlength="500"></textarea></div><div class="field full"><button class="btn primary" type="submit">運営へ送る</button></div></form>`);
+      if (action === "block") openModal("ブロックしますか？", `<p>${esc(button.dataset.person)}さんは今後表示されません。相手に通知されることはありません。</p><div class="actions"><button class="btn primary" data-action="confirm-block" data-person="${esc(button.dataset.person)}">ブロックする</button><button class="btn" data-action="close-modal">戻る</button></div>`);
+      if (action === "confirm-block") { appState.blocked = [...new Set([...appState.blocked, button.dataset.person])]; appState.moderation.blockCount += 1; saveState(); closeModal(); renderListings(); renderRegionalProfiles(); renderRecommendations(); toast("ブロックしました。検索・募集・おすすめには表示されません。"); }
+      if (action === "edit-listing") {
+        const item = listings.find((listing) => listing.id === button.dataset.id); if (!item) return;
+        editingListingId = item.id; document.getElementById("activity").value = [...document.getElementById("activity").options].some((option) => option.value === item.activity) ? item.activity : "何もしない 15分"; document.getElementById("place").value = item.place; document.getElementById("duration").value = item.duration; document.getElementById("talk").value = item.talk; document.getElementById("note").value = item.note; document.getElementById("previewButton").textContent = "変更を保存する"; jumpTo("create"); toast("募集内容を編集できます。");
+      }
+      if (action === "delete-listing") openModal("募集を削除しますか？", `<p>削除した募集は一覧に表示されなくなります。</p><div class="actions"><button class="btn primary" data-action="confirm-delete" data-id="${button.dataset.id}">削除する</button><button class="btn" data-action="close-modal">戻る</button></div>`);
+      if (action === "confirm-delete") { const id = button.dataset.id; appState.customListings = appState.customListings.filter((item) => item.id !== id); const index = listings.findIndex((item) => item.id === id); if (index >= 0) listings.splice(index, 1); saveState(); closeModal(); renderManaged(); renderListings(); renderRegionalProfiles(); renderRecommendations(); toast("募集を削除しました。"); }
+      if (action === "retry") withLoading(() => { jumpTo("home"); toast("読み込み直しました。"); });
+    });
+
+    modalBackdrop.addEventListener("click", (event) => { if (event.target === modalBackdrop) closeModal(); });
+    document.addEventListener("keydown", (event) => { if (event.key === "Escape" && modalBackdrop.classList.contains("open")) closeModal(); });
+    window.addEventListener("hashchange", () => {
+      const id = location.hash.slice(1);
+      if (!id) return;
+      jumpTo(document.getElementById(id) ? id : "not-found");
+    });
+    window.addEventListener("unhandledrejection", () => jumpTo("error"));
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) entry.target.classList.add("is-visible");
+      });
+      const visible = entries.filter((entry) => entry.isIntersecting).sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0];
+      if (!visible) return;
+      document.querySelectorAll(".nav button").forEach((button) => {
+        button.classList.toggle("active", button.dataset.jump === visible.target.id);
+      });
+    }, { threshold: [.25, .55] });
+
+    document.querySelectorAll("main section").forEach((section) => observer.observe(section));
+
+    renderCategories();
+    renderActivities();
+    syncGenderControls();
+    syncTodayOpen();
+    renderDailyMessage();
+    analyzeSafety();
+    updateAccountUI();
+    renderRecommendations();
+    renderListings();
+    renderRegionalProfiles();
+    updateDiagnosis();
+  </script>
+</body>
+</html>
