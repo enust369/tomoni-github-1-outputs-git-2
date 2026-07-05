@@ -1761,14 +1761,32 @@
     let participatingListingIds = new Set();
     let safetyGateActive = false;
     const storageKey = "tomoni-public-preview-v1";
-    const defaultState = { user: null, profileOwnerId: null, safetyOnboardingAccepted: false, saved: [], blocked: [], customListings: [], moderation: { reports: [], blockCount: 0 }, feedbackHistory: [], profile: { nickname: "あなた", age: "30代", gender: "女性", bio: "静かな時間を大切にしています。" } };
+    const defaultState = { user: null, profileOwnerId: null, safetyOnboardingAccepted: false, saved: [], blocked: [], customListings: [], demoParticipations: [], moderation: { reports: [], blockCount: 0 }, feedbackHistory: [], profile: { nickname: "あなた", age: "30代", gender: "女性", bio: "静かな時間を大切にしています。" } };
     let appState = loadState();
     listings.splice(0, listings.length);
+
+    // DEMO LISTINGS START: 本番公開前に、この関数とDEMO LISTINGS ENDまでを削除してください。
+    function createDemoListings() {
+      const inTwoHours = new Date(Date.now() + 2 * 60 * 60 * 1000).toISOString();
+      const demoRows = [
+        { id: "00000000-0000-4000-8000-000000000101", person: "みずき", title: "夕方の公園をゆっくり散歩", activity: "静かな散歩 20分", place: "代々木公園の入口近く", capacity: 5, participantCount: 2, note: "会話は少なめでも大丈夫です。夕方の空気を感じながら歩きましょう。", area: "代々木", distance: 6, activityType: "walk", pace: "slow" },
+        { id: "00000000-0000-4000-8000-000000000102", person: "なつ", title: "カフェで好きな本の話", activity: "小説の話 30分", place: "新宿駅近くのカフェ前", capacity: 3, participantCount: 1, note: "最近読んだ本を一冊ずつ、気軽に紹介し合えたらうれしいです。", area: "新宿", distance: 9, activityType: "talk", pace: "deep" },
+        { id: "00000000-0000-4000-8000-000000000103", person: "あおい", title: "ベンチでのんびり休憩", activity: "ベンチでのんびり 10分", place: "駅前公園の広場近く", capacity: 4, participantCount: 0, note: "急がず、話したくなったら少し話すくらいの時間にしましょう。", area: "渋谷", distance: 12, activityType: "quiet", pace: "still" }
+      ];
+      return demoRows.map((item) => ({
+        ...item,
+        participantCount: item.participantCount + (appState.demoParticipations.includes(item.id) ? 1 : 0),
+        gender: "女性", audience: "anyone", scheduledAt: inTwoHours, duration: "", talk: "自然に話せたらいい",
+        verified: true, air: ["静かで落ち着いた空気", "のんびりした空気"], traits: ["穏やかな人", "聞き上手な人"],
+        availableToday: true, active: true, owner: false, ownerId: null, isDemo: true
+      }));
+    }
+    // DEMO LISTINGS END
 
     function loadState() {
       try {
         const stored = JSON.parse(localStorage.getItem(storageKey) || "{}");
-        return { ...defaultState, ...stored, saved: Array.isArray(stored.saved) ? stored.saved : [], blocked: Array.isArray(stored.blocked) ? stored.blocked : [], customListings: Array.isArray(stored.customListings) ? stored.customListings : [], feedbackHistory: Array.isArray(stored.feedbackHistory) ? stored.feedbackHistory : [], moderation: { ...defaultState.moderation, ...(stored.moderation || {}), reports: Array.isArray(stored.moderation?.reports) ? stored.moderation.reports : [] }, profile: { ...defaultState.profile, ...(stored.profile || {}) } };
+        return { ...defaultState, ...stored, saved: Array.isArray(stored.saved) ? stored.saved : [], blocked: Array.isArray(stored.blocked) ? stored.blocked : [], customListings: Array.isArray(stored.customListings) ? stored.customListings : [], demoParticipations: Array.isArray(stored.demoParticipations) ? stored.demoParticipations : [], feedbackHistory: Array.isArray(stored.feedbackHistory) ? stored.feedbackHistory : [], moderation: { ...defaultState.moderation, ...(stored.moderation || {}), reports: Array.isArray(stored.moderation?.reports) ? stored.moderation.reports : [] }, profile: { ...defaultState.profile, ...(stored.profile || {}) } };
       }
       catch { return { ...defaultState }; }
     }
@@ -2059,6 +2077,7 @@
         <article class="card listing-card">
           <div>
             <div class="chips">
+              ${item.isDemo ? `<span class="badge">動作確認用</span>` : ""}
               <span class="badge">${item.scheduledAt ? esc(new Date(item.scheduledAt).toLocaleString("ja-JP", { month: "numeric", day: "numeric", hour: "2-digit", minute: "2-digit" })) : "今日会えます"}</span>
               ${item.capacity ? `<span class="badge muted">${item.capacity}人募集</span>` : ""}
               ${item.capacity ? `<span class="badge muted">${item.participantCount}/${item.capacity}人</span>` : ""}
@@ -2135,10 +2154,10 @@
       if (countsResult?.error) { toast(`参加人数を読み込めませんでした：${countsResult.error.message}`); return false; }
       if (mineResult?.error) { toast(`参加状態を読み込めませんでした：${mineResult.error.message}`); return false; }
       const counts = new Map((countsResult?.data || []).map((item) => [item.listing_id, Number(item.participant_count)]));
-      participatingListingIds = new Set((mineResult?.data || []).map((item) => item.listing_id));
+      participatingListingIds = new Set([...(mineResult?.data || []).map((item) => item.listing_id), ...appState.demoParticipations]);
       const remote = (result?.data || []).map((row) => listingFromRow({ ...row, participantCount: counts.get(row.id) || 0 }));
       listings.splice(0, listings.length);
-      listings.unshift(...remote);
+      listings.unshift(...createDemoListings(), ...remote);
       appState.customListings = remote.filter((item) => item.owner);
       saveState();
       renderListings(); renderRecommendations(); renderRegionalProfiles();
@@ -2357,12 +2376,15 @@
       if (!/^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(id || "")) { showParticipationMessage("募集IDが正しくありません。募集一覧からもう一度詳細を開いてください。", true); jumpTo("listings"); return; }
       const localItem = listings.find((listing) => listing.id === id);
       if (!localItem) { showParticipationMessage("募集が見つかりません。募集一覧を再読み込みしてください。", true); jumpTo("listings"); return; }
-      const detailResult = await window.tomoniAuth?.getListing?.(id);
-      if (detailResult?.error || !detailResult?.data) { showParticipationMessage("募集がSupabase上に見つかりません。募集一覧を再読み込みしてください。", true); jumpTo("listings"); return; }
-      const item = listingFromRow({ ...detailResult.data, participantCount: localItem.participantCount });
-      const itemIndex = listings.findIndex((listing) => listing.id === id);
-      if (itemIndex >= 0) listings.splice(itemIndex, 1, item);
-      currentDetailListingId = detailResult.data.id;
+      let item = localItem;
+      if (!localItem.isDemo) {
+        const detailResult = await window.tomoniAuth?.getListing?.(id);
+        if (detailResult?.error || !detailResult?.data) { showParticipationMessage("募集がSupabase上に見つかりません。募集一覧を再読み込みしてください。", true); jumpTo("listings"); return; }
+        item = listingFromRow({ ...detailResult.data, participantCount: localItem.participantCount });
+        const itemIndex = listings.findIndex((listing) => listing.id === id);
+        if (itemIndex >= 0) listings.splice(itemIndex, 1, item);
+      }
+      currentDetailListingId = item.id;
       document.getElementById("detailTitle").innerHTML = `${esc(item.title || item.activity)}<br><span class="meta">${esc(item.person)}さんの募集</span>`;
       document.getElementById("detailCopy").textContent = item.note;
       document.getElementById("detailBadges").innerHTML = `<span class="badge">${item.verified ? "本人確認済み" : "本人確認欄あり"}</span><span class="badge muted">${esc(item.place)}</span><span class="badge muted">${item.participantCount}/${item.capacity}人</span><span class="badge muted">${item.audience === "same_gender" ? "同性のみ" : "誰でも"}</span>`;
@@ -2372,7 +2394,7 @@
       participation.textContent = item.owner ? "自分の募集" : joined ? "参加をキャンセル" : full ? "満員" : "参加する";
       participation.disabled = item.owner || (full && !joined);
       const participationStatus = document.getElementById("participationStatus");
-      participationStatus.textContent = item.owner ? "自分で作成した募集です。" : joined ? "この募集に参加しています。" : full ? "この募集は満員です。" : "参加すると、主催者の募集人数に反映されます。";
+      participationStatus.textContent = item.owner ? "自分で作成した募集です。" : joined ? "この募集に参加しています。" : full ? "この募集は満員です。" : item.isDemo ? "動作確認用のサンプル募集です。" : "参加すると、主催者の募集人数に反映されます。";
       participationStatus.classList.toggle("caution", full && !joined);
       document.getElementById("detailSave").dataset.id = item.id;
       document.getElementById("detailSave").disabled = false;
@@ -2477,6 +2499,17 @@
         if (item.owner) { showParticipationMessage("自分で作成した募集には参加できません。", true); return; }
         const joined = participatingListingIds.has(item.id);
         if (!joined && item.participantCount >= item.capacity) { showParticipationMessage("この募集は満員です。", true); return; }
+        if (item.isDemo) {
+          appState.demoParticipations = joined
+            ? appState.demoParticipations.filter((id) => id !== listingId)
+            : [...new Set([...appState.demoParticipations, listingId])];
+          if (joined) participatingListingIds.delete(listingId); else participatingListingIds.add(listingId);
+          item.participantCount = Math.max(0, item.participantCount + (joined ? -1 : 1));
+          saveState(); renderListings();
+          if (document.getElementById("detail").classList.contains("is-visible")) openListingDetail(listingId);
+          showParticipationMessage(joined ? "サンプル募集への参加をキャンセルしました。" : "サンプル募集に参加しました。ボタンと人数の動作確認ができます。");
+          return;
+        }
         button.disabled = true;
         button.setAttribute("aria-busy", "true");
         setLoading(true);
