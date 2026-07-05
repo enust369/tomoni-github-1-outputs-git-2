@@ -28,6 +28,30 @@ window.tomoniAuth = {
   resetPassword: (email) => client
     ? client.auth.resetPasswordForEmail(email, { redirectTo: window.location.href.split("#")[0] })
     : Promise.resolve(notConfigured()),
+  listListings: () => client
+    ? client.from("listings").select("*").order("created_at", { ascending: false })
+    : Promise.resolve(notConfigured()),
+  createListing: (listing) => client
+    ? client.from("listings").insert(listing).select().single()
+    : Promise.resolve(notConfigured()),
+  updateListing: (id, listing) => client
+    ? client.from("listings").update(listing).eq("id", id).select().single()
+    : Promise.resolve(notConfigured()),
+  deleteListing: (id) => client
+    ? client.from("listings").delete().eq("id", id)
+    : Promise.resolve(notConfigured()),
+  listParticipationCounts: () => client
+    ? client.from("listing_participant_counts").select("listing_id,participant_count")
+    : Promise.resolve(notConfigured()),
+  listMyParticipations: () => client
+    ? client.from("listing_participants").select("listing_id")
+    : Promise.resolve(notConfigured()),
+  joinListing: (listingId) => client
+    ? client.rpc("join_listing", { target_listing_id: listingId })
+    : Promise.resolve(notConfigured()),
+  cancelParticipation: (listingId) => client
+    ? client.from("listing_participants").delete().eq("listing_id", listingId)
+    : Promise.resolve(notConfigured()),
 };
 
 window.dispatchEvent(new CustomEvent("tomoni:auth-ready"));

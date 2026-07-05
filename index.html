@@ -1289,7 +1289,11 @@
         <div class="grid two">
           <form class="card form" id="createForm" novalidate>
             <div class="field full">
-              <label for="activity">今日の過ごし方</label>
+              <label for="listingTitle">タイトル</label>
+              <input id="listingTitle" maxlength="60" placeholder="例：夕方の公園をゆっくり散歩" required><span class="field-error"></span>
+            </div>
+            <div class="field full">
+              <label for="activity">過ごし方</label>
               <select id="activity" required>
                 <option>何もしない 15分</option>
                 <option selected>静かな散歩 20分</option>
@@ -1304,47 +1308,26 @@
             </div>
             <div class="field">
               <label for="date">日時</label>
-              <input id="date" type="datetime-local" value="2026-07-02T15:00" required><span class="field-error"></span>
+              <input id="date" type="datetime-local" required><span class="field-error"></span>
             </div>
             <div class="field">
-              <label for="duration">所要時間</label>
-              <select id="duration">
-                <option>5分</option>
-                <option>10分</option>
-                <option>15分</option>
-                <option selected>20分</option>
-                <option>30分</option>
+              <label for="capacity">募集人数</label>
+              <select id="capacity" required>
+                <option value="1">1人</option>
+                <option value="2">2人</option>
+                <option value="3">3人</option>
+                <option value="4">4人</option>
+                <option value="5">5人</option>
               </select>
             </div>
             <div class="field">
-              <label for="talk">話す量</label>
-              <select id="talk">
-                <option>たくさん話したい</option>
-                <option selected>自然に話せたらいい</option>
-                <option>話さなくても大丈夫</option>
-              </select>
-            </div>
-            <div class="field">
-              <label for="registeredGender">登録時の性別</label>
-              <select id="registeredGender">
-                <option>女性</option>
-                <option>男性</option>
-              </select>
-            </div>
-            <div class="field">
-              <label for="age">年代</label>
-              <select id="age">
-                <option>20代</option>
-                <option>30代</option>
-                <option>40代</option>
-                <option selected>特にこだわらない</option>
+              <label for="audience">参加できる人</label>
+              <select id="audience" required>
+                <option value="same_gender">同性のみ</option>
+                <option value="anyone">誰でも</option>
               </select>
             </div>
             <div class="field full">
-              <label for="note">ひとこと</label>
-              <textarea id="note" maxlength="160" required>会話は自由です。
-最初に自己紹介だけして、あとは歩きましょう。
-話したくなったら話しましょう。</textarea>
               <div class="safety-check" id="safetyCheck" role="status">公開前に、場所・募集文の安全性を確認します。</div>
             </div>
             <div class="field full">
@@ -1451,7 +1434,7 @@
               <span class="badge muted">新宿御苑の入口近く</span>
             </div>
             <div class="actions">
-              <button class="btn primary" data-action="invite">一緒に過ごしませんか？</button>
+              <button class="btn primary" id="detailParticipation" data-action="toggle-participation" data-id="sample-1">参加する</button>
               <button class="btn" id="detailSave" data-action="save-listing" data-id="sample-1">保存する</button>
               <button class="btn quiet-action" id="detailLater" data-action="save-listing" data-id="sample-1">あとで見る</button>
             </div>
@@ -1463,11 +1446,7 @@
               <button class="btn small" data-action="block" data-person="ゆう">ブロックする</button>
             </div>
             <div class="notice" style="margin-top:16px"><p>正確な待ち合わせ位置は、一緒に過ごすことが決まった後に共有されます。</p></div>
-            <div class="actions">
-              <button class="btn small primary" data-action="accept-invite">一緒に過ごしたい</button>
-              <button class="btn small" data-action="decline">また今度お願いします</button>
-              <button class="btn small quiet-action" data-action="decline">今日は難しい</button>
-            </div>
+            <div class="actions"><button class="btn small quiet-action" data-action="decline">今日は難しい</button></div>
           </aside>
         </div>
       </section>
@@ -1781,6 +1760,7 @@
     let latestRankedListings = [];
     let todayOpen = true;
     let editingListingId = null;
+    let participatingListingIds = new Set();
     let safetyGateActive = false;
     const storageKey = "tomoni-public-preview-v1";
     const defaultState = { user: null, profileOwnerId: null, safetyOnboardingAccepted: false, saved: [], blocked: [], customListings: [], moderation: { reports: [], blockCount: 0 }, feedbackHistory: [], profile: { nickname: "あなた", age: "30代", gender: "女性", bio: "静かな時間を大切にしています。" } };
@@ -1821,7 +1801,7 @@
     }
 
     function analyzeSafety() {
-      const text = `${document.getElementById("place").value} ${document.getElementById("note").value}`;
+      const text = `${document.getElementById("listingTitle").value} ${document.getElementById("place").value}`;
       const checkedText = text.replace(/車いす/g, "");
       const dangerWords = ["家", "自宅", "送迎", "車", "ホテル", "稼げる", "副業", "投資", "宗教"];
       const hits = dangerWords.filter((word) => checkedText.includes(word));
@@ -1909,11 +1889,7 @@
       document.getElementById("activity").value = [...document.getElementById("activity").options].some((option) => option.value === activity)
         ? activity
         : "何もしない 15分";
-      if (activity === "何もしない 15分") {
-        document.getElementById("duration").value = "15分";
-        document.getElementById("talk").value = "話さなくても大丈夫";
-        document.getElementById("note").value = "話さなくても大丈夫です。\n同じ場所で、ただ静かに過ごしましょう。\n気が向いたら少し話す。それだけで十分です。";
-      }
+      if (!document.getElementById("listingTitle").value) document.getElementById("listingTitle").value = activity;
       jumpTo("create");
     }
 
@@ -2010,7 +1986,7 @@
     function rankListings() {
       const profile = buildComfortProfile();
       latestRankedListings = listings
-        .filter((item) => item.gender === currentGender && item.availableToday && !appState.blocked.includes(item.person))
+        .filter((item) => (item.audience === "anyone" || item.gender === currentGender) && item.availableToday && !appState.blocked.includes(item.person))
         .map((item) => ({ ...item, comfortScore: listingScore(item, profile) }))
         .sort((a, b) => b.comfortScore - a.comfortScore);
       return latestRankedListings;
@@ -2086,22 +2062,26 @@
         <article class="card listing-card">
           <div>
             <div class="chips">
-              <span class="badge">今日会えます</span>
+              <span class="badge">${item.scheduledAt ? esc(new Date(item.scheduledAt).toLocaleString("ja-JP", { month: "numeric", day: "numeric", hour: "2-digit", minute: "2-digit" })) : "今日会えます"}</span>
+              ${item.capacity ? `<span class="badge muted">${item.capacity}人募集</span>` : ""}
+              ${item.capacity ? `<span class="badge muted">${item.participantCount}/${item.capacity}人</span>` : ""}
+              ${item.audience ? `<span class="badge muted">${item.audience === "same_gender" ? "同性のみ" : "誰でも"}</span>` : ""}
               <span class="badge">${item.verified ? "本人確認済み" : "本人確認欄あり"}</span>
             </div>
-            <h3 style="margin-top:12px">${esc(item.person)}さん</h3>
+            <h3 style="margin-top:12px">${esc(item.title || item.activity)}</h3>
+            <p class="meta">${esc(item.person)}さん</p>
             <p class="meta">徒歩${item.distance}分 / ${esc(item.place)}</p>
-            <h3 style="margin-top:10px">${esc(item.activity)}</h3>
+            <p style="margin-top:10px">${esc(item.activity)}</p>
             <div class="listing-summary">
               <div><small>安心の目安</small>${comfortDots()}</div>
               <div><small>話す量</small>${item.talk === "自然に話せたらいい" ? "自然でOK" : esc(item.talk)}</div>
               <div><small>空気感</small>${esc(item.air[0].replace("な空気", ""))}</div>
             </div>
-            <p class="clamp" style="margin-top:12px">${esc(item.note)}</p>
+            <p class="clamp" style="margin-top:12px">${esc(item.note || "無理のない範囲で、一緒に穏やかな時間を過ごしましょう。")}</p>
           </div>
           <div class="actions" style="margin-top:0">
             <button class="btn small" data-action="open-detail" data-id="${item.id}">詳しく見る</button>
-            <button class="btn small primary" data-action="invite" data-id="${item.id}">一緒に過ごしたい</button>
+            ${participationButton(item, "btn small primary")}
             <button class="btn small quiet-action" data-action="save-listing" data-id="${item.id}">${appState.saved.includes(item.id) ? "保存済み" : "保存"}</button>
             <button class="btn small quiet-action" data-action="decline">今日は難しい</button>
             <button class="btn small quiet-action" data-action="report" data-person="${esc(item.person)}" data-source="listing" data-id="${item.id}">通報</button>
@@ -2111,17 +2091,30 @@
       bindJumpButtons(grid);
     }
 
-    function addCurrentListing() {
-      const newListing = {
-        id: editingListingId || `own-${Date.now()}`,
-        person: appState.profile.nickname,
-        gender: document.getElementById("registeredGender").value,
-        activity: document.getElementById("activity").value,
-        duration: document.getElementById("duration").value,
-        place: document.getElementById("place").value,
-        talk: document.getElementById("talk").value,
+    function participationButton(item, className = "btn primary") {
+      const joined = participatingListingIds.has(item.id);
+      const full = item.participantCount >= item.capacity;
+      const label = item.owner ? "自分の募集" : joined ? "参加をキャンセル" : full ? "満員" : "参加する";
+      const disabled = item.owner || (full && !joined) || !item.capacity;
+      return `<button class="${className}" data-action="toggle-participation" data-id="${item.id}" ${disabled ? "disabled" : ""}>${label}</button>`;
+    }
+
+    function listingFromRow(row) {
+      return {
+        id: row.id,
+        person: row.person_name,
+        gender: row.owner_gender,
+        title: row.title,
+        activity: row.activity,
+        duration: "",
+        place: row.place,
+        talk: "自然に話せたらいい",
+        scheduledAt: row.scheduled_at,
+        capacity: row.capacity,
+        participantCount: row.participantCount || 0,
+        audience: row.audience,
         verified: Boolean(appState.user?.verified),
-        note: document.getElementById("note").value.split("\n")[0],
+        note: row.title,
         air: selectedValues("air"),
         traits: selectedValues("withPerson"),
         pace: selectedValues("style")[0] === "軽く体を動かす" ? "active" : "slow",
@@ -2130,29 +2123,65 @@
         distance: 3,
         availableToday: todayOpen,
         active: true,
-        owner: true
+        owner: row.owner_id === appState.user?.id,
+        ownerId: row.owner_id
       };
-      if (editingListingId) {
-        const listingIndex = listings.findIndex((item) => item.id === editingListingId);
-        if (listingIndex >= 0) listings.splice(listingIndex, 1, newListing);
-        const storedIndex = appState.customListings.findIndex((item) => item.id === editingListingId);
-        if (storedIndex >= 0) appState.customListings.splice(storedIndex, 1, newListing);
-      } else {
-        listings.unshift(newListing);
-        appState.customListings.unshift(newListing);
-      }
+    }
+
+    async function loadSupabaseListings() {
+      const [result, countsResult, mineResult] = await Promise.all([
+        window.tomoniAuth?.listListings?.(),
+        window.tomoniAuth?.listParticipationCounts?.(),
+        appState.user ? window.tomoniAuth?.listMyParticipations?.() : Promise.resolve({ data: [], error: null })
+      ]);
+      if (result?.error) { toast(`募集を読み込めませんでした：${result.error.message}`); return; }
+      if (countsResult?.error) { toast(`参加人数を読み込めませんでした：${countsResult.error.message}`); return; }
+      if (mineResult?.error) { toast(`参加状態を読み込めませんでした：${mineResult.error.message}`); return; }
+      const counts = new Map((countsResult?.data || []).map((item) => [item.listing_id, Number(item.participant_count)]));
+      participatingListingIds = new Set((mineResult?.data || []).map((item) => item.listing_id));
+      const remote = (result?.data || []).map((row) => listingFromRow({ ...row, participantCount: counts.get(row.id) || 0 }));
+      listings.splice(0, listings.length);
+      listings.unshift(...remote);
+      appState.customListings = remote.filter((item) => item.owner);
+      saveState();
+      renderListings(); renderRecommendations(); renderRegionalProfiles();
+    }
+
+    async function addCurrentListing() {
+      const payload = {
+        owner_id: appState.user.id,
+        person_name: appState.profile.nickname,
+        owner_gender: appState.profile.gender,
+        title: document.getElementById("listingTitle").value.trim(),
+        activity: document.getElementById("activity").value,
+        place: document.getElementById("place").value.trim(),
+        scheduled_at: new Date(document.getElementById("date").value).toISOString(),
+        capacity: Number(document.getElementById("capacity").value),
+        audience: document.getElementById("audience").value,
+        updated_at: new Date().toISOString()
+      };
+      const result = editingListingId
+        ? await window.tomoniAuth.updateListing(editingListingId, payload)
+        : await window.tomoniAuth.createListing(payload);
+      if (result.error) throw result.error;
       editingListingId = null;
       document.getElementById("previewButton").textContent = "募集一覧に反映する";
-      saveState();
-      currentGender = document.getElementById("registeredGender").value;
+      currentGender = appState.profile.gender;
       syncGenderControls();
-      renderListings();
-      renderRecommendations();
+      await loadSupabaseListings();
+      document.getElementById("createForm").reset();
+      setDefaultListingDate();
       jumpTo("listings");
     }
 
+    function setDefaultListingDate() {
+      const date = new Date(Date.now() + 60 * 60 * 1000);
+      date.setMinutes(Math.ceil(date.getMinutes() / 15) * 15, 0, 0);
+      document.getElementById("date").value = new Date(date.getTime() - date.getTimezoneOffset() * 60000).toISOString().slice(0, 16);
+      document.getElementById("date").min = new Date(Date.now() - new Date().getTimezoneOffset() * 60000).toISOString().slice(0, 16);
+    }
+
     function syncGenderControls() {
-      document.getElementById("registeredGender").value = currentGender;
       document.querySelectorAll("[data-gender]").forEach((button) => {
         button.classList.toggle("selected", button.dataset.gender === currentGender);
       });
@@ -2174,14 +2203,7 @@
         ? "ありがとうございます。お二人が同じ気持ちを選んだときだけ、大切な人として保存されます。"
         : "ありがとうございます。この時間の感じ方を、次の穏やかな紹介に反映します。";
     });
-    [document.getElementById("place"), document.getElementById("note")].forEach((field) => field.addEventListener("input", analyzeSafety));
-    document.getElementById("registeredGender").addEventListener("change", (event) => {
-      currentGender = event.target.value;
-      syncGenderControls();
-      renderRecommendations();
-      renderListings();
-      renderRegionalProfiles();
-    });
+    [document.getElementById("listingTitle"), document.getElementById("place")].forEach((field) => field.addEventListener("input", analyzeSafety));
     document.querySelectorAll("[data-gender]").forEach((button) => {
       button.addEventListener("click", () => {
         currentGender = button.dataset.gender;
@@ -2254,8 +2276,9 @@
       saveState(); updateAccountUI();
       if (user && appState.profileOwnerId === user.id) {
         currentGender = appState.profile.gender || currentGender;
-        syncGenderControls(); renderRecommendations(); renderListings(); renderRegionalProfiles();
+        syncGenderControls();
       }
+      await loadSupabaseListings();
     }
 
     function authMarkup(mode = "login") {
@@ -2306,15 +2329,21 @@
 
     function renderManaged() {
       const own = appState.customListings;
-      document.getElementById("accountContent").innerHTML = own.length ? own.map((item) => `<article class="card managed-listing"><div><span class="badge">公開中</span><h3 style="margin-top:10px">${esc(item.activity)}</h3><p class="meta">${esc(item.place)} / ${esc(item.duration)}</p></div><div class="actions"><button class="btn small" data-action="edit-listing" data-id="${item.id}">編集</button><button class="btn small quiet-action" data-action="delete-listing" data-id="${item.id}">削除</button></div></article>`).join("") : `<article class="card empty-state">作成した募集はまだありません。</article>`;
+      document.getElementById("accountContent").innerHTML = own.length ? own.map((item) => `<article class="card managed-listing"><div><span class="badge">公開中</span><h3 style="margin-top:10px">${esc(item.title || item.activity)}</h3><p class="meta">${esc(item.place)} / ${item.capacity}人募集</p></div><div class="actions"><button class="btn small" data-action="edit-listing" data-id="${item.id}">編集</button><button class="btn small quiet-action" data-action="delete-listing" data-id="${item.id}">削除</button></div></article>`).join("") : `<article class="card empty-state">作成した募集はまだありません。</article>`;
     }
 
     function openListingDetail(id) {
       const item = listings.find((listing) => listing.id === id);
       if (!item) { jumpTo("not-found"); return; }
-      document.getElementById("detailTitle").innerHTML = `${esc(item.person)}さんと<br>${esc(item.activity)}`;
+      document.getElementById("detailTitle").innerHTML = `${esc(item.title || item.activity)}<br><span class="meta">${esc(item.person)}さんの募集</span>`;
       document.getElementById("detailCopy").textContent = item.note;
-      document.getElementById("detailBadges").innerHTML = `<span class="badge">${item.verified ? "本人確認済み" : "本人確認欄あり"}</span><span class="badge muted">${esc(item.duration)}</span><span class="badge muted">${esc(item.place)}</span>`;
+      document.getElementById("detailBadges").innerHTML = `<span class="badge">${item.verified ? "本人確認済み" : "本人確認欄あり"}</span><span class="badge muted">${esc(item.place)}</span><span class="badge muted">${item.participantCount}/${item.capacity}人</span><span class="badge muted">${item.audience === "same_gender" ? "同性のみ" : "誰でも"}</span>`;
+      const participation = document.getElementById("detailParticipation");
+      const joined = participatingListingIds.has(item.id);
+      const full = item.participantCount >= item.capacity;
+      participation.dataset.id = item.id;
+      participation.textContent = item.owner ? "自分の募集" : joined ? "参加をキャンセル" : full ? "満員" : "参加する";
+      participation.disabled = item.owner || (full && !joined);
       document.getElementById("detailSave").dataset.id = item.id;
       document.getElementById("detailLater").dataset.id = item.id;
       document.querySelectorAll('#detail [data-action="report"], #detail [data-action="block"]').forEach((button) => { button.dataset.person = item.person; button.dataset.id = item.id; button.dataset.source = "detail"; });
@@ -2333,11 +2362,17 @@
       if (form.id === "createForm") {
         if (!appState.user) { openModal("ログイン", authMarkup("login")); toast("募集の作成にはログインが必要です。"); return; }
         if (!hasMemberAccess()) { showProfileEditor(true); toast("最初にプロフィールを作成してください。"); return; }
-        if (!appState.user.verified) { toast("本人確認を完了してから募集を作成してください。"); jumpTo("account"); return; }
         const safety = analyzeSafety();
         if (safety.blocked) { toast("安全のため、この内容では公開できません。"); document.getElementById("safetyCheck").scrollIntoView({ behavior: "smooth", block: "center" }); return; }
         const wasEditing = Boolean(editingListingId);
-        withLoading(() => { addCurrentListing(); toast(wasEditing ? "募集を更新しました。" : "募集を公開しました。"); renderManaged(); });
+        setLoading(true);
+        try {
+          await addCurrentListing();
+          toast(wasEditing ? "募集を更新しました。" : "募集を公開しました。");
+          renderManaged();
+        } catch (error) {
+          toast(`保存できませんでした：${error.message}`);
+        } finally { setLoading(false); }
       }
       if (form.id === "contactForm") withLoading(() => { form.reset(); toast("お問い合わせを受け付けました。"); });
       if (form.id === "authForm") {
@@ -2355,7 +2390,7 @@
         appState.user = { id: user.id, email: user.email, verified: Boolean(user.email_confirmed_at) };
         saveState(); updateAccountUI(); closeModal();
         if (appState.profileOwnerId !== user.id) showProfileEditor(true);
-        else { currentGender = appState.profile.gender || currentGender; syncGenderControls(); renderRecommendations(); renderListings(); renderRegionalProfiles(); toast("ログインしました。"); }
+        else { currentGender = appState.profile.gender || currentGender; syncGenderControls(); await loadSupabaseListings(); toast("ログインしました。"); }
       }
       if (form.id === "passwordResetForm") {
         const data = Object.fromEntries(new FormData(form));
@@ -2367,7 +2402,7 @@
       }
       if (form.id === "profileForm") {
         const data = Object.fromEntries(new FormData(form));
-        appState.profile = { ...appState.profile, ...data }; appState.profileOwnerId = appState.user.id; currentGender = data.gender; saveState(); updateAccountUI(); closeModal(); syncGenderControls(); renderRecommendations(); renderListings(); renderRegionalProfiles(); toast(form.dataset.firstTime === "true" ? "プロフィールを作成しました。" : "プロフィールを保存しました。");
+        appState.profile = { ...appState.profile, ...data }; appState.profileOwnerId = appState.user.id; currentGender = data.gender; saveState(); updateAccountUI(); closeModal(); syncGenderControls(); await loadSupabaseListings(); toast(form.dataset.firstTime === "true" ? "プロフィールを作成しました。" : "プロフィールを保存しました。");
       }
       if (form.id === "reportForm") withLoading(() => {
         const data = Object.fromEntries(new FormData(form));
@@ -2394,13 +2429,29 @@
       if (action === "edit-profile") { if (!appState.user) openModal("ログイン", authMarkup("login")); else showProfileEditor(); }
       if (action === "show-saved") renderSaved();
       if (action === "show-managed") renderManaged();
-      if (action === "logout") { setLoading(true); const result = await window.tomoniAuth?.signOut(); setLoading(false); if (result?.error) { toast(result.error.message); return; } appState.user = null; saveState(); updateAccountUI(); document.getElementById("accountContent").innerHTML = `<article class="card empty-state">ログアウトしました。またいつでも戻ってきてください。</article>`; toast("ログアウトしました。"); }
+      if (action === "logout") { setLoading(true); const result = await window.tomoniAuth?.signOut(); if (!result?.error) await restoreSupabaseUser(); setLoading(false); if (result?.error) { toast(result.error.message); return; } document.getElementById("accountContent").innerHTML = `<article class="card empty-state">ログアウトしました。またいつでも戻ってきてください。</article>`; toast("ログアウトしました。"); }
       if (action === "save-listing") {
         const id = button.dataset.id;
         appState.saved = appState.saved.includes(id) ? appState.saved.filter((item) => item !== id) : [...appState.saved, id];
         saveState(); renderListings(); if (document.getElementById("account").classList.contains("is-visible")) renderSaved(); toast(appState.saved.includes(id) ? "あとで見られるよう保存しました。" : "保存を外しました。");
       }
-      if (action === "invite") { if (!appState.user) openModal("ログイン", authMarkup("login")); else withLoading(() => { jumpTo("after"); toast("気持ちを送りました。返事は急がなくて大丈夫です。"); }); }
+      if (action === "toggle-participation") {
+        if (!appState.user) { openModal("ログイン", authMarkup("login")); toast("参加するにはログインしてください。"); return; }
+        const item = listings.find((listing) => listing.id === button.dataset.id);
+        if (!item) return;
+        if (item.owner) { toast("自分で作成した募集には参加できません。"); return; }
+        const joined = participatingListingIds.has(item.id);
+        if (!joined && item.participantCount >= item.capacity) { toast("この募集は満員です。"); return; }
+        setLoading(true);
+        const result = joined
+          ? await window.tomoniAuth.cancelParticipation(item.id)
+          : await window.tomoniAuth.joinListing(item.id);
+        setLoading(false);
+        if (result.error) { toast(`参加状態を変更できませんでした：${result.error.message}`); return; }
+        await loadSupabaseListings();
+        if (document.getElementById("detail").classList.contains("is-visible")) openListingDetail(item.id);
+        toast(joined ? "参加をキャンセルしました。" : "募集に参加しました。");
+      }
       if (action === "accept-invite") { withLoading(() => { jumpTo("after"); toast("一緒に過ごす予定に追加しました。"); }); }
       if (action === "decline") toast("今回は見送りました。相手にはやさしく伝わります。");
       if (action === "report") openModal("通報する", `<p class="meta" style="margin-bottom:18px">安全確認のため、気になったことを教えてください。</p><form class="form" id="reportForm" data-person="${esc(button.dataset.person || "")}" data-source="${esc(button.dataset.source || "profile")}" data-target-id="${esc(button.dataset.id || "")}" novalidate><div class="field full"><label for="reportReason">通報理由</label><select id="reportReason" name="reason"><option>迷惑行為</option><option>勧誘</option><option>営業目的</option><option>宗教</option><option>恋愛目的</option><option>暴言</option><option>危険を感じた</option><option>その他</option></select></div><div class="field full"><label for="reportDetail">詳しい内容（任意）</label><textarea id="reportDetail" name="detail" maxlength="500"></textarea></div><div class="field full"><button class="btn primary" type="submit">運営へ送る</button></div></form>`);
@@ -2408,10 +2459,23 @@
       if (action === "confirm-block") { appState.blocked = [...new Set([...appState.blocked, button.dataset.person])]; appState.moderation.blockCount += 1; saveState(); closeModal(); renderListings(); renderRegionalProfiles(); renderRecommendations(); toast("ブロックしました。検索・募集・おすすめには表示されません。"); }
       if (action === "edit-listing") {
         const item = listings.find((listing) => listing.id === button.dataset.id); if (!item) return;
-        editingListingId = item.id; document.getElementById("activity").value = [...document.getElementById("activity").options].some((option) => option.value === item.activity) ? item.activity : "何もしない 15分"; document.getElementById("place").value = item.place; document.getElementById("duration").value = item.duration; document.getElementById("talk").value = item.talk; document.getElementById("note").value = item.note; document.getElementById("previewButton").textContent = "変更を保存する"; jumpTo("create"); toast("募集内容を編集できます。");
+        editingListingId = item.id;
+        document.getElementById("listingTitle").value = item.title || item.activity;
+        document.getElementById("activity").value = [...document.getElementById("activity").options].some((option) => option.value === item.activity) ? item.activity : "何もしない 15分";
+        document.getElementById("place").value = item.place;
+        document.getElementById("date").value = new Date(new Date(item.scheduledAt).getTime() - new Date(item.scheduledAt).getTimezoneOffset() * 60000).toISOString().slice(0, 16);
+        document.getElementById("capacity").value = String(item.capacity);
+        document.getElementById("audience").value = item.audience;
+        document.getElementById("previewButton").textContent = "変更を保存する"; jumpTo("create"); toast("募集内容を編集できます。");
       }
       if (action === "delete-listing") openModal("募集を削除しますか？", `<p>削除した募集は一覧に表示されなくなります。</p><div class="actions"><button class="btn primary" data-action="confirm-delete" data-id="${button.dataset.id}">削除する</button><button class="btn" data-action="close-modal">戻る</button></div>`);
-      if (action === "confirm-delete") { const id = button.dataset.id; appState.customListings = appState.customListings.filter((item) => item.id !== id); const index = listings.findIndex((item) => item.id === id); if (index >= 0) listings.splice(index, 1); saveState(); closeModal(); renderManaged(); renderListings(); renderRegionalProfiles(); renderRecommendations(); toast("募集を削除しました。"); }
+      if (action === "confirm-delete") {
+        setLoading(true);
+        const result = await window.tomoniAuth.deleteListing(button.dataset.id);
+        setLoading(false);
+        if (result.error) { toast(`削除できませんでした：${result.error.message}`); return; }
+        closeModal(); await loadSupabaseListings(); renderManaged(); toast("募集を削除しました。");
+      }
       if (action === "retry") withLoading(() => { jumpTo("home"); toast("読み込み直しました。"); });
     });
 
@@ -2452,6 +2516,7 @@
     document.querySelectorAll("main section").forEach((section) => observer.observe(section));
 
     renderCategories();
+    setDefaultListingDate();
     renderActivities();
     syncGenderControls();
     syncTodayOpen();
