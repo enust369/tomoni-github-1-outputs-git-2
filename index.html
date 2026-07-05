@@ -1790,6 +1790,22 @@
 
     function saveState() { localStorage.setItem(storageKey, JSON.stringify(appState)); }
     function esc(value = "") { const node = document.createElement("div"); node.textContent = String(value); return node.innerHTML; }
+    function bytesToBase64(bytes) { return btoa(String.fromCharCode(...bytes)); }
+    async function hashPassword(password, salt) {
+      const data = new TextEncoder().encode(`${salt}:${password}`);
+      const digest = await crypto.subtle.digest("SHA-256", data);
+      return bytesToBase64(new Uint8Array(digest));
+    }
+
+    async function createPasswordRecord(password) {
+      const salt = bytesToBase64(crypto.getRandomValues(new Uint8Array(16)));
+      return { passwordSalt: salt, passwordHash: await hashPassword(password, salt) };
+    }
+
+    async function passwordMatches(password, account) {
+      if (!account?.passwordSalt || !account?.passwordHash) return false;
+      return (await hashPassword(password, account.passwordSalt)) === account.passwordHash;
+    }
     function isAdult(value) {
       if (!value) return false;
       const birth = new Date(`${value}T00:00:00`);
@@ -2225,8 +2241,8 @@
       const button = document.getElementById("accountButton");
       button.textContent = appState.user ? `${appState.profile.nickname}さん` : "登録・ログイン";
       button.dataset.action = appState.user ? "open-account" : "open-auth";
-      document.getElementById("profileDisplayName").textContent = "ゆう";
-      document.getElementById("profileDisplayMeta").textContent = "30代 / 今日の気分：穏やか";
+      document.getElementById("profileDisplayName").textContent = appState.profile.nickname;
+      document.getElementById("profileDisplayMeta").textContent = `${appState.profile.age} / 今日の気分：穏やか`;
       document.getElementById("verificationStatus").innerHTML = appState.user?.verified ? `<strong>本人確認済み</strong><p class="meta">メール確認・年齢確認・規約同意・プロフィール入力済み</p>` : `<strong>本人確認</strong><p class="meta">登録後に確認状況を表示します。</p>`;
     }
 
@@ -2237,9 +2253,14 @@
         <div class="field full"><label for="authEmail">メールアドレス</label><input id="authEmail" name="email" type="email" autocomplete="email" required><span class="field-error"></span></div>
         ${registering ? `<div class="field full"><button class="btn" type="button" data-action="send-email-code">確認コードを送る</button><p class="meta">この試作画面では、送信後に表示される確認コードを入力します。</p></div><div class="field full"><label for="authCode">メール確認コード</label><input id="authCode" name="emailCode" inputmode="numeric" pattern="[0-9]{6}" maxlength="6" required disabled><span class="field-error"></span></div>` : ""}
         <div class="field full"><label for="authPassword">パスワード</label><input id="authPassword" name="password" type="password" minlength="8" autocomplete="${registering ? "new-password" : "current-password"}" required><span class="field-error"></span></div>
+        ${registering ? `<div class="field full"><label for="authPasswordConfirm">パスワード（確認）</label><input id="authPasswordConfirm" name="passwordConfirm" type="password" minlength="8" autocomplete="new-password" required><span class="field-error"></span></div>` : ""}
         ${registering ? `<div class="field full"><label class="check-row"><input id="termsAgreement" name="termsAgreement" type="checkbox" required><span><button class="btn quiet-action" type="button" data-action="open-terms">利用規約</button>とプライバシーポリシーに同意します</span></label><span class="field-error"></span></div>` : ""}
         <div class="field full"><button class="btn primary" type="submit">${registering ? "会員登録する" : "ログインする"}</button></div>
-      </form><button class="btn quiet-action" style="margin-top:12px" data-action="${registering ? "show-login" : "show-register"}">${registering ? "ログインへ" : "初めての方は会員登録"}</button>`;
+      </form><div class="actions" style="margin-top:12px"><button class="btn quiet-action" data-action="${registering ? "show-login" : "show-register"}">${registering ? "ログインへ" : "初めての方は会員登録"}</button>${registering ? "" : `<button class="btn quiet-action" data-action="show-password-reset">パスワードを忘れた方</button>`}</div>`;
+    }
+
+    function passwordResetMarkup() {
+      return `<p class="meta" style="margin-bottom:18px">登録したメールアドレスを確認し、新しいパスワードを設定します。</p><form class="form" id="passwordResetForm" novalidate><div class="field full"><label for="resetEmail">メールアドレス</label><input id="resetEmail" name="email" type="email" autocomplete="email" required><span class="field-error"></span></div><div class="field full"><button class="btn" type="button" data-action="send-reset-code">確認コードを送る</button></div><div class="field full"><label for="resetCode">確認コード</label><input id="resetCode" name="code" inputmode="numeric" pattern="[0-9]{6}" maxlength="6" disabled required><span class="field-error"></span></div><div class="field full"><label for="resetPassword">新しいパスワード</label><input id="resetPassword" name="password" type="password" minlength="8" autocomplete="new-password" required><span class="field-error"></span></div><div class="field full"><button class="btn primary" type="submit">パスワードを再設定する</button></div></form><button class="btn quiet-action" style="margin-top:12px" data-action="show-login">ログインへ戻る</button>`;
     }
 
     function validateForm(form) {
@@ -2252,6 +2273,8 @@
         else if (field.type === "email" && field.value && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(field.value)) message = "メールアドレスを確認してください。";
         else if (field.minLength > 0 && field.value.length < field.minLength) message = `${field.minLength}文字以上で入力してください。`;
         else if (field.id === "authCode" && field.value !== "123456") message = "確認コードが一致しません。";
+        else if (field.id === "resetCode" && field.value !== "123456") message = "確認コードが一致しません。";
+        else if (field.id === "authPasswordConfirm" && field.value !== form.querySelector("#authPassword")?.value) message = "パスワードが一致しません。";
         else if (field.id === "authBirthdate" && !isAdult(field.value)) message = "18歳以上の方のみ利用できます。";
         else if (["authNickname", "authBio", "profileNickname", "profileBio"].includes(field.id) && containsPrivateInfo(field.value)) message = "電話番号・メール・住所・SNSは公開プロフィールに入力できません。";
         field.setAttribute("aria-invalid", message ? "true" : "false");
@@ -2289,9 +2312,9 @@
       openModal("プロフィール編集", `<form class="form" id="profileForm" novalidate><div class="field full"><label for="profileNickname">ニックネーム</label><input id="profileNickname" name="nickname" maxlength="20" value="${esc(appState.profile.nickname)}" required><span class="field-error"></span></div><div class="field full"><label for="profileAge">年代</label><select id="profileAge" name="age"><option ${appState.profile.age === "20代" ? "selected" : ""}>20代</option><option ${appState.profile.age === "30代" ? "selected" : ""}>30代</option><option ${appState.profile.age === "40代" ? "selected" : ""}>40代</option><option ${appState.profile.age === "50代以上" ? "selected" : ""}>50代以上</option></select></div><div class="field full"><label for="profileBio">安心してもらうためのひとこと</label><textarea id="profileBio" name="bio" maxlength="120" required>${esc(appState.profile.bio)}</textarea><span class="field-error"></span></div><div class="field full"><button class="btn primary" type="submit">保存する</button></div></form>`);
     }
 
-    document.addEventListener("submit", (event) => {
+    document.addEventListener("submit", async (event) => {
       const form = event.target;
-      if (!["createForm", "contactForm", "authForm", "profileForm", "reportForm"].includes(form.id)) return;
+      if (!["createForm", "contactForm", "authForm", "passwordResetForm", "profileForm", "reportForm"].includes(form.id)) return;
       event.preventDefault();
       if (!validateForm(form)) { toast("入力内容を確認してください。"); return; }
       if (form.id === "createForm") {
@@ -2303,17 +2326,27 @@
         withLoading(() => { addCurrentListing(); toast(wasEditing ? "募集を更新しました。" : "募集を公開しました。"); renderManaged(); });
       }
       if (form.id === "contactForm") withLoading(() => { form.reset(); toast("お問い合わせを受け付けました。"); });
-      if (form.id === "authForm") withLoading(() => {
+      if (form.id === "authForm") {
         const data = Object.fromEntries(new FormData(form));
         const registering = form.dataset.mode === "register";
-        if (!registering && (!appState.registeredAccount || appState.registeredAccount.email !== data.email)) {
-          const emailField = document.getElementById("authEmail"); emailField.setAttribute("aria-invalid", "true"); emailField.parentElement.querySelector(".field-error").textContent = "登録済みのメールアドレスを確認してください。"; toast("登録情報を確認できませんでした。"); return;
+        setLoading(true);
+        const loginValid = registering || (appState.registeredAccount?.email.toLowerCase() === data.email.toLowerCase() && await passwordMatches(data.password, appState.registeredAccount));
+        if (!loginValid) {
+          setLoading(false);
+          const passwordField = document.getElementById("authPassword"); passwordField.setAttribute("aria-invalid", "true"); passwordField.parentElement.querySelector(".field-error").textContent = "メールアドレスまたはパスワードが違います。"; passwordField.focus(); toast("ログイン情報を確認してください。"); return;
         }
-        const verifiedUser = registering ? { email: data.email, verified: true, emailVerified: true, ageConfirmed: true, termsAcceptedAt: new Date().toISOString(), profileComplete: true } : { ...appState.registeredAccount };
+        const passwordRecord = registering ? await createPasswordRecord(data.password) : {};
+        const verifiedUser = registering ? { email: data.email.toLowerCase(), ...passwordRecord, gender: data.gender, verified: true, emailVerified: true, ageConfirmed: true, termsAcceptedAt: new Date().toISOString(), profileComplete: true } : { ...appState.registeredAccount };
         appState.user = verifiedUser;
         if (registering) { appState.registeredAccount = verifiedUser; appState.profile.nickname = data.nickname; appState.profile.bio = data.bio; appState.profile.age = ageLabel(data.birthdate); currentGender = data.gender; }
-        saveState(); updateAccountUI(); closeModal(); syncGenderControls(); renderRecommendations(); renderListings(); renderRegionalProfiles(); toast(form.dataset.mode === "register" ? "会員登録が完了しました。" : "ログインしました。");
-      });
+        else currentGender = verifiedUser.gender || currentGender;
+        saveState(); setLoading(false); updateAccountUI(); closeModal(); syncGenderControls(); renderRecommendations(); renderListings(); renderRegionalProfiles(); toast(registering ? "会員登録が完了しました。" : "ログインしました。");
+      }
+      if (form.id === "passwordResetForm") {
+        const data = Object.fromEntries(new FormData(form));
+        if (!appState.registeredAccount || appState.registeredAccount.email !== data.email.toLowerCase()) { const field = document.getElementById("resetEmail"); field.setAttribute("aria-invalid", "true"); field.parentElement.querySelector(".field-error").textContent = "登録済みのメールアドレスを確認してください。"; field.focus(); return; }
+        setLoading(true); Object.assign(appState.registeredAccount, await createPasswordRecord(data.password)); saveState(); setLoading(false); openModal("ログイン", authMarkup("login")); toast("パスワードを再設定しました。");
+      }
       if (form.id === "profileForm") {
         const data = Object.fromEntries(new FormData(form));
         appState.profile = { ...appState.profile, ...data }; saveState(); updateAccountUI(); closeModal(); toast("プロフィールを保存しました。");
@@ -2336,10 +2369,16 @@
       if (action === "open-auth") openModal("ログイン", authMarkup("login"));
       if (action === "show-register") { modalTitle.textContent = "会員登録"; modalBody.innerHTML = authMarkup("register"); }
       if (action === "show-login") { modalTitle.textContent = "ログイン"; modalBody.innerHTML = authMarkup("login"); }
+      if (action === "show-password-reset") { modalTitle.textContent = "パスワード再設定"; modalBody.innerHTML = passwordResetMarkup(); }
       if (action === "send-email-code") {
         const email = document.getElementById("authEmail");
         if (!email.value || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.value)) { email.setAttribute("aria-invalid", "true"); email.parentElement.querySelector(".field-error").textContent = "メールアドレスを確認してください。"; return; }
         const code = document.getElementById("authCode"); code.disabled = false; code.value = "123456"; code.focus(); toast("確認コードを送信しました。");
+      }
+      if (action === "send-reset-code") {
+        const email = document.getElementById("resetEmail");
+        if (!appState.registeredAccount || appState.registeredAccount.email !== email.value.trim().toLowerCase()) { email.setAttribute("aria-invalid", "true"); email.parentElement.querySelector(".field-error").textContent = "登録済みのメールアドレスを確認してください。"; email.focus(); return; }
+        const code = document.getElementById("resetCode"); code.disabled = false; code.value = "123456"; code.focus(); toast("確認コードを送信しました。");
       }
       if (action === "open-terms") { closeModal(); jumpTo("terms"); toast("内容を確認後、登録画面へ戻って同意してください。"); }
       if (action === "open-account") { jumpTo("account"); renderManaged(); }
