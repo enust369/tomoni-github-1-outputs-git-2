@@ -160,39 +160,42 @@ create table if not exists public.listing_messages (
 
 alter table public.listing_messages enable row level security;
 
+create or replace function public.can_access_listing_chat(target_listing_id uuid)
+returns boolean
+language sql
+stable
+security definer
+set search_path = public
+as $$
+  select auth.uid() is not null
+    and (
+      exists (
+        select 1 from public.listings
+        where listings.id = target_listing_id
+          and listings.owner_id = auth.uid()
+      )
+      or exists (
+        select 1 from public.listing_participants
+        where listing_participants.listing_id = target_listing_id
+          and listing_participants.user_id = auth.uid()
+      )
+    );
+$$;
+
+revoke all on function public.can_access_listing_chat(uuid) from public, anon;
+grant execute on function public.can_access_listing_chat(uuid) to authenticated;
+
 drop policy if exists "listing members can read messages" on public.listing_messages;
 create policy "listing members can read messages"
 on public.listing_messages for select to authenticated
-using (
-  exists (
-    select 1 from public.listings
-    where listings.id = listing_messages.listing_id
-      and listings.owner_id = auth.uid()
-  )
-  or exists (
-    select 1 from public.listing_participants
-    where listing_participants.listing_id = listing_messages.listing_id
-      and listing_participants.user_id = auth.uid()
-  )
-);
+using (public.can_access_listing_chat(listing_id));
 
 drop policy if exists "listing members can send messages" on public.listing_messages;
 create policy "listing members can send messages"
 on public.listing_messages for insert to authenticated
 with check (
   sender_id = auth.uid()
-  and (
-    exists (
-      select 1 from public.listings
-      where listings.id = listing_messages.listing_id
-        and listings.owner_id = auth.uid()
-    )
-    or exists (
-      select 1 from public.listing_participants
-      where listing_participants.listing_id = listing_messages.listing_id
-        and listing_participants.user_id = auth.uid()
-    )
-  )
+  and public.can_access_listing_chat(listing_id)
 );
 
 grant select, insert on public.listing_messages to authenticated;
