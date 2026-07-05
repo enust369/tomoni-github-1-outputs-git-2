@@ -792,6 +792,10 @@
     .verification-row { display: grid; grid-template-columns: 1fr auto; gap: 10px; align-items: end; }
     .check-row { display: flex; align-items: flex-start; gap: 10px; color: var(--ink); }
     .check-row input { width: 20px; height: 20px; margin-top: 3px; flex: 0 0 auto; }
+    .protected-section { position: relative; }
+    .access-gate { display: none; position: absolute; inset: 42px 0 auto; z-index: 8; width: min(520px, calc(100% - 24px)); margin: auto; text-align: center; }
+    .protected-section.is-locked > :not(.access-gate) { pointer-events: none; filter: blur(2px); opacity: .42; user-select: none; }
+    .protected-section.is-locked .access-gate { display: block; }
     .onboarding-points { display: grid; gap: 12px; margin: 22px 0; }
     .onboarding-points .check-row { padding: 14px; border: 1px solid var(--line); border-radius: 14px; background: rgba(237,244,241,.58); }
     .safety-page-grid { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 16px; margin-top: 24px; }
@@ -1274,7 +1278,8 @@
         </div>
       </section>
 
-      <section id="create">
+      <section id="create" class="protected-section">
+        <article class="card access-gate"><span class="badge">ログインが必要です</span><h3 style="margin-top:12px">募集を作るにはログインしてください。</h3><p class="meta" style="margin-top:8px">登録後は、プロフィールを作成してから利用できます。</p><div class="actions" style="justify-content:center"><button class="btn primary" data-action="open-auth">登録・ログイン</button></div></article>
         <div class="section-head">
           <div>
             <p class="eyebrow">募集作成</p>
@@ -1362,7 +1367,8 @@
         </div>
       </section>
 
-      <section id="region">
+      <section id="region" class="protected-section">
+        <article class="card access-gate"><span class="badge">ログインが必要です</span><h3 style="margin-top:12px">地域から探すにはログインしてください。</h3><p class="meta" style="margin-top:8px">安心して利用できるよう、登録済みの方だけに表示しています。</p><div class="actions" style="justify-content:center"><button class="btn primary" data-action="open-auth">登録・ログイン</button></div></article>
         <div class="section-head"><div><p class="eyebrow">地域から探す</p><h2>近くで、今日過ごせる人。</h2><p class="meta" style="margin-top:10px">登録した性別と同じ方だけが表示されます。</p></div></div>
         <div class="card region-controls">
           <div class="field"><label for="prefecture">都道府県</label><select id="prefecture"><option>東京都</option></select></div>
@@ -1571,6 +1577,8 @@
   <div class="loading-layer" id="loadingLayer" aria-live="polite"><div><div class="spinner" aria-hidden="true"></div><p class="meta" style="margin-top:10px">少しお待ちください</p></div></div>
   <div class="toast-region" id="toastRegion" aria-live="polite" aria-atomic="true"></div>
 
+  <script src="./supabase-env.js"></script>
+  <script type="module" src="./supabase.js"></script>
   <script>
     const categories = [
       {
@@ -1775,7 +1783,7 @@
     let editingListingId = null;
     let safetyGateActive = false;
     const storageKey = "tomoni-public-preview-v1";
-    const defaultState = { user: null, registeredAccount: null, safetyOnboardingAccepted: false, saved: [], blocked: [], customListings: [], moderation: { reports: [], blockCount: 0 }, feedbackHistory: [], profile: { nickname: "あなた", age: "30代", bio: "静かな時間を大切にしています。" } };
+    const defaultState = { user: null, profileOwnerId: null, safetyOnboardingAccepted: false, saved: [], blocked: [], customListings: [], moderation: { reports: [], blockCount: 0 }, feedbackHistory: [], profile: { nickname: "あなた", age: "30代", gender: "女性", bio: "静かな時間を大切にしています。" } };
     let appState = loadState();
     listings.forEach((item, index) => { item.id = item.id || `sample-${index + 1}`; });
     appState.customListings.forEach((item) => { if (!listings.some((existing) => existing.id === item.id)) listings.unshift(item); });
@@ -1790,22 +1798,6 @@
 
     function saveState() { localStorage.setItem(storageKey, JSON.stringify(appState)); }
     function esc(value = "") { const node = document.createElement("div"); node.textContent = String(value); return node.innerHTML; }
-    function bytesToBase64(bytes) { return btoa(String.fromCharCode(...bytes)); }
-    async function hashPassword(password, salt) {
-      const data = new TextEncoder().encode(`${salt}:${password}`);
-      const digest = await crypto.subtle.digest("SHA-256", data);
-      return bytesToBase64(new Uint8Array(digest));
-    }
-
-    async function createPasswordRecord(password) {
-      const salt = bytesToBase64(crypto.getRandomValues(new Uint8Array(16)));
-      return { passwordSalt: salt, passwordHash: await hashPassword(password, salt) };
-    }
-
-    async function passwordMatches(password, account) {
-      if (!account?.passwordSalt || !account?.passwordHash) return false;
-      return (await hashPassword(password, account.passwordSalt)) === account.passwordHash;
-    }
     function isAdult(value) {
       if (!value) return false;
       const birth = new Date(`${value}T00:00:00`);
@@ -2239,19 +2231,37 @@
 
     function updateAccountUI() {
       const button = document.getElementById("accountButton");
-      button.textContent = appState.user ? `${appState.profile.nickname}さん` : "登録・ログイン";
+      const profileComplete = Boolean(appState.user && appState.profileOwnerId === appState.user.id);
+      button.textContent = appState.user ? (profileComplete ? `${appState.profile.nickname}さん` : "プロフィール作成") : "登録・ログイン";
       button.dataset.action = appState.user ? "open-account" : "open-auth";
       document.getElementById("profileDisplayName").textContent = appState.profile.nickname;
       document.getElementById("profileDisplayMeta").textContent = `${appState.profile.age} / 今日の気分：穏やか`;
       document.getElementById("verificationStatus").innerHTML = appState.user?.verified ? `<strong>本人確認済み</strong><p class="meta">メール確認・年齢確認・規約同意・プロフィール入力済み</p>` : `<strong>本人確認</strong><p class="meta">登録後に確認状況を表示します。</p>`;
+      document.getElementById("create").classList.toggle("is-locked", !profileComplete);
+      document.getElementById("region").classList.toggle("is-locked", !profileComplete);
+    }
+
+    function hasMemberAccess() {
+      return Boolean(appState.user && appState.profileOwnerId === appState.user.id);
+    }
+
+    async function restoreSupabaseUser() {
+      const auth = window.tomoniAuth;
+      if (!auth?.configured) { appState.user = null; updateAccountUI(); return; }
+      const result = await auth.getUser();
+      const user = result.data?.user;
+      appState.user = user ? { id: user.id, email: user.email, verified: Boolean(user.email_confirmed_at) } : null;
+      saveState(); updateAccountUI();
+      if (user && appState.profileOwnerId === user.id) {
+        currentGender = appState.profile.gender || currentGender;
+        syncGenderControls(); renderRecommendations(); renderListings(); renderRegionalProfiles();
+      }
     }
 
     function authMarkup(mode = "login") {
       const registering = mode === "register";
       return `<form class="form" id="authForm" data-mode="${mode}" novalidate>
-        ${registering ? `<div class="field full"><label for="authNickname">ニックネーム</label><input id="authNickname" name="nickname" maxlength="20" required><span class="field-error"></span></div><div class="field full"><label for="authBirthdate">生年月日</label><input id="authBirthdate" name="birthdate" type="date" required><span class="field-error"></span><p class="meta">18歳未満の方は利用できません。</p></div><div class="field full"><label for="authGender">登録する性別</label><select id="authGender" name="gender"><option>女性</option><option>男性</option></select><p class="meta">TOMONIは同性同士が安心して過ごすためのサービスです。</p></div><div class="field full"><label for="authBio">安心してもらうためのひとこと</label><textarea id="authBio" name="bio" maxlength="120" required></textarea><span class="field-error"></span></div>` : ""}
         <div class="field full"><label for="authEmail">メールアドレス</label><input id="authEmail" name="email" type="email" autocomplete="email" required><span class="field-error"></span></div>
-        ${registering ? `<div class="field full"><button class="btn" type="button" data-action="send-email-code">確認コードを送る</button><p class="meta">この試作画面では、送信後に表示される確認コードを入力します。</p></div><div class="field full"><label for="authCode">メール確認コード</label><input id="authCode" name="emailCode" inputmode="numeric" pattern="[0-9]{6}" maxlength="6" required disabled><span class="field-error"></span></div>` : ""}
         <div class="field full"><label for="authPassword">パスワード</label><input id="authPassword" name="password" type="password" minlength="8" autocomplete="${registering ? "new-password" : "current-password"}" required><span class="field-error"></span></div>
         ${registering ? `<div class="field full"><label for="authPasswordConfirm">パスワード（確認）</label><input id="authPasswordConfirm" name="passwordConfirm" type="password" minlength="8" autocomplete="new-password" required><span class="field-error"></span></div>` : ""}
         ${registering ? `<div class="field full"><label class="check-row"><input id="termsAgreement" name="termsAgreement" type="checkbox" required><span><button class="btn quiet-action" type="button" data-action="open-terms">利用規約</button>とプライバシーポリシーに同意します</span></label><span class="field-error"></span></div>` : ""}
@@ -2259,8 +2269,12 @@
       </form><div class="actions" style="margin-top:12px"><button class="btn quiet-action" data-action="${registering ? "show-login" : "show-register"}">${registering ? "ログインへ" : "初めての方は会員登録"}</button>${registering ? "" : `<button class="btn quiet-action" data-action="show-password-reset">パスワードを忘れた方</button>`}</div>`;
     }
 
+    function emailVerificationMarkup(email) {
+      return `<div class="thanks" style="padding:8px 0"><span class="badge">メール認証</span><h3 style="margin-top:16px">確認メールを送りました。</h3><p class="meta" style="margin-top:10px">${esc(email)} に届いたメールを開き、認証を完了してください。</p><div class="actions" style="justify-content:center"><button class="btn primary" data-action="show-login">認証後にログインする</button></div></div>`;
+    }
+
     function passwordResetMarkup() {
-      return `<p class="meta" style="margin-bottom:18px">登録したメールアドレスを確認し、新しいパスワードを設定します。</p><form class="form" id="passwordResetForm" novalidate><div class="field full"><label for="resetEmail">メールアドレス</label><input id="resetEmail" name="email" type="email" autocomplete="email" required><span class="field-error"></span></div><div class="field full"><button class="btn" type="button" data-action="send-reset-code">確認コードを送る</button></div><div class="field full"><label for="resetCode">確認コード</label><input id="resetCode" name="code" inputmode="numeric" pattern="[0-9]{6}" maxlength="6" disabled required><span class="field-error"></span></div><div class="field full"><label for="resetPassword">新しいパスワード</label><input id="resetPassword" name="password" type="password" minlength="8" autocomplete="new-password" required><span class="field-error"></span></div><div class="field full"><button class="btn primary" type="submit">パスワードを再設定する</button></div></form><button class="btn quiet-action" style="margin-top:12px" data-action="show-login">ログインへ戻る</button>`;
+      return `<p class="meta" style="margin-bottom:18px">登録したメールアドレスへ、再設定用の案内を送ります。</p><form class="form" id="passwordResetForm" novalidate><div class="field full"><label for="resetEmail">メールアドレス</label><input id="resetEmail" name="email" type="email" autocomplete="email" required><span class="field-error"></span></div><div class="field full"><button class="btn primary" type="submit">再設定メールを送る</button></div></form><button class="btn quiet-action" style="margin-top:12px" data-action="show-login">ログインへ戻る</button>`;
     }
 
     function validateForm(form) {
@@ -2272,7 +2286,6 @@
         else if (field.required && !field.value.trim()) message = "入力してください。";
         else if (field.type === "email" && field.value && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(field.value)) message = "メールアドレスを確認してください。";
         else if (field.minLength > 0 && field.value.length < field.minLength) message = `${field.minLength}文字以上で入力してください。`;
-        else if (field.id === "authCode" && field.value !== "123456") message = "確認コードが一致しません。";
         else if (field.id === "resetCode" && field.value !== "123456") message = "確認コードが一致しません。";
         else if (field.id === "authPasswordConfirm" && field.value !== form.querySelector("#authPassword")?.value) message = "パスワードが一致しません。";
         else if (field.id === "authBirthdate" && !isAdult(field.value)) message = "18歳以上の方のみ利用できます。";
@@ -2308,8 +2321,8 @@
       jumpTo("detail");
     }
 
-    function showProfileEditor() {
-      openModal("プロフィール編集", `<form class="form" id="profileForm" novalidate><div class="field full"><label for="profileNickname">ニックネーム</label><input id="profileNickname" name="nickname" maxlength="20" value="${esc(appState.profile.nickname)}" required><span class="field-error"></span></div><div class="field full"><label for="profileAge">年代</label><select id="profileAge" name="age"><option ${appState.profile.age === "20代" ? "selected" : ""}>20代</option><option ${appState.profile.age === "30代" ? "selected" : ""}>30代</option><option ${appState.profile.age === "40代" ? "selected" : ""}>40代</option><option ${appState.profile.age === "50代以上" ? "selected" : ""}>50代以上</option></select></div><div class="field full"><label for="profileBio">安心してもらうためのひとこと</label><textarea id="profileBio" name="bio" maxlength="120" required>${esc(appState.profile.bio)}</textarea><span class="field-error"></span></div><div class="field full"><button class="btn primary" type="submit">保存する</button></div></form>`);
+    function showProfileEditor(firstTime = false) {
+      openModal(firstTime ? "プロフィール作成" : "プロフィール編集", `<form class="form" id="profileForm" data-first-time="${firstTime}" novalidate><div class="field full"><label for="profileNickname">ニックネーム</label><input id="profileNickname" name="nickname" maxlength="20" value="${esc(appState.profile.nickname === "あなた" ? "" : appState.profile.nickname)}" required><span class="field-error"></span></div><div class="field full"><label for="profileGender">登録する性別</label><select id="profileGender" name="gender"><option ${appState.profile.gender === "女性" ? "selected" : ""}>女性</option><option ${appState.profile.gender === "男性" ? "selected" : ""}>男性</option></select><p class="meta">TOMONIでは、登録した性別と同じ方だけを表示します。</p></div><div class="field full"><label for="profileAge">年代</label><select id="profileAge" name="age"><option ${appState.profile.age === "20代" ? "selected" : ""}>20代</option><option ${appState.profile.age === "30代" ? "selected" : ""}>30代</option><option ${appState.profile.age === "40代" ? "selected" : ""}>40代</option><option ${appState.profile.age === "50代以上" ? "selected" : ""}>50代以上</option></select></div><div class="field full"><label for="profileBio">安心してもらうためのひとこと</label><textarea id="profileBio" name="bio" maxlength="120" required>${esc(appState.profile.bio)}</textarea><span class="field-error"></span></div><div class="field full"><button class="btn primary" type="submit">${firstTime ? "プロフィールを作成する" : "保存する"}</button></div></form>`);
     }
 
     document.addEventListener("submit", async (event) => {
@@ -2319,6 +2332,7 @@
       if (!validateForm(form)) { toast("入力内容を確認してください。"); return; }
       if (form.id === "createForm") {
         if (!appState.user) { openModal("ログイン", authMarkup("login")); toast("募集の作成にはログインが必要です。"); return; }
+        if (!hasMemberAccess()) { showProfileEditor(true); toast("最初にプロフィールを作成してください。"); return; }
         if (!appState.user.verified) { toast("本人確認を完了してから募集を作成してください。"); jumpTo("account"); return; }
         const safety = analyzeSafety();
         if (safety.blocked) { toast("安全のため、この内容では公開できません。"); document.getElementById("safetyCheck").scrollIntoView({ behavior: "smooth", block: "center" }); return; }
@@ -2330,26 +2344,30 @@
         const data = Object.fromEntries(new FormData(form));
         const registering = form.dataset.mode === "register";
         setLoading(true);
-        const loginValid = registering || (appState.registeredAccount?.email.toLowerCase() === data.email.toLowerCase() && await passwordMatches(data.password, appState.registeredAccount));
-        if (!loginValid) {
-          setLoading(false);
-          const passwordField = document.getElementById("authPassword"); passwordField.setAttribute("aria-invalid", "true"); passwordField.parentElement.querySelector(".field-error").textContent = "メールアドレスまたはパスワードが違います。"; passwordField.focus(); toast("ログイン情報を確認してください。"); return;
-        }
-        const passwordRecord = registering ? await createPasswordRecord(data.password) : {};
-        const verifiedUser = registering ? { email: data.email.toLowerCase(), ...passwordRecord, gender: data.gender, verified: true, emailVerified: true, ageConfirmed: true, termsAcceptedAt: new Date().toISOString(), profileComplete: true } : { ...appState.registeredAccount };
-        appState.user = verifiedUser;
-        if (registering) { appState.registeredAccount = verifiedUser; appState.profile.nickname = data.nickname; appState.profile.bio = data.bio; appState.profile.age = ageLabel(data.birthdate); currentGender = data.gender; }
-        else currentGender = verifiedUser.gender || currentGender;
-        saveState(); setLoading(false); updateAccountUI(); closeModal(); syncGenderControls(); renderRecommendations(); renderListings(); renderRegionalProfiles(); toast(registering ? "会員登録が完了しました。" : "ログインしました。");
+        const auth = window.tomoniAuth;
+        if (!auth?.configured) { setLoading(false); toast("Supabaseの接続情報を設定してください。"); return; }
+        const result = registering ? await auth.signUp(data.email.trim(), data.password) : await auth.signIn(data.email.trim(), data.password);
+        setLoading(false);
+        if (result.error) { const passwordField = document.getElementById("authPassword"); passwordField.setAttribute("aria-invalid", "true"); passwordField.parentElement.querySelector(".field-error").textContent = result.error.message; passwordField.focus(); return; }
+        if (registering) { modalTitle.textContent = "メール認証"; modalBody.innerHTML = emailVerificationMarkup(data.email.trim()); return; }
+        const user = result.data?.user;
+        if (!user) { toast("ログイン状態を確認できませんでした。"); return; }
+        appState.user = { id: user.id, email: user.email, verified: Boolean(user.email_confirmed_at) };
+        saveState(); updateAccountUI(); closeModal();
+        if (appState.profileOwnerId !== user.id) showProfileEditor(true);
+        else { currentGender = appState.profile.gender || currentGender; syncGenderControls(); renderRecommendations(); renderListings(); renderRegionalProfiles(); toast("ログインしました。"); }
       }
       if (form.id === "passwordResetForm") {
         const data = Object.fromEntries(new FormData(form));
-        if (!appState.registeredAccount || appState.registeredAccount.email !== data.email.toLowerCase()) { const field = document.getElementById("resetEmail"); field.setAttribute("aria-invalid", "true"); field.parentElement.querySelector(".field-error").textContent = "登録済みのメールアドレスを確認してください。"; field.focus(); return; }
-        setLoading(true); Object.assign(appState.registeredAccount, await createPasswordRecord(data.password)); saveState(); setLoading(false); openModal("ログイン", authMarkup("login")); toast("パスワードを再設定しました。");
+        const auth = window.tomoniAuth;
+        if (!auth?.configured) { toast("Supabaseの接続情報を設定してください。"); return; }
+        setLoading(true); const result = await auth.resetPassword(data.email.trim()); setLoading(false);
+        if (result.error) { const field = document.getElementById("resetEmail"); field.setAttribute("aria-invalid", "true"); field.parentElement.querySelector(".field-error").textContent = result.error.message; return; }
+        openModal("メールを確認してください", `<p>${esc(data.email.trim())} にパスワード再設定用の案内を送りました。</p><div class="actions"><button class="btn primary" data-action="show-login">ログインへ戻る</button></div>`);
       }
       if (form.id === "profileForm") {
         const data = Object.fromEntries(new FormData(form));
-        appState.profile = { ...appState.profile, ...data }; saveState(); updateAccountUI(); closeModal(); toast("プロフィールを保存しました。");
+        appState.profile = { ...appState.profile, ...data }; appState.profileOwnerId = appState.user.id; currentGender = data.gender; saveState(); updateAccountUI(); closeModal(); syncGenderControls(); renderRecommendations(); renderListings(); renderRegionalProfiles(); toast(form.dataset.firstTime === "true" ? "プロフィールを作成しました。" : "プロフィールを保存しました。");
       }
       if (form.id === "reportForm") withLoading(() => {
         const data = Object.fromEntries(new FormData(form));
@@ -2358,7 +2376,7 @@
       });
     });
 
-    document.addEventListener("click", (event) => {
+    document.addEventListener("click", async (event) => {
       const button = event.target.closest("[data-action]");
       if (!button) return;
       const action = button.dataset.action;
@@ -2370,23 +2388,13 @@
       if (action === "show-register") { modalTitle.textContent = "会員登録"; modalBody.innerHTML = authMarkup("register"); }
       if (action === "show-login") { modalTitle.textContent = "ログイン"; modalBody.innerHTML = authMarkup("login"); }
       if (action === "show-password-reset") { modalTitle.textContent = "パスワード再設定"; modalBody.innerHTML = passwordResetMarkup(); }
-      if (action === "send-email-code") {
-        const email = document.getElementById("authEmail");
-        if (!email.value || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.value)) { email.setAttribute("aria-invalid", "true"); email.parentElement.querySelector(".field-error").textContent = "メールアドレスを確認してください。"; return; }
-        const code = document.getElementById("authCode"); code.disabled = false; code.value = "123456"; code.focus(); toast("確認コードを送信しました。");
-      }
-      if (action === "send-reset-code") {
-        const email = document.getElementById("resetEmail");
-        if (!appState.registeredAccount || appState.registeredAccount.email !== email.value.trim().toLowerCase()) { email.setAttribute("aria-invalid", "true"); email.parentElement.querySelector(".field-error").textContent = "登録済みのメールアドレスを確認してください。"; email.focus(); return; }
-        const code = document.getElementById("resetCode"); code.disabled = false; code.value = "123456"; code.focus(); toast("確認コードを送信しました。");
-      }
       if (action === "open-terms") { closeModal(); jumpTo("terms"); toast("内容を確認後、登録画面へ戻って同意してください。"); }
-      if (action === "open-account") { jumpTo("account"); renderManaged(); }
+      if (action === "open-account") { if (appState.profileOwnerId !== appState.user?.id) showProfileEditor(true); else { jumpTo("account"); renderManaged(); } }
       if (action === "open-detail") openListingDetail(button.dataset.id);
       if (action === "edit-profile") { if (!appState.user) openModal("ログイン", authMarkup("login")); else showProfileEditor(); }
       if (action === "show-saved") renderSaved();
       if (action === "show-managed") renderManaged();
-      if (action === "logout") { appState.user = null; saveState(); updateAccountUI(); document.getElementById("accountContent").innerHTML = `<article class="card empty-state">ログアウトしました。またいつでも戻ってきてください。</article>`; toast("ログアウトしました。"); }
+      if (action === "logout") { setLoading(true); const result = await window.tomoniAuth?.signOut(); setLoading(false); if (result?.error) { toast(result.error.message); return; } appState.user = null; saveState(); updateAccountUI(); document.getElementById("accountContent").innerHTML = `<article class="card empty-state">ログアウトしました。またいつでも戻ってきてください。</article>`; toast("ログアウトしました。"); }
       if (action === "save-listing") {
         const id = button.dataset.id;
         appState.saved = appState.saved.includes(id) ? appState.saved.filter((item) => item !== id) : [...appState.saved, id];
@@ -2421,6 +2429,14 @@
       jumpTo(document.getElementById(id) ? id : "not-found");
     });
     window.addEventListener("unhandledrejection", () => jumpTo("error"));
+    window.addEventListener("tomoni:auth-ready", restoreSupabaseUser);
+    document.addEventListener("click", (event) => {
+      const protectedLink = event.target.closest('[data-jump="create"], [data-jump="region"]');
+      if (!protectedLink || hasMemberAccess()) return;
+      event.preventDefault(); event.stopImmediatePropagation();
+      if (!appState.user) { openModal("ログイン", authMarkup("login")); toast("この機能はログイン後に利用できます。"); }
+      else { showProfileEditor(true); toast("最初にプロフィールを作成してください。"); }
+    }, true);
 
     const observer = new IntersectionObserver((entries) => {
       entries.forEach((entry) => {
