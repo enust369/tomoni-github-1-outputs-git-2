@@ -1461,7 +1461,7 @@
       </section>
 
       <section id="chat">
-        <div class="section-head"><div><p class="eyebrow">チャット</p><h2 id="chatTitle">募集について話す。</h2><p class="meta" id="chatMeta">参加が決まった方と募集主だけが利用できます。</p></div></div>
+        <div class="section-head"><div><p class="eyebrow">チャット</p><h2 id="chatTitle">募集について話す。</h2><p class="meta" id="chatMeta">参加が決まった方と募集主だけが利用できます。</p></div><button class="btn small quiet-action" data-jump="listings">チャットを閉じる</button></div>
         <article class="card chat-shell">
           <div class="chat-messages" id="chatMessages" role="log" aria-live="polite"><div class="empty-state">募集詳細からチャットを開いてください。</div></div>
           <form class="chat-form" id="chatForm" novalidate>
@@ -1783,6 +1783,8 @@
     let editingListingId = null;
     let currentDetailListingId = null;
     let currentChatListingId = null;
+    let currentChatChannel = null;
+    let currentChatMessages = new Map();
     let participatingListingIds = new Set();
     let safetyGateActive = false;
     const storageKey = "tomoni-public-preview-v1";
@@ -1856,7 +1858,10 @@
       return { blocked, message, hits, hasPrivateInfo };
     }
 
-    const jumpTo = (id) => document.getElementById(id)?.scrollIntoView({ behavior: "smooth", block: "start" });
+    const jumpTo = (id) => {
+      if (id !== "chat" && currentChatChannel) closeChatRealtime();
+      document.getElementById(id)?.scrollIntoView({ behavior: "smooth", block: "start" });
+    };
 
     document.querySelectorAll("[data-jump]").forEach((button) => {
       button.addEventListener("click", () => jumpTo(button.dataset.jump));
@@ -2446,14 +2451,47 @@
       return `チャットを読み込めませんでした。${message || "しばらくしてからもう一度お試しください。"}`;
     }
 
-    function renderChatMessages(messages) {
+    function renderChatMessages() {
       const container = document.getElementById("chatMessages");
+      const messages = [...currentChatMessages.values()].sort((a, b) => new Date(a.created_at) - new Date(b.created_at) || Number(a.id) - Number(b.id));
       container.innerHTML = messages.length ? messages.map((message) => {
         const mine = message.sender_id === appState.user?.id;
         const time = new Date(message.created_at).toLocaleString("ja-JP", { month: "numeric", day: "numeric", hour: "2-digit", minute: "2-digit" });
         return `<div class="chat-message ${mine ? "mine" : ""}"><small>${mine ? "あなた" : "相手"}・${esc(time)}</small><div class="chat-bubble">${esc(message.body)}</div></div>`;
       }).join("") : `<div class="empty-state">まだメッセージはありません。最初のひとことを送ってみましょう。</div>`;
       container.scrollTop = container.scrollHeight;
+    }
+
+    function mergeChatMessage(message) {
+      if (!message?.id || message.listing_id !== currentChatListingId || currentChatMessages.has(String(message.id))) return false;
+      currentChatMessages.set(String(message.id), message);
+      renderChatMessages();
+      return true;
+    }
+
+    async function closeChatRealtime(resetChat = true) {
+      const channel = currentChatChannel;
+      currentChatChannel = null;
+      if (channel) await window.tomoniAuth?.unsubscribeMessages?.(channel);
+      if (!resetChat) return;
+      currentChatListingId = null;
+      currentChatMessages = new Map();
+      document.getElementById("chatMessage").disabled = true;
+      document.getElementById("chatSend").disabled = true;
+      document.getElementById("chatStatus").textContent = "チャットを閉じました。募集詳細から再度開けます。";
+    }
+
+    function startChatRealtime(listingId) {
+      currentChatChannel = window.tomoniAuth?.subscribeToMessages?.(
+        listingId,
+        (message) => mergeChatMessage(message),
+        (status) => {
+          if (status === "CHANNEL_ERROR" || status === "TIMED_OUT") {
+            document.getElementById("chatStatus").textContent = "リアルタイム接続が切れました。チャットを開き直してください。";
+            document.getElementById("chatStatus").classList.add("caution");
+          }
+        }
+      );
     }
 
     async function loadChatMessages(listingId) {
@@ -2465,20 +2503,26 @@
         toast(message);
         return false;
       }
-      renderChatMessages(result?.data || []);
+      (result?.data || []).forEach((message) => {
+        if (!currentChatMessages.has(String(message.id))) currentChatMessages.set(String(message.id), message);
+      });
+      renderChatMessages();
       return true;
     }
 
     async function openChat(listingId) {
       const item = listings.find((listing) => listing.id === listingId);
       if (!canUseChat(item)) { showParticipationMessage("チャットは募集主と参加済みのユーザーだけが利用できます。", true); return; }
+      await closeChatRealtime(false);
       currentChatListingId = item.id;
+      currentChatMessages = new Map();
       document.getElementById("chatTitle").textContent = item.title || item.activity;
       document.getElementById("chatMeta").textContent = `${item.person}さんの募集についてのチャット`;
       document.getElementById("chatMessage").disabled = false;
       document.getElementById("chatSend").disabled = false;
       document.getElementById("chatStatus").textContent = "個人情報の共有は慎重に行ってください。";
       document.getElementById("chatStatus").classList.remove("caution");
+      startChatRealtime(item.id);
       setLoading(true);
       await loadChatMessages(item.id);
       setLoading(false);
@@ -2520,9 +2564,9 @@
           const result = await window.tomoniAuth.sendMessage(currentChatListingId, body);
           if (result?.error) throw result.error;
           field.value = "";
+          mergeChatMessage(result.data);
           document.getElementById("chatStatus").textContent = "メッセージを送信しました。";
           document.getElementById("chatStatus").classList.remove("caution");
-          await loadChatMessages(currentChatListingId);
         } catch (error) {
           const message = chatErrorMessage(error); document.getElementById("chatStatus").textContent = message; document.getElementById("chatStatus").classList.add("caution"); toast(message);
         } finally { document.getElementById("chatSend").disabled = false; }
@@ -2583,7 +2627,7 @@
       if (action === "edit-profile") { if (!appState.user) openModal("ログイン", authMarkup("login")); else showProfileEditor(); }
       if (action === "show-saved") renderSaved();
       if (action === "show-managed") renderManaged();
-      if (action === "logout") { setLoading(true); const result = await window.tomoniAuth?.signOut(); if (!result?.error) await restoreSupabaseUser(); setLoading(false); if (result?.error) { toast(result.error.message); return; } currentChatListingId = null; document.getElementById("chatMessage").disabled = true; document.getElementById("chatSend").disabled = true; document.getElementById("chatMessages").innerHTML = `<div class="empty-state">ログインするとチャットを利用できます。</div>`; document.getElementById("accountContent").innerHTML = `<article class="card empty-state">ログアウトしました。またいつでも戻ってきてください。</article>`; toast("ログアウトしました。"); }
+      if (action === "logout") { setLoading(true); await closeChatRealtime(); const result = await window.tomoniAuth?.signOut(); if (!result?.error) await restoreSupabaseUser(); setLoading(false); if (result?.error) { toast(result.error.message); return; } document.getElementById("chatMessages").innerHTML = `<div class="empty-state">ログインするとチャットを利用できます。</div>`; document.getElementById("accountContent").innerHTML = `<article class="card empty-state">ログアウトしました。またいつでも戻ってきてください。</article>`; toast("ログアウトしました。"); }
       if (action === "save-listing") {
         const id = button.dataset.id;
         appState.saved = appState.saved.includes(id) ? appState.saved.filter((item) => item !== id) : [...appState.saved, id];
@@ -2623,9 +2667,7 @@
             participatingListingIds.delete(item.id);
             item.participantCount = Math.max(0, item.participantCount - 1);
             if (currentChatListingId === item.id) {
-              currentChatListingId = null;
-              document.getElementById("chatMessage").disabled = true;
-              document.getElementById("chatSend").disabled = true;
+              await closeChatRealtime();
               document.getElementById("chatMessages").innerHTML = `<div class="empty-state">参加をキャンセルしたため、このチャットは利用できません。</div>`;
             }
           } else {
@@ -2688,6 +2730,7 @@
       jumpTo(document.getElementById(id) ? id : "not-found");
     });
     window.addEventListener("unhandledrejection", () => jumpTo("error"));
+    window.addEventListener("beforeunload", () => { if (currentChatChannel) window.tomoniAuth?.unsubscribeMessages?.(currentChatChannel); });
     window.addEventListener("tomoni:auth-ready", restoreSupabaseUser);
     document.addEventListener("click", (event) => {
       const protectedLink = event.target.closest('[data-jump="create"], [data-jump="region"]');

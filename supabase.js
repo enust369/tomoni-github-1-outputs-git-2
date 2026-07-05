@@ -61,6 +61,14 @@ window.tomoniAuth = {
   sendMessage: (listingId, body) => client
     ? client.from("listing_messages").insert({ listing_id: listingId, body }).select().single()
     : Promise.resolve(notConfigured()),
+  subscribeToMessages: (listingId, onInsert, onStatus) => client
+    ? client.channel(`listing-messages-${listingId}-${Date.now()}`)
+      .on("postgres_changes", { event: "INSERT", schema: "public", table: "listing_messages", filter: `listing_id=eq.${listingId}` }, (payload) => onInsert(payload.new))
+      .subscribe((status) => onStatus?.(status))
+    : null,
+  unsubscribeMessages: (channel) => client && channel
+    ? client.removeChannel(channel)
+    : Promise.resolve(),
 };
 
 window.dispatchEvent(new CustomEvent("tomoni:auth-ready"));

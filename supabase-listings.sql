@@ -200,3 +200,17 @@ grant usage, select on sequence public.listing_messages_id_seq to authenticated;
 
 create index if not exists listing_messages_listing_created_idx
 on public.listing_messages (listing_id, created_at);
+
+do $$
+begin
+  if exists (select 1 from pg_publication where pubname = 'supabase_realtime')
+    and not exists (
+      select 1 from pg_publication_tables
+      where pubname = 'supabase_realtime'
+        and schemaname = 'public'
+        and tablename = 'listing_messages'
+    ) then
+    alter publication supabase_realtime add table public.listing_messages;
+  end if;
+end;
+$$;
