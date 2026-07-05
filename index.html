@@ -1797,6 +1797,8 @@
     let currentDetailListingId = null;
     let currentChatListingId = null;
     let currentChatChannel = null;
+    let currentChatSyncTimer = null;
+    let chatRealtimeSubscribed = false;
     let currentChatMessages = new Map();
     let participatingListingIds = new Set();
     let safetyGateActive = false;
@@ -2485,6 +2487,9 @@
     async function closeChatRealtime(resetChat = true) {
       const channel = currentChatChannel;
       currentChatChannel = null;
+      chatRealtimeSubscribed = false;
+      if (currentChatSyncTimer) clearInterval(currentChatSyncTimer);
+      currentChatSyncTimer = null;
       if (channel) await window.tomoniAuth?.unsubscribeMessages?.(channel);
       if (!resetChat) return;
       currentChatListingId = null;
@@ -2494,26 +2499,43 @@
       document.getElementById("chatStatus").textContent = "チャットを閉じました。募集詳細から再度開けます。";
     }
 
-    function startChatRealtime(listingId) {
-      currentChatChannel = window.tomoniAuth?.subscribeToMessages?.(
+    async function startChatRealtime(listingId) {
+      if (currentChatSyncTimer) clearInterval(currentChatSyncTimer);
+      currentChatSyncTimer = setInterval(() => {
+        if (currentChatListingId === listingId && !chatRealtimeSubscribed) loadChatMessages(listingId, true);
+      }, 1000);
+      const channel = await window.tomoniAuth?.subscribeToMessages?.(
         listingId,
         (message) => mergeChatMessage(message),
-        (status) => {
+        (status, error) => {
+          if (status === "SUBSCRIBED") {
+            chatRealtimeSubscribed = true;
+            if (currentChatSyncTimer) clearInterval(currentChatSyncTimer);
+            currentChatSyncTimer = null;
+            document.getElementById("chatStatus").textContent = "リアルタイムで接続しています。";
+            document.getElementById("chatStatus").classList.remove("caution");
+          }
           if (status === "CHANNEL_ERROR" || status === "TIMED_OUT") {
-            document.getElementById("chatStatus").textContent = "リアルタイム接続が切れました。チャットを開き直してください。";
+            chatRealtimeSubscribed = false;
+            if (!currentChatSyncTimer) currentChatSyncTimer = setInterval(() => { if (currentChatListingId === listingId) loadChatMessages(listingId, true); }, 1000);
+            document.getElementById("chatStatus").textContent = "リアルタイム接続を再試行しています。接続中もメッセージは自動更新されます。";
             document.getElementById("chatStatus").classList.add("caution");
           }
         }
       );
+      if (currentChatListingId !== listingId) { await window.tomoniAuth?.unsubscribeMessages?.(channel); return; }
+      currentChatChannel = channel;
     }
 
-    async function loadChatMessages(listingId) {
+    async function loadChatMessages(listingId, silent = false) {
       const result = await window.tomoniAuth?.listMessages?.(listingId);
       if (result?.error) {
         const message = chatErrorMessage(result.error);
-        document.getElementById("chatStatus").textContent = message;
-        document.getElementById("chatStatus").classList.add("caution");
-        toast(message);
+        if (!silent) {
+          document.getElementById("chatStatus").textContent = message;
+          document.getElementById("chatStatus").classList.add("caution");
+          toast(message);
+        }
         return false;
       }
       (result?.data || []).forEach((message) => {
@@ -2535,7 +2557,7 @@
       document.getElementById("chatSend").disabled = false;
       document.getElementById("chatStatus").textContent = "個人情報の共有は慎重に行ってください。";
       document.getElementById("chatStatus").classList.remove("caution");
-      startChatRealtime(item.id);
+      await startChatRealtime(item.id);
       setLoading(true);
       await loadChatMessages(item.id);
       setLoading(false);

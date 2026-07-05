@@ -204,6 +204,8 @@ grant usage, select on sequence public.listing_messages_id_seq to authenticated;
 create index if not exists listing_messages_listing_created_idx
 on public.listing_messages (listing_id, created_at);
 
+alter table public.listing_messages replica identity full;
+
 do $$
 begin
   if exists (select 1 from pg_publication where pubname = 'supabase_realtime')
