@@ -911,6 +911,15 @@
     .account-menu { display: grid; gap: 8px; }
     .account-menu button { text-align: left; }
     .managed-listing { display: grid; grid-template-columns: minmax(0,1fr) auto; gap: 16px; align-items: center; }
+    .chat-shell { max-width: 780px; margin-inline: auto; }
+    .chat-messages { display: grid; gap: 12px; min-height: 280px; max-height: 520px; overflow-y: auto; padding: 8px 4px 18px; }
+    .chat-message { display: grid; justify-items: start; gap: 4px; }
+    .chat-message.mine { justify-items: end; }
+    .chat-bubble { max-width: min(78%, 520px); padding: 12px 15px; border: 1px solid var(--line); border-radius: 18px 18px 18px 5px; background: var(--soft); white-space: pre-wrap; overflow-wrap: anywhere; }
+    .chat-message.mine .chat-bubble { border-color: rgba(138,165,130,.55); border-radius: 18px 18px 5px 18px; background: var(--sage); }
+    .chat-message small { color: var(--muted); }
+    .chat-form { display: grid; grid-template-columns: minmax(0,1fr) auto; gap: 10px; align-items: end; padding-top: 16px; border-top: 1px solid var(--line); }
+    .chat-form textarea { min-height: 52px; max-height: 140px; }
     .modal-backdrop { position: fixed; inset: 0; z-index: 80; display: grid; place-items: center; padding: 20px; background: rgba(36,48,40,.34); backdrop-filter: blur(12px); opacity: 0; visibility: hidden; transition: opacity .25s var(--ease), visibility .25s var(--ease); }
     .modal-backdrop.open { opacity: 1; visibility: visible; }
     .modal { width: min(520px,100%); max-height: min(720px,calc(100vh - 40px)); overflow: auto; border: 1px solid var(--line); border-radius: 24px; background: var(--paper); box-shadow: 0 40px 100px rgba(36,48,40,.24); padding: clamp(22px,5vw,34px); transform: translateY(12px) scale(.985); transition: transform .28s var(--ease); }
@@ -993,6 +1002,8 @@
 
     @media (max-width: 680px) {
       :root { --radius: 16px; }
+      .chat-form { grid-template-columns: 1fr; }
+      .chat-bubble { max-width: 88%; }
       .topbar {
         flex-wrap: wrap;
         gap: 10px;
@@ -1431,6 +1442,7 @@
             <div class="chips" id="detailBadges" style="margin-top:18px"></div>
             <div class="actions">
               <button class="btn primary" id="detailParticipation" data-action="toggle-participation" disabled>参加する</button>
+              <button class="btn" id="detailChat" data-action="open-chat" disabled>チャットする</button>
               <button class="btn" id="detailSave" data-action="save-listing" disabled>保存する</button>
               <button class="btn quiet-action" id="detailLater" data-action="save-listing" disabled>あとで見る</button>
             </div>
@@ -1446,6 +1458,18 @@
             <div class="actions"><button class="btn small quiet-action" data-action="decline">今日は難しい</button></div>
           </aside>
         </div>
+      </section>
+
+      <section id="chat">
+        <div class="section-head"><div><p class="eyebrow">チャット</p><h2 id="chatTitle">募集について話す。</h2><p class="meta" id="chatMeta">参加が決まった方と募集主だけが利用できます。</p></div></div>
+        <article class="card chat-shell">
+          <div class="chat-messages" id="chatMessages" role="log" aria-live="polite"><div class="empty-state">募集詳細からチャットを開いてください。</div></div>
+          <form class="chat-form" id="chatForm" novalidate>
+            <div class="field"><label for="chatMessage">メッセージ</label><textarea id="chatMessage" maxlength="1000" placeholder="待ち合わせや当日の過ごし方について話しましょう" required disabled></textarea><span class="field-error"></span></div>
+            <button class="btn primary" id="chatSend" type="submit" disabled>送信する</button>
+          </form>
+          <div class="safety-check" id="chatStatus" role="status" aria-live="polite">個人情報の共有は慎重に行ってください。</div>
+        </article>
       </section>
 
       <section id="after">
@@ -1758,6 +1782,7 @@
     let todayOpen = true;
     let editingListingId = null;
     let currentDetailListingId = null;
+    let currentChatListingId = null;
     let participatingListingIds = new Set();
     let safetyGateActive = false;
     const storageKey = "tomoni-public-preview-v1";
@@ -2365,7 +2390,7 @@
 
     function renderManaged() {
       const own = appState.customListings;
-      document.getElementById("accountContent").innerHTML = own.length ? own.map((item) => `<article class="card managed-listing"><div><span class="badge">公開中</span><h3 style="margin-top:10px">${esc(item.title || item.activity)}</h3><p class="meta">${esc(item.place)} / ${item.capacity}人募集</p></div><div class="actions"><button class="btn small" data-action="edit-listing" data-id="${item.id}">編集</button><button class="btn small quiet-action" data-action="delete-listing" data-id="${item.id}">削除</button></div></article>`).join("") : `<article class="card empty-state">作成した募集はまだありません。</article>`;
+      document.getElementById("accountContent").innerHTML = own.length ? own.map((item) => `<article class="card managed-listing"><div><span class="badge">公開中</span><h3 style="margin-top:10px">${esc(item.title || item.activity)}</h3><p class="meta">${esc(item.place)} / ${item.capacity}人募集</p></div><div class="actions"><button class="btn small primary" data-action="open-detail" data-id="${item.id}">詳細・チャット</button><button class="btn small" data-action="edit-listing" data-id="${item.id}">編集</button><button class="btn small quiet-action" data-action="delete-listing" data-id="${item.id}">削除</button></div></article>`).join("") : `<article class="card empty-state">作成した募集はまだありません。</article>`;
     }
 
     async function openListingDetail(id) {
@@ -2393,6 +2418,11 @@
       participation.dataset.id = item.id;
       participation.textContent = item.owner ? "自分の募集" : joined ? "参加をキャンセル" : full ? "満員" : "参加する";
       participation.disabled = item.owner || (full && !joined);
+      const chatButton = document.getElementById("detailChat");
+      const chatAllowed = !item.isDemo && Boolean(appState.user) && (item.owner || joined);
+      chatButton.dataset.id = item.id;
+      chatButton.disabled = !chatAllowed;
+      chatButton.textContent = item.isDemo ? "サンプルでは利用できません" : chatAllowed ? "チャットする" : "参加後にチャットできます";
       const participationStatus = document.getElementById("participationStatus");
       participationStatus.textContent = item.owner ? "自分で作成した募集です。" : joined ? "この募集に参加しています。" : full ? "この募集は満員です。" : item.isDemo ? "動作確認用のサンプル募集です。" : "参加すると、主催者の募集人数に反映されます。";
       participationStatus.classList.toggle("caution", full && !joined);
@@ -2404,13 +2434,64 @@
       jumpTo("detail");
     }
 
+    function canUseChat(item) {
+      return Boolean(appState.user && item && !item.isDemo && (item.owner || participatingListingIds.has(item.id)));
+    }
+
+    function chatErrorMessage(error) {
+      const message = String(error?.message || error || "");
+      if (/row-level security|permission denied|42501/i.test(message)) return "このチャットは募集主と参加者だけが利用できます。";
+      if (/Failed to fetch|NetworkError|fetch/i.test(message)) return "通信できませんでした。接続を確認して、もう一度お試しください。";
+      if (/listing_messages|relation .* does not exist|42P01/i.test(message)) return "チャット用SQLがSupabaseに反映されていません。supabase-listings.sqlを実行してください。";
+      return `チャットを読み込めませんでした。${message || "しばらくしてからもう一度お試しください。"}`;
+    }
+
+    function renderChatMessages(messages) {
+      const container = document.getElementById("chatMessages");
+      container.innerHTML = messages.length ? messages.map((message) => {
+        const mine = message.sender_id === appState.user?.id;
+        const time = new Date(message.created_at).toLocaleString("ja-JP", { month: "numeric", day: "numeric", hour: "2-digit", minute: "2-digit" });
+        return `<div class="chat-message ${mine ? "mine" : ""}"><small>${mine ? "あなた" : "相手"}・${esc(time)}</small><div class="chat-bubble">${esc(message.body)}</div></div>`;
+      }).join("") : `<div class="empty-state">まだメッセージはありません。最初のひとことを送ってみましょう。</div>`;
+      container.scrollTop = container.scrollHeight;
+    }
+
+    async function loadChatMessages(listingId) {
+      const result = await window.tomoniAuth?.listMessages?.(listingId);
+      if (result?.error) {
+        const message = chatErrorMessage(result.error);
+        document.getElementById("chatStatus").textContent = message;
+        document.getElementById("chatStatus").classList.add("caution");
+        toast(message);
+        return false;
+      }
+      renderChatMessages(result?.data || []);
+      return true;
+    }
+
+    async function openChat(listingId) {
+      const item = listings.find((listing) => listing.id === listingId);
+      if (!canUseChat(item)) { showParticipationMessage("チャットは募集主と参加済みのユーザーだけが利用できます。", true); return; }
+      currentChatListingId = item.id;
+      document.getElementById("chatTitle").textContent = item.title || item.activity;
+      document.getElementById("chatMeta").textContent = `${item.person}さんの募集についてのチャット`;
+      document.getElementById("chatMessage").disabled = false;
+      document.getElementById("chatSend").disabled = false;
+      document.getElementById("chatStatus").textContent = "個人情報の共有は慎重に行ってください。";
+      document.getElementById("chatStatus").classList.remove("caution");
+      setLoading(true);
+      await loadChatMessages(item.id);
+      setLoading(false);
+      jumpTo("chat");
+    }
+
     function showProfileEditor(firstTime = false) {
       openModal(firstTime ? "プロフィール作成" : "プロフィール編集", `<form class="form" id="profileForm" data-first-time="${firstTime}" novalidate><div class="field full"><label for="profileNickname">ニックネーム</label><input id="profileNickname" name="nickname" maxlength="20" value="${esc(appState.profile.nickname === "あなた" ? "" : appState.profile.nickname)}" required><span class="field-error"></span></div><div class="field full"><label for="profileGender">登録する性別</label><select id="profileGender" name="gender"><option ${appState.profile.gender === "女性" ? "selected" : ""}>女性</option><option ${appState.profile.gender === "男性" ? "selected" : ""}>男性</option></select><p class="meta">TOMONIでは、登録した性別と同じ方だけを表示します。</p></div><div class="field full"><label for="profileAge">年代</label><select id="profileAge" name="age"><option ${appState.profile.age === "20代" ? "selected" : ""}>20代</option><option ${appState.profile.age === "30代" ? "selected" : ""}>30代</option><option ${appState.profile.age === "40代" ? "selected" : ""}>40代</option><option ${appState.profile.age === "50代以上" ? "selected" : ""}>50代以上</option></select></div><div class="field full"><label for="profileBio">安心してもらうためのひとこと</label><textarea id="profileBio" name="bio" maxlength="120" required>${esc(appState.profile.bio)}</textarea><span class="field-error"></span></div><div class="field full"><button class="btn primary" type="submit">${firstTime ? "プロフィールを作成する" : "保存する"}</button></div></form>`);
     }
 
     document.addEventListener("submit", async (event) => {
       const form = event.target;
-      if (!["createForm", "contactForm", "authForm", "passwordResetForm", "profileForm", "reportForm"].includes(form.id)) return;
+      if (!["createForm", "chatForm", "contactForm", "authForm", "passwordResetForm", "profileForm", "reportForm"].includes(form.id)) return;
       event.preventDefault();
       if (!validateForm(form)) { toast("入力内容を確認してください。"); return; }
       if (form.id === "createForm") {
@@ -2427,6 +2508,24 @@
         } catch (error) {
           toast(`保存できませんでした：${error.message}`);
         } finally { setLoading(false); }
+      }
+      if (form.id === "chatForm") {
+        const item = listings.find((listing) => listing.id === currentChatListingId);
+        if (!canUseChat(item)) { document.getElementById("chatStatus").textContent = "このチャットは募集主と参加者だけが利用できます。"; document.getElementById("chatStatus").classList.add("caution"); return; }
+        const field = document.getElementById("chatMessage");
+        const body = field.value.trim();
+        if (!body) return;
+        document.getElementById("chatSend").disabled = true;
+        try {
+          const result = await window.tomoniAuth.sendMessage(currentChatListingId, body);
+          if (result?.error) throw result.error;
+          field.value = "";
+          document.getElementById("chatStatus").textContent = "メッセージを送信しました。";
+          document.getElementById("chatStatus").classList.remove("caution");
+          await loadChatMessages(currentChatListingId);
+        } catch (error) {
+          const message = chatErrorMessage(error); document.getElementById("chatStatus").textContent = message; document.getElementById("chatStatus").classList.add("caution"); toast(message);
+        } finally { document.getElementById("chatSend").disabled = false; }
       }
       if (form.id === "contactForm") withLoading(() => { form.reset(); toast("お問い合わせを受け付けました。"); });
       if (form.id === "authForm") {
@@ -2480,10 +2579,11 @@
       if (action === "open-terms") { closeModal(); jumpTo("terms"); toast("内容を確認後、登録画面へ戻って同意してください。"); }
       if (action === "open-account") { if (appState.profileOwnerId !== appState.user?.id) showProfileEditor(true); else { jumpTo("account"); renderManaged(); } }
       if (action === "open-detail") openListingDetail(button.dataset.id);
+      if (action === "open-chat") openChat(currentDetailListingId || button.dataset.id);
       if (action === "edit-profile") { if (!appState.user) openModal("ログイン", authMarkup("login")); else showProfileEditor(); }
       if (action === "show-saved") renderSaved();
       if (action === "show-managed") renderManaged();
-      if (action === "logout") { setLoading(true); const result = await window.tomoniAuth?.signOut(); if (!result?.error) await restoreSupabaseUser(); setLoading(false); if (result?.error) { toast(result.error.message); return; } document.getElementById("accountContent").innerHTML = `<article class="card empty-state">ログアウトしました。またいつでも戻ってきてください。</article>`; toast("ログアウトしました。"); }
+      if (action === "logout") { setLoading(true); const result = await window.tomoniAuth?.signOut(); if (!result?.error) await restoreSupabaseUser(); setLoading(false); if (result?.error) { toast(result.error.message); return; } currentChatListingId = null; document.getElementById("chatMessage").disabled = true; document.getElementById("chatSend").disabled = true; document.getElementById("chatMessages").innerHTML = `<div class="empty-state">ログインするとチャットを利用できます。</div>`; document.getElementById("accountContent").innerHTML = `<article class="card empty-state">ログアウトしました。またいつでも戻ってきてください。</article>`; toast("ログアウトしました。"); }
       if (action === "save-listing") {
         const id = button.dataset.id;
         appState.saved = appState.saved.includes(id) ? appState.saved.filter((item) => item !== id) : [...appState.saved, id];
@@ -2522,6 +2622,12 @@
           if (joined) {
             participatingListingIds.delete(item.id);
             item.participantCount = Math.max(0, item.participantCount - 1);
+            if (currentChatListingId === item.id) {
+              currentChatListingId = null;
+              document.getElementById("chatMessage").disabled = true;
+              document.getElementById("chatSend").disabled = true;
+              document.getElementById("chatMessages").innerHTML = `<div class="empty-state">参加をキャンセルしたため、このチャットは利用できません。</div>`;
+            }
           } else {
             participatingListingIds.add(item.id);
             item.participantCount += 1;

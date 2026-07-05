@@ -55,6 +55,12 @@ window.tomoniAuth = {
   cancelParticipation: (listingId) => client
     ? client.rpc("cancel_listing_participation", { target_listing_id: listingId })
     : Promise.resolve(notConfigured()),
+  listMessages: (listingId) => client
+    ? client.from("listing_messages").select("id,listing_id,sender_id,body,created_at").eq("listing_id", listingId).order("created_at", { ascending: true })
+    : Promise.resolve(notConfigured()),
+  sendMessage: (listingId, body) => client
+    ? client.from("listing_messages").insert({ listing_id: listingId, body }).select().single()
+    : Promise.resolve(notConfigured()),
 };
 
 window.dispatchEvent(new CustomEvent("tomoni:auth-ready"));
