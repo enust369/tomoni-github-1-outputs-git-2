@@ -31,6 +31,9 @@ window.tomoniAuth = {
   listListings: () => client
     ? client.from("listings").select("*").order("created_at", { ascending: false })
     : Promise.resolve(notConfigured()),
+  getListing: (id) => client
+    ? client.from("listings").select("*").eq("id", id).single()
+    : Promise.resolve(notConfigured()),
   createListing: (listing) => client
     ? client.from("listings").insert(listing).select().single()
     : Promise.resolve(notConfigured()),

@@ -1092,7 +1092,7 @@
         <button data-jump="region">地域から探す</button>
         <button data-jump="listings">募集一覧</button>
         <button data-jump="profile">人柄カード</button>
-        <button data-jump="detail">詳細</button>
+        <button data-jump="listings">募集を見る</button>
         <button data-jump="after">会った後</button>
       </nav>
       <button class="account-button" id="accountButton" type="button" data-action="open-auth">登録・ログイン</button>
@@ -1426,25 +1426,21 @@
         <div class="detail">
           <article class="card">
             <p class="eyebrow">詳細</p>
-            <p class="detail-title" id="detailTitle">ゆうさんと<br>静かな散歩 20分</p>
-            <p id="detailCopy">会話は自由です。<br>話さなくても大丈夫。<br>最初だけ自己紹介をして、一緒に歩きましょう。</p>
-            <div class="chips" id="detailBadges" style="margin-top:18px">
-              <span class="badge">本人確認済み</span>
-              <span class="badge muted">終了予定：15:20</span>
-              <span class="badge muted">新宿御苑の入口近く</span>
-            </div>
+            <p class="detail-title" id="detailTitle">募集一覧から詳細を選んでください。</p>
+            <p id="detailCopy">募集内容を読み込むと、ここに詳しい情報が表示されます。</p>
+            <div class="chips" id="detailBadges" style="margin-top:18px"></div>
             <div class="actions">
-              <button class="btn primary" id="detailParticipation" data-action="toggle-participation" data-id="sample-1">参加する</button>
-              <button class="btn" id="detailSave" data-action="save-listing" data-id="sample-1">保存する</button>
-              <button class="btn quiet-action" id="detailLater" data-action="save-listing" data-id="sample-1">あとで見る</button>
+              <button class="btn primary" id="detailParticipation" data-action="toggle-participation" disabled>参加する</button>
+              <button class="btn" id="detailSave" data-action="save-listing" disabled>保存する</button>
+              <button class="btn quiet-action" id="detailLater" data-action="save-listing" disabled>あとで見る</button>
             </div>
             <div class="safety-check" id="participationStatus" role="status" aria-live="polite">参加状況をここに表示します。</div>
           </article>
           <aside class="card">
             <div class="safety-guide"><h3>安心して過ごすためのお約束</h3><ul><li>初回は昼間に会いましょう</li><li>公共施設やカフェ、公園など人のいる場所を利用してください</li><li>個人宅へ行かない</li><li>車へ乗らない</li><li>違和感を感じたら断ってください</li><li>個人情報は慎重に共有してください</li></ul></div>
             <div class="safety-actions">
-              <button class="btn small" data-action="report" data-person="ゆう" data-source="detail" data-id="sample-1">通報する</button>
-              <button class="btn small" data-action="block" data-person="ゆう">ブロックする</button>
+              <button class="btn small" data-action="report" data-source="detail" disabled>通報する</button>
+              <button class="btn small" data-action="block" disabled>ブロックする</button>
             </div>
             <div class="notice" style="margin-top:16px"><p>正確な待ち合わせ位置は、一緒に過ごすことが決まった後に共有されます。</p></div>
             <div class="actions"><button class="btn small quiet-action" data-action="decline">今日は難しい</button></div>
@@ -1761,13 +1757,13 @@
     let latestRankedListings = [];
     let todayOpen = true;
     let editingListingId = null;
+    let currentDetailListingId = null;
     let participatingListingIds = new Set();
     let safetyGateActive = false;
     const storageKey = "tomoni-public-preview-v1";
     const defaultState = { user: null, profileOwnerId: null, safetyOnboardingAccepted: false, saved: [], blocked: [], customListings: [], moderation: { reports: [], blockCount: 0 }, feedbackHistory: [], profile: { nickname: "あなた", age: "30代", gender: "女性", bio: "静かな時間を大切にしています。" } };
     let appState = loadState();
-    listings.forEach((item, index) => { item.id = item.id || `sample-${index + 1}`; });
-    appState.customListings.forEach((item) => { if (!listings.some((existing) => existing.id === item.id)) listings.unshift(item); });
+    listings.splice(0, listings.length);
 
     function loadState() {
       try {
@@ -2344,7 +2340,7 @@
 
     function renderSaved() {
       const saved = listings.filter((item) => appState.saved.includes(item.id));
-      document.getElementById("accountContent").innerHTML = saved.length ? saved.map((item) => `<article class="card managed-listing"><div><span class="badge">保存済み</span><h3 style="margin-top:10px">${esc(item.activity)}</h3><p class="meta">${esc(item.person)}さん / ${esc(item.place)}</p></div><div class="actions"><button class="btn small" data-jump="detail">詳しく見る</button><button class="btn small quiet-action" data-action="save-listing" data-id="${item.id}">保存を外す</button></div></article>`).join("") : `<article class="card empty-state">保存した募集はまだありません。</article>`;
+      document.getElementById("accountContent").innerHTML = saved.length ? saved.map((item) => `<article class="card managed-listing"><div><span class="badge">保存済み</span><h3 style="margin-top:10px">${esc(item.activity)}</h3><p class="meta">${esc(item.person)}さん / ${esc(item.place)}</p></div><div class="actions"><button class="btn small" data-action="open-detail" data-id="${item.id}">詳しく見る</button><button class="btn small quiet-action" data-action="save-listing" data-id="${item.id}">保存を外す</button></div></article>`).join("") : `<article class="card empty-state">保存した募集はまだありません。</article>`;
       bindJumpButtons(document.getElementById("accountContent"));
     }
 
@@ -2353,13 +2349,23 @@
       document.getElementById("accountContent").innerHTML = own.length ? own.map((item) => `<article class="card managed-listing"><div><span class="badge">公開中</span><h3 style="margin-top:10px">${esc(item.title || item.activity)}</h3><p class="meta">${esc(item.place)} / ${item.capacity}人募集</p></div><div class="actions"><button class="btn small" data-action="edit-listing" data-id="${item.id}">編集</button><button class="btn small quiet-action" data-action="delete-listing" data-id="${item.id}">削除</button></div></article>`).join("") : `<article class="card empty-state">作成した募集はまだありません。</article>`;
     }
 
-    function openListingDetail(id) {
-      const item = listings.find((listing) => listing.id === id);
-      if (!item) { jumpTo("not-found"); return; }
+    async function openListingDetail(id) {
+      currentDetailListingId = null;
+      const participation = document.getElementById("detailParticipation");
+      participation.disabled = true;
+      participation.removeAttribute("data-id");
+      if (!/^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(id || "")) { showParticipationMessage("募集IDが正しくありません。募集一覧からもう一度詳細を開いてください。", true); jumpTo("listings"); return; }
+      const localItem = listings.find((listing) => listing.id === id);
+      if (!localItem) { showParticipationMessage("募集が見つかりません。募集一覧を再読み込みしてください。", true); jumpTo("listings"); return; }
+      const detailResult = await window.tomoniAuth?.getListing?.(id);
+      if (detailResult?.error || !detailResult?.data) { showParticipationMessage("募集がSupabase上に見つかりません。募集一覧を再読み込みしてください。", true); jumpTo("listings"); return; }
+      const item = listingFromRow({ ...detailResult.data, participantCount: localItem.participantCount });
+      const itemIndex = listings.findIndex((listing) => listing.id === id);
+      if (itemIndex >= 0) listings.splice(itemIndex, 1, item);
+      currentDetailListingId = detailResult.data.id;
       document.getElementById("detailTitle").innerHTML = `${esc(item.title || item.activity)}<br><span class="meta">${esc(item.person)}さんの募集</span>`;
       document.getElementById("detailCopy").textContent = item.note;
       document.getElementById("detailBadges").innerHTML = `<span class="badge">${item.verified ? "本人確認済み" : "本人確認欄あり"}</span><span class="badge muted">${esc(item.place)}</span><span class="badge muted">${item.participantCount}/${item.capacity}人</span><span class="badge muted">${item.audience === "same_gender" ? "同性のみ" : "誰でも"}</span>`;
-      const participation = document.getElementById("detailParticipation");
       const joined = participatingListingIds.has(item.id);
       const full = item.participantCount >= item.capacity;
       participation.dataset.id = item.id;
@@ -2369,8 +2375,10 @@
       participationStatus.textContent = item.owner ? "自分で作成した募集です。" : joined ? "この募集に参加しています。" : full ? "この募集は満員です。" : "参加すると、主催者の募集人数に反映されます。";
       participationStatus.classList.toggle("caution", full && !joined);
       document.getElementById("detailSave").dataset.id = item.id;
+      document.getElementById("detailSave").disabled = false;
       document.getElementById("detailLater").dataset.id = item.id;
-      document.querySelectorAll('#detail [data-action="report"], #detail [data-action="block"]').forEach((button) => { button.dataset.person = item.person; button.dataset.id = item.id; button.dataset.source = "detail"; });
+      document.getElementById("detailLater").disabled = false;
+      document.querySelectorAll('#detail [data-action="report"], #detail [data-action="block"]').forEach((button) => { button.dataset.person = item.person; button.dataset.id = item.id; button.dataset.source = "detail"; button.disabled = false; });
       jumpTo("detail");
     }
 
@@ -2461,9 +2469,11 @@
       }
       if (action === "toggle-participation") {
         if (!appState.user) { openModal("ログイン", authMarkup("login")); showParticipationMessage("参加するにはログインしてください。", true); return; }
-        const item = listings.find((listing) => listing.id === button.dataset.id);
+        const listingId = button.id === "detailParticipation" ? currentDetailListingId : button.dataset.id;
+        if (button.id === "detailParticipation" && button.dataset.id !== currentDetailListingId) { showParticipationMessage("募集詳細の読み込みに失敗しました。募集一覧からもう一度詳細を開いてください。", true); return; }
+        const item = listings.find((listing) => listing.id === listingId);
         if (!item) { showParticipationMessage("募集が見つかりません。画面を再読み込みしてください。", true); return; }
-        if (!/^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(item.id)) { showParticipationMessage("募集IDが正しくありません。画面を再読み込みしてください。", true); return; }
+        if (!/^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(listingId)) { showParticipationMessage("募集IDが正しくありません。募集一覧からもう一度詳細を開いてください。", true); return; }
         if (item.owner) { showParticipationMessage("自分で作成した募集には参加できません。", true); return; }
         const joined = participatingListingIds.has(item.id);
         if (!joined && item.participantCount >= item.capacity) { showParticipationMessage("この募集は満員です。", true); return; }
@@ -2472,8 +2482,8 @@
         setLoading(true);
         try {
           const result = joined
-            ? await window.tomoniAuth.cancelParticipation(item.id)
-            : await window.tomoniAuth.joinListing(item.id);
+            ? await window.tomoniAuth.cancelParticipation(listingId)
+            : await window.tomoniAuth.joinListing(listingId);
           if (result?.error) throw result.error;
 
           if (joined) {
