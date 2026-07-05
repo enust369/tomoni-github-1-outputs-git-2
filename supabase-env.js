@@ -1,4 +1,4 @@
 window.__TOMONI_ENV__ = {
-  VITE_SUPABASE_URL: "",
-  VITE_SUPABASE_ANON_KEY: "",
+  VITE_SUPABASE_URL: "https://qporjswbpfjfsnxequyd.supabase.co",
+  VITE_SUPABASE_ANON_KEY: "sb_publishable_JCk0iNVL30Kmgih4hknwug_Wj0sidGw",
 };

@@ -1,6 +1,6 @@
 const env = window.__TOMONI_ENV__ || {};
-const supabaseUrl = env.VITE_SUPABASE_URL || "";
-const supabaseAnonKey = env.VITE_SUPABASE_ANON_KEY || "";
+const supabaseUrl = env.VITE_SUPABASE_URL || "https://qporjswbpfjfsnxequyd.supabase.co";
+const supabaseAnonKey = env.VITE_SUPABASE_ANON_KEY || "sb_publishable_JCk0iNVL30Kmgih4hknwug_Wj0sidGw";
 const configured = Boolean(supabaseUrl && supabaseAnonKey);
 const client = configured
   ? (await import("https://esm.sh/@supabase/supabase-js@2")).createClient(supabaseUrl, supabaseAnonKey)
