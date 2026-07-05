@@ -50,7 +50,7 @@ window.tomoniAuth = {
     ? client.rpc("join_listing", { target_listing_id: listingId })
     : Promise.resolve(notConfigured()),
   cancelParticipation: (listingId) => client
-    ? client.from("listing_participants").delete().eq("listing_id", listingId)
+    ? client.rpc("cancel_listing_participation", { target_listing_id: listingId })
     : Promise.resolve(notConfigured()),
 };
 

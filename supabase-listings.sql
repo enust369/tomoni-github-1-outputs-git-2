@@ -68,6 +68,9 @@ from public.listing_participants
 group by listing_id;
 
 grant select on public.listing_participant_counts to anon, authenticated;
+grant select on public.listings to anon, authenticated;
+grant insert, update, delete on public.listings to authenticated;
+grant select, delete on public.listing_participants to authenticated;
 
 create or replace function public.join_listing(target_listing_id uuid)
 returns void
@@ -121,6 +124,28 @@ $$;
 
 revoke all on function public.join_listing(uuid) from public, anon;
 grant execute on function public.join_listing(uuid) to authenticated;
+
+create or replace function public.cancel_listing_participation(target_listing_id uuid)
+returns void
+language plpgsql
+security definer
+set search_path = public
+as $$
+declare
+  current_user_id uuid := auth.uid();
+begin
+  if current_user_id is null then
+    raise exception 'ログインが必要です。';
+  end if;
+
+  delete from public.listing_participants
+  where listing_id = target_listing_id
+    and user_id = current_user_id;
+end;
+$$;
+
+revoke all on function public.cancel_listing_participation(uuid) from public, anon;
+grant execute on function public.cancel_listing_participation(uuid) to authenticated;
 
 create index if not exists listing_participants_user_id_idx
 on public.listing_participants (user_id);
