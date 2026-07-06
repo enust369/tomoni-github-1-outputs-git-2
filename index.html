@@ -1455,13 +1455,14 @@
             <p id="detailCopy">募集内容を読み込むと、ここに詳しい情報が表示されます。</p>
             <div class="chips" id="detailBadges" style="margin-top:18px"></div>
             <div class="actions">
-              <button class="btn primary" id="detailParticipation" data-action="toggle-participation" disabled>参加する</button>
+              <button class="btn primary" id="detailParticipation" data-action="toggle-participation" disabled>参加申請する</button>
               <button class="btn" id="detailChat" data-action="open-chat" disabled>チャットする</button>
               <button class="btn" id="detailMeetingRecord" data-action="open-meeting-record" hidden>会った記録</button>
               <button class="btn" id="detailSave" data-action="save-listing" disabled>保存する</button>
               <button class="btn quiet-action" id="detailLater" data-action="save-listing" disabled>あとで見る</button>
             </div>
             <div class="safety-check" id="participationStatus" role="status" aria-live="polite">参加状況をここに表示します。</div>
+            <div id="listingRequestsPanel" hidden style="margin-top:20px"><p class="eyebrow">参加申請者</p><div class="grid" id="listingRequestsList"></div></div>
           </article>
           <aside class="card">
             <div class="safety-guide"><h3>安心して過ごすためのお約束</h3><ul><li>初回は昼間に会いましょう</li><li>公共施設やカフェ、公園など人のいる場所を利用してください</li><li>個人宅へ行かない</li><li>車へ乗らない</li><li>違和感を感じたら断ってください</li><li>個人情報は慎重に共有してください</li></ul></div>
@@ -1815,6 +1816,7 @@
     let chatRealtimeSubscribed = false;
     let currentChatMessages = new Map();
     let participatingListingIds = new Set();
+    let participationStatuses = new Map();
     let safetyGateActive = false;
     const storageKey = "tomoni-public-preview-v1";
     const defaultState = { user: null, profileOwnerId: null, safetyOnboardingAccepted: false, saved: [], blocked: [], customListings: [], demoParticipations: [], moderation: { reports: [], blockCount: 0 }, feedbackHistory: [], profile: { nickname: "あなた", age: "30代", gender: "女性", bio: "静かな時間を大切にしています。" } };
@@ -1831,7 +1833,7 @@
       ];
       return demoRows.map((item) => ({
         ...item,
-        participantCount: item.participantCount + (appState.demoParticipations.includes(item.id) ? 1 : 0),
+        participantCount: item.participantCount,
         gender: "女性", audience: "anyone", scheduledAt: inTwoHours, duration: "", talk: "自然に話せたらいい",
         verified: true, air: ["静かで落ち着いた空気", "のんびりした空気"], traits: ["穏やかな人", "聞き上手な人"],
         availableToday: true, active: true, owner: false, ownerId: null, isDemo: true
@@ -2167,10 +2169,10 @@
     }
 
     function participationButton(item, className = "btn primary") {
-      const joined = participatingListingIds.has(item.id);
+      const status = participationStatuses.get(item.id);
       const full = item.participantCount >= item.capacity;
-      const label = item.owner ? "自分の募集" : joined ? "参加をキャンセル" : full ? "満員" : "参加する";
-      const disabled = item.owner || (full && !joined) || !item.capacity;
+      const label = item.owner ? "自分の募集" : status === "pending" ? "申請中" : status === "approved" ? "承認されました" : status === "declined" ? "今回は見送られました" : full ? "満員" : "参加申請する";
+      const disabled = item.owner || Boolean(status) || full || !item.capacity;
       return `<button class="${className}" data-action="toggle-participation" data-id="${item.id}" ${disabled ? "disabled" : ""}>${label}</button>`;
     }
 
@@ -2213,7 +2215,8 @@
       if (countsResult?.error) { toast(`参加人数を読み込めませんでした：${countsResult.error.message}`); return false; }
       if (mineResult?.error) { toast(`参加状態を読み込めませんでした：${mineResult.error.message}`); return false; }
       const counts = new Map((countsResult?.data || []).map((item) => [item.listing_id, Number(item.participant_count)]));
-      participatingListingIds = new Set([...(mineResult?.data || []).map((item) => item.listing_id), ...appState.demoParticipations]);
+      participationStatuses = new Map((mineResult?.data || []).map((item) => [item.listing_id, item.status || "approved"]));
+      participatingListingIds = new Set([...participationStatuses].filter(([, status]) => status === "approved").map(([id]) => id));
       const remote = (result?.data || []).map((row) => listingFromRow({ ...row, participantCount: counts.get(row.id) || 0 }));
       listings.splice(0, listings.length);
       listings.unshift(...createDemoListings(), ...remote);
@@ -2309,7 +2312,7 @@
       if (/自分の募集/.test(message)) return "自分で作成した募集には参加できません。";
       if (/満員/.test(message)) return "この募集は満員です。";
       if (/見つかりません/.test(message)) return "募集が見つかりません。再読み込みしてください。";
-      if (/PGRST202|Could not find the function|join_listing|cancel_listing_participation/i.test(message)) return "参加機能のSQLがSupabaseに反映されていません。supabase-listings.sqlを実行してください。";
+      if (/PGRST202|Could not find the function|request_listing_participation|review_listing_participation/i.test(message)) return "参加申請機能のSQLがSupabaseに反映されていません。supabase-listings.sqlを実行してください。";
       if (/Failed to fetch|NetworkError|fetch/i.test(message)) return "通信できませんでした。接続を確認して、もう一度お試しください。";
       return `参加状態を変更できませんでした。${message || "しばらくしてからもう一度お試しください。"}`;
     }
@@ -2436,6 +2439,17 @@
       document.getElementById("accountContent").innerHTML = own.length ? own.map((item) => `<article class="card managed-listing"><div><span class="badge">公開中</span><h3 style="margin-top:10px">${esc(item.title || item.activity)}</h3><p class="meta">${esc(item.place)} / ${item.capacity}人募集</p></div><div class="actions"><button class="btn small primary" data-action="open-detail" data-id="${item.id}">詳細・チャット</button><button class="btn small" data-action="edit-listing" data-id="${item.id}">編集</button><button class="btn small quiet-action" data-action="delete-listing" data-id="${item.id}">削除</button></div></article>`).join("") : `<article class="card empty-state">作成した募集はまだありません。</article>`;
     }
 
+    async function loadListingRequests(listingId) {
+      const result = await window.tomoniAuth?.listListingRequests?.(listingId);
+      const list = document.getElementById("listingRequestsList");
+      if (result?.error) { list.innerHTML = `<div class="notice">参加申請を読み込めませんでした。</div>`; return; }
+      const requests = result?.data || [];
+      list.innerHTML = requests.length ? requests.map((request) => {
+        const statusLabel = request.status === "approved" ? "承認されました" : request.status === "declined" ? "今回は見送られました" : "申請中";
+        return `<div class="notice"><strong>${esc(request.applicant_name || "参加申請者")}さん</strong><p class="meta">${statusLabel}</p>${request.status === "pending" ? `<div class="actions" style="margin-top:10px"><button class="btn small primary" data-action="review-request" data-id="${listingId}" data-user-id="${request.user_id}" data-decision="approved">承認する</button><button class="btn small quiet-action" data-action="review-request" data-id="${listingId}" data-user-id="${request.user_id}" data-decision="declined">今回は見送る</button></div>` : ""}</div>`;
+      }).join("") : `<div class="empty-state">参加申請はまだありません。</div>`;
+    }
+
     async function openListingDetail(id) {
       currentDetailListingId = null;
       const participation = document.getElementById("detailParticipation");
@@ -2456,11 +2470,12 @@
       document.getElementById("detailTitle").innerHTML = `${esc(item.title || item.activity)}<br><span class="meta">${esc(item.person)}さんの募集</span>`;
       document.getElementById("detailCopy").textContent = item.note;
       document.getElementById("detailBadges").innerHTML = `<span class="badge">${item.verified ? "本人確認済み" : "本人確認欄あり"}</span><span class="badge muted">${esc(item.place)}</span><span class="badge muted">${item.participantCount}/${item.capacity}人</span><span class="badge muted">${item.audience === "same_gender" ? "同性のみ" : "誰でも"}</span>`;
-      const joined = participatingListingIds.has(item.id);
+      const participationStatusValue = participationStatuses.get(item.id);
+      const joined = participationStatusValue === "approved";
       const full = item.participantCount >= item.capacity;
       participation.dataset.id = item.id;
-      participation.textContent = item.owner ? "自分の募集" : joined ? "参加をキャンセル" : full ? "満員" : "参加する";
-      participation.disabled = item.owner || (full && !joined);
+      participation.textContent = item.owner ? "自分の募集" : participationStatusValue === "pending" ? "申請中" : joined ? "承認されました" : participationStatusValue === "declined" ? "今回は見送られました" : full ? "満員" : "参加申請する";
+      participation.disabled = item.owner || Boolean(participationStatusValue) || full;
       const chatButton = document.getElementById("detailChat");
       const chatAllowed = !item.isDemo && Boolean(appState.user) && (item.owner || joined);
       chatButton.dataset.id = item.id;
@@ -2471,8 +2486,10 @@
       meetingRecordButton.dataset.id = item.id;
       meetingRecordButton.hidden = !meetingRecordAllowed;
       const participationStatus = document.getElementById("participationStatus");
-      participationStatus.textContent = item.owner ? "自分で作成した募集です。" : joined ? "この募集に参加しています。" : full ? "この募集は満員です。" : item.isDemo ? "動作確認用のサンプル募集です。" : "参加すると、主催者の募集人数に反映されます。";
+      participationStatus.textContent = item.owner ? "参加申請を確認できます。" : participationStatusValue === "pending" ? "参加申請を送りました。募集主の確認をお待ちください。" : joined ? "承認されました。チャットを利用できます。" : participationStatusValue === "declined" ? "今回は見送られました。" : full ? "この募集は満員です。" : item.isDemo ? "動作確認用のサンプル募集です。" : "申請が承認されると、参加人数に反映されます。";
       participationStatus.classList.toggle("caution", full && !joined);
+      document.getElementById("listingRequestsPanel").hidden = !item.owner;
+      if (item.owner) loadListingRequests(item.id);
       document.getElementById("detailSave").dataset.id = item.id;
       document.getElementById("detailSave").disabled = false;
       document.getElementById("detailLater").dataset.id = item.id;
@@ -2748,50 +2765,32 @@
         saveState(); renderListings(); if (document.getElementById("account").classList.contains("is-visible")) renderSaved(); toast(appState.saved.includes(id) ? "あとで見られるよう保存しました。" : "保存を外しました。");
       }
       if (action === "toggle-participation") {
-        if (!appState.user) { openModal("ログイン", authMarkup("login")); showParticipationMessage("参加するにはログインしてください。", true); return; }
+        if (!appState.user) { openModal("ログイン", authMarkup("login")); showParticipationMessage("参加申請するにはログインしてください。", true); return; }
         const listingId = button.id === "detailParticipation" ? currentDetailListingId : button.dataset.id;
         if (button.id === "detailParticipation" && button.dataset.id !== currentDetailListingId) { showParticipationMessage("募集詳細の読み込みに失敗しました。募集一覧からもう一度詳細を開いてください。", true); return; }
         const item = listings.find((listing) => listing.id === listingId);
         if (!item) { showParticipationMessage("募集が見つかりません。画面を再読み込みしてください。", true); return; }
         if (!/^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(listingId)) { showParticipationMessage("募集IDが正しくありません。募集一覧からもう一度詳細を開いてください。", true); return; }
         if (item.owner) { showParticipationMessage("自分で作成した募集には参加できません。", true); return; }
-        const joined = participatingListingIds.has(item.id);
-        if (!joined && item.participantCount >= item.capacity) { showParticipationMessage("この募集は満員です。", true); return; }
+        if (participationStatuses.has(item.id)) return;
+        if (item.participantCount >= item.capacity) { showParticipationMessage("この募集は満員です。", true); return; }
         if (item.isDemo) {
-          appState.demoParticipations = joined
-            ? appState.demoParticipations.filter((id) => id !== listingId)
-            : [...new Set([...appState.demoParticipations, listingId])];
-          if (joined) participatingListingIds.delete(listingId); else participatingListingIds.add(listingId);
-          item.participantCount = Math.max(0, item.participantCount + (joined ? -1 : 1));
-          saveState(); renderListings();
+          participationStatuses.set(listingId, "pending"); renderListings();
           if (document.getElementById("detail").classList.contains("is-visible")) openListingDetail(listingId);
-          showParticipationMessage(joined ? "サンプル募集への参加をキャンセルしました。" : "サンプル募集に参加しました。ボタンと人数の動作確認ができます。");
+          showParticipationMessage("申請中");
           return;
         }
         button.disabled = true;
         button.setAttribute("aria-busy", "true");
         setLoading(true);
         try {
-          const result = joined
-            ? await window.tomoniAuth.cancelParticipation(listingId)
-            : await window.tomoniAuth.joinListing(listingId);
+          const result = await window.tomoniAuth.requestParticipation(listingId, appState.profile.nickname || "参加申請者");
           if (result?.error) throw result.error;
-
-          if (joined) {
-            participatingListingIds.delete(item.id);
-            item.participantCount = Math.max(0, item.participantCount - 1);
-            if (currentChatListingId === item.id) {
-              await closeChatRealtime();
-              document.getElementById("chatMessages").innerHTML = `<div class="empty-state">参加をキャンセルしたため、このチャットは利用できません。</div>`;
-            }
-          } else {
-            participatingListingIds.add(item.id);
-            item.participantCount += 1;
-          }
+          participationStatuses.set(item.id, "pending");
           renderListings();
           const detailWasVisible = document.getElementById("detail").classList.contains("is-visible");
           if (detailWasVisible) openListingDetail(item.id);
-          showParticipationMessage(joined ? "参加をキャンセルしました。" : "募集に参加しました。");
+          showParticipationMessage("申請中");
 
           await loadSupabaseListings();
           if (detailWasVisible && listings.some((listing) => listing.id === item.id)) openListingDetail(item.id);
@@ -2802,6 +2801,15 @@
           button.removeAttribute("aria-busy");
           if (document.body.contains(button)) button.disabled = false;
         }
+      }
+      if (action === "review-request") {
+        button.disabled = true;
+        const result = await window.tomoniAuth.reviewParticipation(button.dataset.id, button.dataset.userId, button.dataset.decision);
+        if (result?.error) { button.disabled = false; toast(participationErrorMessage(result.error)); return; }
+        await loadSupabaseListings();
+        await loadListingRequests(button.dataset.id);
+        if (currentDetailListingId === button.dataset.id) await openListingDetail(button.dataset.id);
+        toast(button.dataset.decision === "approved" ? "承認しました。" : "今回は見送りました。");
       }
       if (action === "accept-invite") { withLoading(() => { jumpTo("after"); toast("一緒に過ごす予定に追加しました。"); }); }
       if (action === "decline") toast("今回は見送りました。相手にはやさしく伝わります。");

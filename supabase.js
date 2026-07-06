@@ -47,10 +47,16 @@ window.tomoniAuth = {
     ? client.from("listing_participant_counts").select("listing_id,participant_count")
     : Promise.resolve(notConfigured()),
   listMyParticipations: () => client
-    ? client.from("listing_participants").select("listing_id")
+    ? client.from("listing_participants").select("listing_id,status")
     : Promise.resolve(notConfigured()),
-  joinListing: (listingId) => client
-    ? client.rpc("join_listing", { target_listing_id: listingId })
+  requestParticipation: (listingId, applicantName) => client
+    ? client.rpc("request_listing_participation", { target_listing_id: listingId, requested_applicant_name: applicantName })
+    : Promise.resolve(notConfigured()),
+  listListingRequests: (listingId) => client
+    ? client.from("listing_participants").select("listing_id,user_id,applicant_name,status,created_at").eq("listing_id", listingId).order("created_at", { ascending: true })
+    : Promise.resolve(notConfigured()),
+  reviewParticipation: (listingId, userId, decision) => client
+    ? client.rpc("review_listing_participation", { target_listing_id: listingId, target_user_id: userId, decision })
     : Promise.resolve(notConfigured()),
   cancelParticipation: (listingId) => client
     ? client.rpc("cancel_listing_participation", { target_listing_id: listingId })

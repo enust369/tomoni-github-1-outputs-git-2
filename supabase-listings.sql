@@ -46,12 +46,37 @@ create table if not exists public.listing_participants (
   primary key (listing_id, user_id)
 );
 
+alter table public.listing_participants
+add column if not exists applicant_name text,
+add column if not exists status text not null default 'approved';
+
+do $$
+begin
+  if not exists (select 1 from pg_constraint where conname = 'listing_participants_status_check' and conrelid = 'public.listing_participants'::regclass) then
+    alter table public.listing_participants
+    add constraint listing_participants_status_check
+    check (status in ('pending', 'approved', 'declined'));
+  end if;
+end;
+$$;
+
 alter table public.listing_participants enable row level security;
 
 drop policy if exists "users can read their own participation" on public.listing_participants;
 create policy "users can read their own participation"
 on public.listing_participants for select to authenticated
 using (auth.uid() = user_id);
+
+drop policy if exists "owners can read listing requests" on public.listing_participants;
+create policy "owners can read listing requests"
+on public.listing_participants for select to authenticated
+using (
+  exists (
+    select 1 from public.listings
+    where listings.id = listing_participants.listing_id
+      and listings.owner_id = auth.uid()
+  )
+);
 
 drop policy if exists "users can cancel their own participation" on public.listing_participants;
 create policy "users can cancel their own participation"
@@ -65,6 +90,7 @@ select
   listing_id,
   count(*)::integer as participant_count
 from public.listing_participants
+where status = 'approved'
 group by listing_id;
 
 grant select on public.listing_participant_counts to anon, authenticated;
@@ -72,7 +98,9 @@ grant select on public.listings to anon, authenticated;
 grant insert, update, delete on public.listings to authenticated;
 grant select, delete on public.listing_participants to authenticated;
 
-create or replace function public.join_listing(target_listing_id uuid)
+drop function if exists public.join_listing(uuid);
+
+create or replace function public.request_listing_participation(target_listing_id uuid, requested_applicant_name text)
 returns void
 language plpgsql
 security definer
@@ -81,15 +109,13 @@ as $$
 declare
   current_user_id uuid := auth.uid();
   listing_owner_id uuid;
-  listing_capacity smallint;
-  current_count integer;
 begin
   if current_user_id is null then
     raise exception 'ログインが必要です。';
   end if;
 
-  select owner_id, capacity
-  into listing_owner_id, listing_capacity
+  select owner_id
+  into listing_owner_id
   from public.listings
   where id = target_listing_id
   for update;
@@ -109,21 +135,61 @@ begin
     return;
   end if;
 
-  select count(*) into current_count
-  from public.listing_participants
-  where listing_id = target_listing_id;
-
-  if current_count >= listing_capacity then
-    raise exception 'この募集は満員です。';
-  end if;
-
-  insert into public.listing_participants (listing_id, user_id)
-  values (target_listing_id, current_user_id);
+  insert into public.listing_participants (listing_id, user_id, applicant_name, status)
+  values (target_listing_id, current_user_id, left(nullif(trim(requested_applicant_name), ''), 20), 'pending');
 end;
 $$;
 
-revoke all on function public.join_listing(uuid) from public, anon;
-grant execute on function public.join_listing(uuid) to authenticated;
+revoke all on function public.request_listing_participation(uuid, text) from public, anon;
+grant execute on function public.request_listing_participation(uuid, text) to authenticated;
+
+create or replace function public.review_listing_participation(target_listing_id uuid, target_user_id uuid, decision text)
+returns void
+language plpgsql
+security definer
+set search_path = public
+as $$
+declare
+  current_user_id uuid := auth.uid();
+  listing_capacity smallint;
+  approved_count integer;
+begin
+  if decision not in ('approved', 'declined') then
+    raise exception '承認内容が正しくありません。';
+  end if;
+
+  select capacity into listing_capacity
+  from public.listings
+  where id = target_listing_id and owner_id = current_user_id
+  for update;
+
+  if not found then
+    raise exception 'この参加申請を確認する権限がありません。';
+  end if;
+
+  if decision = 'approved' then
+    select count(*) into approved_count
+    from public.listing_participants
+    where listing_id = target_listing_id and status = 'approved';
+    if approved_count >= listing_capacity then
+      raise exception 'この募集は満員です。';
+    end if;
+  end if;
+
+  update public.listing_participants
+  set status = decision
+  where listing_id = target_listing_id
+    and user_id = target_user_id
+    and status = 'pending';
+
+  if not found then
+    raise exception '参加申請が見つかりません。';
+  end if;
+end;
+$$;
+
+revoke all on function public.review_listing_participation(uuid, uuid, text) from public, anon;
+grant execute on function public.review_listing_participation(uuid, uuid, text) to authenticated;
 
 create or replace function public.cancel_listing_participation(target_listing_id uuid)
 returns void
@@ -178,6 +244,7 @@ as $$
         select 1 from public.listing_participants
         where listing_participants.listing_id = target_listing_id
           and listing_participants.user_id = auth.uid()
+          and listing_participants.status = 'approved'
       )
     );
 $$;
@@ -235,6 +302,7 @@ as $$
             select 1 from public.listing_participants
             where listing_participants.listing_id = target_listing_id
               and listing_participants.user_id = auth.uid()
+              and listing_participants.status = 'approved'
           )
         )
     );
