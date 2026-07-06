@@ -2866,17 +2866,26 @@
       }
       if (form.id === "contactForm") withLoading(() => { form.reset(); toast("お問い合わせを受け付けました。"); });
       if (form.id === "authForm") {
+        if (form.dataset.submitting === "true") return;
+        form.dataset.submitting = "true";
         const data = Object.fromEntries(new FormData(form));
         const registering = form.dataset.mode === "register";
         setLoading(true);
         const auth = window.tomoniAuth;
-        if (!auth?.configured) { setLoading(false); toast("Supabaseの接続情報を設定してください。"); return; }
-        const result = registering ? await auth.signUp(data.email.trim(), data.password) : await auth.signIn(data.email.trim(), data.password);
+        if (!auth?.configured) { setLoading(false); form.dataset.submitting = "false"; toast("Supabaseの接続情報を設定してください。"); return; }
+        let result = registering ? await auth.signUp(data.email.trim(), data.password) : await auth.signIn(data.email.trim(), data.password);
         setLoading(false);
-        if (result.error) { const passwordField = document.getElementById("authPassword"); passwordField.setAttribute("aria-invalid", "true"); passwordField.parentElement.querySelector(".field-error").textContent = result.error.message; passwordField.focus(); return; }
-        if (registering && !result.data?.session) { modalTitle.textContent = "メール認証"; modalBody.innerHTML = emailVerificationMarkup(data.email.trim()); return; }
+        if (result.error) { form.dataset.submitting = "false"; const passwordField = document.getElementById("authPassword"); passwordField.setAttribute("aria-invalid", "true"); passwordField.parentElement.querySelector(".field-error").textContent = result.error.message; passwordField.focus(); return; }
+        if (registering && !result.data?.session) {
+          setLoading(true);
+          const signInResult = await auth.signIn(data.email.trim(), data.password);
+          setLoading(false);
+          if (!signInResult.error && signInResult.data?.session) result = signInResult;
+          else if (/email not confirmed|not confirmed|confirm/i.test(signInResult.error?.message || "")) { form.dataset.submitting = "false"; modalTitle.textContent = "メール認証"; modalBody.innerHTML = emailVerificationMarkup(data.email.trim()); return; }
+          else { form.dataset.submitting = "false"; toast("登録後のログイン状態を確認できませんでした。もう一度ログインしてください。"); modalTitle.textContent = "ログイン"; modalBody.innerHTML = authMarkup("login"); return; }
+        }
         const user = result.data?.user;
-        if (!user) { toast("ログイン状態を確認できませんでした。"); return; }
+        if (!user) { form.dataset.submitting = "false"; toast("ログイン状態を確認できませんでした。"); return; }
         appState.user = { id: user.id, email: user.email, verified: Boolean(user.email_confirmed_at) };
         await loadSupabaseProfile(user.id);
         saveState(); updateAccountUI(); closeModal();
