@@ -1822,6 +1822,10 @@
     let currentChatMessages = new Map();
     let participatingListingIds = new Set();
     let participationStatuses = new Map();
+    let participationUserChannel = null;
+    let participationOwnerChannel = null;
+    let participationOwnerListingId = null;
+    const handledParticipationEvents = new Set();
     let safetyGateActive = false;
     const storageKey = "tomoni-public-preview-v1";
     const defaultState = { user: null, profileOwnerId: null, safetyOnboardingAccepted: false, saved: [], blocked: [], customListings: [], demoParticipations: [], moderation: { reports: [], blockCount: 0 }, feedbackHistory: [], profile: { nickname: "あなた", age: "30代", gender: "女性", bio: "静かな時間を大切にしています。" } };
@@ -1896,6 +1900,7 @@
 
     const jumpTo = (id) => {
       if (id !== "chat" && currentChatChannel) closeChatRealtime();
+      if (id !== "detail" && participationOwnerChannel) closeOwnerParticipationRealtime();
       document.getElementById(id)?.scrollIntoView({ behavior: "smooth", block: "start" });
     };
 
@@ -2386,6 +2391,7 @@
       appState.user = user ? { id: user.id, email: user.email, verified: Boolean(user.email_confirmed_at) } : null;
       saveState(); updateAccountUI();
       await updateMetCount();
+      await startUserParticipationRealtime();
       if (user && appState.profileOwnerId === user.id) {
         currentGender = appState.profile.gender || currentGender;
         syncGenderControls();
@@ -2455,6 +2461,102 @@
       }).join("") : `<div class="empty-state">参加申請はまだありません。</div>`;
     }
 
+    function acceptParticipationEvent(eventType, payload) {
+      const row = payload.new || {};
+      const key = `${eventType}:${row.listing_id}:${row.user_id}:${row.status}:${payload.commit_timestamp || ""}`;
+      if (handledParticipationEvents.has(key)) return false;
+      handledParticipationEvents.add(key);
+      if (handledParticipationEvents.size > 200) handledParticipationEvents.delete(handledParticipationEvents.values().next().value);
+      return true;
+    }
+
+    async function refreshParticipationCount(listingId) {
+      const result = await window.tomoniAuth?.getParticipationCount?.(listingId);
+      if (result?.error) return;
+      const item = listings.find((listing) => listing.id === listingId);
+      if (!item) return;
+      item.participantCount = Number(result.data?.participant_count || 0);
+      renderListings();
+      if (currentDetailListingId === listingId) updateDetailParticipationUI(item);
+    }
+
+    async function handleUserParticipationChange(eventType, payload) {
+      if (!acceptParticipationEvent(eventType, payload)) return;
+      const row = payload.new;
+      if (!row || row.user_id !== appState.user?.id) return;
+      participationStatuses.set(row.listing_id, row.status);
+      if (row.status === "approved") participatingListingIds.add(row.listing_id); else participatingListingIds.delete(row.listing_id);
+      await refreshParticipationCount(row.listing_id);
+      if (currentDetailListingId === row.listing_id) {
+        const item = listings.find((listing) => listing.id === row.listing_id);
+        if (item) updateDetailParticipationUI(item);
+      }
+      if (row.status === "approved") toast("承認されました");
+      if (row.status === "declined") toast("今回は見送られました");
+    }
+
+    async function handleOwnerParticipationChange(eventType, payload) {
+      if (!acceptParticipationEvent(eventType, payload)) return;
+      const row = payload.new;
+      if (!row || row.listing_id !== participationOwnerListingId) return;
+      await loadListingRequests(row.listing_id);
+      await refreshParticipationCount(row.listing_id);
+      if (eventType === "INSERT" && row.status === "pending") toast("新しい参加申請があります");
+    }
+
+    async function closeUserParticipationRealtime() {
+      const channel = participationUserChannel;
+      participationUserChannel = null;
+      if (channel) await window.tomoniAuth?.unsubscribeParticipationChanges?.(channel);
+    }
+
+    async function startUserParticipationRealtime() {
+      await closeUserParticipationRealtime();
+      if (!appState.user) return;
+      const userId = appState.user.id;
+      const channel = await window.tomoniAuth?.subscribeToParticipationChanges?.(`user_id=eq.${userId}`, handleUserParticipationChange);
+      if (appState.user?.id !== userId) { await window.tomoniAuth?.unsubscribeParticipationChanges?.(channel); return; }
+      participationUserChannel = channel;
+    }
+
+    async function closeOwnerParticipationRealtime() {
+      const channel = participationOwnerChannel;
+      participationOwnerChannel = null;
+      participationOwnerListingId = null;
+      if (channel) await window.tomoniAuth?.unsubscribeParticipationChanges?.(channel);
+    }
+
+    async function startOwnerParticipationRealtime(listingId) {
+      if (participationOwnerListingId === listingId && participationOwnerChannel) return;
+      await closeOwnerParticipationRealtime();
+      participationOwnerListingId = listingId;
+      const channel = await window.tomoniAuth?.subscribeToParticipationChanges?.(`listing_id=eq.${listingId}`, handleOwnerParticipationChange);
+      if (participationOwnerListingId !== listingId) { await window.tomoniAuth?.unsubscribeParticipationChanges?.(channel); return; }
+      participationOwnerChannel = channel;
+    }
+
+    function updateDetailParticipationUI(item) {
+      const status = participationStatuses.get(item.id);
+      const approved = status === "approved";
+      const full = item.participantCount >= item.capacity;
+      const participation = document.getElementById("detailParticipation");
+      participation.dataset.id = item.id;
+      participation.textContent = item.owner ? "自分の募集" : status === "pending" ? "申請中" : approved ? "承認されました" : status === "declined" ? "今回は見送られました" : full ? "満員" : "参加申請する";
+      participation.disabled = item.owner || Boolean(status) || full;
+      const chatButton = document.getElementById("detailChat");
+      const chatAllowed = !item.isDemo && Boolean(appState.user) && (item.owner || approved);
+      chatButton.dataset.id = item.id;
+      chatButton.disabled = !chatAllowed;
+      chatButton.textContent = item.isDemo ? "サンプルでは利用できません" : chatAllowed ? "チャットする" : "承認後にチャットできます";
+      const meetingRecordButton = document.getElementById("detailMeetingRecord");
+      meetingRecordButton.dataset.id = item.id;
+      meetingRecordButton.hidden = !(!item.isDemo && Boolean(appState.user) && (item.owner || approved) && new Date(item.scheduledAt).getTime() <= Date.now());
+      const statusElement = document.getElementById("participationStatus");
+      statusElement.textContent = item.owner ? "参加申請を確認できます。" : status === "pending" ? "参加申請を送りました。募集主の確認をお待ちください。" : approved ? "承認されました。チャットを利用できます。" : status === "declined" ? "今回は見送られました。" : full ? "この募集は満員です。" : item.isDemo ? "動作確認用のサンプル募集です。" : "申請が承認されると、参加人数に反映されます。";
+      statusElement.classList.toggle("caution", status === "declined" || (full && !approved));
+      document.getElementById("detailBadges").innerHTML = `<span class="badge">${item.verified ? "本人確認済み" : "本人確認欄あり"}</span><span class="badge muted">${esc(item.place)}</span><span class="badge muted">${item.participantCount}/${item.capacity}人</span><span class="badge muted">${item.audience === "same_gender" ? "同性のみ" : "誰でも"}</span>`;
+    }
+
     async function openListingDetail(id) {
       currentDetailListingId = null;
       const participation = document.getElementById("detailParticipation");
@@ -2474,27 +2576,9 @@
       currentDetailListingId = item.id;
       document.getElementById("detailTitle").innerHTML = `${esc(item.title || item.activity)}<br><span class="meta">${esc(item.person)}さんの募集</span>`;
       document.getElementById("detailCopy").textContent = item.note;
-      document.getElementById("detailBadges").innerHTML = `<span class="badge">${item.verified ? "本人確認済み" : "本人確認欄あり"}</span><span class="badge muted">${esc(item.place)}</span><span class="badge muted">${item.participantCount}/${item.capacity}人</span><span class="badge muted">${item.audience === "same_gender" ? "同性のみ" : "誰でも"}</span>`;
-      const participationStatusValue = participationStatuses.get(item.id);
-      const joined = participationStatusValue === "approved";
-      const full = item.participantCount >= item.capacity;
-      participation.dataset.id = item.id;
-      participation.textContent = item.owner ? "自分の募集" : participationStatusValue === "pending" ? "申請中" : joined ? "承認されました" : participationStatusValue === "declined" ? "今回は見送られました" : full ? "満員" : "参加申請する";
-      participation.disabled = item.owner || Boolean(participationStatusValue) || full;
-      const chatButton = document.getElementById("detailChat");
-      const chatAllowed = !item.isDemo && Boolean(appState.user) && (item.owner || joined);
-      chatButton.dataset.id = item.id;
-      chatButton.disabled = !chatAllowed;
-      chatButton.textContent = item.isDemo ? "サンプルでは利用できません" : chatAllowed ? "チャットする" : "参加後にチャットできます";
-      const meetingRecordButton = document.getElementById("detailMeetingRecord");
-      const meetingRecordAllowed = !item.isDemo && Boolean(appState.user) && (item.owner || joined) && new Date(item.scheduledAt).getTime() <= Date.now();
-      meetingRecordButton.dataset.id = item.id;
-      meetingRecordButton.hidden = !meetingRecordAllowed;
-      const participationStatus = document.getElementById("participationStatus");
-      participationStatus.textContent = item.owner ? "参加申請を確認できます。" : participationStatusValue === "pending" ? "参加申請を送りました。募集主の確認をお待ちください。" : joined ? "承認されました。チャットを利用できます。" : participationStatusValue === "declined" ? "今回は見送られました。" : full ? "この募集は満員です。" : item.isDemo ? "動作確認用のサンプル募集です。" : "申請が承認されると、参加人数に反映されます。";
-      participationStatus.classList.toggle("caution", full && !joined);
+      updateDetailParticipationUI(item);
       document.getElementById("listingRequestsPanel").hidden = !item.owner;
-      if (item.owner) loadListingRequests(item.id);
+      if (item.owner) { loadListingRequests(item.id); startOwnerParticipationRealtime(item.id); }
       document.getElementById("detailSave").dataset.id = item.id;
       document.getElementById("detailSave").disabled = false;
       document.getElementById("detailLater").dataset.id = item.id;
@@ -2721,6 +2805,7 @@
         appState.user = { id: user.id, email: user.email, verified: Boolean(user.email_confirmed_at) };
         saveState(); updateAccountUI(); closeModal();
         await updateMetCount();
+        await startUserParticipationRealtime();
         if (appState.profileOwnerId !== user.id) showProfileEditor(true);
         else { currentGender = appState.profile.gender || currentGender; syncGenderControls(); await loadSupabaseListings(); toast("ログインしました。"); }
       }
@@ -2763,7 +2848,7 @@
       if (action === "edit-profile") { if (!appState.user) openModal("ログイン", authMarkup("login")); else showProfileEditor(); }
       if (action === "show-saved") renderSaved();
       if (action === "show-managed") renderManaged();
-      if (action === "logout") { setLoading(true); await closeChatRealtime(); const result = await window.tomoniAuth?.signOut(); if (!result?.error) await restoreSupabaseUser(); setLoading(false); if (result?.error) { toast(result.error.message); return; } document.getElementById("chatMessages").innerHTML = `<div class="empty-state">ログインするとチャットを利用できます。</div>`; document.getElementById("accountContent").innerHTML = `<article class="card empty-state">ログアウトしました。またいつでも戻ってきてください。</article>`; toast("ログアウトしました。"); }
+      if (action === "logout") { setLoading(true); await closeChatRealtime(); await closeOwnerParticipationRealtime(); await closeUserParticipationRealtime(); const result = await window.tomoniAuth?.signOut(); if (!result?.error) await restoreSupabaseUser(); setLoading(false); if (result?.error) { toast(result.error.message); return; } document.getElementById("chatMessages").innerHTML = `<div class="empty-state">ログインするとチャットを利用できます。</div>`; document.getElementById("accountContent").innerHTML = `<article class="card empty-state">ログアウトしました。またいつでも戻ってきてください。</article>`; toast("ログアウトしました。"); }
       if (action === "save-listing") {
         const id = button.dataset.id;
         appState.saved = appState.saved.includes(id) ? appState.saved.filter((item) => item !== id) : [...appState.saved, id];
@@ -2857,7 +2942,11 @@
       jumpTo(document.getElementById(id) ? id : "not-found");
     });
     window.addEventListener("unhandledrejection", () => jumpTo("error"));
-    window.addEventListener("beforeunload", () => { if (currentChatChannel) window.tomoniAuth?.unsubscribeMessages?.(currentChatChannel); });
+    window.addEventListener("beforeunload", () => {
+      if (currentChatChannel) window.tomoniAuth?.unsubscribeMessages?.(currentChatChannel);
+      if (participationUserChannel) window.tomoniAuth?.unsubscribeParticipationChanges?.(participationUserChannel);
+      if (participationOwnerChannel) window.tomoniAuth?.unsubscribeParticipationChanges?.(participationOwnerChannel);
+    });
     window.addEventListener("tomoni:auth-ready", restoreSupabaseUser);
     document.addEventListener("click", (event) => {
       const protectedLink = event.target.closest('[data-jump="create"], [data-jump="region"]');

@@ -341,6 +341,7 @@ with check (
 
 grant select, insert, update on public.meeting_records to authenticated;
 
+alter table public.listing_participants replica identity full;
 alter table public.listing_messages replica identity full;
 
 do $$
@@ -353,6 +354,15 @@ begin
         and tablename = 'listing_messages'
     ) then
     alter publication supabase_realtime add table public.listing_messages;
+  end if;
+  if exists (select 1 from pg_publication where pubname = 'supabase_realtime')
+    and not exists (
+      select 1 from pg_publication_tables
+      where pubname = 'supabase_realtime'
+        and schemaname = 'public'
+        and tablename = 'listing_participants'
+    ) then
+    alter publication supabase_realtime add table public.listing_participants;
   end if;
 end;
 $$;

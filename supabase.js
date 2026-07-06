@@ -58,6 +58,21 @@ window.tomoniAuth = {
   reviewParticipation: (listingId, userId, decision) => client
     ? client.rpc("review_listing_participation", { target_listing_id: listingId, target_user_id: userId, decision })
     : Promise.resolve(notConfigured()),
+  getParticipationCount: (listingId) => client
+    ? client.from("listing_participant_counts").select("participant_count").eq("listing_id", listingId).maybeSingle()
+    : Promise.resolve(notConfigured()),
+  subscribeToParticipationChanges: async (filter, onChange, onStatus) => {
+    if (!client) return null;
+    const { data } = await client.auth.getSession();
+    if (data.session?.access_token) await client.realtime.setAuth(data.session.access_token);
+    return client.channel(`listing-participants-${filter.replace(/[^a-z0-9-]/gi, "-")}-${Date.now()}`)
+      .on("postgres_changes", { event: "INSERT", schema: "public", table: "listing_participants", filter }, (payload) => onChange("INSERT", payload))
+      .on("postgres_changes", { event: "UPDATE", schema: "public", table: "listing_participants", filter }, (payload) => onChange("UPDATE", payload))
+      .subscribe((status, error) => onStatus?.(status, error));
+  },
+  unsubscribeParticipationChanges: (channel) => client && channel
+    ? client.removeChannel(channel)
+    : Promise.resolve(),
   cancelParticipation: (listingId) => client
     ? client.rpc("cancel_listing_participation", { target_listing_id: listingId })
     : Promise.resolve(notConfigured()),
