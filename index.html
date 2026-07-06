@@ -175,6 +175,11 @@
       transform: translateY(0);
     }
 
+    #listings {
+      opacity: 1;
+      transform: none;
+    }
+
     .hero {
       min-height: calc(100vh - 66px);
       display: grid;
@@ -2871,7 +2876,7 @@
       document.querySelectorAll(".nav button").forEach((button) => {
         button.classList.toggle("active", button.dataset.jump === visible.target.id);
       });
-    }, { threshold: [.25, .55] });
+    }, { threshold: [.01, .25, .55] });
 
     document.querySelectorAll("main section").forEach((section) => observer.observe(section));
 
