@@ -91,6 +91,26 @@ window.tomoniAuth = {
   countMetPeople: () => client
     ? client.from("meeting_records").select("listing_id", { count: "exact", head: true }).eq("met_safely", true)
     : Promise.resolve(notConfigured()),
+  listNotifications: () => client
+    ? client.from("notifications").select("id,listing_id,type,message,read_at,created_at").order("created_at", { ascending: false }).limit(100)
+    : Promise.resolve(notConfigured()),
+  markNotificationRead: (id) => client
+    ? client.from("notifications").update({ read_at: new Date().toISOString() }).eq("id", id)
+    : Promise.resolve(notConfigured()),
+  syncListingEndNotifications: () => client
+    ? client.rpc("sync_listing_end_notifications")
+    : Promise.resolve(notConfigured()),
+  subscribeToNotifications: async (userId, onInsert, onStatus) => {
+    if (!client) return null;
+    const { data } = await client.auth.getSession();
+    if (data.session?.access_token) await client.realtime.setAuth(data.session.access_token);
+    return client.channel(`notifications-${userId}-${Date.now()}`)
+      .on("postgres_changes", { event: "INSERT", schema: "public", table: "notifications", filter: `recipient_id=eq.${userId}` }, (payload) => onInsert(payload.new))
+      .subscribe((status, error) => onStatus?.(status, error));
+  },
+  unsubscribeNotifications: (channel) => client && channel
+    ? client.removeChannel(channel)
+    : Promise.resolve(),
   subscribeToMessages: async (listingId, onInsert, onStatus) => {
     if (!client) return null;
     const { data } = await client.auth.getSession();
