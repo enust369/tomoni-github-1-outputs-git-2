@@ -2874,7 +2874,7 @@
         const result = registering ? await auth.signUp(data.email.trim(), data.password) : await auth.signIn(data.email.trim(), data.password);
         setLoading(false);
         if (result.error) { const passwordField = document.getElementById("authPassword"); passwordField.setAttribute("aria-invalid", "true"); passwordField.parentElement.querySelector(".field-error").textContent = result.error.message; passwordField.focus(); return; }
-        if (registering) { modalTitle.textContent = "メール認証"; modalBody.innerHTML = emailVerificationMarkup(data.email.trim()); return; }
+        if (registering && !result.data?.session) { modalTitle.textContent = "メール認証"; modalBody.innerHTML = emailVerificationMarkup(data.email.trim()); return; }
         const user = result.data?.user;
         if (!user) { toast("ログイン状態を確認できませんでした。"); return; }
         appState.user = { id: user.id, email: user.email, verified: Boolean(user.email_confirmed_at) };
@@ -2884,6 +2884,14 @@
         await startUserParticipationRealtime();
         await startNotificationRealtime();
         await loadNotifications();
+        if (registering) {
+          currentGender = appState.profile.gender || currentGender;
+          syncGenderControls();
+          await loadSupabaseListings();
+          jumpTo("home");
+          toast("登録してログインしました。");
+          return;
+        }
         if (appState.profileOwnerId !== user.id) showProfileEditor(true);
         else { currentGender = appState.profile.gender || currentGender; syncGenderControls(); await loadSupabaseListings(); toast("ログインしました。"); }
       }
