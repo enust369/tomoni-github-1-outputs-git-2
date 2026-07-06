@@ -1408,6 +1408,7 @@
               <div class="avatar">ゆ</div>
               <h3 id="profileDisplayName">ゆう</h3>
               <p class="meta" id="profileDisplayMeta">30代 / 今日の気分：穏やか</p>
+              <p class="meta" id="profileMetCount">会った人数：0人</p>
               <div class="chips" style="justify-content:center;margin-top:14px">
                 <span class="badge">本人確認済み</span>
                 <span class="badge muted">敬語希望</span>
@@ -1475,13 +1476,13 @@
       </section>
 
       <section id="meeting-record">
-        <div class="section-head"><div><p class="eyebrow">会った記録</p><h2 id="meetingRecordTitle">今日の時間を、自分のために残す。</h2><p class="meta">内容は相手に通知されず、自分だけが確認できます。</p></div></div>
+        <div class="section-head"><div><p class="eyebrow">会った記録</p><h2 id="meetingRecordTitle">相手と過ごした記録</h2><p class="meta" id="meetingRecordListingTitle">募集タイトル</p><p class="meta" style="margin-top:6px">内容は相手に通知されず、自分だけが確認できます。</p></div></div>
         <form class="card form" id="meetingRecordForm" novalidate>
           <div class="field full"><label class="check-row"><input id="metSafely" name="metSafely" type="checkbox"><span><strong>無事に会えた</strong><br><span class="meta">待ち合わせができたことを記録します。</span></span></label></div>
-          <div class="field full"><label class="check-row"><input id="meetAgain" name="meetAgain" type="checkbox"><span><strong>⭐ また会いたい</strong><br><span class="meta">自分だけに保存され、相手には通知されません。</span></span></label></div>
-          <div class="field full"><label for="privateMeetingNote">📝 自分だけのメモ</label><textarea id="privateMeetingNote" name="privateNote" maxlength="300" placeholder="安心できたことや、次に覚えておきたいこと"></textarea><div class="meta"><span id="meetingNoteCount">0</span>/300文字</div></div>
-          <div class="field full"><div class="actions"><button class="btn small quiet-action" type="button" id="meetingBlock" data-action="block">🚫 ブロック</button><button class="btn small quiet-action" type="button" id="meetingReport" data-action="report" data-source="meeting-record">🚨 通報</button></div></div>
-          <div class="field full"><button class="btn primary" id="meetingRecordSave" type="submit" disabled>保存</button><div class="safety-check" id="meetingRecordStatus" role="status" aria-live="polite">募集終了後に記録できます。</div></div>
+          <div class="field full"><label class="check-row"><input id="meetAgain" name="meetAgain" type="checkbox"><span><strong>⭐ また会えたらうれしい</strong><br><span class="meta">自分だけに保存され、相手には通知されません。</span></span></label></div>
+          <div class="field full"><label for="privateMeetingNote">📝 自分だけのメモ</label><textarea id="privateMeetingNote" name="privateNote" maxlength="300" placeholder="安心できたこと&#10;話した内容&#10;次に覚えておきたいこと&#10;（自分だけが見られます）"></textarea><div class="meta"><span id="meetingNoteCount">0</span>/300文字</div></div>
+          <div class="field full"><button class="btn primary" id="meetingRecordSave" type="submit" disabled>会った記録を保存</button><div class="safety-check" id="meetingRecordStatus" role="status" aria-live="polite">募集終了後に記録できます。</div></div>
+          <div class="field full" style="border-top:1px solid var(--line);padding-top:20px"><p class="eyebrow">その他</p><div class="actions" style="margin-top:10px"><button class="btn small quiet-action" type="button" id="meetingBlock" data-action="block">🚫 ブロック</button><button class="btn small quiet-action" type="button" id="meetingReport" data-action="report" data-source="meeting-record">🚨 通報</button></div></div>
         </form>
       </section>
 
@@ -2362,6 +2363,13 @@
       return Boolean(appState.user && appState.profileOwnerId === appState.user.id);
     }
 
+    async function updateMetCount() {
+      const countElement = document.getElementById("profileMetCount");
+      if (!appState.user) { countElement.textContent = "会った人数：0人"; return; }
+      const result = await window.tomoniAuth?.countMetPeople?.();
+      if (!result?.error) countElement.textContent = `会った人数：${result.count || 0}人`;
+    }
+
     async function restoreSupabaseUser() {
       const auth = window.tomoniAuth;
       if (!auth?.configured) { appState.user = null; updateAccountUI(); return; }
@@ -2369,6 +2377,7 @@
       const user = result.data?.user;
       appState.user = user ? { id: user.id, email: user.email, verified: Boolean(user.email_confirmed_at) } : null;
       saveState(); updateAccountUI();
+      await updateMetCount();
       if (user && appState.profileOwnerId === user.id) {
         currentGender = appState.profile.gender || currentGender;
         syncGenderControls();
@@ -2480,8 +2489,9 @@
       const item = listings.find((listing) => listing.id === listingId);
       if (!canUseMeetingRecord(item)) { toast("会った記録は、募集終了後に募集主と参加者だけが利用できます。"); return; }
       currentMeetingListingId = item.id;
-      document.getElementById("meetingRecordTitle").textContent = item.title || item.activity;
       const counterpart = item.owner ? "参加者" : item.person;
+      document.getElementById("meetingRecordTitle").textContent = `${counterpart}さんと過ごした記録`;
+      document.getElementById("meetingRecordListingTitle").textContent = item.title || item.activity;
       [document.getElementById("meetingBlock"), document.getElementById("meetingReport")].forEach((button) => { button.dataset.person = counterpart; button.dataset.id = item.id; });
       setLoading(true);
       const result = await window.tomoniAuth?.getMeetingRecord?.(item.id);
@@ -2664,9 +2674,10 @@
         try {
           const result = await window.tomoniAuth.saveMeetingRecord(item.id, record);
           if (result?.error) throw result.error;
-          document.getElementById("meetingRecordStatus").textContent = "会った記録を保存しました。相手には通知されません。";
+          document.getElementById("meetingRecordStatus").textContent = "保存しました。この内容は自分だけが確認できます。";
           document.getElementById("meetingRecordStatus").classList.remove("caution");
-          toast("会った記録を保存しました。");
+          await updateMetCount();
+          toast("保存しました。この内容は自分だけが確認できます。");
         } catch (error) {
           document.getElementById("meetingRecordStatus").textContent = `保存できませんでした：${error.message}`;
           document.getElementById("meetingRecordStatus").classList.add("caution");
@@ -2687,6 +2698,7 @@
         if (!user) { toast("ログイン状態を確認できませんでした。"); return; }
         appState.user = { id: user.id, email: user.email, verified: Boolean(user.email_confirmed_at) };
         saveState(); updateAccountUI(); closeModal();
+        await updateMetCount();
         if (appState.profileOwnerId !== user.id) showProfileEditor(true);
         else { currentGender = appState.profile.gender || currentGender; syncGenderControls(); await loadSupabaseListings(); toast("ログインしました。"); }
       }
