@@ -61,6 +61,12 @@ window.tomoniAuth = {
   sendMessage: (listingId, body) => client
     ? client.from("listing_messages").insert({ listing_id: listingId, body }).select().single()
     : Promise.resolve(notConfigured()),
+  getMeetingRecord: (listingId) => client
+    ? client.from("meeting_records").select("listing_id,met_safely,meet_again,private_note,updated_at").eq("listing_id", listingId).maybeSingle()
+    : Promise.resolve(notConfigured()),
+  saveMeetingRecord: (listingId, record) => client
+    ? client.from("meeting_records").upsert({ listing_id: listingId, ...record }, { onConflict: "listing_id,user_id" }).select().single()
+    : Promise.resolve(notConfigured()),
   subscribeToMessages: async (listingId, onInsert, onStatus) => {
     if (!client) return null;
     const { data } = await client.auth.getSession();

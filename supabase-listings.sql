@@ -204,6 +204,75 @@ grant usage, select on sequence public.listing_messages_id_seq to authenticated;
 create index if not exists listing_messages_listing_created_idx
 on public.listing_messages (listing_id, created_at);
 
+create table if not exists public.meeting_records (
+  listing_id uuid not null references public.listings(id) on delete cascade,
+  user_id uuid not null default auth.uid() references auth.users(id) on delete cascade,
+  met_safely boolean not null default false,
+  meet_again boolean not null default false,
+  private_note text check (private_note is null or char_length(private_note) <= 300),
+  created_at timestamptz not null default now(),
+  updated_at timestamptz not null default now(),
+  primary key (listing_id, user_id)
+);
+
+alter table public.meeting_records enable row level security;
+
+create or replace function public.can_manage_meeting_record(target_listing_id uuid)
+returns boolean
+language sql
+stable
+security definer
+set search_path = public
+as $$
+  select auth.uid() is not null
+    and exists (
+      select 1 from public.listings
+      where listings.id = target_listing_id
+        and listings.scheduled_at <= now()
+        and (
+          listings.owner_id = auth.uid()
+          or exists (
+            select 1 from public.listing_participants
+            where listing_participants.listing_id = target_listing_id
+              and listing_participants.user_id = auth.uid()
+          )
+        )
+    );
+$$;
+
+revoke all on function public.can_manage_meeting_record(uuid) from public, anon;
+grant execute on function public.can_manage_meeting_record(uuid) to authenticated;
+
+drop policy if exists "users can read their own meeting record" on public.meeting_records;
+create policy "users can read their own meeting record"
+on public.meeting_records for select to authenticated
+using (
+  user_id = auth.uid()
+  and public.can_manage_meeting_record(listing_id)
+);
+
+drop policy if exists "users can create their own meeting record" on public.meeting_records;
+create policy "users can create their own meeting record"
+on public.meeting_records for insert to authenticated
+with check (
+  user_id = auth.uid()
+  and public.can_manage_meeting_record(listing_id)
+);
+
+drop policy if exists "users can update their own meeting record" on public.meeting_records;
+create policy "users can update their own meeting record"
+on public.meeting_records for update to authenticated
+using (
+  user_id = auth.uid()
+  and public.can_manage_meeting_record(listing_id)
+)
+with check (
+  user_id = auth.uid()
+  and public.can_manage_meeting_record(listing_id)
+);
+
+grant select, insert, update on public.meeting_records to authenticated;
+
 alter table public.listing_messages replica identity full;
 
 do $$

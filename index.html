@@ -1456,6 +1456,7 @@
             <div class="actions">
               <button class="btn primary" id="detailParticipation" data-action="toggle-participation" disabled>参加する</button>
               <button class="btn" id="detailChat" data-action="open-chat" disabled>チャットする</button>
+              <button class="btn" id="detailMeetingRecord" data-action="open-meeting-record" hidden>会った記録</button>
               <button class="btn" id="detailSave" data-action="save-listing" disabled>保存する</button>
               <button class="btn quiet-action" id="detailLater" data-action="save-listing" disabled>あとで見る</button>
             </div>
@@ -1471,6 +1472,17 @@
             <div class="actions"><button class="btn small quiet-action" data-action="decline">今日は難しい</button></div>
           </aside>
         </div>
+      </section>
+
+      <section id="meeting-record">
+        <div class="section-head"><div><p class="eyebrow">会った記録</p><h2 id="meetingRecordTitle">今日の時間を、自分のために残す。</h2><p class="meta">内容は相手に通知されず、自分だけが確認できます。</p></div></div>
+        <form class="card form" id="meetingRecordForm" novalidate>
+          <div class="field full"><label class="check-row"><input id="metSafely" name="metSafely" type="checkbox"><span><strong>無事に会えた</strong><br><span class="meta">待ち合わせができたことを記録します。</span></span></label></div>
+          <div class="field full"><label class="check-row"><input id="meetAgain" name="meetAgain" type="checkbox"><span><strong>⭐ また会いたい</strong><br><span class="meta">自分だけに保存され、相手には通知されません。</span></span></label></div>
+          <div class="field full"><label for="privateMeetingNote">📝 自分だけのメモ</label><textarea id="privateMeetingNote" name="privateNote" maxlength="300" placeholder="安心できたことや、次に覚えておきたいこと"></textarea><div class="meta"><span id="meetingNoteCount">0</span>/300文字</div></div>
+          <div class="field full"><div class="actions"><button class="btn small quiet-action" type="button" id="meetingBlock" data-action="block">🚫 ブロック</button><button class="btn small quiet-action" type="button" id="meetingReport" data-action="report" data-source="meeting-record">🚨 通報</button></div></div>
+          <div class="field full"><button class="btn primary" id="meetingRecordSave" type="submit" disabled>保存</button><div class="safety-check" id="meetingRecordStatus" role="status" aria-live="polite">募集終了後に記録できます。</div></div>
+        </form>
       </section>
 
       <section id="chat">
@@ -1796,6 +1808,7 @@
     let editingListingId = null;
     let currentDetailListingId = null;
     let currentChatListingId = null;
+    let currentMeetingListingId = null;
     let currentChatChannel = null;
     let currentChatSyncTimer = null;
     let chatRealtimeSubscribed = false;
@@ -2266,6 +2279,7 @@
         : "ありがとうございます。この時間の感じ方を、次の穏やかな紹介に反映します。";
     });
     [document.getElementById("listingTitle"), document.getElementById("place")].forEach((field) => field.addEventListener("input", analyzeSafety));
+    document.getElementById("privateMeetingNote").addEventListener("input", (event) => { document.getElementById("meetingNoteCount").textContent = String(event.target.value.length); });
     document.querySelectorAll("[data-gender]").forEach((button) => {
       button.addEventListener("click", () => {
         currentGender = button.dataset.gender;
@@ -2443,6 +2457,10 @@
       chatButton.dataset.id = item.id;
       chatButton.disabled = !chatAllowed;
       chatButton.textContent = item.isDemo ? "サンプルでは利用できません" : chatAllowed ? "チャットする" : "参加後にチャットできます";
+      const meetingRecordButton = document.getElementById("detailMeetingRecord");
+      const meetingRecordAllowed = !item.isDemo && Boolean(appState.user) && (item.owner || joined) && new Date(item.scheduledAt).getTime() <= Date.now();
+      meetingRecordButton.dataset.id = item.id;
+      meetingRecordButton.hidden = !meetingRecordAllowed;
       const participationStatus = document.getElementById("participationStatus");
       participationStatus.textContent = item.owner ? "自分で作成した募集です。" : joined ? "この募集に参加しています。" : full ? "この募集は満員です。" : item.isDemo ? "動作確認用のサンプル募集です。" : "参加すると、主催者の募集人数に反映されます。";
       participationStatus.classList.toggle("caution", full && !joined);
@@ -2452,6 +2470,32 @@
       document.getElementById("detailLater").disabled = false;
       document.querySelectorAll('#detail [data-action="report"], #detail [data-action="block"]').forEach((button) => { button.dataset.person = item.person; button.dataset.id = item.id; button.dataset.source = "detail"; button.disabled = false; });
       jumpTo("detail");
+    }
+
+    function canUseMeetingRecord(item) {
+      return Boolean(appState.user && item && !item.isDemo && new Date(item.scheduledAt).getTime() <= Date.now() && (item.owner || participatingListingIds.has(item.id)));
+    }
+
+    async function openMeetingRecord(listingId) {
+      const item = listings.find((listing) => listing.id === listingId);
+      if (!canUseMeetingRecord(item)) { toast("会った記録は、募集終了後に募集主と参加者だけが利用できます。"); return; }
+      currentMeetingListingId = item.id;
+      document.getElementById("meetingRecordTitle").textContent = item.title || item.activity;
+      const counterpart = item.owner ? "参加者" : item.person;
+      [document.getElementById("meetingBlock"), document.getElementById("meetingReport")].forEach((button) => { button.dataset.person = counterpart; button.dataset.id = item.id; });
+      setLoading(true);
+      const result = await window.tomoniAuth?.getMeetingRecord?.(item.id);
+      setLoading(false);
+      if (result?.error) { const message = `会った記録を読み込めませんでした：${result.error.message}`; document.getElementById("meetingRecordStatus").textContent = message; document.getElementById("meetingRecordStatus").classList.add("caution"); toast(message); return; }
+      const record = result?.data;
+      document.getElementById("metSafely").checked = Boolean(record?.met_safely);
+      document.getElementById("meetAgain").checked = Boolean(record?.meet_again);
+      document.getElementById("privateMeetingNote").value = record?.private_note || "";
+      document.getElementById("meetingNoteCount").textContent = String((record?.private_note || "").length);
+      document.getElementById("meetingRecordSave").disabled = false;
+      document.getElementById("meetingRecordStatus").textContent = record ? "保存済みの記録を表示しています。" : "この内容は自分だけに保存されます。";
+      document.getElementById("meetingRecordStatus").classList.remove("caution");
+      jumpTo("meeting-record");
     }
 
     function canUseChat(item) {
@@ -2570,7 +2614,7 @@
 
     document.addEventListener("submit", async (event) => {
       const form = event.target;
-      if (!["createForm", "chatForm", "contactForm", "authForm", "passwordResetForm", "profileForm", "reportForm"].includes(form.id)) return;
+      if (!["createForm", "meetingRecordForm", "chatForm", "contactForm", "authForm", "passwordResetForm", "profileForm", "reportForm"].includes(form.id)) return;
       event.preventDefault();
       if (!validateForm(form)) { toast("入力内容を確認してください。"); return; }
       if (form.id === "createForm") {
@@ -2605,6 +2649,28 @@
         } catch (error) {
           const message = chatErrorMessage(error); document.getElementById("chatStatus").textContent = message; document.getElementById("chatStatus").classList.add("caution"); toast(message);
         } finally { document.getElementById("chatSend").disabled = false; }
+      }
+      if (form.id === "meetingRecordForm") {
+        const item = listings.find((listing) => listing.id === currentMeetingListingId);
+        if (!canUseMeetingRecord(item)) { document.getElementById("meetingRecordStatus").textContent = "この記録は募集主と参加者だけが保存できます。"; document.getElementById("meetingRecordStatus").classList.add("caution"); return; }
+        const saveButton = document.getElementById("meetingRecordSave");
+        saveButton.disabled = true;
+        const record = {
+          met_safely: document.getElementById("metSafely").checked,
+          meet_again: document.getElementById("meetAgain").checked,
+          private_note: document.getElementById("privateMeetingNote").value.trim() || null,
+          updated_at: new Date().toISOString()
+        };
+        try {
+          const result = await window.tomoniAuth.saveMeetingRecord(item.id, record);
+          if (result?.error) throw result.error;
+          document.getElementById("meetingRecordStatus").textContent = "会った記録を保存しました。相手には通知されません。";
+          document.getElementById("meetingRecordStatus").classList.remove("caution");
+          toast("会った記録を保存しました。");
+        } catch (error) {
+          document.getElementById("meetingRecordStatus").textContent = `保存できませんでした：${error.message}`;
+          document.getElementById("meetingRecordStatus").classList.add("caution");
+        } finally { saveButton.disabled = false; }
       }
       if (form.id === "contactForm") withLoading(() => { form.reset(); toast("お問い合わせを受け付けました。"); });
       if (form.id === "authForm") {
@@ -2658,6 +2724,7 @@
       if (action === "open-terms") { closeModal(); jumpTo("terms"); toast("内容を確認後、登録画面へ戻って同意してください。"); }
       if (action === "open-account") { if (appState.profileOwnerId !== appState.user?.id) showProfileEditor(true); else { jumpTo("account"); renderManaged(); } }
       if (action === "open-detail") openListingDetail(button.dataset.id);
+      if (action === "open-meeting-record") openMeetingRecord(currentDetailListingId || button.dataset.id);
       if (action === "open-chat") openChat(currentDetailListingId || button.dataset.id);
       if (action === "edit-profile") { if (!appState.user) openModal("ログイン", authMarkup("login")); else showProfileEditor(); }
       if (action === "show-saved") renderSaved();
