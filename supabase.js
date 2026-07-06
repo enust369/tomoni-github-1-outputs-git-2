@@ -91,6 +91,23 @@ window.tomoniAuth = {
   countMetPeople: () => client
     ? client.from("meeting_records").select("listing_id", { count: "exact", head: true }).eq("met_safely", true)
     : Promise.resolve(notConfigured()),
+  countMeetAgain: () => client
+    ? client.from("meeting_records").select("listing_id", { count: "exact", head: true }).eq("meet_again", true)
+    : Promise.resolve(notConfigured()),
+  getProfile: (userId) => client
+    ? client.from("profiles").select("user_id,nickname,age,gender,area,bio,tags,photo_urls").eq("user_id", userId).maybeSingle()
+    : Promise.resolve(notConfigured()),
+  saveProfile: (profile) => client
+    ? client.from("profiles").upsert(profile, { onConflict: "user_id" }).select().single()
+    : Promise.resolve(notConfigured()),
+  uploadProfilePhoto: async (userId, file) => {
+    if (!client) return notConfigured();
+    const extension = file.name.split(".").pop()?.toLowerCase().replace(/[^a-z0-9]/g, "") || "jpg";
+    const path = `${userId}/${crypto.randomUUID()}.${extension}`;
+    const result = await client.storage.from("profile-photos").upload(path, file, { upsert: false, contentType: file.type });
+    if (result.error) return result;
+    return { data: { url: client.storage.from("profile-photos").getPublicUrl(path).data.publicUrl }, error: null };
+  },
   listNotifications: () => client
     ? client.from("notifications").select("id,listing_id,type,message,read_at,created_at").order("created_at", { ascending: false }).limit(100)
     : Promise.resolve(notConfigured()),

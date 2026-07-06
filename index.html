@@ -854,6 +854,12 @@
       text-align: center;
       background: linear-gradient(135deg, rgba(237, 244, 241, .95), rgba(255, 253, 248, .96));
     }
+    .profile-photos { display: grid; grid-template-columns: 1.5fr 1fr 1fr; gap: 10px; margin-bottom: 18px; }
+    .profile-photo { width: 100%; aspect-ratio: 1; object-fit: cover; border-radius: 18px; border: 1px solid var(--line); background: var(--soft); }
+    .profile-photo-placeholder { display: grid; place-items: center; color: var(--leaf); font-size: 28px; }
+    .assurance-grid { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 10px; margin: 20px 0; }
+    .assurance-card { padding: 14px; border: 1px solid var(--line); border-radius: 16px; background: rgba(237,244,241,.66); text-align: center; }
+    .assurance-card strong { display: block; color: var(--leaf); font-size: 19px; }
 
     .avatar {
       width: 96px;
@@ -1075,6 +1081,8 @@
       }
 
       .safety-page-grid { grid-template-columns: 1fr; }
+      .assurance-grid { grid-template-columns: 1fr; }
+      .profile-photos { grid-template-columns: repeat(3,minmax(0,1fr)); }
 
       .listing-summary,
       .region-controls {
@@ -1415,36 +1423,18 @@
         <div class="profile">
           <article class="card person-block">
             <div>
-              <div class="avatar">ゆ</div>
+              <div class="profile-photos" id="profilePhotos"><div class="profile-photo profile-photo-placeholder">ゆ</div></div>
               <h3 id="profileDisplayName">ゆう</h3>
               <p class="meta" id="profileDisplayMeta">30代 / 今日の気分：穏やか</p>
-              <p class="meta" id="profileMetCount">会った人数：0人</p>
-              <div class="chips" style="justify-content:center;margin-top:14px">
-                <span class="badge">本人確認済み</span>
-                <span class="badge muted">敬語希望</span>
-              </div>
+              <p class="meta" id="profileArea">居住エリア：未設定</p>
+              <div class="assurance-grid"><div class="assurance-card"><strong id="profileVerified">確認中</strong><span class="meta">本人確認</span></div><div class="assurance-card"><strong id="profileMetCount">0人</strong><span class="meta">会った人数</span></div><div class="assurance-card"><strong id="profileMeetAgainCount">0件</strong><span class="meta">また会いたい登録数</span></div></div>
+              <div class="actions" style="justify-content:center"><button class="btn small primary" data-action="edit-profile">プロフィールを編集</button></div>
               <div class="actions" style="justify-content:center"><button class="btn small" data-action="report" data-person="ゆう" data-source="profile">通報</button><button class="btn small quiet-action" data-action="block" data-person="ゆう">ブロック</button></div>
             </div>
           </article>
           <article class="card">
-            <div class="grid two">
-              <div>
-                <h3>話し方</h3>
-                <p class="meta">相手に合わせる / 自然に話せたらいい</p>
-              </div>
-              <div>
-                <h3>よく選ぶ過ごし方</h3>
-                <p class="meta">静かな散歩、朝散歩、写真散歩</p>
-              </div>
-              <div>
-                <h3>あなたの日常</h3>
-                <p class="meta">植物を育てている / 一人時間が落ち着く / 朝散歩が日課</p>
-              </div>
-              <div>
-                <h3>配慮してほしいこと</h3>
-                <p class="meta">ゆっくり話してほしい / 静かな場所が安心 / 歩く速度はゆっくり</p>
-              </div>
-            </div>
+            <p class="eyebrow">自己紹介</p><p id="profileBioDisplay">静かな時間を大切にしています。</p>
+            <p class="eyebrow" style="margin-top:28px">趣味タグ</p><div class="chips" id="profileTags"></div>
             <div class="meters">
               <div><div class="meter-head"><strong>安心して過ごせる目安</strong><span class="meta">穏やか</span></div><div class="meter-track"><div class="meter-fill" style="width:86%"></div></div></div>
               <div><div class="meter-head"><strong>会話テンポ</strong><span class="meta">ゆっくり</span></div><div class="meter-track"><div class="meter-fill" style="width:34%"></div></div><div class="meter-labels"><span>ゆっくり</span><span>軽やか</span></div></div>
@@ -1840,7 +1830,7 @@
     let notificationChannel = null;
     let safetyGateActive = false;
     const storageKey = "tomoni-public-preview-v1";
-    const defaultState = { user: null, profileOwnerId: null, safetyOnboardingAccepted: false, saved: [], blocked: [], customListings: [], demoParticipations: [], moderation: { reports: [], blockCount: 0 }, feedbackHistory: [], profile: { nickname: "あなた", age: "30代", gender: "女性", bio: "静かな時間を大切にしています。" } };
+    const defaultState = { user: null, profileOwnerId: null, safetyOnboardingAccepted: false, saved: [], blocked: [], customListings: [], demoParticipations: [], moderation: { reports: [], blockCount: 0 }, feedbackHistory: [], profile: { nickname: "あなた", age: "30代", gender: "女性", area: "", bio: "静かな時間を大切にしています。", tags: [], photoUrls: [] } };
     let appState = loadState();
     listings.splice(0, listings.length);
 
@@ -2379,6 +2369,12 @@
       button.dataset.action = appState.user ? "open-account" : "open-auth";
       document.getElementById("profileDisplayName").textContent = appState.profile.nickname;
       document.getElementById("profileDisplayMeta").textContent = `${appState.profile.age} / 今日の気分：穏やか`;
+      document.getElementById("profileArea").textContent = `居住エリア：${appState.profile.area || "未設定"}`;
+      document.getElementById("profileBioDisplay").textContent = appState.profile.bio || "自己紹介はまだありません。";
+      document.getElementById("profileTags").innerHTML = appState.profile.tags?.length ? appState.profile.tags.map((tag) => `<span class="badge muted">${esc(tag)}</span>`).join("") : `<span class="meta">タグはまだありません。</span>`;
+      const photos = appState.profile.photoUrls || [];
+      document.getElementById("profilePhotos").innerHTML = photos.length ? photos.map((url, index) => `<img class="profile-photo" src="${esc(url)}" alt="プロフィール写真 ${index + 1}">`).join("") : `<div class="profile-photo profile-photo-placeholder">${esc((appState.profile.nickname || "と").slice(0, 1))}</div>`;
+      document.getElementById("profileVerified").textContent = appState.user?.verified ? "本人確認済" : "確認中";
       document.getElementById("verificationStatus").innerHTML = appState.user?.verified ? `<strong>本人確認済み</strong><p class="meta">メール確認・年齢確認・規約同意・プロフィール入力済み</p>` : `<strong>本人確認</strong><p class="meta">登録後に確認状況を表示します。</p>`;
       document.getElementById("create").classList.toggle("is-locked", !profileComplete);
       document.getElementById("region").classList.toggle("is-locked", !profileComplete);
@@ -2388,11 +2384,21 @@
       return Boolean(appState.user && appState.profileOwnerId === appState.user.id);
     }
 
+    async function loadSupabaseProfile(userId) {
+      const result = await window.tomoniAuth?.getProfile?.(userId);
+      if (result?.error || !result?.data) return false;
+      const profile = result.data;
+      appState.profile = { ...appState.profile, nickname: profile.nickname, age: profile.age, gender: profile.gender, area: profile.area || "", bio: profile.bio || "", tags: profile.tags || [], photoUrls: profile.photo_urls || [] };
+      appState.profileOwnerId = userId;
+      saveState();
+      return true;
+    }
+
     async function updateMetCount() {
-      const countElement = document.getElementById("profileMetCount");
-      if (!appState.user) { countElement.textContent = "会った人数：0人"; return; }
-      const result = await window.tomoniAuth?.countMetPeople?.();
-      if (!result?.error) countElement.textContent = `会った人数：${result.count || 0}人`;
+      if (!appState.user) { document.getElementById("profileMetCount").textContent = "0人"; document.getElementById("profileMeetAgainCount").textContent = "0件"; return; }
+      const [metResult, againResult] = await Promise.all([window.tomoniAuth?.countMetPeople?.(), window.tomoniAuth?.countMeetAgain?.()]);
+      if (!metResult?.error) document.getElementById("profileMetCount").textContent = `${metResult.count || 0}人`;
+      if (!againResult?.error) document.getElementById("profileMeetAgainCount").textContent = `${againResult.count || 0}件`;
     }
 
     async function restoreSupabaseUser() {
@@ -2401,6 +2407,7 @@
       const result = await auth.getUser();
       const user = result.data?.user;
       appState.user = user ? { id: user.id, email: user.email, verified: Boolean(user.email_confirmed_at) } : null;
+      if (user) await loadSupabaseProfile(user.id);
       saveState(); updateAccountUI();
       await updateMetCount();
       await startUserParticipationRealtime();
@@ -2792,7 +2799,8 @@
     }
 
     function showProfileEditor(firstTime = false) {
-      openModal(firstTime ? "プロフィール作成" : "プロフィール編集", `<form class="form" id="profileForm" data-first-time="${firstTime}" novalidate><div class="field full"><label for="profileNickname">ニックネーム</label><input id="profileNickname" name="nickname" maxlength="20" value="${esc(appState.profile.nickname === "あなた" ? "" : appState.profile.nickname)}" required><span class="field-error"></span></div><div class="field full"><label for="profileGender">登録する性別</label><select id="profileGender" name="gender"><option ${appState.profile.gender === "女性" ? "selected" : ""}>女性</option><option ${appState.profile.gender === "男性" ? "selected" : ""}>男性</option></select><p class="meta">TOMONIでは、登録した性別と同じ方だけを表示します。</p></div><div class="field full"><label for="profileAge">年代</label><select id="profileAge" name="age"><option ${appState.profile.age === "20代" ? "selected" : ""}>20代</option><option ${appState.profile.age === "30代" ? "selected" : ""}>30代</option><option ${appState.profile.age === "40代" ? "selected" : ""}>40代</option><option ${appState.profile.age === "50代以上" ? "selected" : ""}>50代以上</option></select></div><div class="field full"><label for="profileBio">安心してもらうためのひとこと</label><textarea id="profileBio" name="bio" maxlength="120" required>${esc(appState.profile.bio)}</textarea><span class="field-error"></span></div><div class="field full"><button class="btn primary" type="submit">${firstTime ? "プロフィールを作成する" : "保存する"}</button></div></form>`);
+      const tagOptions = ["散歩", "カフェ", "公園", "読書", "温泉", "映画", "ボードゲーム", "美術館", "食べ歩き", "ランニング", "写真", "神社", "自然", "ドライブ", "雑談", "無言OK"];
+      openModal(firstTime ? "プロフィール作成" : "プロフィール編集", `<form class="form" id="profileForm" data-first-time="${firstTime}" novalidate><div class="field full"><label for="profilePhotosInput">プロフィール写真（最大3枚）</label><input id="profilePhotosInput" type="file" accept="image/jpeg,image/png,image/webp" multiple><p class="meta">新しく選択すると現在の写真を置き換えます。1枚5MBまで。</p></div><div class="field full"><label for="profileNickname">ニックネーム</label><input id="profileNickname" name="nickname" maxlength="20" value="${esc(appState.profile.nickname === "あなた" ? "" : appState.profile.nickname)}" required><span class="field-error"></span></div><div class="field"><label for="profileGender">登録する性別</label><select id="profileGender" name="gender"><option ${appState.profile.gender === "女性" ? "selected" : ""}>女性</option><option ${appState.profile.gender === "男性" ? "selected" : ""}>男性</option></select></div><div class="field"><label for="profileAge">年代</label><select id="profileAge" name="age"><option ${appState.profile.age === "20代" ? "selected" : ""}>20代</option><option ${appState.profile.age === "30代" ? "selected" : ""}>30代</option><option ${appState.profile.age === "40代" ? "selected" : ""}>40代</option><option ${appState.profile.age === "50代以上" ? "selected" : ""}>50代以上</option></select></div><div class="field full"><label for="profileAreaInput">居住エリア（市まで）</label><input id="profileAreaInput" name="area" maxlength="30" placeholder="例：武蔵野市" value="${esc(appState.profile.area || "")}" required><span class="field-error"></span></div><div class="field full"><label for="profileBio">自己紹介（300文字まで）</label><textarea id="profileBio" name="bio" maxlength="300" required>${esc(appState.profile.bio)}</textarea><span class="field-error"></span></div><div class="field full"><label>趣味タグ（複数選択可）</label><div class="chips">${tagOptions.map((tag) => `<label class="check-row badge muted"><input type="checkbox" name="tags" value="${tag}" ${appState.profile.tags?.includes(tag) ? "checked" : ""}>${tag}</label>`).join("")}</div></div><div class="field full"><button class="btn primary" type="submit">${firstTime ? "プロフィールを作成する" : "プロフィールを保存"}</button></div></form>`);
     }
 
     document.addEventListener("submit", async (event) => {
@@ -2870,6 +2878,7 @@
         const user = result.data?.user;
         if (!user) { toast("ログイン状態を確認できませんでした。"); return; }
         appState.user = { id: user.id, email: user.email, verified: Boolean(user.email_confirmed_at) };
+        await loadSupabaseProfile(user.id);
         saveState(); updateAccountUI(); closeModal();
         await updateMetCount();
         await startUserParticipationRealtime();
@@ -2887,8 +2896,25 @@
         openModal("メールを確認してください", `<p>${esc(data.email.trim())} にパスワード再設定用の案内を送りました。</p><div class="actions"><button class="btn primary" data-action="show-login">ログインへ戻る</button></div>`);
       }
       if (form.id === "profileForm") {
-        const data = Object.fromEntries(new FormData(form));
-        appState.profile = { ...appState.profile, ...data }; appState.profileOwnerId = appState.user.id; currentGender = data.gender; saveState(); updateAccountUI(); closeModal(); syncGenderControls(); await loadSupabaseListings(); toast(form.dataset.firstTime === "true" ? "プロフィールを作成しました。" : "プロフィールを保存しました。");
+        const formData = new FormData(form);
+        const files = [...document.getElementById("profilePhotosInput").files];
+        if (files.length > 3) { toast("プロフィール写真は3枚まで選択できます。"); return; }
+        if (files.some((file) => file.size > 5 * 1024 * 1024)) { toast("プロフィール写真は1枚5MBまでです。"); return; }
+        setLoading(true);
+        try {
+          let photoUrls = appState.profile.photoUrls || [];
+          if (files.length) {
+            const uploads = await Promise.all(files.map((file) => window.tomoniAuth.uploadProfilePhoto(appState.user.id, file)));
+            const uploadError = uploads.find((result) => result.error)?.error;
+            if (uploadError) throw uploadError;
+            photoUrls = uploads.map((result) => result.data.url);
+          }
+          const profile = { nickname: String(formData.get("nickname")).trim(), gender: String(formData.get("gender")), age: String(formData.get("age")), area: String(formData.get("area")).trim(), bio: String(formData.get("bio")).trim(), tags: formData.getAll("tags").map(String), photoUrls };
+          const result = await window.tomoniAuth.saveProfile({ user_id: appState.user.id, nickname: profile.nickname, gender: profile.gender, age: profile.age, area: profile.area, bio: profile.bio, tags: profile.tags, photo_urls: profile.photoUrls, updated_at: new Date().toISOString() });
+          if (result?.error) throw result.error;
+          appState.profile = { ...appState.profile, ...profile }; appState.profileOwnerId = appState.user.id; currentGender = profile.gender; saveState(); updateAccountUI(); closeModal(); syncGenderControls(); await loadSupabaseListings(); toast(form.dataset.firstTime === "true" ? "プロフィールを作成しました。" : "プロフィールを保存しました。");
+        } catch (error) { toast(`プロフィールを保存できませんでした：${error.message}`); }
+        finally { setLoading(false); }
       }
       if (form.id === "reportForm") withLoading(() => {
         const data = Object.fromEntries(new FormData(form));
