@@ -1435,6 +1435,13 @@
           <article class="card">
             <p class="eyebrow">自己紹介</p><p id="profileBioDisplay">静かな時間を大切にしています。</p>
             <p class="eyebrow" style="margin-top:28px">趣味タグ</p><div class="chips" id="profileTags"></div>
+            <p class="eyebrow" style="margin-top:28px">心地よい時間診断</p>
+            <div class="notice" id="profilePersonalityCard">
+              <span class="badge">診断結果</span>
+              <h3 id="profilePersonalityTitle" style="margin-top:12px">まだ診断されていません</h3>
+              <p class="meta" id="profilePersonalityDescription" style="margin-top:8px">診断すると、あなたが心地よく過ごしやすい空気感がここに表示されます。</p>
+              <div class="chips" id="profilePersonalityTags" style="margin-top:12px"></div>
+            </div>
             <div class="meters">
               <div><div class="meter-head"><strong>安心して過ごせる目安</strong><span class="meta">穏やか</span></div><div class="meter-track"><div class="meter-fill" style="width:86%"></div></div></div>
               <div><div class="meter-head"><strong>会話テンポ</strong><span class="meta">ゆっくり</span></div><div class="meter-track"><div class="meter-fill" style="width:34%"></div></div><div class="meter-labels"><span>ゆっくり</span><span>軽やか</span></div></div>
@@ -1830,7 +1837,7 @@
     let notificationChannel = null;
     let safetyGateActive = false;
     const storageKey = "tomoni-public-preview-v1";
-    const defaultState = { user: null, profileOwnerId: null, safetyOnboardingAccepted: false, saved: [], blocked: [], customListings: [], demoParticipations: [], moderation: { reports: [], blockCount: 0 }, feedbackHistory: [], profile: { nickname: "あなた", age: "30代", gender: "女性", area: "", bio: "静かな時間を大切にしています。", tags: [], photoUrls: [] } };
+    const defaultState = { user: null, profileOwnerId: null, safetyOnboardingAccepted: false, saved: [], blocked: [], customListings: [], demoParticipations: [], moderation: { reports: [], blockCount: 0 }, feedbackHistory: [], profile: { nickname: "あなた", age: "30代", gender: "女性", area: "", bio: "静かな時間を大切にしています。", tags: [], photoUrls: [], personalityType: "", personalityTitle: "", personalityDescription: "", personalityTags: [], quietScore: null, talkScore: null, comfortScore: null } };
     let appState = loadState();
     listings.splice(0, listings.length);
 
@@ -1981,7 +1988,7 @@
       jumpTo("create");
     }
 
-    function updateDiagnosis() {
+    function updateDiagnosis(shouldPersist = true) {
       const selected = [...document.querySelectorAll("#diagnosis .option.selected")].map((item) => item.textContent.trim());
       const style = selected.find((item) => ["静かに過ごす", "歩く", "軽く体を動かす", "語れるものを話す", "一人では行きづらい場所に行く"].includes(item));
       const time = selected.find((item) => item.endsWith("分")) || "15分";
@@ -2010,6 +2017,7 @@
         ? `<br><br>${suggested.person}さんの「${suggested.activity}」は、今日の距離感に近そうです。`
         : "";
       document.getElementById("diagnosisResult").innerHTML = `今日のあなたには、<br>「${primary}」や「${secondary}」が合いそうです。<br><br>${profile.summary}${personLine}`;
+      if (shouldPersist) persistPersonalityResult(buildPersonalityResult(profile));
       document.getElementById("diagnosisPerson").innerHTML = suggested ? `
         <div class="notice">
           <span class="badge">今日のあなたなら</span>
@@ -2054,6 +2062,61 @@
         distance,
         summary: `空気感は「${distance}」を大切にすると、疲れにくく過ごせそうです。`
       };
+    }
+
+    function buildPersonalityResult(profile) {
+      const talkScore = profile.talk === "たくさん話したい" ? 3 : profile.talk === "自然に話せたらいい" ? 2 : 1;
+      const comfortScore = profile.quietScore + profile.activeScore + profile.smileScore + talkScore;
+      let personalityType = "balanced";
+      let personalityTitle = "自然体で合わせられる人";
+      if (profile.style === "語れるものを話す" || talkScore >= 3) {
+        personalityType = "talk";
+        personalityTitle = "言葉でほどける人";
+      } else if (profile.activeScore > profile.quietScore) {
+        personalityType = "active";
+        personalityTitle = "動きながらなじむ人";
+      } else if (profile.quietScore >= profile.activeScore && profile.quietScore > 0) {
+        personalityType = "quiet";
+        personalityTitle = "静かに寄り添える人";
+      }
+      const tags = [...new Set([profile.style, profile.talk, profile.distance, ...profile.selfAir, ...profile.withPerson])]
+        .filter(Boolean)
+        .slice(0, 6);
+      return {
+        personalityType,
+        personalityTitle,
+        personalityDescription: `${profile.summary} 今日は「${profile.style}」と「${profile.talk}」が合いやすい状態です。`,
+        personalityTags: tags,
+        quietScore: profile.quietScore,
+        talkScore,
+        comfortScore
+      };
+    }
+
+    function personalitySupabasePayload(profile = appState.profile) {
+      return {
+        personality_type: profile.personalityType || null,
+        personality_title: profile.personalityTitle || null,
+        personality_description: profile.personalityDescription || null,
+        personality_tags: profile.personalityTags || [],
+        quiet_score: Number.isFinite(profile.quietScore) ? profile.quietScore : null,
+        talk_score: Number.isFinite(profile.talkScore) ? profile.talkScore : null,
+        comfort_score: Number.isFinite(profile.comfortScore) ? profile.comfortScore : null
+      };
+    }
+
+    let personalitySaveTimer = null;
+    async function syncPersonalityToSupabase() {
+      if (!appState.user || appState.profileOwnerId !== appState.user.id || !appState.profile.personalityType) return;
+      await window.tomoniAuth?.savePersonality?.({ user_id: appState.user.id, ...personalitySupabasePayload(), updated_at: new Date().toISOString() });
+    }
+
+    function persistPersonalityResult(personality) {
+      appState.profile = { ...appState.profile, ...personality };
+      saveState();
+      updateAccountUI();
+      clearTimeout(personalitySaveTimer);
+      personalitySaveTimer = setTimeout(syncPersonalityToSupabase, 500);
     }
 
     function listingScore(item, profile) {
@@ -2372,6 +2435,9 @@
       document.getElementById("profileArea").textContent = `居住エリア：${appState.profile.area || "未設定"}`;
       document.getElementById("profileBioDisplay").textContent = appState.profile.bio || "自己紹介はまだありません。";
       document.getElementById("profileTags").innerHTML = appState.profile.tags?.length ? appState.profile.tags.map((tag) => `<span class="badge muted">${esc(tag)}</span>`).join("") : `<span class="meta">タグはまだありません。</span>`;
+      document.getElementById("profilePersonalityTitle").textContent = appState.profile.personalityTitle || "まだ診断されていません";
+      document.getElementById("profilePersonalityDescription").textContent = appState.profile.personalityDescription || "診断すると、あなたが心地よく過ごしやすい空気感がここに表示されます。";
+      document.getElementById("profilePersonalityTags").innerHTML = appState.profile.personalityTags?.length ? appState.profile.personalityTags.map((tag) => `<span class="badge muted">${esc(tag)}</span>`).join("") : `<span class="meta">診断タグはまだありません。</span>`;
       const photos = appState.profile.photoUrls || [];
       document.getElementById("profilePhotos").innerHTML = photos.length ? photos.map((url, index) => `<img class="profile-photo" src="${esc(url)}" alt="プロフィール写真 ${index + 1}">`).join("") : `<div class="profile-photo profile-photo-placeholder">${esc((appState.profile.nickname || "と").slice(0, 1))}</div>`;
       document.getElementById("profileVerified").textContent = appState.user?.verified ? "本人確認済" : "確認中";
@@ -2388,9 +2454,26 @@
       const result = await window.tomoniAuth?.getProfile?.(userId);
       if (result?.error || !result?.data) return false;
       const profile = result.data;
-      appState.profile = { ...appState.profile, nickname: profile.nickname, age: profile.age, gender: profile.gender, area: profile.area || "", bio: profile.bio || "", tags: profile.tags || [], photoUrls: profile.photo_urls || [] };
+      appState.profile = {
+        ...appState.profile,
+        nickname: profile.nickname,
+        age: profile.age,
+        gender: profile.gender,
+        area: profile.area || "",
+        bio: profile.bio || "",
+        tags: profile.tags || [],
+        photoUrls: profile.photo_urls || [],
+        personalityType: profile.personality_type || appState.profile.personalityType || "",
+        personalityTitle: profile.personality_title || appState.profile.personalityTitle || "",
+        personalityDescription: profile.personality_description || appState.profile.personalityDescription || "",
+        personalityTags: profile.personality_tags?.length ? profile.personality_tags : (appState.profile.personalityTags || []),
+        quietScore: Number.isFinite(profile.quiet_score) ? profile.quiet_score : appState.profile.quietScore,
+        talkScore: Number.isFinite(profile.talk_score) ? profile.talk_score : appState.profile.talkScore,
+        comfortScore: Number.isFinite(profile.comfort_score) ? profile.comfort_score : appState.profile.comfortScore
+      };
       appState.profileOwnerId = userId;
       saveState();
+      await syncPersonalityToSupabase();
       return true;
     }
 
@@ -2927,7 +3010,7 @@
             photoUrls = uploads.map((result) => result.data.url);
           }
           const profile = { nickname: String(formData.get("nickname")).trim(), gender: String(formData.get("gender")), age: String(formData.get("age")), area: String(formData.get("area")).trim(), bio: String(formData.get("bio")).trim(), tags: formData.getAll("tags").map(String), photoUrls };
-          const result = await window.tomoniAuth.saveProfile({ user_id: appState.user.id, nickname: profile.nickname, gender: profile.gender, age: profile.age, area: profile.area, bio: profile.bio, tags: profile.tags, photo_urls: profile.photoUrls, updated_at: new Date().toISOString() });
+          const result = await window.tomoniAuth.saveProfile({ user_id: appState.user.id, nickname: profile.nickname, gender: profile.gender, age: profile.age, area: profile.area, bio: profile.bio, tags: profile.tags, photo_urls: profile.photoUrls, ...personalitySupabasePayload(appState.profile), updated_at: new Date().toISOString() });
           if (result?.error) throw result.error;
           appState.profile = { ...appState.profile, ...profile }; appState.profileOwnerId = appState.user.id; currentGender = profile.gender; saveState(); updateAccountUI(); closeModal(); syncGenderControls(); await loadSupabaseListings(); toast(form.dataset.firstTime === "true" ? "プロフィールを作成しました。" : "プロフィールを保存しました。");
         } catch (error) { toast(`プロフィールを保存できませんでした：${error.message}`); }
@@ -3095,7 +3178,7 @@
     renderRecommendations();
     renderListings();
     renderRegionalProfiles();
-    updateDiagnosis();
+    updateDiagnosis(false);
     if (!appState.safetyOnboardingAccepted) setTimeout(openSafetyOnboarding, 180);
   </script>
 </body>

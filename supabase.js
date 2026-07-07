@@ -95,11 +95,16 @@ window.tomoniAuth = {
     ? client.from("meeting_records").select("listing_id", { count: "exact", head: true }).eq("meet_again", true)
     : Promise.resolve(notConfigured()),
   getProfile: (userId) => client
-    ? client.from("profiles").select("user_id,nickname,age,gender,area,bio,tags,photo_urls").eq("user_id", userId).maybeSingle()
+    ? client.from("profiles").select("user_id,nickname,age,gender,area,bio,tags,photo_urls,personality_type,personality_title,personality_description,personality_tags,quiet_score,talk_score,comfort_score").eq("user_id", userId).maybeSingle()
     : Promise.resolve(notConfigured()),
   saveProfile: (profile) => client
     ? client.from("profiles").upsert(profile, { onConflict: "user_id" }).select().single()
     : Promise.resolve(notConfigured()),
+  savePersonality: (profile) => {
+    if (!client) return Promise.resolve(notConfigured());
+    const { user_id, ...values } = profile;
+    return client.from("profiles").update(values).eq("user_id", user_id);
+  },
   uploadProfilePhoto: async (userId, file) => {
     if (!client) return notConfigured();
     const extension = file.name.split(".").pop()?.toLowerCase().replace(/[^a-z0-9]/g, "") || "jpg";

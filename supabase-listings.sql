@@ -350,10 +350,25 @@ create table if not exists public.profiles (
   bio text not null check (char_length(bio) between 1 and 300),
   tags text[] not null default '{}',
   photo_urls text[] not null default '{}',
+  personality_type text,
+  personality_title text,
+  personality_description text,
+  personality_tags text[] not null default '{}',
+  quiet_score integer,
+  talk_score integer,
+  comfort_score integer,
   created_at timestamptz not null default now(),
   updated_at timestamptz not null default now(),
   check (cardinality(photo_urls) <= 3)
 );
+
+alter table public.profiles add column if not exists personality_type text;
+alter table public.profiles add column if not exists personality_title text;
+alter table public.profiles add column if not exists personality_description text;
+alter table public.profiles add column if not exists personality_tags text[] not null default '{}';
+alter table public.profiles add column if not exists quiet_score integer;
+alter table public.profiles add column if not exists talk_score integer;
+alter table public.profiles add column if not exists comfort_score integer;
 
 alter table public.profiles enable row level security;
 
