@@ -820,6 +820,41 @@
       gap: 18px;
       align-items: center;
     }
+    .listing-profile {
+      display: grid;
+      grid-template-columns: 58px minmax(0, 1fr);
+      gap: 12px;
+      align-items: center;
+      margin-top: 14px;
+      padding: 12px;
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      background: rgba(237, 244, 241, .46);
+    }
+    .listing-avatar {
+      width: 58px;
+      height: 58px;
+      border-radius: 18px;
+      object-fit: cover;
+      border: 1px solid var(--line-strong);
+      background: var(--paper);
+    }
+    .listing-avatar.fallback {
+      display: grid;
+      place-items: center;
+      color: var(--leaf);
+      font-size: 24px;
+      font-weight: 800;
+    }
+    .listing-profile h4 {
+      margin: 2px 0 4px;
+      color: var(--ink);
+      font-size: 17px;
+      overflow-wrap: anywhere;
+    }
+    .listing-profile .chips {
+      margin-top: 8px;
+    }
 
     .badge {
       display: inline-flex;
@@ -1087,6 +1122,17 @@
       .listing-summary,
       .region-controls {
         grid-template-columns: 1fr;
+      }
+
+      .listing-profile {
+        grid-template-columns: 48px minmax(0, 1fr);
+        padding: 10px;
+      }
+
+      .listing-avatar {
+        width: 48px;
+        height: 48px;
+        border-radius: 15px;
       }
 
       .category-list {
@@ -2223,6 +2269,18 @@
             <h3 style="margin-top:12px">${esc(item.title || item.activity)}</h3>
             <p class="meta">${esc(item.person)}さん</p>
             <p class="meta">徒歩${item.distance}分 / ${esc(item.place)}</p>
+            <div class="listing-profile">
+              ${item.profilePhoto ? `<img class="listing-avatar" src="${esc(item.profilePhoto)}" alt="${esc(item.person)}さんのプロフィール写真">` : `<div class="listing-avatar fallback" aria-label="${esc(item.person)}さんの頭文字">${esc((item.person || "と").slice(0, 1))}</div>`}
+              <div>
+                <div class="chips">
+                  ${item.age ? `<span class="badge muted">${esc(item.age)}</span>` : ""}
+                  ${item.profileArea ? `<span class="badge muted">${esc(item.profileArea)}</span>` : ""}
+                  <span class="badge">${item.verified ? "本人確認済み" : "本人確認欄あり"}</span>
+                </div>
+                <h4>${esc(item.personalityTitle || "自然体で過ごせる人")}</h4>
+                <div class="chips">${(item.personalityTags || []).slice(0, 5).map((tag) => `<span class="badge muted">${esc(tag)}</span>`).join("") || `<span class="meta">診断タグはまだありません。</span>`}</div>
+              </div>
+            </div>
             <p style="margin-top:10px">${esc(item.activity)}</p>
             <div class="listing-summary">
               <div><small>安心の目安</small>${comfortDots()}</div>
@@ -2252,9 +2310,10 @@
     }
 
     function listingFromRow(row) {
+      const profile = row.profile || {};
       return {
         id: row.id,
-        person: row.person_name,
+        person: profile.nickname || row.person_name,
         gender: row.owner_gender,
         title: row.title,
         activity: row.activity,
@@ -2265,7 +2324,12 @@
         capacity: row.capacity,
         participantCount: row.participantCount || 0,
         audience: row.audience,
-        verified: Boolean(appState.user?.verified),
+        verified: Boolean(profile.user_id || row.owner_id === appState.user?.id),
+        age: profile.age || "",
+        profileArea: profile.area || "",
+        profilePhoto: profile.photo_urls?.[0] || "",
+        personalityTitle: profile.personality_title || "",
+        personalityTags: profile.personality_tags || [],
         note: row.title,
         air: selectedValues("air"),
         traits: selectedValues("withPerson"),
@@ -2281,18 +2345,21 @@
     }
 
     async function loadSupabaseListings() {
-      const [result, countsResult, mineResult] = await Promise.all([
+      const [result, countsResult, mineResult, profilesResult] = await Promise.all([
         window.tomoniAuth?.listListings?.(),
         window.tomoniAuth?.listParticipationCounts?.(),
-        appState.user ? window.tomoniAuth?.listMyParticipations?.() : Promise.resolve({ data: [], error: null })
+        appState.user ? window.tomoniAuth?.listMyParticipations?.() : Promise.resolve({ data: [], error: null }),
+        appState.user ? window.tomoniAuth?.listProfiles?.() : Promise.resolve({ data: [], error: null })
       ]);
       if (result?.error) { toast(`募集を読み込めませんでした：${result.error.message}`); return false; }
       if (countsResult?.error) { toast(`参加人数を読み込めませんでした：${countsResult.error.message}`); return false; }
       if (mineResult?.error) { toast(`参加状態を読み込めませんでした：${mineResult.error.message}`); return false; }
+      if (profilesResult?.error) { toast(`プロフィール情報を読み込めませんでした：${profilesResult.error.message}`); return false; }
       const counts = new Map((countsResult?.data || []).map((item) => [item.listing_id, Number(item.participant_count)]));
+      const profiles = new Map((profilesResult?.data || []).map((profile) => [profile.user_id, profile]));
       participationStatuses = new Map((mineResult?.data || []).map((item) => [item.listing_id, item.status || "approved"]));
       participatingListingIds = new Set([...participationStatuses].filter(([, status]) => status === "approved").map(([id]) => id));
-      const remote = (result?.data || []).map((row) => listingFromRow({ ...row, participantCount: counts.get(row.id) || 0 }));
+      const remote = (result?.data || []).map((row) => listingFromRow({ ...row, participantCount: counts.get(row.id) || 0, profile: profiles.get(row.owner_id) }));
       listings.splice(0, listings.length);
       listings.unshift(...createDemoListings(), ...remote);
       appState.customListings = remote.filter((item) => item.owner);
