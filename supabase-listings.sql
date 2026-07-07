@@ -390,6 +390,38 @@ with check (user_id = auth.uid());
 
 grant select, insert, update on public.profiles to authenticated;
 
+create table if not exists public.favorites (
+  id uuid primary key default gen_random_uuid(),
+  user_id uuid not null default auth.uid() references auth.users(id) on delete cascade,
+  target_user_id uuid references auth.users(id) on delete cascade,
+  listing_id uuid not null references public.listings(id) on delete cascade,
+  created_at timestamptz not null default now(),
+  constraint favorites_user_listing_unique unique (user_id, listing_id)
+);
+
+create unique index if not exists favorites_user_target_unique
+on public.favorites (user_id, target_user_id)
+where target_user_id is not null;
+
+alter table public.favorites enable row level security;
+
+drop policy if exists "users can read their own favorites" on public.favorites;
+create policy "users can read their own favorites"
+on public.favorites for select to authenticated
+using (user_id = auth.uid());
+
+drop policy if exists "users can create their own favorites" on public.favorites;
+create policy "users can create their own favorites"
+on public.favorites for insert to authenticated
+with check (user_id = auth.uid());
+
+drop policy if exists "users can delete their own favorites" on public.favorites;
+create policy "users can delete their own favorites"
+on public.favorites for delete to authenticated
+using (user_id = auth.uid());
+
+grant select, insert, delete on public.favorites to authenticated;
+
 insert into storage.buckets (id, name, public, file_size_limit, allowed_mime_types)
 values ('profile-photos', 'profile-photos', true, 5242880, array['image/jpeg', 'image/png', 'image/webp'])
 on conflict (id) do update set public = excluded.public, file_size_limit = excluded.file_size_limit, allowed_mime_types = excluded.allowed_mime_types;

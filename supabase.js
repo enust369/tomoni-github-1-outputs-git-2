@@ -46,6 +46,18 @@ window.tomoniAuth = {
   deleteListing: (id) => client
     ? client.from("listings").delete().eq("id", id)
     : Promise.resolve(notConfigured()),
+  listFavorites: () => client
+    ? client.from("favorites").select("*").order("created_at", { ascending: false })
+    : Promise.resolve(notConfigured()),
+  addFavorite: (favorite) => client
+    ? client.from("favorites").upsert(favorite, { onConflict: "user_id,listing_id" }).select().single()
+    : Promise.resolve(notConfigured()),
+  removeFavorite: (listingId, targetUserId = null) => {
+    if (!client) return Promise.resolve(notConfigured());
+    const filters = [`listing_id.eq.${listingId}`];
+    if (targetUserId) filters.push(`target_user_id.eq.${targetUserId}`);
+    return client.from("favorites").delete().or(filters.join(","));
+  },
   listParticipationCounts: () => client
     ? client.from("listing_participant_counts").select("listing_id,participant_count")
     : Promise.resolve(notConfigured()),
