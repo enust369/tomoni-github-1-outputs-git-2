@@ -58,6 +58,9 @@ window.tomoniAuth = {
     if (targetUserId) filters.push(`target_user_id.eq.${targetUserId}`);
     return client.from("favorites").delete().or(filters.join(","));
   },
+  listMatches: () => client
+    ? client.from("matches").select("*").eq("status", "active").order("created_at", { ascending: false })
+    : Promise.resolve(notConfigured()),
   listParticipationCounts: () => client
     ? client.from("listing_participant_counts").select("listing_id,participant_count")
     : Promise.resolve(notConfigured()),

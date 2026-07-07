@@ -1474,7 +1474,7 @@
               <p class="meta" id="profileDisplayMeta">30代 / 今日の気分：穏やか</p>
               <p class="meta" id="profileArea">居住エリア：未設定</p>
               <div class="assurance-grid"><div class="assurance-card"><strong id="profileVerified">確認中</strong><span class="meta">本人確認</span></div><div class="assurance-card"><strong id="profileMetCount">0人</strong><span class="meta">会った人数</span></div><div class="assurance-card"><strong id="profileMeetAgainCount">0件</strong><span class="meta">また会いたい登録数</span></div></div>
-              <div class="actions" style="justify-content:center"><button class="btn small primary" data-action="edit-profile">プロフィールを編集</button><button class="btn small" data-action="show-favorites">気になる一覧</button></div>
+              <div class="actions" style="justify-content:center"><button class="btn small primary" data-action="edit-profile">プロフィールを編集</button><button class="btn small" data-action="show-favorites">気になる一覧</button><button class="btn small" data-action="show-matches">マッチしました</button></div>
               <div class="actions" style="justify-content:center"><button class="btn small" data-action="report" data-person="ゆう" data-source="profile">通報</button><button class="btn small quiet-action" data-action="block" data-person="ゆう">ブロック</button></div>
             </div>
           </article>
@@ -1586,6 +1586,7 @@
             <div class="notice" id="verificationStatus"><strong>本人確認</strong><p class="meta">登録後に確認状況を表示します。</p></div>
             <button class="btn small" data-action="edit-profile">プロフィールを編集</button>
             <button class="btn small" data-action="show-favorites">気になる一覧</button>
+            <button class="btn small" data-action="show-matches">マッチしました</button>
             <button class="btn small" data-action="show-managed">自分の募集</button>
             <button class="btn small quiet-action" data-action="logout">ログアウト</button>
             <div class="chips"><span class="badge muted">SMS認証 準備中</span><span class="badge muted">本人確認書類 準備中</span></div>
@@ -1884,6 +1885,8 @@
     let favoriteRecords = [];
     let favoriteListingIds = new Set();
     let favoriteTargetUserIds = new Set();
+    let matchRecords = [];
+    let matchedUserIds = new Set();
     let safetyGateActive = false;
     const storageKey = "tomoni-public-preview-v1";
     const defaultState = { user: null, profileOwnerId: null, safetyOnboardingAccepted: false, saved: [], blocked: [], customListings: [], demoParticipations: [], moderation: { reports: [], blockCount: 0 }, feedbackHistory: [], profile: { nickname: "あなた", age: "30代", gender: "女性", area: "", bio: "静かな時間を大切にしています。", tags: [], photoUrls: [], personalityType: "", personalityTitle: "", personalityDescription: "", personalityTags: [], quietScore: null, talkScore: null, comfortScore: null } };
@@ -2241,6 +2244,7 @@
             <span class="badge muted">${esc(item.area)}</span>
             <span class="badge muted">徒歩${item.distance}分</span>
             ${item.verified ? `<span class="badge">本人確認済み</span>` : ""}
+            ${isMatched(item) ? `<span class="badge">マッチ済み</span>` : ""}
           </div>
           <h3 style="margin-top:12px">${esc(item.person)}さん</h3>
           <p class="meta">${esc(item.activity)} / ${esc(item.talk)}</p>
@@ -2269,6 +2273,7 @@
               ${item.capacity ? `<span class="badge muted">${item.participantCount}/${item.capacity}人</span>` : ""}
               ${item.audience ? `<span class="badge muted">${item.audience === "same_gender" ? "同性のみ" : "誰でも"}</span>` : ""}
               <span class="badge">${item.verified ? "本人確認済み" : "本人確認欄あり"}</span>
+              ${isMatched(item) ? `<span class="badge">マッチ済み</span>` : ""}
             </div>
             <h3 style="margin-top:12px">${esc(item.title || item.activity)}</h3>
             <p class="meta">${esc(item.person)}さん</p>
@@ -2315,6 +2320,10 @@
 
     function isFavorite(item) {
       return Boolean(item && (favoriteListingIds.has(item.id) || (item.ownerId && favoriteTargetUserIds.has(item.ownerId))));
+    }
+
+    function isMatched(item) {
+      return Boolean(item?.ownerId && matchedUserIds.has(item.ownerId));
     }
 
     function favoriteButton(item, className = "btn small quiet-action") {
@@ -2376,8 +2385,22 @@
       return true;
     }
 
+    async function loadMatches() {
+      if (!appState.user) {
+        matchRecords = [];
+        matchedUserIds = new Set();
+        return true;
+      }
+      const result = await window.tomoniAuth?.listMatches?.();
+      if (result?.error) { toast(`マッチ一覧を読み込めませんでした：${result.error.message}`); return false; }
+      matchRecords = result?.data || [];
+      matchedUserIds = new Set(matchRecords.map((match) => match.user1_id === appState.user.id ? match.user2_id : match.user1_id).filter(Boolean));
+      return true;
+    }
+
     async function loadSupabaseListings() {
       await loadFavorites();
+      await loadMatches();
       const [result, countsResult, mineResult, profilesResult] = await Promise.all([
         window.tomoniAuth?.listListings?.(),
         window.tomoniAuth?.listParticipationCounts?.(),
@@ -2649,6 +2672,12 @@
       bindJumpButtons(document.getElementById("accountContent"));
     }
 
+    function renderMatches() {
+      const matched = listings.filter((item) => isMatched(item));
+      document.getElementById("accountContent").innerHTML = matched.length ? matched.map((item) => `<article class="card managed-listing"><div><span class="badge">マッチしました</span><h3 style="margin-top:10px">${esc(item.person)}さん</h3><p class="meta">${esc(item.activity)} / ${esc(item.place)}</p><p class="meta">${esc(item.personalityTitle || "自然体で過ごせる人")}</p></div><div class="actions"><button class="btn small primary" data-action="open-detail" data-id="${item.id}">募集を見る</button></div></article>`).join("") : `<article class="card empty-state">まだマッチはありません。お互いに「気になる」になると、ここに表示されます。</article>`;
+      bindJumpButtons(document.getElementById("accountContent"));
+    }
+
     function renderManaged() {
       const own = appState.customListings;
       document.getElementById("accountContent").innerHTML = own.length ? own.map((item) => `<article class="card managed-listing"><div><span class="badge">公開中</span><h3 style="margin-top:10px">${esc(item.title || item.activity)}</h3><p class="meta">${esc(item.place)} / ${item.capacity}人募集</p></div><div class="actions"><button class="btn small primary" data-action="open-detail" data-id="${item.id}">詳細・チャット</button><button class="btn small" data-action="edit-listing" data-id="${item.id}">編集</button><button class="btn small quiet-action" data-action="delete-listing" data-id="${item.id}">削除</button></div></article>`).join("") : `<article class="card empty-state">作成した募集はまだありません。</article>`;
@@ -2811,7 +2840,7 @@
       const statusElement = document.getElementById("participationStatus");
       statusElement.textContent = item.owner ? "参加申請を確認できます。" : status === "pending" ? "参加申請を送りました。募集主の確認をお待ちください。" : approved ? "承認されました。チャットを利用できます。" : status === "declined" ? "今回は見送られました。" : full ? "この募集は満員です。" : item.isDemo ? "動作確認用のサンプル募集です。" : "申請が承認されると、参加人数に反映されます。";
       statusElement.classList.toggle("caution", status === "declined" || (full && !approved));
-      document.getElementById("detailBadges").innerHTML = `<span class="badge">${item.verified ? "本人確認済み" : "本人確認欄あり"}</span><span class="badge muted">${esc(item.place)}</span><span class="badge muted">${item.participantCount}/${item.capacity}人</span><span class="badge muted">${item.audience === "same_gender" ? "同性のみ" : "誰でも"}</span>`;
+      document.getElementById("detailBadges").innerHTML = `<span class="badge">${item.verified ? "本人確認済み" : "本人確認欄あり"}</span>${isMatched(item) ? `<span class="badge">マッチ済み</span>` : ""}<span class="badge muted">${esc(item.place)}</span><span class="badge muted">${item.participantCount}/${item.capacity}人</span><span class="badge muted">${item.audience === "same_gender" ? "同性のみ" : "誰でも"}</span>`;
     }
 
     function updateDetailFavoriteUI(item) {
@@ -3154,6 +3183,7 @@
       if (action === "open-chat") openChat(currentDetailListingId || button.dataset.id);
       if (action === "edit-profile") { if (!appState.user) openModal("ログイン", authMarkup("login")); else showProfileEditor(); }
       if (action === "show-favorites") { if (!appState.user) openModal("ログイン", authMarkup("login")); else { jumpTo("account"); renderFavorites(); } }
+      if (action === "show-matches") { if (!appState.user) openModal("ログイン", authMarkup("login")); else { await loadMatches(); jumpTo("account"); renderMatches(); } }
       if (action === "show-managed") renderManaged();
       if (action === "logout") { setLoading(true); await closeChatRealtime(); await closeOwnerParticipationRealtime(); await closeUserParticipationRealtime(); await closeNotificationRealtime(); const result = await window.tomoniAuth?.signOut(); if (!result?.error) await restoreSupabaseUser(); setLoading(false); if (result?.error) { toast(result.error.message); return; } notifications = []; renderNotifications(); document.getElementById("chatMessages").innerHTML = `<div class="empty-state">ログインするとチャットを利用できます。</div>`; document.getElementById("accountContent").innerHTML = `<article class="card empty-state">ログアウトしました。またいつでも戻ってきてください。</article>`; toast("ログアウトしました。"); }
       if (action === "toggle-favorite") {
@@ -3169,10 +3199,12 @@
         setLoading(false);
         if (result?.error) { toast(`気になるを更新できませんでした：${result.error.message}`); return; }
         await loadFavorites();
+        await loadMatches();
         renderListings();
+        renderRegionalProfiles();
         if (currentDetailListingId === item.id) updateDetailFavoriteUI(item);
         if (document.getElementById("account").classList.contains("is-visible")) renderFavorites();
-        toast(active ? "気になるを解除しました。" : "気になるに追加しました。相手には通知されません。");
+        toast(active ? "気になるを解除しました。" : isMatched(item) ? "マッチしました。" : "気になるに追加しました。相手には通知されません。");
       }
       if (action === "toggle-participation") {
         if (!appState.user) { openModal("ログイン", authMarkup("login")); showParticipationMessage("参加申請するにはログインしてください。", true); return; }

@@ -422,6 +422,78 @@ using (user_id = auth.uid());
 
 grant select, insert, delete on public.favorites to authenticated;
 
+create table if not exists public.matches (
+  id uuid primary key default gen_random_uuid(),
+  user1_id uuid not null references auth.users(id) on delete cascade,
+  user2_id uuid not null references auth.users(id) on delete cascade,
+  created_at timestamptz not null default now(),
+  status text not null default 'active' check (status in ('active')),
+  check (user1_id <> user2_id)
+);
+
+create unique index if not exists matches_unique_pair
+on public.matches (least(user1_id, user2_id), greatest(user1_id, user2_id))
+where status = 'active';
+
+alter table public.matches enable row level security;
+
+drop policy if exists "matched users can read their own matches" on public.matches;
+create policy "matched users can read their own matches"
+on public.matches for select to authenticated
+using (auth.uid() = user1_id or auth.uid() = user2_id);
+
+grant select on public.matches to authenticated;
+
+create or replace function public.create_match_from_favorite()
+returns trigger
+language plpgsql
+security definer
+set search_path = public
+as $$
+declare
+  first_user uuid;
+  second_user uuid;
+begin
+  if new.target_user_id is null or new.target_user_id = new.user_id then
+    return new;
+  end if;
+
+  if exists (
+    select 1
+    from public.favorites
+    where favorites.user_id = new.target_user_id
+      and favorites.target_user_id = new.user_id
+  ) then
+    first_user := least(new.user_id, new.target_user_id);
+    second_user := greatest(new.user_id, new.target_user_id);
+
+    insert into public.matches (user1_id, user2_id, status)
+    values (first_user, second_user, 'active')
+    on conflict do nothing;
+  end if;
+
+  return new;
+end;
+$$;
+
+drop trigger if exists on_favorite_create_match on public.favorites;
+create trigger on_favorite_create_match
+after insert on public.favorites
+for each row execute function public.create_match_from_favorite();
+
+insert into public.matches (user1_id, user2_id, status)
+select distinct
+  least(f1.user_id, f1.target_user_id),
+  greatest(f1.user_id, f1.target_user_id),
+  'active'
+from public.favorites f1
+join public.favorites f2
+  on f2.user_id = f1.target_user_id
+ and f2.target_user_id = f1.user_id
+where f1.target_user_id is not null
+  and f1.user_id <> f1.target_user_id
+on conflict do nothing;
+
 insert into storage.buckets (id, name, public, file_size_limit, allowed_mime_types)
 values ('profile-photos', 'profile-photos', true, 5242880, array['image/jpeg', 'image/png', 'image/webp'])
 on conflict (id) do update set public = excluded.public, file_size_limit = excluded.file_size_limit, allowed_mime_types = excluded.allowed_mime_types;
