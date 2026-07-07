@@ -494,6 +494,65 @@ where f1.target_user_id is not null
   and f1.user_id <> f1.target_user_id
 on conflict do nothing;
 
+create table if not exists public.match_messages (
+  id bigint generated always as identity primary key,
+  match_id uuid not null references public.matches(id) on delete cascade,
+  sender_id uuid not null default auth.uid() references auth.users(id) on delete cascade,
+  receiver_id uuid not null references auth.users(id) on delete cascade,
+  body text not null check (char_length(body) between 1 and 1000),
+  created_at timestamptz not null default now(),
+  check (sender_id <> receiver_id)
+);
+
+alter table public.match_messages enable row level security;
+
+create or replace function public.can_access_match_chat(target_match_id uuid)
+returns boolean
+language sql
+stable
+security definer
+set search_path = public
+as $$
+  select auth.uid() is not null
+    and exists (
+      select 1
+      from public.matches
+      where matches.id = target_match_id
+        and matches.status = 'active'
+        and (matches.user1_id = auth.uid() or matches.user2_id = auth.uid())
+    );
+$$;
+
+revoke all on function public.can_access_match_chat(uuid) from public, anon;
+grant execute on function public.can_access_match_chat(uuid) to authenticated;
+
+drop policy if exists "matched users can read match messages" on public.match_messages;
+create policy "matched users can read match messages"
+on public.match_messages for select to authenticated
+using (public.can_access_match_chat(match_id));
+
+drop policy if exists "matched users can send match messages" on public.match_messages;
+create policy "matched users can send match messages"
+on public.match_messages for insert to authenticated
+with check (
+  sender_id = auth.uid()
+  and public.can_access_match_chat(match_id)
+  and exists (
+    select 1
+    from public.matches
+    where matches.id = match_id
+      and matches.status = 'active'
+      and receiver_id in (matches.user1_id, matches.user2_id)
+      and receiver_id <> auth.uid()
+  )
+);
+
+grant select, insert on public.match_messages to authenticated;
+grant usage, select on sequence public.match_messages_id_seq to authenticated;
+
+create index if not exists match_messages_match_created_idx
+on public.match_messages (match_id, created_at);
+
 insert into storage.buckets (id, name, public, file_size_limit, allowed_mime_types)
 values ('profile-photos', 'profile-photos', true, 5242880, array['image/jpeg', 'image/png', 'image/webp'])
 on conflict (id) do update set public = excluded.public, file_size_limit = excluded.file_size_limit, allowed_mime_types = excluded.allowed_mime_types;
@@ -647,6 +706,7 @@ grant execute on function public.sync_listing_end_notifications() to authenticat
 
 alter table public.listing_participants replica identity full;
 alter table public.listing_messages replica identity full;
+alter table public.match_messages replica identity full;
 alter table public.notifications replica identity full;
 
 do $$
@@ -677,6 +737,15 @@ begin
         and tablename = 'notifications'
     ) then
     alter publication supabase_realtime add table public.notifications;
+  end if;
+  if exists (select 1 from pg_publication where pubname = 'supabase_realtime')
+    and not exists (
+      select 1 from pg_publication_tables
+      where pubname = 'supabase_realtime'
+        and schemaname = 'public'
+        and tablename = 'match_messages'
+    ) then
+    alter publication supabase_realtime add table public.match_messages;
   end if;
 end;
 $$;

@@ -100,6 +100,12 @@ window.tomoniAuth = {
   sendMessage: (listingId, body) => client
     ? client.from("listing_messages").insert({ listing_id: listingId, body }).select().single()
     : Promise.resolve(notConfigured()),
+  listMatchMessages: (matchId) => client
+    ? client.from("match_messages").select("id,match_id,sender_id,receiver_id,body,created_at").eq("match_id", matchId).order("created_at", { ascending: true })
+    : Promise.resolve(notConfigured()),
+  sendMatchMessage: (matchId, receiverId, body) => client
+    ? client.from("match_messages").insert({ match_id: matchId, receiver_id: receiverId, body }).select().single()
+    : Promise.resolve(notConfigured()),
   getMeetingRecord: (listingId) => client
     ? client.from("meeting_records").select("listing_id,met_safely,meet_again,private_note,updated_at").eq("listing_id", listingId).maybeSingle()
     : Promise.resolve(notConfigured()),
@@ -159,6 +165,19 @@ window.tomoniAuth = {
       .on("postgres_changes", { event: "INSERT", schema: "public", table: "listing_messages", filter: `listing_id=eq.${listingId}` }, (payload) => onInsert(payload.new))
       .subscribe((status, error) => onStatus?.(status, error));
   },
+  subscribeToMatchMessages: async (matchId, onInsert, onStatus) => {
+    if (!client) return null;
+    const { data } = await client.auth.getSession();
+    if (data.session?.access_token) await client.realtime.setAuth(data.session.access_token);
+    const channel = client
+      .channel(`tomoni-match-chat-${matchId}`)
+      .on("postgres_changes", { event: "INSERT", schema: "public", table: "match_messages", filter: `match_id=eq.${matchId}` }, (payload) => onInsert(payload.new))
+      .subscribe((status) => onStatus?.(status));
+    return channel;
+  },
+  unsubscribeMatchMessages: (channel) => client && channel
+    ? client.removeChannel(channel)
+    : Promise.resolve(),
   unsubscribeMessages: (channel) => client && channel
     ? client.removeChannel(channel)
     : Promise.resolve(),
