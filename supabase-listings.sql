@@ -143,7 +143,8 @@ $$;
 revoke all on function public.request_listing_participation(uuid, text) from public, anon;
 grant execute on function public.request_listing_participation(uuid, text) to authenticated;
 
-create or replace function public.review_listing_participation(target_listing_id uuid, target_user_id uuid, decision text)
+drop function if exists public.review_listing_participation(uuid, uuid, text);
+create or replace function public.review_listing_participation(target_listing_id uuid, p_target_user_id uuid, decision text)
 returns void
 language plpgsql
 security definer
@@ -179,7 +180,7 @@ begin
   update public.listing_participants
   set status = decision
   where listing_id = target_listing_id
-    and user_id = target_user_id
+    and user_id = p_target_user_id
     and status = 'pending';
 
   if not found then
@@ -556,7 +557,8 @@ create trigger on_favorite_create_match
 after insert on public.favorites
 for each row execute function public.create_match_from_favorite();
 
-create or replace function public.ensure_match_with_user(target_user_id uuid)
+drop function if exists public.ensure_match_with_user(uuid);
+create or replace function public.ensure_match_with_user(p_target_user_id uuid)
 returns public.matches
 language plpgsql
 security definer
@@ -572,39 +574,41 @@ begin
     raise exception 'ログインが必要です。';
   end if;
 
-  if target_user_id is null or target_user_id = current_user_id then
+  if p_target_user_id is null or p_target_user_id = current_user_id then
     raise exception '相手ユーザーが正しくありません。';
   end if;
 
   if not exists (
-    select 1 from public.favorites
-    where user_id = current_user_id
-      and target_user_id = ensure_match_with_user.target_user_id
+    select 1
+    from public.favorites f
+    where f.user_id = current_user_id
+      and f.target_user_id = p_target_user_id
   ) then
     raise exception '自分の気になるが見つかりません。';
   end if;
 
   if not exists (
-    select 1 from public.favorites
-    where user_id = ensure_match_with_user.target_user_id
-      and target_user_id = current_user_id
+    select 1
+    from public.favorites f
+    where f.user_id = p_target_user_id
+      and f.target_user_id = current_user_id
   ) then
     return null;
   end if;
 
-  first_user := least(current_user_id, target_user_id);
-  second_user := greatest(current_user_id, target_user_id);
+  first_user := least(current_user_id, p_target_user_id);
+  second_user := greatest(current_user_id, p_target_user_id);
 
   insert into public.matches (user1_id, user2_id, status)
   values (first_user, second_user, 'active')
   on conflict do nothing;
 
-  select *
+  select m.*
   into match_row
-  from public.matches
-  where status = 'active'
-    and least(user1_id, user2_id) = first_user
-    and greatest(user1_id, user2_id) = second_user
+  from public.matches m
+  where m.status = 'active'
+    and least(m.user1_id, m.user2_id) = first_user
+    and greatest(m.user1_id, m.user2_id) = second_user
   limit 1;
 
   return match_row;

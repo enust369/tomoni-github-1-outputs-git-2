@@ -85,7 +85,7 @@ window.tomoniAuth = {
     ? client.from("matches").select("*").eq("status", "active").or(`user1_id.eq.${userId},user2_id.eq.${userId}`).maybeSingle()
     : Promise.resolve(notConfigured()),
   ensureMatchWithUser: (userId) => client
-    ? client.rpc("ensure_match_with_user", { target_user_id: userId })
+    ? client.rpc("ensure_match_with_user", { p_target_user_id: userId })
     : Promise.resolve(notConfigured()),
   listParticipationCounts: () => client
     ? client.from("listing_participant_counts").select("listing_id,participant_count")
@@ -100,7 +100,7 @@ window.tomoniAuth = {
     ? client.from("listing_participants").select("listing_id,user_id,applicant_name,status,created_at").eq("listing_id", listingId).order("created_at", { ascending: true })
     : Promise.resolve(notConfigured()),
   reviewParticipation: (listingId, userId, decision) => client
-    ? client.rpc("review_listing_participation", { target_listing_id: listingId, target_user_id: userId, decision })
+    ? client.rpc("review_listing_participation", { target_listing_id: listingId, p_target_user_id: userId, decision })
     : Promise.resolve(notConfigured()),
   getParticipationCount: (listingId) => client
     ? client.from("listing_participant_counts").select("participant_count").eq("listing_id", listingId).maybeSingle()
