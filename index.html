@@ -2402,6 +2402,7 @@
       }
       const result = await window.tomoniAuth?.listMatches?.();
       if (result?.error) { toast(`マッチ一覧を読み込めませんでした：${result.error.message}`); return false; }
+      console.log("tomoni matches result", { current_user_id: appState.user.id, result });
       matchRecords = result?.data || [];
       matchedUserIds = new Set(matchRecords.map((match) => match.user1_id === appState.user.id ? match.user2_id : match.user1_id).filter(Boolean));
       return true;
@@ -3340,7 +3341,15 @@
           ? await window.tomoniAuth?.removeFavorite?.(item.id, item.ownerId)
           : await window.tomoniAuth?.addFavorite?.({ user_id: appState.user.id, target_user_id: item.ownerId || null, listing_id: item.id });
         setLoading(false);
+        console.log("tomoni favorite result", { favorite_saved: !active, current_user_id: appState.user.id, target_user_id: item.ownerId || null, listing_id: item.id, result });
         if (result?.error) { toast(`気になるを更新できませんでした：${result.error.message}`); return; }
+        let matchResult = null;
+        if (!active && item.ownerId) {
+          matchResult = await window.tomoniAuth?.ensureMatchWithUser?.(item.ownerId);
+          console.log("tomoni match create result", { current_user_id: appState.user.id, target_user_id: item.ownerId, matchResult });
+          if (matchResult?.error) { toast(`マッチ確認ができませんでした：${matchResult.error.message}`); return; }
+          if (matchResult?.data && !matchRecords.some((match) => match.id === matchResult.data.id)) matchRecords.unshift(matchResult.data);
+        }
         await loadFavorites();
         await loadMatches();
         renderListings();

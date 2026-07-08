@@ -481,6 +481,64 @@ create trigger on_favorite_create_match
 after insert on public.favorites
 for each row execute function public.create_match_from_favorite();
 
+create or replace function public.ensure_match_with_user(target_user_id uuid)
+returns public.matches
+language plpgsql
+security definer
+set search_path = public
+as $$
+declare
+  current_user_id uuid := auth.uid();
+  first_user uuid;
+  second_user uuid;
+  match_row public.matches;
+begin
+  if current_user_id is null then
+    raise exception 'ログインが必要です。';
+  end if;
+
+  if target_user_id is null or target_user_id = current_user_id then
+    raise exception '相手ユーザーが正しくありません。';
+  end if;
+
+  if not exists (
+    select 1 from public.favorites
+    where user_id = current_user_id
+      and target_user_id = ensure_match_with_user.target_user_id
+  ) then
+    raise exception '自分の気になるが見つかりません。';
+  end if;
+
+  if not exists (
+    select 1 from public.favorites
+    where user_id = ensure_match_with_user.target_user_id
+      and target_user_id = current_user_id
+  ) then
+    return null;
+  end if;
+
+  first_user := least(current_user_id, target_user_id);
+  second_user := greatest(current_user_id, target_user_id);
+
+  insert into public.matches (user1_id, user2_id, status)
+  values (first_user, second_user, 'active')
+  on conflict do nothing;
+
+  select *
+  into match_row
+  from public.matches
+  where status = 'active'
+    and least(user1_id, user2_id) = first_user
+    and greatest(user1_id, user2_id) = second_user
+  limit 1;
+
+  return match_row;
+end;
+$$;
+
+revoke all on function public.ensure_match_with_user(uuid) from public, anon;
+grant execute on function public.ensure_match_with_user(uuid) to authenticated;
+
 insert into public.matches (user1_id, user2_id, status)
 select distinct
   least(f1.user_id, f1.target_user_id),

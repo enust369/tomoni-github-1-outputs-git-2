@@ -64,6 +64,9 @@ window.tomoniAuth = {
   getMatchWithUser: (userId) => client
     ? client.from("matches").select("*").eq("status", "active").or(`user1_id.eq.${userId},user2_id.eq.${userId}`).maybeSingle()
     : Promise.resolve(notConfigured()),
+  ensureMatchWithUser: (userId) => client
+    ? client.rpc("ensure_match_with_user", { target_user_id: userId })
+    : Promise.resolve(notConfigured()),
   listParticipationCounts: () => client
     ? client.from("listing_participant_counts").select("listing_id,participant_count")
     : Promise.resolve(notConfigured()),
