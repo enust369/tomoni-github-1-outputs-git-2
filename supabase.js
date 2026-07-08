@@ -61,9 +61,11 @@ window.tomoniAuth = {
   listReports: () => client
     ? client.from("reports").select("*").order("created_at", { ascending: false })
     : Promise.resolve(notConfigured()),
-  createReport: (report) => client
-    ? client.from("reports").insert(report).select().single()
-    : Promise.resolve(notConfigured()),
+  createReport: (report) => {
+    if (!client) return Promise.resolve(notConfigured());
+    const payload = Object.fromEntries(Object.entries(report).filter(([, value]) => value !== undefined && value !== null && value !== ""));
+    return client.from("reports").insert(payload).select().single();
+  },
   listBlocks: () => client
     ? client.from("blocks").select("*").order("created_at", { ascending: false })
     : Promise.resolve(notConfigured()),

@@ -3378,7 +3378,10 @@
         const data = Object.fromEntries(new FormData(form));
         if (data.reason === "その他" && !String(data.detail || "").trim()) { toast("その他の場合は詳しい内容を入力してください。"); return; }
         setLoading(true);
-        const result = await window.tomoniAuth?.createReport?.({ reporter_id: appState.user.id, target_user_id: form.dataset.userId || null, listing_id: form.dataset.listingId || null, match_id: form.dataset.matchId || null, source: form.dataset.source || "unknown", reason: data.reason, detail: data.detail || null });
+        const reportPayload = { reporter_id: appState.user.id, target_user_id: form.dataset.userId || null, reason: data.reason, detail: data.detail || null, source: form.dataset.source || "unknown" };
+        if (form.dataset.listingId) reportPayload.listing_id = form.dataset.listingId;
+        if (form.dataset.matchId) reportPayload.match_id = form.dataset.matchId;
+        const result = await window.tomoniAuth?.createReport?.(reportPayload);
         setLoading(false);
         if (result?.error) { toast(`通報を送信できませんでした：${result.error.message}`); return; }
         closeModal(); toast("通報を受け付けました。安全チームが確認します。");
@@ -3489,7 +3492,12 @@
       }
       if (action === "accept-invite") { withLoading(() => { jumpTo("after"); toast("一緒に過ごす予定に追加しました。"); }); }
       if (action === "decline") toast("今回は見送りました。相手にはやさしく伝わります。");
-      if (action === "report") openModal("通報する", `<p class="meta" style="margin-bottom:18px">安全確認のため、気になったことを教えてください。</p><form class="form" id="reportForm" data-person="${esc(button.dataset.person || "")}" data-source="${esc(button.dataset.source || "profile")}" data-user-id="${esc(button.dataset.userId || "")}" data-listing-id="${esc(button.dataset.listingId || button.dataset.id || "")}" data-match-id="${esc(button.dataset.matchId || "")}" novalidate><div class="field full"><label for="reportReason">通報理由</label><select id="reportReason" name="reason"><option>不適切な発言</option><option>勧誘・営業</option><option>誹謗中傷</option><option>ドタキャン</option><option>その他</option></select></div><div class="field full"><label for="reportDetail">詳しい内容（その他の場合は必須）</label><textarea id="reportDetail" name="detail" maxlength="500"></textarea></div><div class="field full"><button class="btn primary" type="submit">運営へ送る</button></div></form>`);
+      if (action === "report") {
+        const source = button.dataset.source || "profile";
+        const listingId = ["detail", "listing", "region", "recommendation", "meeting-record"].includes(source) ? (button.dataset.listingId || button.dataset.id || "") : "";
+        const matchId = source === "match-chat" || source === "chat" ? (button.dataset.matchId || button.dataset.id || "") : "";
+        openModal("通報する", `<p class="meta" style="margin-bottom:18px">安全確認のため、気になったことを教えてください。</p><form class="form" id="reportForm" data-person="${esc(button.dataset.person || "")}" data-source="${esc(source === "match-chat" ? "chat" : source)}" data-user-id="${esc(button.dataset.userId || "")}" data-listing-id="${esc(listingId)}" data-match-id="${esc(matchId)}" novalidate><div class="field full"><label for="reportReason">通報理由</label><select id="reportReason" name="reason"><option>不適切な発言</option><option>勧誘・営業</option><option>誹謗中傷</option><option>ドタキャン</option><option>その他</option></select></div><div class="field full"><label for="reportDetail">詳しい内容（その他の場合は必須）</label><textarea id="reportDetail" name="detail" maxlength="500"></textarea></div><div class="field full"><button class="btn primary" type="submit">運営へ送る</button></div></form>`);
+      }
       if (action === "block") openModal("ブロックしますか？", `<p>${esc(button.dataset.person || "相手")}さんは今後表示されません。相手に通知されることはありません。</p><div class="actions"><button class="btn primary" data-action="confirm-block" data-person="${esc(button.dataset.person || "相手")}" data-user-id="${esc(button.dataset.userId || "")}">ブロックする</button><button class="btn" data-action="close-modal">戻る</button></div>`);
       if (action === "confirm-block") {
         if (!appState.user) { openModal("ログイン", authMarkup("login")); toast("ブロックはログイン後に利用できます。"); return; }
