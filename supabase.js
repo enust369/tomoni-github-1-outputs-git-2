@@ -50,7 +50,7 @@ window.tomoniAuth = {
     ? client.from("favorites").select("*").order("created_at", { ascending: false })
     : Promise.resolve(notConfigured()),
   addFavorite: (favorite) => client
-    ? client.from("favorites").upsert(favorite, { onConflict: "user_id,listing_id" }).select().single()
+    ? client.from("favorites").insert(favorite).select().single()
     : Promise.resolve(notConfigured()),
   removeFavorite: (listingId, targetUserId = null) => {
     if (!client) return Promise.resolve(notConfigured());

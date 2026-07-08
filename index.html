@@ -1900,6 +1900,7 @@
     let favoriteRecords = [];
     let favoriteListingIds = new Set();
     let favoriteTargetUserIds = new Set();
+    const favoriteToggleInProgress = new Set();
     let matchRecords = [];
     let matchedUserIds = new Set();
     let profilesByUserId = new Map();
@@ -3420,28 +3421,52 @@
         const id = button.dataset.id;
         const item = listings.find((listing) => listing.id === id);
         if (!item || item.isDemo) { toast("この募集は気になるに追加できません。"); return; }
+        if (favoriteToggleInProgress.has(item.id)) return;
+        favoriteToggleInProgress.add(item.id);
+        button.disabled = true;
         setLoading(true);
-        const active = isFavorite(item);
-        const result = active
-          ? await window.tomoniAuth?.removeFavorite?.(item.id, item.ownerId)
-          : await window.tomoniAuth?.addFavorite?.({ user_id: appState.user.id, target_user_id: item.ownerId || null, listing_id: item.id });
-        setLoading(false);
-        console.log("tomoni favorite result", { favorite_saved: !active, current_user_id: appState.user.id, target_user_id: item.ownerId || null, listing_id: item.id, result });
-        if (result?.error) { toast(`気になるを更新できませんでした：${result.error.message}`); return; }
-        let matchResult = null;
-        if (!active && item.ownerId) {
-          matchResult = await window.tomoniAuth?.ensureMatchWithUser?.(item.ownerId);
-          console.log("tomoni match create result", { current_user_id: appState.user.id, target_user_id: item.ownerId, matchResult });
-          if (matchResult?.error) { toast(`マッチ確認ができませんでした：${matchResult.error.message}`); return; }
-          if (matchResult?.data && !matchRecords.some((match) => match.id === matchResult.data.id)) matchRecords.unshift(matchResult.data);
+        try {
+          await loadFavorites();
+          const active = isFavorite(item);
+          if (active) {
+            const result = await window.tomoniAuth?.removeFavorite?.(item.id, item.ownerId);
+            console.log("tomoni favorite result", { favorite_saved: false, current_user_id: appState.user.id, target_user_id: item.ownerId || null, listing_id: item.id, result });
+            if (result?.error) throw result.error;
+            await loadFavorites();
+            await loadMatches();
+            renderListings();
+            renderRegionalProfiles();
+            if (currentDetailListingId === item.id) updateDetailFavoriteUI(item);
+            if (document.getElementById("account").classList.contains("is-visible")) renderFavorites();
+            toast("気になるを解除しました。");
+            return;
+          }
+          const alreadyExists = favoriteRecords.some((favorite) => favorite.listing_id === item.id || (item.ownerId && favorite.target_user_id === item.ownerId));
+          let result = { data: alreadyExists ? favoriteRecords.find((favorite) => favorite.listing_id === item.id || favorite.target_user_id === item.ownerId) : null, error: null };
+          if (!alreadyExists) result = await window.tomoniAuth?.addFavorite?.({ user_id: appState.user.id, target_user_id: item.ownerId || null, listing_id: item.id });
+          console.log("tomoni favorite result", { favorite_saved: true, skipped_existing: alreadyExists, current_user_id: appState.user.id, target_user_id: item.ownerId || null, listing_id: item.id, result });
+          if (result?.error) throw result.error;
+          let matchResult = null;
+          if (item.ownerId) {
+            matchResult = await window.tomoniAuth?.ensureMatchWithUser?.(item.ownerId);
+            console.log("tomoni match create result", { current_user_id: appState.user.id, target_user_id: item.ownerId, matchResult });
+            if (matchResult?.error) throw matchResult.error;
+            if (matchResult?.data && !matchRecords.some((match) => match.id === matchResult.data.id)) matchRecords.unshift(matchResult.data);
+          }
+          await loadFavorites();
+          await loadMatches();
+          renderListings();
+          renderRegionalProfiles();
+          if (currentDetailListingId === item.id) updateDetailFavoriteUI(item);
+          if (document.getElementById("account").classList.contains("is-visible")) renderFavorites();
+          toast(isMatched(item) ? "マッチしました。" : "気になるに追加しました。相手には通知されません。");
+        } catch (error) {
+          toast(`気になるを更新できませんでした：${error.message}`);
+        } finally {
+          setLoading(false);
+          favoriteToggleInProgress.delete(item.id);
+          button.disabled = false;
         }
-        await loadFavorites();
-        await loadMatches();
-        renderListings();
-        renderRegionalProfiles();
-        if (currentDetailListingId === item.id) updateDetailFavoriteUI(item);
-        if (document.getElementById("account").classList.contains("is-visible")) renderFavorites();
-        toast(active ? "気になるを解除しました。" : isMatched(item) ? "マッチしました。" : "気になるに追加しました。相手には通知されません。");
       }
       if (action === "toggle-participation") {
         if (!appState.user) { openModal("ログイン", authMarkup("login")); showParticipationMessage("参加申請するにはログインしてください。", true); return; }
