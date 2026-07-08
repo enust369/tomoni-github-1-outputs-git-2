@@ -422,6 +422,81 @@ using (user_id = auth.uid());
 
 grant select, insert, delete on public.favorites to authenticated;
 
+create or replace function public.is_admin()
+returns boolean
+language sql
+stable
+security definer
+set search_path = public
+as $$
+  select coalesce(auth.jwt() ->> 'email', '') = 'iriehair@yahoo.co.jp';
+$$;
+
+revoke all on function public.is_admin() from public, anon;
+grant execute on function public.is_admin() to authenticated;
+
+create table if not exists public.reports (
+  id uuid primary key default gen_random_uuid(),
+  reporter_id uuid not null default auth.uid() references auth.users(id) on delete cascade,
+  target_user_id uuid references auth.users(id) on delete set null,
+  listing_id uuid references public.listings(id) on delete set null,
+  match_id uuid,
+  source text not null default 'unknown',
+  reason text not null check (reason in ('不適切な発言', '勧誘・営業', '誹謗中傷', 'ドタキャン', 'その他')),
+  detail text check (detail is null or char_length(detail) <= 500),
+  status text not null default 'received' check (status in ('received', 'reviewing', 'resolved')),
+  created_at timestamptz not null default now()
+);
+
+alter table public.reports enable row level security;
+
+drop policy if exists "users can create their own reports" on public.reports;
+create policy "users can create their own reports"
+on public.reports for insert to authenticated
+with check (reporter_id = auth.uid());
+
+drop policy if exists "users can read their own reports" on public.reports;
+create policy "users can read their own reports"
+on public.reports for select to authenticated
+using (reporter_id = auth.uid() or public.is_admin());
+
+grant select, insert on public.reports to authenticated;
+
+create index if not exists reports_reporter_created_idx
+on public.reports (reporter_id, created_at desc);
+
+create table if not exists public.blocks (
+  id uuid primary key default gen_random_uuid(),
+  blocker_id uuid not null default auth.uid() references auth.users(id) on delete cascade,
+  blocked_user_id uuid not null references auth.users(id) on delete cascade,
+  reason text,
+  created_at timestamptz not null default now(),
+  constraint blocks_unique_pair unique (blocker_id, blocked_user_id),
+  check (blocker_id <> blocked_user_id)
+);
+
+alter table public.blocks enable row level security;
+
+drop policy if exists "users can create their own blocks" on public.blocks;
+create policy "users can create their own blocks"
+on public.blocks for insert to authenticated
+with check (blocker_id = auth.uid());
+
+drop policy if exists "users can read their own blocks" on public.blocks;
+create policy "users can read their own blocks"
+on public.blocks for select to authenticated
+using (blocker_id = auth.uid() or public.is_admin());
+
+drop policy if exists "users can delete their own blocks" on public.blocks;
+create policy "users can delete their own blocks"
+on public.blocks for delete to authenticated
+using (blocker_id = auth.uid());
+
+grant select, insert, delete on public.blocks to authenticated;
+
+create index if not exists blocks_blocker_created_idx
+on public.blocks (blocker_id, created_at desc);
+
 create table if not exists public.matches (
   id uuid primary key default gen_random_uuid(),
   user1_id uuid not null references auth.users(id) on delete cascade,
@@ -603,6 +678,12 @@ with check (
       and receiver_id in (matches.user1_id, matches.user2_id)
       and receiver_id <> auth.uid()
   )
+  and not exists (
+    select 1
+    from public.blocks
+    where (blocks.blocker_id = auth.uid() and blocks.blocked_user_id = receiver_id)
+       or (blocks.blocker_id = receiver_id and blocks.blocked_user_id = auth.uid())
+  )
 );
 
 grant select, insert on public.match_messages to authenticated;
@@ -663,6 +744,32 @@ with check (recipient_id = auth.uid());
 
 grant select on public.notifications to authenticated;
 grant update (read_at) on public.notifications to authenticated;
+
+create or replace function public.get_admin_summary()
+returns jsonb
+language plpgsql
+security definer
+set search_path = public
+as $$
+begin
+  if not public.is_admin() then
+    raise exception '管理者のみ利用できます。';
+  end if;
+
+  return jsonb_build_object(
+    'users_count', (select count(*) from auth.users),
+    'listings_count', (select count(*) from public.listings),
+    'matches_count', (select count(*) from public.matches where status = 'active'),
+    'listing_messages_count', (select count(*) from public.listing_messages),
+    'match_messages_count', (select count(*) from public.match_messages),
+    'reports_count', (select count(*) from public.reports),
+    'blocks_count', (select count(*) from public.blocks)
+  );
+end;
+$$;
+
+revoke all on function public.get_admin_summary() from public, anon;
+grant execute on function public.get_admin_summary() to authenticated;
 
 create or replace function public.notify_listing_participation_change()
 returns trigger

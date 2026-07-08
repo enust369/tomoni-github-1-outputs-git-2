@@ -58,6 +58,24 @@ window.tomoniAuth = {
     if (targetUserId) filters.push(`target_user_id.eq.${targetUserId}`);
     return client.from("favorites").delete().or(filters.join(","));
   },
+  listReports: () => client
+    ? client.from("reports").select("*").order("created_at", { ascending: false })
+    : Promise.resolve(notConfigured()),
+  createReport: (report) => client
+    ? client.from("reports").insert(report).select().single()
+    : Promise.resolve(notConfigured()),
+  listBlocks: () => client
+    ? client.from("blocks").select("*").order("created_at", { ascending: false })
+    : Promise.resolve(notConfigured()),
+  createBlock: (block) => client
+    ? client.from("blocks").upsert(block, { onConflict: "blocker_id,blocked_user_id" }).select().single()
+    : Promise.resolve(notConfigured()),
+  removeBlock: (blockedUserId) => client
+    ? client.from("blocks").delete().eq("blocked_user_id", blockedUserId)
+    : Promise.resolve(notConfigured()),
+  getAdminSummary: () => client
+    ? client.rpc("get_admin_summary")
+    : Promise.resolve(notConfigured()),
   listMatches: () => client
     ? client.from("matches").select("*").eq("status", "active").order("created_at", { ascending: false })
     : Promise.resolve(notConfigured()),
