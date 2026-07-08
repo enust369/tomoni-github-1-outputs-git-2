@@ -61,6 +61,9 @@ window.tomoniAuth = {
   listMatches: () => client
     ? client.from("matches").select("*").eq("status", "active").order("created_at", { ascending: false })
     : Promise.resolve(notConfigured()),
+  getMatchWithUser: (userId) => client
+    ? client.from("matches").select("*").eq("status", "active").or(`user1_id.eq.${userId},user2_id.eq.${userId}`).maybeSingle()
+    : Promise.resolve(notConfigured()),
   listParticipationCounts: () => client
     ? client.from("listing_participant_counts").select("listing_id,participant_count")
     : Promise.resolve(notConfigured()),
@@ -103,9 +106,11 @@ window.tomoniAuth = {
   listMatchMessages: (matchId) => client
     ? client.from("match_messages").select("id,match_id,sender_id,receiver_id,body,created_at").eq("match_id", matchId).order("created_at", { ascending: true })
     : Promise.resolve(notConfigured()),
-  sendMatchMessage: (matchId, receiverId, body) => client
-    ? client.from("match_messages").insert({ match_id: matchId, receiver_id: receiverId, body }).select().single()
-    : Promise.resolve(notConfigured()),
+  sendMatchMessage: async (matchId, receiverId, body) => {
+    if (!client) return notConfigured();
+    const { data } = await client.auth.getUser();
+    return client.from("match_messages").insert({ match_id: matchId, sender_id: data.user?.id, receiver_id: receiverId, body }).select().single();
+  },
   getMeetingRecord: (listingId) => client
     ? client.from("meeting_records").select("listing_id,met_safely,meet_again,private_note,updated_at").eq("listing_id", listingId).maybeSingle()
     : Promise.resolve(notConfigured()),
