@@ -482,6 +482,35 @@ grant select, insert on public.reports to authenticated;
 create index if not exists reports_reporter_created_idx
 on public.reports (reporter_id, created_at desc);
 
+create table if not exists public.contacts (
+  id uuid primary key default gen_random_uuid(),
+  name text not null check (char_length(name) between 1 and 80),
+  email text not null check (char_length(email) between 3 and 254),
+  category text not null check (category in ('サービスについて', '安全について', '登録情報について', 'その他')),
+  message text not null check (char_length(message) between 10 and 2000),
+  user_id uuid references auth.users(id) on delete set null,
+  status text not null default 'received' check (status in ('received', 'reviewing', 'resolved')),
+  created_at timestamptz not null default now()
+);
+
+alter table public.contacts enable row level security;
+
+drop policy if exists "anyone can create contacts" on public.contacts;
+create policy "anyone can create contacts"
+on public.contacts for insert
+with check (user_id is null or user_id = auth.uid());
+
+drop policy if exists "admins can read contacts" on public.contacts;
+create policy "admins can read contacts"
+on public.contacts for select to authenticated
+using (public.is_admin());
+
+grant insert on public.contacts to anon, authenticated;
+grant select on public.contacts to authenticated;
+
+create index if not exists contacts_created_idx
+on public.contacts (created_at desc);
+
 create table if not exists public.blocks (
   id uuid primary key default gen_random_uuid(),
   blocker_id uuid not null default auth.uid() references auth.users(id) on delete cascade,
@@ -890,6 +919,41 @@ $$;
 revoke all on function public.get_admin_reports() from public, anon;
 grant execute on function public.get_admin_reports() to authenticated;
 
+drop function if exists public.get_admin_contacts();
+create or replace function public.get_admin_contacts()
+returns jsonb
+language plpgsql
+security definer
+set search_path = public
+as $$
+begin
+  if not public.is_admin() then
+    raise exception '管理者のみ利用できます。';
+  end if;
+
+  return (
+    select coalesce(jsonb_agg(to_jsonb(admin_contacts) order by admin_contacts.created_at desc), '[]'::jsonb)
+    from (
+      select
+        c.id,
+        c.name,
+        c.email,
+        c.category,
+        c.message,
+        c.user_id,
+        c.status,
+        c.created_at
+      from public.contacts c
+      order by c.created_at desc
+      limit 200
+    ) admin_contacts
+  );
+end;
+$$;
+
+revoke all on function public.get_admin_contacts() from public, anon;
+grant execute on function public.get_admin_contacts() to authenticated;
+
 drop function if exists public.get_admin_listings();
 create or replace function public.get_admin_listings()
 returns jsonb
@@ -991,6 +1055,27 @@ $$;
 
 revoke all on function public.resolve_admin_report(uuid) from public, anon;
 grant execute on function public.resolve_admin_report(uuid) to authenticated;
+
+drop function if exists public.resolve_admin_contact(uuid);
+create or replace function public.resolve_admin_contact(target_contact_id uuid)
+returns void
+language plpgsql
+security definer
+set search_path = public
+as $$
+begin
+  if not public.is_admin() then
+    raise exception '管理者のみ利用できます。';
+  end if;
+
+  update public.contacts
+  set status = 'resolved'
+  where id = target_contact_id;
+end;
+$$;
+
+revoke all on function public.resolve_admin_contact(uuid) from public, anon;
+grant execute on function public.resolve_admin_contact(uuid) to authenticated;
 
 drop function if exists public.admin_end_listing(uuid);
 create or replace function public.admin_end_listing(target_listing_id uuid)

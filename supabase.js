@@ -66,6 +66,11 @@ window.tomoniAuth = {
     const payload = Object.fromEntries(Object.entries(report).filter(([, value]) => value !== undefined && value !== null && value !== ""));
     return client.from("reports").insert(payload).select().single();
   },
+  createContact: (contact) => {
+    if (!client) return Promise.resolve(notConfigured());
+    const payload = Object.fromEntries(Object.entries(contact).filter(([, value]) => value !== undefined && value !== null && value !== ""));
+    return client.from("contacts").insert(payload).select().single();
+  },
   listBlocks: () => client
     ? client.from("blocks").select("*").order("created_at", { ascending: false })
     : Promise.resolve(notConfigured()),
@@ -90,6 +95,9 @@ window.tomoniAuth = {
   listAdminBlocks: () => client
     ? client.rpc("get_admin_blocks")
     : Promise.resolve(notConfigured()),
+  listAdminContacts: () => client
+    ? client.rpc("get_admin_contacts")
+    : Promise.resolve(notConfigured()),
   resolveAdminReport: (reportId) => client
     ? client.rpc("resolve_admin_report", { target_report_id: reportId })
     : Promise.resolve(notConfigured()),
@@ -101,6 +109,9 @@ window.tomoniAuth = {
     : Promise.resolve(notConfigured()),
   unblockAdminUser: (blockId) => client
     ? client.rpc("admin_unblock_user", { target_block_id: blockId })
+    : Promise.resolve(notConfigured()),
+  resolveAdminContact: (contactId) => client
+    ? client.rpc("resolve_admin_contact", { target_contact_id: contactId })
     : Promise.resolve(notConfigured()),
   listMatches: () => client
     ? client.from("matches").select("*").eq("status", "active").order("created_at", { ascending: false })

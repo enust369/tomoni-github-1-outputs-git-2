@@ -1604,6 +1604,7 @@
         <div class="grid two" style="margin-top:18px">
           <article class="card"><p class="eyebrow">ユーザー管理</p><div class="field" style="margin:12px 0"><label for="adminUserSearch">名前・メールで検索</label><input id="adminUserSearch" type="search" placeholder="例：tomoni@example.com"></div><div class="grid" id="adminUsers"><div class="empty-state">まだ読み込まれていません。</div></div></article>
           <article class="card"><p class="eyebrow">通報管理</p><div class="grid" id="adminReports"><div class="empty-state">まだ読み込まれていません。</div></div></article>
+          <article class="card"><p class="eyebrow">お問い合わせ管理</p><div class="grid" id="adminContacts"><div class="empty-state">まだ読み込まれていません。</div></div></article>
           <article class="card"><p class="eyebrow">募集管理</p><div class="grid" id="adminListings"><div class="empty-state">まだ読み込まれていません。</div></div></article>
           <article class="card"><p class="eyebrow">ブロック管理</p><div class="grid" id="adminBlocks"><div class="empty-state">まだ読み込まれていません。</div></div></article>
         </div>
@@ -1652,9 +1653,10 @@
         <form class="card form utility-page" id="contactForm" novalidate>
           <div class="field full"><label for="contactName">お名前</label><input id="contactName" name="name" autocomplete="name" required><span class="field-error"></span></div>
           <div class="field full"><label for="contactEmail">メールアドレス</label><input id="contactEmail" name="email" type="email" autocomplete="email" required><span class="field-error"></span></div>
-          <div class="field full"><label for="contactType">お問い合わせ内容</label><select id="contactType" name="type"><option>サービスについて</option><option>安全について</option><option>登録情報について</option><option>その他</option></select></div>
+          <div class="field full"><label for="contactType">お問い合わせ内容</label><select id="contactType" name="category"><option>サービスについて</option><option>安全について</option><option>登録情報について</option><option>その他</option></select></div>
           <div class="field full"><label for="contactMessage">メッセージ</label><textarea id="contactMessage" name="message" minlength="10" required></textarea><span class="field-error"></span></div>
           <div class="field full"><button class="btn primary" type="submit">送信する</button></div>
+          <div class="field full"><p class="meta" id="contactStatus" aria-live="polite"></p></div>
         </form>
       </section>
 
@@ -1912,6 +1914,7 @@
     const isAdminUser = () => Boolean(appState.user?.email && adminEmails.includes(appState.user.email));
     let adminUsers = [];
     let adminReports = [];
+    let adminContacts = [];
     let adminListings = [];
     let adminBlocks = [];
     let adminSearchTimer = null;
@@ -2795,6 +2798,7 @@
       document.getElementById("adminStats").innerHTML = `<article class="card empty-state">読み込み中...</article>`;
       document.getElementById("adminUsers").innerHTML = `<div class="empty-state">読み込み中...</div>`;
       document.getElementById("adminReports").innerHTML = `<div class="empty-state">読み込み中...</div>`;
+      document.getElementById("adminContacts").innerHTML = `<div class="empty-state">読み込み中...</div>`;
       document.getElementById("adminListings").innerHTML = `<div class="empty-state">読み込み中...</div>`;
       document.getElementById("adminBlocks").innerHTML = `<div class="empty-state">読み込み中...</div>`;
     }
@@ -2803,6 +2807,7 @@
       document.getElementById("adminStats").innerHTML = `<article class="card empty-state">管理者のみ閲覧できます。</article>`;
       document.getElementById("adminUsers").innerHTML = `<div class="empty-state">管理者のみ閲覧できます。</div>`;
       document.getElementById("adminReports").innerHTML = `<div class="empty-state">管理者のみ閲覧できます。</div>`;
+      document.getElementById("adminContacts").innerHTML = `<div class="empty-state">管理者のみ閲覧できます。</div>`;
       document.getElementById("adminListings").innerHTML = `<div class="empty-state">管理者のみ閲覧できます。</div>`;
       document.getElementById("adminBlocks").innerHTML = `<div class="empty-state">管理者のみ閲覧できます。</div>`;
     }
@@ -2812,6 +2817,7 @@
       document.getElementById("adminStats").innerHTML = `<article class="card empty-state">${esc(message)}</article>`;
       document.getElementById("adminUsers").innerHTML = markup;
       document.getElementById("adminReports").innerHTML = markup;
+      document.getElementById("adminContacts").innerHTML = markup;
       document.getElementById("adminListings").innerHTML = markup;
       document.getElementById("adminBlocks").innerHTML = markup;
     }
@@ -2848,6 +2854,23 @@
           </div>
         </article>
       `).join("") : `<div class="empty-state">通報はありません。</div>`;
+    }
+
+    function renderAdminContacts() {
+      document.getElementById("adminContacts").innerHTML = adminContacts.length ? adminContacts.map((contact) => `
+        <article class="notice">
+          <div class="actions" style="justify-content:space-between;align-items:flex-start">
+            <div>
+              <span class="badge">${esc(contact.category || "お問い合わせ")}</span>
+              <span class="badge ${contact.status === "resolved" ? "" : "muted"}">${contact.status === "resolved" ? "対応済み" : "受付中"}</span>
+              <h3 style="margin-top:10px">${esc(contact.name || "お名前なし")}</h3>
+              <p class="meta">${esc(contact.email || "メールなし")} / ${esc(adminDate(contact.created_at))}</p>
+              <p style="margin-top:8px;white-space:pre-wrap">${esc(contact.message || "内容なし")}</p>
+            </div>
+            ${contact.status === "resolved" ? "" : `<button class="btn small primary" data-action="admin-resolve-contact" data-id="${esc(contact.id)}">対応済みにする</button>`}
+          </div>
+        </article>
+      `).join("") : `<div class="empty-state">お問い合わせはありません。</div>`;
     }
 
     function renderAdminListings() {
@@ -2906,19 +2929,21 @@
         }
 
         const searchTerm = document.getElementById("adminUserSearch")?.value || "";
-        const [summaryResult, usersResult, reportsResult, listingsResult, blocksResult] = await Promise.all([
+        const [summaryResult, usersResult, reportsResult, contactsResult, listingsResult, blocksResult] = await Promise.all([
           window.tomoniAuth.getAdminSummary(),
           window.tomoniAuth.listAdminUsers(searchTerm),
           window.tomoniAuth.listAdminReports(),
+          window.tomoniAuth.listAdminContacts(),
           window.tomoniAuth.listAdminListings(),
           window.tomoniAuth.listAdminBlocks()
         ]);
-        const rpcError = summaryResult?.error || usersResult?.error || reportsResult?.error || listingsResult?.error || blocksResult?.error;
+        const rpcError = summaryResult?.error || usersResult?.error || reportsResult?.error || contactsResult?.error || listingsResult?.error || blocksResult?.error;
         if (rpcError) throw rpcError;
 
         const summary = typeof summaryResult.data === "string" ? JSON.parse(summaryResult.data) : (summaryResult.data || {});
         adminUsers = normalizeAdminList(usersResult.data);
         adminReports = normalizeAdminList(reportsResult.data);
+        adminContacts = normalizeAdminList(contactsResult.data);
         adminListings = normalizeAdminList(listingsResult.data);
         adminBlocks = normalizeAdminList(blocksResult.data);
         document.getElementById("adminStats").innerHTML = [
@@ -2932,6 +2957,7 @@
         ].map(([label, value]) => `<article class="card assurance-card"><strong>${esc(value ?? 0)}</strong><span class="meta">${esc(label)}</span></article>`).join("");
         renderAdminUsers();
         renderAdminReports();
+        renderAdminContacts();
         renderAdminListings();
         renderAdminBlocks();
       } catch (error) {
@@ -3462,7 +3488,35 @@
           document.getElementById("meetingRecordStatus").classList.add("caution");
         } finally { saveButton.disabled = false; }
       }
-      if (form.id === "contactForm") withLoading(() => { form.reset(); toast("お問い合わせを受け付けました。"); });
+      if (form.id === "contactForm") {
+        const status = document.getElementById("contactStatus");
+        const button = form.querySelector('button[type="submit"]');
+        const data = Object.fromEntries(new FormData(form));
+        const payload = {
+          name: String(data.name || "").trim(),
+          email: String(data.email || "").trim(),
+          category: String(data.category || "その他"),
+          message: String(data.message || "").trim(),
+          user_id: appState.user?.id || null
+        };
+        button.disabled = true;
+        setLoading(true);
+        try {
+          const result = await window.tomoniAuth?.createContact?.(payload);
+          if (result?.error) throw result.error;
+          form.reset();
+          status.textContent = "お問い合わせを受け付けました。確認後、必要に応じてご連絡します。";
+          status.classList.remove("caution");
+          toast("お問い合わせを受け付けました。確認後、必要に応じてご連絡します。");
+        } catch (error) {
+          status.textContent = `お問い合わせを送信できませんでした：${error.message}`;
+          status.classList.add("caution");
+          toast(`お問い合わせを送信できませんでした：${error.message}`);
+        } finally {
+          setLoading(false);
+          button.disabled = false;
+        }
+      }
       if (form.id === "authForm") {
         if (form.dataset.submitting === "true") return;
         form.dataset.submitting = "true";
@@ -3578,6 +3632,14 @@
         if (result?.error) { toast(`通報を更新できませんでした：${result.error.message}`); return; }
         await renderAdmin();
         toast("通報を対応済みにしました。");
+      }
+      if (action === "admin-resolve-contact") {
+        setLoading(true);
+        const result = await window.tomoniAuth?.resolveAdminContact?.(button.dataset.id);
+        setLoading(false);
+        if (result?.error) { toast(`お問い合わせを更新できませんでした：${result.error.message}`); return; }
+        await renderAdmin();
+        toast("お問い合わせを対応済みにしました。");
       }
       if (action === "admin-end-listing") openModal("募集を終了しますか？", `<p>この募集を終了済みにします。通常の募集一覧には表示されなくなります。</p><div class="actions"><button class="btn primary" data-action="confirm-admin-end-listing" data-id="${esc(button.dataset.id)}">終了する</button><button class="btn" data-action="close-modal">戻る</button></div>`);
       if (action === "confirm-admin-end-listing") {
