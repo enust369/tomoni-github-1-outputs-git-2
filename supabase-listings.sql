@@ -140,6 +140,10 @@ begin
     raise exception '自分の募集には参加できません。';
   end if;
 
+  if public.has_block_relation(listing_owner_id) then
+    raise exception 'ブロック関係があるため、この募集には応募できません。';
+  end if;
+
   if exists (
     select 1 from public.listing_participants
     where listing_id = target_listing_id and user_id = current_user_id
@@ -276,6 +280,26 @@ on public.listing_messages for insert to authenticated
 with check (
   sender_id = auth.uid()
   and public.can_access_listing_chat(listing_id)
+  and not exists (
+    select 1
+    from public.listings l
+    where l.id = public.listing_messages.listing_id
+      and l.owner_id <> auth.uid()
+      and public.has_block_relation(l.owner_id)
+  )
+  and not exists (
+    select 1
+    from public.listings l
+    where l.id = public.listing_messages.listing_id
+      and l.owner_id = auth.uid()
+      and exists (
+        select 1
+        from public.listing_participants lp
+        where lp.listing_id = l.id
+          and lp.status = 'approved'
+          and public.has_block_relation(lp.user_id)
+      )
+  )
 );
 
 grant select, insert on public.listing_messages to authenticated;
@@ -543,6 +567,26 @@ grant select, insert, delete on public.blocks to authenticated;
 create index if not exists blocks_blocker_created_idx
 on public.blocks (blocker_id, created_at desc);
 
+create or replace function public.has_block_relation(p_target_user_id uuid)
+returns boolean
+language sql
+stable
+security definer
+set search_path = public
+as $$
+  select auth.uid() is not null
+    and p_target_user_id is not null
+    and exists (
+      select 1
+      from public.blocks b
+      where (b.blocker_id = auth.uid() and b.blocked_user_id = p_target_user_id)
+         or (b.blocker_id = p_target_user_id and b.blocked_user_id = auth.uid())
+    );
+$$;
+
+revoke all on function public.has_block_relation(uuid) from public, anon;
+grant execute on function public.has_block_relation(uuid) to authenticated;
+
 create table if not exists public.matches (
   id uuid primary key default gen_random_uuid(),
   user1_id uuid not null references auth.users(id) on delete cascade,
@@ -727,12 +771,7 @@ with check (
       and receiver_id in (matches.user1_id, matches.user2_id)
       and receiver_id <> auth.uid()
   )
-  and not exists (
-    select 1
-    from public.blocks
-    where (blocks.blocker_id = auth.uid() and blocks.blocked_user_id = receiver_id)
-       or (blocks.blocker_id = receiver_id and blocks.blocked_user_id = auth.uid())
-  )
+  and not public.has_block_relation(receiver_id)
 );
 
 grant select, insert on public.match_messages to authenticated;

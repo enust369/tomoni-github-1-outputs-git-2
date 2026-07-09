@@ -2879,6 +2879,15 @@
       `).join("") : `<div class="empty-state">通報はありません。</div>`;
     }
 
+    async function loadAdminReports() {
+      document.getElementById("adminReports").innerHTML = `<div class="empty-state">読み込み中...</div>`;
+      let result = await window.tomoniAuth.listAdminReports();
+      if (result?.error && window.tomoniAuth?.listAdminReportsDirect) result = await window.tomoniAuth.listAdminReportsDirect();
+      if (result?.error) throw result.error;
+      adminReports = normalizeAdminList(result.data);
+      renderAdminReports();
+    }
+
     function renderAdminContacts() {
       document.getElementById("adminContacts").innerHTML = adminContacts.length ? adminContacts.map((contact) => `
         <article class="notice">
@@ -2955,20 +2964,19 @@
         if (searchOverride !== undefined && searchInput) searchInput.value = searchOverride;
         const searchTerm = searchOverride !== undefined ? searchOverride : (searchInput?.value || "");
         await loadAdminUsers(searchTerm);
+        await loadAdminReports();
 
         try {
-          const [summaryResult, reportsResult, contactsResult, listingsResult, blocksResult] = await Promise.all([
+          const [summaryResult, contactsResult, listingsResult, blocksResult] = await Promise.all([
             window.tomoniAuth.getAdminSummary(),
-            window.tomoniAuth.listAdminReports(),
             window.tomoniAuth.listAdminContacts(),
             window.tomoniAuth.listAdminListings(),
             window.tomoniAuth.listAdminBlocks()
           ]);
-          const rpcError = summaryResult?.error || reportsResult?.error || contactsResult?.error || listingsResult?.error || blocksResult?.error;
+          const rpcError = summaryResult?.error || contactsResult?.error || listingsResult?.error || blocksResult?.error;
           if (rpcError) throw rpcError;
 
           const summary = typeof summaryResult.data === "string" ? JSON.parse(summaryResult.data) : (summaryResult.data || {});
-          adminReports = normalizeAdminList(reportsResult.data);
           adminContacts = normalizeAdminList(contactsResult.data);
           adminListings = normalizeAdminList(listingsResult.data);
           adminBlocks = normalizeAdminList(blocksResult.data);
@@ -2981,7 +2989,6 @@
             ["通報件数", summary.reports_count],
             ["ブロック件数", summary.blocks_count]
           ].map(([label, value]) => `<article class="card assurance-card"><strong>${esc(value ?? 0)}</strong><span class="meta">${esc(label)}</span></article>`).join("");
-          renderAdminReports();
           renderAdminContacts();
           renderAdminListings();
           renderAdminBlocks();
@@ -3238,6 +3245,27 @@
       return Boolean(appState.user && item && !item.isDemo && (item.owner || participatingListingIds.has(item.id)));
     }
 
+    async function hasBlockRelationWith(userId) {
+      if (!appState.user || !userId || userId === appState.user.id) return false;
+      if (blockedUserIds.has(userId)) return true;
+      const result = await window.tomoniAuth?.hasBlockRelation?.(userId);
+      if (result?.error) throw result.error;
+      return Boolean(result?.data);
+    }
+
+    async function showBlockedRelationMessage(targetUserId, message = "ブロック関係があるため、この操作はできません。") {
+      const blocked = await hasBlockRelationWith(targetUserId);
+      if (!blocked) return false;
+      const chatStatus = document.getElementById("chatStatus");
+      if (chatStatus) {
+        chatStatus.textContent = message;
+        chatStatus.classList.add("caution");
+      }
+      showParticipationMessage(message, true);
+      toast(message);
+      return true;
+    }
+
     function chatErrorMessage(error) {
       const message = String(error?.message || error || "");
       if (/row-level security|permission denied|42501/i.test(message)) return "このチャットを利用できる権限がありません。";
@@ -3386,6 +3414,7 @@
     async function openChat(listingId) {
       const item = listings.find((listing) => listing.id === listingId);
       if (!canUseChat(item)) { showParticipationMessage("チャットは募集主と参加済みのユーザーだけが利用できます。", true); return; }
+      if (!item.owner && await showBlockedRelationMessage(item.ownerId, "ブロック関係があるため、この募集のチャットは利用できません。")) return;
       await closeChatRealtime(false);
       currentChatMode = "listing";
       currentChatListingId = item.id;
@@ -3427,6 +3456,7 @@
       const includesCurrentUser = match && (match.user1_id === appState.user.id || match.user2_id === appState.user.id);
       const includesPartner = match && partnerUserId && (match.user1_id === partnerUserId || match.user2_id === partnerUserId);
       if (!match || !includesCurrentUser || !includesPartner || !matchedUserIds.has(partnerUserId)) { document.getElementById("chatStatus").textContent = "マッチした相手とだけチャットできます。"; document.getElementById("chatStatus").classList.add("caution"); toast("マッチした相手とだけチャットできます。"); return; }
+      if (await showBlockedRelationMessage(partnerUserId, "ブロック関係があるため、この相手とはチャットできません。")) return;
       await closeChatRealtime(false);
       currentChatMode = "match";
       currentChatListingId = null;
@@ -3480,7 +3510,8 @@
         const matchAllowed = currentChatMode === "match" && currentMatchChatId && currentMatchChatReceiverId && matchedUserIds.has(currentMatchChatReceiverId);
         if (currentChatMode === "listing" && !canUseChat(item)) { document.getElementById("chatStatus").textContent = "このチャットは募集主と参加者だけが利用できます。"; document.getElementById("chatStatus").classList.add("caution"); return; }
         if (currentChatMode === "match" && !matchAllowed) { document.getElementById("chatStatus").textContent = "マッチした相手とだけチャットできます。"; document.getElementById("chatStatus").classList.add("caution"); return; }
-        if ((currentChatMode === "match" && blockedUserIds.has(currentMatchChatReceiverId)) || (currentChatMode === "listing" && item?.ownerId && blockedUserIds.has(item.ownerId))) { document.getElementById("chatStatus").textContent = "ブロック中の相手にはメッセージを送信できません。"; document.getElementById("chatStatus").classList.add("caution"); return; }
+        if (currentChatMode === "match" && await showBlockedRelationMessage(currentMatchChatReceiverId, "ブロック関係があるため、この相手にはメッセージを送信できません。")) return;
+        if (currentChatMode === "listing" && !item?.owner && await showBlockedRelationMessage(item?.ownerId, "ブロック関係があるため、この募集のチャットには送信できません。")) return;
         const field = document.getElementById("chatMessage");
         const body = field.value.trim();
         if (!body) return;
@@ -3761,6 +3792,7 @@
         if (!item) { showParticipationMessage("募集が見つかりません。画面を再読み込みしてください。", true); return; }
         if (!/^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(listingId)) { showParticipationMessage("募集IDが正しくありません。募集一覧からもう一度詳細を開いてください。", true); return; }
         if (item.owner) { showParticipationMessage("自分で作成した募集には参加できません。", true); return; }
+        if (await showBlockedRelationMessage(item.ownerId, "ブロック関係があるため、この募集には応募できません。")) return;
         if (participationStatuses.has(item.id)) return;
         if (item.participantCount >= item.capacity) { showParticipationMessage("この募集は満員です。", true); return; }
         if (item.isDemo) {

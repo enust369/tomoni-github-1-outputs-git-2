@@ -89,6 +89,9 @@ window.tomoniAuth = {
   listAdminReports: () => client
     ? client.rpc("get_admin_reports")
     : Promise.resolve(notConfigured()),
+  listAdminReportsDirect: () => client
+    ? client.from("reports").select("*").order("created_at", { ascending: false })
+    : Promise.resolve(notConfigured()),
   listAdminListings: () => client
     ? client.rpc("get_admin_listings")
     : Promise.resolve(notConfigured()),
@@ -112,6 +115,9 @@ window.tomoniAuth = {
     : Promise.resolve(notConfigured()),
   resolveAdminContact: (contactId) => client
     ? client.rpc("resolve_admin_contact", { target_contact_id: contactId })
+    : Promise.resolve(notConfigured()),
+  hasBlockRelation: (targetUserId) => client
+    ? client.rpc("has_block_relation", { p_target_user_id: targetUserId })
     : Promise.resolve(notConfigured()),
   listMatches: () => client
     ? client.from("matches").select("*").eq("status", "active").order("created_at", { ascending: false })
