@@ -13,6 +13,18 @@ create table if not exists public.listings (
   updated_at timestamptz not null default now()
 );
 
+alter table public.listings add column if not exists status text not null default 'open';
+
+do $$
+begin
+  if not exists (select 1 from pg_constraint where conname = 'listings_status_check' and conrelid = 'public.listings'::regclass) then
+    alter table public.listings
+    add constraint listings_status_check
+    check (status in ('open', 'ended'));
+  end if;
+end;
+$$;
+
 alter table public.listings enable row level security;
 
 drop policy if exists "listings are readable by everyone" on public.listings;
@@ -370,6 +382,7 @@ alter table public.profiles add column if not exists personality_tags text[] not
 alter table public.profiles add column if not exists quiet_score integer;
 alter table public.profiles add column if not exists talk_score integer;
 alter table public.profiles add column if not exists comfort_score integer;
+alter table public.profiles add column if not exists is_verified boolean not null default false;
 
 alter table public.profiles enable row level security;
 
@@ -762,10 +775,26 @@ begin
 
   return jsonb_build_object(
     'users_count', (select count(*) from auth.users),
+    'verified_users_count', (
+      select count(*)
+      from auth.users u
+      left join public.profiles p on p.user_id = u.id
+      where coalesce(p.is_verified, false) or u.email_confirmed_at is not null
+    ),
+    'today_listings_count', (
+      select count(*)
+      from public.listings
+      where created_at >= current_date
+    ),
     'listings_count', (select count(*) from public.listings),
     'matches_count', (select count(*) from public.matches where status = 'active'),
     'listing_messages_count', (select count(*) from public.listing_messages),
     'match_messages_count', (select count(*) from public.match_messages),
+    'today_chat_messages_count', (
+      (select count(*) from public.listing_messages where created_at >= current_date)
+      +
+      (select count(*) from public.match_messages where created_at >= current_date)
+    ),
     'reports_count', (select count(*) from public.reports),
     'blocks_count', (select count(*) from public.blocks)
   );
@@ -774,6 +803,252 @@ $$;
 
 revoke all on function public.get_admin_summary() from public, anon;
 grant execute on function public.get_admin_summary() to authenticated;
+
+drop function if exists public.get_admin_users(text);
+create or replace function public.get_admin_users(search_term text default '')
+returns jsonb
+language plpgsql
+security definer
+set search_path = public
+as $$
+begin
+  if not public.is_admin() then
+    raise exception '管理者のみ利用できます。';
+  end if;
+
+  return (
+    select coalesce(jsonb_agg(to_jsonb(admin_users) order by admin_users.created_at desc), '[]'::jsonb)
+    from (
+      select
+        u.id as user_id,
+        u.email,
+        coalesce(p.nickname, '未設定') as nickname,
+        coalesce(p.is_verified, false) or u.email_confirmed_at is not null as is_verified,
+        u.last_sign_in_at,
+        u.created_at,
+        (select count(*) from public.listings l where l.owner_id = u.id) as listings_count,
+        (select count(*) from public.matches m where m.status = 'active' and (m.user1_id = u.id or m.user2_id = u.id)) as matches_count
+      from auth.users u
+      left join public.profiles p on p.user_id = u.id
+      where nullif(trim(search_term), '') is null
+        or lower(coalesce(p.nickname, '') || ' ' || coalesce(u.email, '')) like '%' || lower(trim(search_term)) || '%'
+      order by u.created_at desc
+      limit 200
+    ) admin_users
+  );
+end;
+$$;
+
+revoke all on function public.get_admin_users(text) from public, anon;
+grant execute on function public.get_admin_users(text) to authenticated;
+
+drop function if exists public.get_admin_reports();
+create or replace function public.get_admin_reports()
+returns jsonb
+language plpgsql
+security definer
+set search_path = public
+as $$
+begin
+  if not public.is_admin() then
+    raise exception '管理者のみ利用できます。';
+  end if;
+
+  return (
+    select coalesce(jsonb_agg(to_jsonb(admin_reports) order by admin_reports.created_at desc), '[]'::jsonb)
+    from (
+      select
+        r.id,
+        r.reason,
+        r.detail,
+        r.status,
+        r.source,
+        r.listing_id,
+        r.match_id,
+        r.created_at,
+        r.reporter_id,
+        reporter.email as reporter_email,
+        coalesce(reporter_profile.nickname, '未設定') as reporter_name,
+        r.target_user_id,
+        target_user.email as target_email,
+        coalesce(target_profile.nickname, '未設定') as target_name
+      from public.reports r
+      left join auth.users reporter on reporter.id = r.reporter_id
+      left join public.profiles reporter_profile on reporter_profile.user_id = r.reporter_id
+      left join auth.users target_user on target_user.id = r.target_user_id
+      left join public.profiles target_profile on target_profile.user_id = r.target_user_id
+      order by r.created_at desc
+      limit 200
+    ) admin_reports
+  );
+end;
+$$;
+
+revoke all on function public.get_admin_reports() from public, anon;
+grant execute on function public.get_admin_reports() to authenticated;
+
+drop function if exists public.get_admin_listings();
+create or replace function public.get_admin_listings()
+returns jsonb
+language plpgsql
+security definer
+set search_path = public
+as $$
+begin
+  if not public.is_admin() then
+    raise exception '管理者のみ利用できます。';
+  end if;
+
+  return (
+    select coalesce(jsonb_agg(to_jsonb(admin_listings) order by admin_listings.created_at desc), '[]'::jsonb)
+    from (
+      select
+        l.id,
+        l.title,
+        l.activity,
+        l.place,
+        l.scheduled_at,
+        l.capacity,
+        l.status,
+        l.created_at,
+        l.owner_id,
+        owner.email as owner_email,
+        coalesce(p.nickname, l.person_name) as owner_name,
+        (select count(*) from public.listing_participants lp where lp.listing_id = l.id and lp.status = 'approved') as participant_count
+      from public.listings l
+      left join auth.users owner on owner.id = l.owner_id
+      left join public.profiles p on p.user_id = l.owner_id
+      order by l.created_at desc
+      limit 200
+    ) admin_listings
+  );
+end;
+$$;
+
+revoke all on function public.get_admin_listings() from public, anon;
+grant execute on function public.get_admin_listings() to authenticated;
+
+drop function if exists public.get_admin_blocks();
+create or replace function public.get_admin_blocks()
+returns jsonb
+language plpgsql
+security definer
+set search_path = public
+as $$
+begin
+  if not public.is_admin() then
+    raise exception '管理者のみ利用できます。';
+  end if;
+
+  return (
+    select coalesce(jsonb_agg(to_jsonb(admin_blocks) order by admin_blocks.created_at desc), '[]'::jsonb)
+    from (
+      select
+        b.id,
+        b.blocker_id,
+        blocker.email as blocker_email,
+        coalesce(blocker_profile.nickname, '未設定') as blocker_name,
+        b.blocked_user_id,
+        blocked.email as blocked_email,
+        coalesce(blocked_profile.nickname, '未設定') as blocked_name,
+        b.reason,
+        b.created_at
+      from public.blocks b
+      left join auth.users blocker on blocker.id = b.blocker_id
+      left join public.profiles blocker_profile on blocker_profile.user_id = b.blocker_id
+      left join auth.users blocked on blocked.id = b.blocked_user_id
+      left join public.profiles blocked_profile on blocked_profile.user_id = b.blocked_user_id
+      order by b.created_at desc
+      limit 200
+    ) admin_blocks
+  );
+end;
+$$;
+
+revoke all on function public.get_admin_blocks() from public, anon;
+grant execute on function public.get_admin_blocks() to authenticated;
+
+drop function if exists public.resolve_admin_report(uuid);
+create or replace function public.resolve_admin_report(target_report_id uuid)
+returns void
+language plpgsql
+security definer
+set search_path = public
+as $$
+begin
+  if not public.is_admin() then
+    raise exception '管理者のみ利用できます。';
+  end if;
+
+  update public.reports
+  set status = 'resolved'
+  where id = target_report_id;
+end;
+$$;
+
+revoke all on function public.resolve_admin_report(uuid) from public, anon;
+grant execute on function public.resolve_admin_report(uuid) to authenticated;
+
+drop function if exists public.admin_end_listing(uuid);
+create or replace function public.admin_end_listing(target_listing_id uuid)
+returns void
+language plpgsql
+security definer
+set search_path = public
+as $$
+begin
+  if not public.is_admin() then
+    raise exception '管理者のみ利用できます。';
+  end if;
+
+  update public.listings
+  set status = 'ended', updated_at = now()
+  where id = target_listing_id;
+end;
+$$;
+
+revoke all on function public.admin_end_listing(uuid) from public, anon;
+grant execute on function public.admin_end_listing(uuid) to authenticated;
+
+drop function if exists public.admin_delete_listing(uuid);
+create or replace function public.admin_delete_listing(target_listing_id uuid)
+returns void
+language plpgsql
+security definer
+set search_path = public
+as $$
+begin
+  if not public.is_admin() then
+    raise exception '管理者のみ利用できます。';
+  end if;
+
+  delete from public.listings
+  where id = target_listing_id;
+end;
+$$;
+
+revoke all on function public.admin_delete_listing(uuid) from public, anon;
+grant execute on function public.admin_delete_listing(uuid) to authenticated;
+
+drop function if exists public.admin_unblock_user(uuid);
+create or replace function public.admin_unblock_user(target_block_id uuid)
+returns void
+language plpgsql
+security definer
+set search_path = public
+as $$
+begin
+  if not public.is_admin() then
+    raise exception '管理者のみ利用できます。';
+  end if;
+
+  delete from public.blocks
+  where id = target_block_id;
+end;
+$$;
+
+revoke all on function public.admin_unblock_user(uuid) from public, anon;
+grant execute on function public.admin_unblock_user(uuid) to authenticated;
 
 create or replace function public.notify_listing_participation_change()
 returns trigger

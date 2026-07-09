@@ -32,7 +32,7 @@ window.tomoniAuth = {
     ? client.from("listings").select("*").order("created_at", { ascending: false })
     : Promise.resolve(notConfigured()),
   listProfiles: () => client
-    ? client.from("profiles").select("user_id,nickname,age,area,photo_urls,personality_title,personality_tags")
+    ? client.from("profiles").select("user_id,nickname,age,area,photo_urls,personality_title,personality_tags,is_verified")
     : Promise.resolve(notConfigured()),
   getListing: (id) => client
     ? client.from("listings").select("*").eq("id", id).single()
@@ -77,6 +77,30 @@ window.tomoniAuth = {
     : Promise.resolve(notConfigured()),
   getAdminSummary: () => client
     ? client.rpc("get_admin_summary")
+    : Promise.resolve(notConfigured()),
+  listAdminUsers: (searchTerm = "") => client
+    ? client.rpc("get_admin_users", { search_term: searchTerm })
+    : Promise.resolve(notConfigured()),
+  listAdminReports: () => client
+    ? client.rpc("get_admin_reports")
+    : Promise.resolve(notConfigured()),
+  listAdminListings: () => client
+    ? client.rpc("get_admin_listings")
+    : Promise.resolve(notConfigured()),
+  listAdminBlocks: () => client
+    ? client.rpc("get_admin_blocks")
+    : Promise.resolve(notConfigured()),
+  resolveAdminReport: (reportId) => client
+    ? client.rpc("resolve_admin_report", { target_report_id: reportId })
+    : Promise.resolve(notConfigured()),
+  endAdminListing: (listingId) => client
+    ? client.rpc("admin_end_listing", { target_listing_id: listingId })
+    : Promise.resolve(notConfigured()),
+  deleteAdminListing: (listingId) => client
+    ? client.rpc("admin_delete_listing", { target_listing_id: listingId })
+    : Promise.resolve(notConfigured()),
+  unblockAdminUser: (blockId) => client
+    ? client.rpc("admin_unblock_user", { target_block_id: blockId })
     : Promise.resolve(notConfigured()),
   listMatches: () => client
     ? client.from("matches").select("*").eq("status", "active").order("created_at", { ascending: false })

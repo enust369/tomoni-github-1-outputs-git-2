@@ -1599,11 +1599,13 @@
       </section>
 
       <section id="admin">
-        <div class="section-head"><div><p class="eyebrow">管理画面</p><h2>通報と安全状態を確認する。</h2><p class="meta">管理者だけが表示できます。</p></div></div>
+        <div class="section-head"><div><p class="eyebrow">管理画面</p><h2>運営に必要な状態を確認する。</h2><p class="meta">管理者だけが表示できます。</p></div></div>
         <div class="grid three" id="adminStats"><article class="card empty-state">管理者でログインすると表示されます。</article></div>
         <div class="grid two" style="margin-top:18px">
-          <article class="card"><p class="eyebrow">通報一覧</p><div class="grid" id="adminReports"><div class="empty-state">まだ読み込まれていません。</div></div></article>
-          <article class="card"><p class="eyebrow">ブロック一覧</p><div class="grid" id="adminBlocks"><div class="empty-state">まだ読み込まれていません。</div></div></article>
+          <article class="card"><p class="eyebrow">ユーザー管理</p><div class="field" style="margin:12px 0"><label for="adminUserSearch">名前・メールで検索</label><input id="adminUserSearch" type="search" placeholder="例：tomoni@example.com"></div><div class="grid" id="adminUsers"><div class="empty-state">まだ読み込まれていません。</div></div></article>
+          <article class="card"><p class="eyebrow">通報管理</p><div class="grid" id="adminReports"><div class="empty-state">まだ読み込まれていません。</div></div></article>
+          <article class="card"><p class="eyebrow">募集管理</p><div class="grid" id="adminListings"><div class="empty-state">まだ読み込まれていません。</div></div></article>
+          <article class="card"><p class="eyebrow">ブロック管理</p><div class="grid" id="adminBlocks"><div class="empty-state">まだ読み込まれていません。</div></div></article>
         </div>
       </section>
 
@@ -1907,6 +1909,11 @@
     let blockRecords = [];
     let blockedUserIds = new Set();
     const adminEmail = "iriehair@yahoo.co.jp";
+    let adminUsers = [];
+    let adminReports = [];
+    let adminListings = [];
+    let adminBlocks = [];
+    let adminSearchTimer = null;
     let safetyGateActive = false;
     const storageKey = "tomoni-public-preview-v1";
     const defaultState = { user: null, profileOwnerId: null, safetyOnboardingAccepted: false, saved: [], blocked: [], customListings: [], demoParticipations: [], moderation: { reports: [], blockCount: 0 }, feedbackHistory: [], profile: { nickname: "あなた", age: "30代", gender: "女性", area: "", bio: "静かな時間を大切にしています。", tags: [], photoUrls: [], personalityType: "", personalityTitle: "", personalityDescription: "", personalityTags: [], quietScore: null, talkScore: null, comfortScore: null } };
@@ -2370,7 +2377,8 @@
         capacity: row.capacity,
         participantCount: row.participantCount || 0,
         audience: row.audience,
-        verified: Boolean(profile.user_id || row.owner_id === appState.user?.id),
+        status: row.status || "open",
+        verified: Boolean(profile.is_verified || row.owner_id === appState.user?.id),
         age: profile.age || "",
         profileArea: profile.area || "",
         profilePhoto: profile.photo_urls?.[0] || "",
@@ -2458,7 +2466,7 @@
       profilesByUserId = profiles;
       participationStatuses = new Map((mineResult?.data || []).map((item) => [item.listing_id, item.status || "approved"]));
       participatingListingIds = new Set([...participationStatuses].filter(([, status]) => status === "approved").map(([id]) => id));
-      const remote = (result?.data || []).map((row) => listingFromRow({ ...row, participantCount: counts.get(row.id) || 0, profile: profiles.get(row.owner_id) }));
+      const remote = (result?.data || []).filter((row) => (row.status || "open") !== "ended").map((row) => listingFromRow({ ...row, participantCount: counts.get(row.id) || 0, profile: profiles.get(row.owner_id) }));
       listings.splice(0, listings.length);
       listings.unshift(...createDemoListings(), ...remote);
       appState.customListings = remote.filter((item) => item.owner);
@@ -2756,31 +2764,117 @@
       document.getElementById("accountContent").innerHTML = own.length ? own.map((item) => `<article class="card managed-listing"><div><span class="badge">公開中</span><h3 style="margin-top:10px">${esc(item.title || item.activity)}</h3><p class="meta">${esc(item.place)} / ${item.capacity}人募集</p></div><div class="actions"><button class="btn small primary" data-action="open-detail" data-id="${item.id}">詳細・チャット</button><button class="btn small" data-action="edit-listing" data-id="${item.id}">編集</button><button class="btn small quiet-action" data-action="delete-listing" data-id="${item.id}">削除</button></div></article>`).join("") : `<article class="card empty-state">作成した募集はまだありません。</article>`;
     }
 
+    function adminDate(value) {
+      return value ? new Date(value).toLocaleString("ja-JP") : "未記録";
+    }
+
+    function renderAdminUsers() {
+      document.getElementById("adminUsers").innerHTML = adminUsers.length ? adminUsers.map((user) => `
+        <article class="notice">
+          <div class="actions" style="justify-content:space-between;align-items:flex-start">
+            <div>
+              <span class="badge ${user.is_verified ? "" : "muted"}">${user.is_verified ? "本人確認済み" : "未確認"}</span>
+              <h3 style="margin-top:10px">${esc(user.nickname || "未設定")}</h3>
+              <p class="meta">${esc(user.email || "メールなし")}</p>
+              <p class="meta">募集 ${esc(user.listings_count || 0)}件 / マッチ ${esc(user.matches_count || 0)}件</p>
+              <p class="meta">最終ログイン：${esc(adminDate(user.last_sign_in_at))}</p>
+            </div>
+          </div>
+        </article>
+      `).join("") : `<div class="empty-state">該当するユーザーはいません。</div>`;
+    }
+
+    function renderAdminReports() {
+      document.getElementById("adminReports").innerHTML = adminReports.length ? adminReports.map((report) => `
+        <article class="notice">
+          <div class="actions" style="justify-content:space-between;align-items:flex-start">
+            <div>
+              <span class="badge">${esc(report.reason)}</span>
+              <span class="badge ${report.status === "resolved" ? "" : "muted"}">${report.status === "resolved" ? "対応済み" : "未対応"}</span>
+              <p style="margin-top:8px">${esc(report.detail || "詳細なし")}</p>
+              <p class="meta">通報者：${esc(report.reporter_name || "未設定")} / ${esc(report.reporter_email || report.reporter_id || "不明")}</p>
+              <p class="meta">対象：${esc(report.target_name || "未設定")} / ${esc(report.target_email || report.target_user_id || "不明")}</p>
+              <p class="meta">source: ${esc(report.source || "unknown")} / ${esc(adminDate(report.created_at))}</p>
+            </div>
+            ${report.status === "resolved" ? "" : `<button class="btn small primary" data-action="admin-resolve-report" data-id="${esc(report.id)}">対応済みに変更</button>`}
+          </div>
+        </article>
+      `).join("") : `<div class="empty-state">通報はありません。</div>`;
+    }
+
+    function renderAdminListings() {
+      document.getElementById("adminListings").innerHTML = adminListings.length ? adminListings.map((listing) => `
+        <article class="notice">
+          <div class="actions" style="justify-content:space-between;align-items:flex-start">
+            <div>
+              <span class="badge ${listing.status === "ended" ? "muted" : ""}">${listing.status === "ended" ? "終了済み" : "公開中"}</span>
+              <h3 style="margin-top:10px">${esc(listing.title || listing.activity || "無題の募集")}</h3>
+              <p class="meta">募集主：${esc(listing.owner_name || "未設定")} / ${esc(listing.owner_email || listing.owner_id || "不明")}</p>
+              <p class="meta">${esc(listing.place || "")} / ${esc(adminDate(listing.scheduled_at))}</p>
+              <p class="meta">参加人数：${esc(listing.participant_count || 0)}/${esc(listing.capacity || 0)}人</p>
+            </div>
+            <div class="actions">
+              ${listing.status === "ended" ? "" : `<button class="btn small" data-action="admin-end-listing" data-id="${esc(listing.id)}">終了</button>`}
+              <button class="btn small quiet-action" data-action="admin-delete-listing" data-id="${esc(listing.id)}">削除</button>
+            </div>
+          </div>
+        </article>
+      `).join("") : `<div class="empty-state">募集はありません。</div>`;
+    }
+
+    function renderAdminBlocks() {
+      document.getElementById("adminBlocks").innerHTML = adminBlocks.length ? adminBlocks.map((block) => `
+        <article class="notice">
+          <div class="actions" style="justify-content:space-between;align-items:flex-start">
+            <div>
+              <span class="badge">ブロック</span>
+              <p class="meta" style="margin-top:8px">ブロックした人：${esc(block.blocker_name || "未設定")} / ${esc(block.blocker_email || block.blocker_id || "不明")}</p>
+              <p class="meta">ブロックされた人：${esc(block.blocked_name || "未設定")} / ${esc(block.blocked_email || block.blocked_user_id || "不明")}</p>
+              <p class="meta">${esc(adminDate(block.created_at))}</p>
+            </div>
+            <button class="btn small quiet-action" data-action="admin-unblock" data-id="${esc(block.id)}">解除</button>
+          </div>
+        </article>
+      `).join("") : `<div class="empty-state">ブロックはありません。</div>`;
+    }
+
     async function renderAdmin() {
       if (appState.user?.email !== adminEmail) {
         document.getElementById("adminStats").innerHTML = `<article class="card empty-state">管理者のみ表示できます。</article>`;
+        document.getElementById("adminUsers").innerHTML = `<div class="empty-state">権限がありません。</div>`;
         document.getElementById("adminReports").innerHTML = `<div class="empty-state">権限がありません。</div>`;
+        document.getElementById("adminListings").innerHTML = `<div class="empty-state">権限がありません。</div>`;
         document.getElementById("adminBlocks").innerHTML = `<div class="empty-state">権限がありません。</div>`;
         jumpTo("admin");
         return;
       }
-      const [summaryResult, reportsResult, blocksResult] = await Promise.all([
+      const searchTerm = document.getElementById("adminUserSearch")?.value || "";
+      const [summaryResult, usersResult, reportsResult, listingsResult, blocksResult] = await Promise.all([
         window.tomoniAuth?.getAdminSummary?.(),
-        window.tomoniAuth?.listReports?.(),
-        window.tomoniAuth?.listBlocks?.()
+        window.tomoniAuth?.listAdminUsers?.(searchTerm),
+        window.tomoniAuth?.listAdminReports?.(),
+        window.tomoniAuth?.listAdminListings?.(),
+        window.tomoniAuth?.listAdminBlocks?.()
       ]);
-      if (summaryResult?.error || reportsResult?.error || blocksResult?.error) { toast("管理画面を読み込めませんでした。SQLと権限を確認してください。"); return; }
+      if (summaryResult?.error || usersResult?.error || reportsResult?.error || listingsResult?.error || blocksResult?.error) { toast("管理画面を読み込めませんでした。SQLと権限を確認してください。"); return; }
       const summary = summaryResult.data || {};
+      adminUsers = usersResult.data || [];
+      adminReports = reportsResult.data || [];
+      adminListings = listingsResult.data || [];
+      adminBlocks = blocksResult.data || [];
       document.getElementById("adminStats").innerHTML = [
-        ["ユーザー数", summary.users_count],
-        ["募集数", summary.listings_count],
-        ["マッチ数", summary.matches_count],
-        ["チャット件数", Number(summary.listing_messages_count || 0) + Number(summary.match_messages_count || 0)],
-        ["通報数", summary.reports_count],
-        ["ブロック数", summary.blocks_count]
+        ["総ユーザー数", summary.users_count],
+        ["本人確認済み人数", summary.verified_users_count],
+        ["今日の募集数", summary.today_listings_count],
+        ["現在のマッチ数", summary.matches_count],
+        ["今日のチャット件数", summary.today_chat_messages_count],
+        ["通報件数", summary.reports_count],
+        ["ブロック件数", summary.blocks_count]
       ].map(([label, value]) => `<article class="card assurance-card"><strong>${esc(value ?? 0)}</strong><span class="meta">${esc(label)}</span></article>`).join("");
-      document.getElementById("adminReports").innerHTML = reportsResult.data?.length ? reportsResult.data.map((report) => `<article class="notice"><span class="badge">${esc(report.reason)}</span><p style="margin-top:8px">${esc(report.detail || "詳細なし")}</p><p class="meta">reporter: ${esc(report.reporter_id)} / target: ${esc(report.target_user_id || "なし")} / ${esc(new Date(report.created_at).toLocaleString("ja-JP"))}</p></article>`).join("") : `<div class="empty-state">通報はありません。</div>`;
-      document.getElementById("adminBlocks").innerHTML = blocksResult.data?.length ? blocksResult.data.map((block) => `<article class="notice"><span class="badge">ブロック</span><p class="meta">blocker: ${esc(block.blocker_id)}<br>blocked: ${esc(block.blocked_user_id)}<br>${esc(new Date(block.created_at).toLocaleString("ja-JP"))}</p></article>`).join("") : `<div class="empty-state">ブロックはありません。</div>`;
+      renderAdminUsers();
+      renderAdminReports();
+      renderAdminListings();
+      renderAdminBlocks();
       jumpTo("admin");
     }
 
@@ -3414,6 +3508,38 @@
       if (action === "show-matches") { if (!appState.user) openModal("ログイン", authMarkup("login")); else { await loadMatches(); jumpTo("account"); renderMatches(); } }
       if (action === "show-blocks") { if (!appState.user) openModal("ログイン", authMarkup("login")); else { await loadBlocks(); jumpTo("account"); renderBlocks(); } }
       if (action === "open-admin") await renderAdmin();
+      if (action === "admin-resolve-report") {
+        setLoading(true);
+        const result = await window.tomoniAuth?.resolveAdminReport?.(button.dataset.id);
+        setLoading(false);
+        if (result?.error) { toast(`通報を更新できませんでした：${result.error.message}`); return; }
+        await renderAdmin();
+        toast("通報を対応済みにしました。");
+      }
+      if (action === "admin-end-listing") openModal("募集を終了しますか？", `<p>この募集を終了済みにします。通常の募集一覧には表示されなくなります。</p><div class="actions"><button class="btn primary" data-action="confirm-admin-end-listing" data-id="${esc(button.dataset.id)}">終了する</button><button class="btn" data-action="close-modal">戻る</button></div>`);
+      if (action === "confirm-admin-end-listing") {
+        setLoading(true);
+        const result = await window.tomoniAuth?.endAdminListing?.(button.dataset.id);
+        setLoading(false);
+        if (result?.error) { toast(`募集を終了できませんでした：${result.error.message}`); return; }
+        closeModal(); await renderAdmin(); await loadSupabaseListings(); toast("募集を終了しました。");
+      }
+      if (action === "admin-delete-listing") openModal("募集を削除しますか？", `<p>この操作は取り消せません。関連する参加・チャット情報も削除される場合があります。</p><div class="actions"><button class="btn primary" data-action="confirm-admin-delete-listing" data-id="${esc(button.dataset.id)}">削除する</button><button class="btn" data-action="close-modal">戻る</button></div>`);
+      if (action === "confirm-admin-delete-listing") {
+        setLoading(true);
+        const result = await window.tomoniAuth?.deleteAdminListing?.(button.dataset.id);
+        setLoading(false);
+        if (result?.error) { toast(`募集を削除できませんでした：${result.error.message}`); return; }
+        closeModal(); await renderAdmin(); await loadSupabaseListings(); toast("募集を削除しました。");
+      }
+      if (action === "admin-unblock") openModal("ブロックを解除しますか？", `<p>このブロック状態を解除します。</p><div class="actions"><button class="btn primary" data-action="confirm-admin-unblock" data-id="${esc(button.dataset.id)}">解除する</button><button class="btn" data-action="close-modal">戻る</button></div>`);
+      if (action === "confirm-admin-unblock") {
+        setLoading(true);
+        const result = await window.tomoniAuth?.unblockAdminUser?.(button.dataset.id);
+        setLoading(false);
+        if (result?.error) { toast(`ブロック解除できませんでした：${result.error.message}`); return; }
+        closeModal(); await renderAdmin(); await loadBlocks(); toast("ブロックを解除しました。");
+      }
       if (action === "show-managed") renderManaged();
       if (action === "logout") { setLoading(true); await closeChatRealtime(); await closeOwnerParticipationRealtime(); await closeUserParticipationRealtime(); await closeNotificationRealtime(); const result = await window.tomoniAuth?.signOut(); if (!result?.error) await restoreSupabaseUser(); setLoading(false); if (result?.error) { toast(result.error.message); return; } notifications = []; renderNotifications(); document.getElementById("chatMessages").innerHTML = `<div class="empty-state">ログインするとチャットを利用できます。</div>`; document.getElementById("accountContent").innerHTML = `<article class="card empty-state">ログアウトしました。またいつでも戻ってきてください。</article>`; toast("ログアウトしました。"); }
       if (action === "toggle-favorite") {
@@ -3564,6 +3690,11 @@
 
     modalBackdrop.addEventListener("click", (event) => { if (event.target === modalBackdrop) closeModal(); });
     document.addEventListener("keydown", (event) => { if (event.key === "Escape" && modalBackdrop.classList.contains("open")) closeModal(); });
+    document.getElementById("adminUserSearch")?.addEventListener("input", () => {
+      if (appState.user?.email !== adminEmail) return;
+      clearTimeout(adminSearchTimer);
+      adminSearchTimer = setTimeout(renderAdmin, 350);
+    });
     modalBackdrop.addEventListener("change", (event) => {
       if (!event.target.matches("[data-safety-confirm]")) return;
       const confirmations = [...modalBackdrop.querySelectorAll("[data-safety-confirm]")];
