@@ -90,7 +90,7 @@ window.tomoniAuth = {
     ? client.rpc("get_admin_reports")
     : Promise.resolve(notConfigured()),
   listAdminReportsDirect: () => client
-    ? client.from("reports").select("*").order("created_at", { ascending: false })
+    ? client.from("reports").select("id,reporter_id,target_user_id,reason,detail,status,source,created_at").order("created_at", { ascending: false })
     : Promise.resolve(notConfigured()),
   listAdminListings: () => client
     ? client.rpc("get_admin_listings")

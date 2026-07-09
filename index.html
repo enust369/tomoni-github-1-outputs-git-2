@@ -2868,10 +2868,10 @@
             <div>
               <span class="badge">${esc(report.reason)}</span>
               <span class="badge ${report.status === "resolved" ? "" : "muted"}">${report.status === "resolved" ? "対応済み" : "未対応"}</span>
-              <p style="margin-top:8px">${esc(report.detail || "詳細なし")}</p>
-              <p class="meta">通報者：${esc(report.reporter_name || "未設定")} / ${esc(report.reporter_email || report.reporter_id || "不明")}</p>
-              <p class="meta">対象：${esc(report.target_name || "未設定")} / ${esc(report.target_email || report.target_user_id || "不明")}</p>
-              <p class="meta">source: ${esc(report.source || "unknown")} / ${esc(adminDate(report.created_at))}</p>
+              <p class="meta" style="margin-top:8px">通報日時：${esc(adminDate(report.created_at))}</p>
+              <p class="meta">通報者：${esc(report.reporter_name || report.reporter_email || report.reporter_id || "不明")}</p>
+              <p class="meta">対象ユーザー：${esc(report.target_name || report.target_email || report.target_user_id || "不明")}</p>
+              <p style="margin-top:8px;white-space:pre-wrap">${esc(report.description || report.detail || "詳細なし")}</p>
             </div>
             ${report.status === "resolved" ? "" : `<button class="btn small primary" data-action="admin-resolve-report" data-id="${esc(report.id)}">対応済みに変更</button>`}
           </div>
@@ -2881,8 +2881,8 @@
 
     async function loadAdminReports() {
       document.getElementById("adminReports").innerHTML = `<div class="empty-state">読み込み中...</div>`;
-      let result = await window.tomoniAuth.listAdminReports();
-      if (result?.error && window.tomoniAuth?.listAdminReportsDirect) result = await window.tomoniAuth.listAdminReportsDirect();
+      let result = await window.tomoniAuth.listAdminReportsDirect();
+      if (result?.error && window.tomoniAuth?.listAdminReports) result = await window.tomoniAuth.listAdminReports();
       if (result?.error) throw result.error;
       adminReports = normalizeAdminList(result.data);
       renderAdminReports();
@@ -2995,7 +2995,6 @@
         } catch (error) {
           const message = adminErrorMessage(error);
           document.getElementById("adminStats").innerHTML = `<article class="card empty-state">${esc(message)}</article>`;
-          document.getElementById("adminReports").innerHTML = `<div class="empty-state">${esc(message)}</div>`;
           document.getElementById("adminContacts").innerHTML = `<div class="empty-state">${esc(message)}</div>`;
           document.getElementById("adminListings").innerHTML = `<div class="empty-state">${esc(message)}</div>`;
           document.getElementById("adminBlocks").innerHTML = `<div class="empty-state">${esc(message)}</div>`;
