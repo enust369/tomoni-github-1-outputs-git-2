@@ -2838,6 +2838,14 @@
       `).join("") : `<div class="empty-state">該当するユーザーはいません。</div>`;
     }
 
+    async function loadAdminUsers(searchTerm = "") {
+      document.getElementById("adminUsers").innerHTML = `<div class="empty-state">読み込み中...</div>`;
+      const result = await window.tomoniAuth.listAdminUsers(searchTerm);
+      if (result?.error) throw result.error;
+      adminUsers = normalizeAdminList(result.data);
+      renderAdminUsers();
+    }
+
     function renderAdminReports() {
       document.getElementById("adminReports").innerHTML = adminReports.length ? adminReports.map((report) => `
         <article class="notice">
@@ -2931,37 +2939,46 @@
         const searchInput = document.getElementById("adminUserSearch");
         if (searchOverride !== undefined && searchInput) searchInput.value = searchOverride;
         const searchTerm = searchOverride !== undefined ? searchOverride : (searchInput?.value || "");
-        const [summaryResult, usersResult, reportsResult, contactsResult, listingsResult, blocksResult] = await Promise.all([
-          window.tomoniAuth.getAdminSummary(),
-          window.tomoniAuth.listAdminUsers(searchTerm),
-          window.tomoniAuth.listAdminReports(),
-          window.tomoniAuth.listAdminContacts(),
-          window.tomoniAuth.listAdminListings(),
-          window.tomoniAuth.listAdminBlocks()
-        ]);
-        const rpcError = summaryResult?.error || usersResult?.error || reportsResult?.error || contactsResult?.error || listingsResult?.error || blocksResult?.error;
-        if (rpcError) throw rpcError;
+        await loadAdminUsers(searchTerm);
 
-        const summary = typeof summaryResult.data === "string" ? JSON.parse(summaryResult.data) : (summaryResult.data || {});
-        adminUsers = normalizeAdminList(usersResult.data);
-        adminReports = normalizeAdminList(reportsResult.data);
-        adminContacts = normalizeAdminList(contactsResult.data);
-        adminListings = normalizeAdminList(listingsResult.data);
-        adminBlocks = normalizeAdminList(blocksResult.data);
-        document.getElementById("adminStats").innerHTML = [
-          ["総ユーザー数", summary.users_count],
-          ["本人確認済み人数", summary.verified_users_count],
-          ["今日の募集数", summary.today_listings_count],
-          ["現在のマッチ数", summary.matches_count],
-          ["今日のチャット件数", summary.today_chat_messages_count],
-          ["通報件数", summary.reports_count],
-          ["ブロック件数", summary.blocks_count]
-        ].map(([label, value]) => `<article class="card assurance-card"><strong>${esc(value ?? 0)}</strong><span class="meta">${esc(label)}</span></article>`).join("");
-        renderAdminUsers();
-        renderAdminReports();
-        renderAdminContacts();
-        renderAdminListings();
-        renderAdminBlocks();
+        try {
+          const [summaryResult, reportsResult, contactsResult, listingsResult, blocksResult] = await Promise.all([
+            window.tomoniAuth.getAdminSummary(),
+            window.tomoniAuth.listAdminReports(),
+            window.tomoniAuth.listAdminContacts(),
+            window.tomoniAuth.listAdminListings(),
+            window.tomoniAuth.listAdminBlocks()
+          ]);
+          const rpcError = summaryResult?.error || reportsResult?.error || contactsResult?.error || listingsResult?.error || blocksResult?.error;
+          if (rpcError) throw rpcError;
+
+          const summary = typeof summaryResult.data === "string" ? JSON.parse(summaryResult.data) : (summaryResult.data || {});
+          adminReports = normalizeAdminList(reportsResult.data);
+          adminContacts = normalizeAdminList(contactsResult.data);
+          adminListings = normalizeAdminList(listingsResult.data);
+          adminBlocks = normalizeAdminList(blocksResult.data);
+          document.getElementById("adminStats").innerHTML = [
+            ["総ユーザー数", summary.users_count],
+            ["本人確認済み人数", summary.verified_users_count],
+            ["今日の募集数", summary.today_listings_count],
+            ["現在のマッチ数", summary.matches_count],
+            ["今日のチャット件数", summary.today_chat_messages_count],
+            ["通報件数", summary.reports_count],
+            ["ブロック件数", summary.blocks_count]
+          ].map(([label, value]) => `<article class="card assurance-card"><strong>${esc(value ?? 0)}</strong><span class="meta">${esc(label)}</span></article>`).join("");
+          renderAdminReports();
+          renderAdminContacts();
+          renderAdminListings();
+          renderAdminBlocks();
+        } catch (error) {
+          const message = adminErrorMessage(error);
+          document.getElementById("adminStats").innerHTML = `<article class="card empty-state">${esc(message)}</article>`;
+          document.getElementById("adminReports").innerHTML = `<div class="empty-state">${esc(message)}</div>`;
+          document.getElementById("adminContacts").innerHTML = `<div class="empty-state">${esc(message)}</div>`;
+          document.getElementById("adminListings").innerHTML = `<div class="empty-state">${esc(message)}</div>`;
+          document.getElementById("adminBlocks").innerHTML = `<div class="empty-state">${esc(message)}</div>`;
+          toast(message);
+        }
       } catch (error) {
         const message = adminErrorMessage(error);
         setAdminError(message);
@@ -3820,7 +3837,13 @@
     document.getElementById("adminUserSearch")?.addEventListener("input", () => {
       if (!isAdminUser()) return;
       clearTimeout(adminSearchTimer);
-      adminSearchTimer = setTimeout(() => renderAdmin(document.getElementById("adminUserSearch")?.value || ""), 350);
+      adminSearchTimer = setTimeout(async () => {
+        try {
+          await loadAdminUsers(document.getElementById("adminUserSearch")?.value || "");
+        } catch (error) {
+          document.getElementById("adminUsers").innerHTML = `<div class="empty-state">${esc(adminErrorMessage(error))}</div>`;
+        }
+      }, 350);
     });
     modalBackdrop.addEventListener("change", (event) => {
       if (!event.target.matches("[data-safety-confirm]")) return;
