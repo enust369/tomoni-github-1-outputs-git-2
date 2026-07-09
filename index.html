@@ -1918,6 +1918,7 @@
     let adminListings = [];
     let adminBlocks = [];
     let adminSearchTimer = null;
+    let adminUsersLoaded = false;
     let safetyGateActive = false;
     const storageKey = "tomoni-public-preview-v1";
     const defaultState = { user: null, profileOwnerId: null, safetyOnboardingAccepted: false, saved: [], blocked: [], customListings: [], demoParticipations: [], moderation: { reports: [], blockCount: 0 }, feedbackHistory: [], profile: { nickname: "あなた", age: "30代", gender: "女性", area: "", bio: "静かな時間を大切にしています。", tags: [], photoUrls: [], personalityType: "", personalityTitle: "", personalityDescription: "", personalityTags: [], quietScore: null, talkScore: null, comfortScore: null } };
@@ -2835,7 +2836,7 @@
             </div>
           </div>
         </article>
-      `).join("") : `<div class="empty-state">該当するユーザーはいません。</div>`;
+      `).join("") : `<div class="empty-state">ユーザーはいません</div>`;
     }
 
     async function loadAdminUsers(searchTerm = "") {
@@ -2843,7 +2844,21 @@
       const result = await window.tomoniAuth.listAdminUsers(searchTerm);
       if (result?.error) throw result.error;
       adminUsers = normalizeAdminList(result.data);
+      adminUsersLoaded = true;
       renderAdminUsers();
+    }
+
+    async function ensureAdminUsersInitialLoad() {
+      if (!isAdminUser()) return;
+      const searchInput = document.getElementById("adminUserSearch");
+      if (searchInput?.value.trim()) return;
+      const currentText = document.getElementById("adminUsers")?.textContent || "";
+      if (adminUsersLoaded && !currentText.includes("まだ読み込まれていません")) return;
+      try {
+        await loadAdminUsers("");
+      } catch (error) {
+        document.getElementById("adminUsers").innerHTML = `<div class="empty-state">${esc(adminErrorMessage(error))}</div>`;
+      }
     }
 
     function renderAdminReports() {
@@ -3879,6 +3894,7 @@
     const observer = new IntersectionObserver((entries) => {
       entries.forEach((entry) => {
         if (entry.isIntersecting) entry.target.classList.add("is-visible");
+        if (entry.isIntersecting && entry.target.id === "admin") ensureAdminUsersInitialLoad();
       });
       const visible = entries.filter((entry) => entry.isIntersecting).sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0];
       if (!visible) return;
