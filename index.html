@@ -2909,7 +2909,7 @@
       `).join("") : `<div class="empty-state">ブロックはありません。</div>`;
     }
 
-    async function renderAdmin() {
+    async function renderAdmin(searchOverride) {
       jumpTo("admin");
       setAdminLoading();
       try {
@@ -2928,7 +2928,9 @@
           return;
         }
 
-        const searchTerm = document.getElementById("adminUserSearch")?.value || "";
+        const searchInput = document.getElementById("adminUserSearch");
+        if (searchOverride !== undefined && searchInput) searchInput.value = searchOverride;
+        const searchTerm = searchOverride !== undefined ? searchOverride : (searchInput?.value || "");
         const [summaryResult, usersResult, reportsResult, contactsResult, listingsResult, blocksResult] = await Promise.all([
           window.tomoniAuth.getAdminSummary(),
           window.tomoniAuth.listAdminUsers(searchTerm),
@@ -3624,7 +3626,7 @@
       if (action === "show-favorites") { if (!appState.user) openModal("ログイン", authMarkup("login")); else { jumpTo("account"); renderFavorites(); } }
       if (action === "show-matches") { if (!appState.user) openModal("ログイン", authMarkup("login")); else { await loadMatches(); jumpTo("account"); renderMatches(); } }
       if (action === "show-blocks") { if (!appState.user) openModal("ログイン", authMarkup("login")); else { await loadBlocks(); jumpTo("account"); renderBlocks(); } }
-      if (action === "open-admin") await renderAdmin();
+      if (action === "open-admin") await renderAdmin("");
       if (action === "admin-resolve-report") {
         setLoading(true);
         const result = await window.tomoniAuth?.resolveAdminReport?.(button.dataset.id);
@@ -3818,7 +3820,7 @@
     document.getElementById("adminUserSearch")?.addEventListener("input", () => {
       if (!isAdminUser()) return;
       clearTimeout(adminSearchTimer);
-      adminSearchTimer = setTimeout(renderAdmin, 350);
+      adminSearchTimer = setTimeout(() => renderAdmin(document.getElementById("adminUserSearch")?.value || ""), 350);
     });
     modalBackdrop.addEventListener("change", (event) => {
       if (!event.target.matches("[data-safety-confirm]")) return;
@@ -3829,7 +3831,7 @@
     window.addEventListener("hashchange", () => {
       const id = location.hash.slice(1);
       if (!id) return;
-      if (id === "admin") { renderAdmin(); return; }
+      if (id === "admin") { renderAdmin(""); return; }
       jumpTo(document.getElementById(id) ? id : "not-found");
     });
     window.addEventListener("unhandledrejection", () => jumpTo("error"));
@@ -3876,7 +3878,7 @@
     renderListings();
     renderRegionalProfiles();
     updateDiagnosis(false);
-    if (location.hash === "#admin" || location.pathname.endsWith("/admin")) setTimeout(renderAdmin, 250);
+    if (location.hash === "#admin" || location.pathname.endsWith("/admin")) setTimeout(() => renderAdmin(""), 250);
     if (!appState.safetyOnboardingAccepted) setTimeout(openSafetyOnboarding, 180);
   </script>
 </body>
