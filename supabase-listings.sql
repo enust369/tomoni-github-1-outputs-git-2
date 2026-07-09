@@ -443,7 +443,10 @@ stable
 security definer
 set search_path = public
 as $$
-  select coalesce(auth.jwt() ->> 'email', '') = 'iriehair@yahoo.co.jp';
+  select coalesce(auth.jwt() ->> 'email', '') in (
+    'iriehair@yahoo.co.jp',
+    'tsunehito1979@hotmail.co.jp'
+  );
 $$;
 
 revoke all on function public.is_admin() from public, anon;

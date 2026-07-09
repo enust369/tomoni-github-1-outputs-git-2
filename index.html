@@ -1908,7 +1908,8 @@
     let profilesByUserId = new Map();
     let blockRecords = [];
     let blockedUserIds = new Set();
-    const adminEmail = "iriehair@yahoo.co.jp";
+    const adminEmails = ["iriehair@yahoo.co.jp", "tsunehito1979@hotmail.co.jp"];
+    const isAdminUser = () => Boolean(appState.user?.email && adminEmails.includes(appState.user.email));
     let adminUsers = [];
     let adminReports = [];
     let adminListings = [];
@@ -2605,7 +2606,7 @@
       const profileComplete = Boolean(appState.user && appState.profileOwnerId === appState.user.id);
       button.textContent = appState.user ? (profileComplete ? `${appState.profile.nickname}さん` : "プロフィール作成") : "登録・ログイン";
       button.dataset.action = appState.user ? "open-account" : "open-auth";
-      document.getElementById("adminMenuButton").hidden = appState.user?.email !== adminEmail;
+      document.getElementById("adminMenuButton").hidden = !isAdminUser();
       document.getElementById("profileDisplayName").textContent = appState.profile.nickname;
       document.getElementById("profileDisplayMeta").textContent = `${appState.profile.age} / 今日の気分：穏やか`;
       document.getElementById("profileArea").textContent = `居住エリア：${appState.profile.area || "未設定"}`;
@@ -2899,7 +2900,7 @@
         appState.user = user ? { id: user.id, email: user.email, verified: Boolean(user.email_confirmed_at) } : null;
         updateAccountUI();
 
-        if (appState.user?.email !== adminEmail) {
+        if (!isAdminUser()) {
           setAdminDenied();
           return;
         }
@@ -3753,7 +3754,7 @@
     modalBackdrop.addEventListener("click", (event) => { if (event.target === modalBackdrop) closeModal(); });
     document.addEventListener("keydown", (event) => { if (event.key === "Escape" && modalBackdrop.classList.contains("open")) closeModal(); });
     document.getElementById("adminUserSearch")?.addEventListener("input", () => {
-      if (appState.user?.email !== adminEmail) return;
+      if (!isAdminUser()) return;
       clearTimeout(adminSearchTimer);
       adminSearchTimer = setTimeout(renderAdmin, 350);
     });
