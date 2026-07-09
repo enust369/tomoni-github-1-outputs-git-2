@@ -2221,7 +2221,7 @@
     function rankListings() {
       const profile = buildComfortProfile();
       latestRankedListings = listings
-        .filter((item) => (item.audience === "anyone" || item.gender === currentGender) && item.availableToday && !blockedUserIds.has(item.ownerId))
+        .filter((item) => (item.audience === "anyone" || item.gender === currentGender) && item.availableToday)
         .map((item) => ({ ...item, comfortScore: listingScore(item, profile) }))
         .sort((a, b) => b.comfortScore - a.comfortScore);
       return latestRankedListings;
@@ -3848,7 +3848,7 @@
         const result = await window.tomoniAuth?.createBlock?.({ blocker_id: appState.user.id, blocked_user_id: button.dataset.userId, reason: "user_block" });
         setLoading(false);
         if (result?.error) { toast(`ブロックできませんでした：${result.error.message}`); return; }
-        appState.blocked = [...new Set([...appState.blocked, button.dataset.person])]; appState.moderation.blockCount += 1; saveState(); closeModal(); await loadBlocks(); renderListings(); renderRegionalProfiles(); renderRecommendations(); toast("ブロックしました。検索・募集・おすすめには表示されません。");
+        appState.blocked = [...new Set([...appState.blocked, button.dataset.person])]; appState.moderation.blockCount += 1; saveState(); closeModal(); await loadBlocks(); renderListings(); renderRegionalProfiles(); renderRecommendations(); toast("ブロックしました。応募とチャット送信が制限されます。");
       }
       if (action === "unblock-user") {
         setLoading(true);
