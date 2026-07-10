@@ -25,6 +25,9 @@ window.tomoniAuth = {
   getUser: () => client
     ? client.auth.getUser()
     : Promise.resolve(notConfigured()),
+  getSession: () => client
+    ? client.auth.getSession()
+    : Promise.resolve(notConfigured()),
   resetPassword: (email) => client
     ? client.auth.resetPasswordForEmail(email, { redirectTo: window.location.href.split("#")[0] })
     : Promise.resolve(notConfigured()),
