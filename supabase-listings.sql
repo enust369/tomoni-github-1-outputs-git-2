@@ -3,7 +3,7 @@ create table if not exists public.listings (
   owner_id uuid not null references auth.users(id) on delete cascade,
   person_name text not null check (char_length(person_name) between 1 and 20),
   owner_gender text not null check (owner_gender in ('女性', '男性')),
-  title text not null check (char_length(title) between 1 and 60),
+  title text check (title is null or char_length(title) between 1 and 60),
   activity text not null,
   duration text,
   prefecture text,
@@ -20,6 +20,20 @@ alter table public.listings add column if not exists status text not null defaul
 alter table public.listings add column if not exists duration text;
 alter table public.listings add column if not exists prefecture text;
 alter table public.listings add column if not exists city text;
+alter table public.listings alter column title drop not null;
+
+do $$
+begin
+  if exists (select 1 from pg_constraint where conname = 'listings_title_check' and conrelid = 'public.listings'::regclass) then
+    alter table public.listings drop constraint listings_title_check;
+  end if;
+  alter table public.listings
+  add constraint listings_title_check
+  check (title is null or char_length(title) between 1 and 60);
+exception
+  when duplicate_object then null;
+end;
+$$;
 
 do $$
 begin

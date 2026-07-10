@@ -1378,7 +1378,7 @@
           <form class="card form" id="createForm" novalidate>
             <div class="field full">
               <label for="listingTitle">タイトル</label>
-              <input id="listingTitle" maxlength="60" placeholder="例：夕方の公園をゆっくり散歩" required><span class="field-error"></span>
+              <input id="listingTitle" maxlength="60" placeholder="例：高知城をゆっくり歩きませんか？ / 海沿いをのんびり走りたいです / 短い時間だけお話ししませんか？"><span class="field-error"></span>
             </div>
             <div class="field full">
               <label for="activity">過ごし方</label>
@@ -2188,7 +2188,7 @@
       }
       activitySelect.value = parsed.activity;
       if (parsed.duration && [...durationSelect.options].some((option) => option.value === parsed.duration)) durationSelect.value = parsed.duration;
-      if (!document.getElementById("listingTitle").value) document.getElementById("listingTitle").value = parsed.activity;
+      document.getElementById("listingTitle").value = "";
       jumpTo("create");
     }
 
@@ -2443,7 +2443,7 @@
                 <div class="chips">${(item.personalityTags || []).slice(0, 5).map((tag) => `<span class="badge muted">${esc(tag)}</span>`).join("") || `<span class="meta">診断タグはまだありません。</span>`}</div>
               </div>
             </div>
-            <p style="margin-top:10px">${esc(activityDisplay(item))}</p>
+            ${item.title ? `<p style="margin-top:10px">${esc(activityDisplay(item))}</p>` : ""}
             <div class="listing-summary">
               <div><small>安心の目安</small>${comfortDots()}</div>
               <div><small>話す量</small>${item.talk === "自然に話せたらいい" ? "自然でOK" : esc(item.talk)}</div>
@@ -2495,7 +2495,7 @@
         id: row.id,
         person: profile.nickname || row.person_name,
         gender: row.owner_gender,
-        title: row.title,
+        title: row.title || "",
         activity: parsedActivity.activity,
         duration: parsedActivity.duration,
         prefecture: row.prefecture || "",
@@ -2513,7 +2513,7 @@
         profilePhoto: profile.photo_urls?.[0] || "",
         personalityTitle: profile.personality_title || "",
         personalityTags: profile.personality_tags || [],
-        note: row.title,
+        note: row.title || "",
         air: selectedValues("air"),
         traits: selectedValues("withPerson"),
         pace: selectedValues("style")[0] === "軽く体を動かす" ? "active" : "slow",
@@ -2609,7 +2609,7 @@
         owner_id: appState.user.id,
         person_name: appState.profile.nickname,
         owner_gender: appState.profile.gender,
-        title: document.getElementById("listingTitle").value.trim(),
+        title: document.getElementById("listingTitle").value.trim() || null,
         activity: document.getElementById("activity").value,
         duration: document.getElementById("duration").value,
         prefecture: document.getElementById("listingPrefecture").value,
@@ -3329,7 +3329,7 @@
       }
       currentDetailListingId = item.id;
       document.getElementById("detailTitle").innerHTML = `${esc(item.title || activityDisplay(item))}<br><span class="meta">${esc(item.person)}さんの募集</span>`;
-      document.getElementById("detailCopy").textContent = `過ごし方：${activityDisplay(item)}。${item.note || ""}`;
+      document.getElementById("detailCopy").textContent = item.title ? `過ごし方：${activityDisplay(item)}` : (item.note || "募集内容を確認して、無理のない範囲で参加申請してください。");
       updateDetailParticipationUI(item);
       updateDetailFavoriteUI(item);
       document.getElementById("listingRequestsPanel").hidden = !item.owner;
@@ -3984,7 +3984,7 @@
       if (action === "edit-listing") {
         const item = listings.find((listing) => listing.id === button.dataset.id); if (!item) return;
         editingListingId = item.id;
-        document.getElementById("listingTitle").value = item.title || activityDisplay(item);
+        document.getElementById("listingTitle").value = item.title || "";
         if (![...document.getElementById("activity").options].some((option) => option.value === item.activity)) {
           document.getElementById("activity").insertAdjacentHTML("beforeend", `<option value="${esc(item.activity)}">${esc(item.activity)}</option>`);
         }
