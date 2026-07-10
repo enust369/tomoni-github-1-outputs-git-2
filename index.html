@@ -2448,6 +2448,8 @@
         const showActivityLine = item.title && !isSameListingLabel(item.title, listingLabel);
         const dateLabel = item.scheduledAt ? esc(new Date(item.scheduledAt).toLocaleString("ja-JP", { month: "numeric", day: "numeric", hour: "2-digit", minute: "2-digit" })) : "今日会えます";
         const placeLabel = `${item.prefecture ? `${esc(item.prefecture)}・` : ""}${item.city ? `${esc(item.city)}・` : ""}${esc(item.place)}・徒歩${item.distance}分`;
+        const noteText = item.note || "無理のない範囲で、一緒に穏やかな時間を過ごしましょう。";
+        const showNote = noteText && !isSameListingLabel(noteText, title) && !isSameListingLabel(noteText, listingLabel);
         const actionButtons = item.owner
           ? `<button class="btn small primary" data-action="open-detail" data-id="${item.id}">詳しく見る</button>${participationButton(item, "btn small")}<button class="btn small" data-action="edit-listing" data-id="${item.id}">編集</button>`
           : `${participationButton(item, "btn small primary")}<button class="btn small" data-action="open-detail" data-id="${item.id}">詳しく見る</button>${favoriteButton(item)}<button class="btn small quiet-action" data-action="decline">今日は難しい</button><button class="btn small quiet-action" data-action="report" data-person="${esc(item.person)}" data-source="listing" data-id="${item.id}" data-user-id="${esc(item.ownerId || "")}">通報</button>`;
@@ -2477,7 +2479,7 @@
                   <span class="badge">${item.verified ? "本人確認済み" : "本人確認欄あり"}</span>
                 </div>
                 <h4>${esc(item.personalityTitle || "自然体で過ごせる人")}</h4>
-                <div class="chips">${(item.personalityTags || []).slice(0, 5).map((tag) => `<span class="badge muted">${esc(tag)}</span>`).join("") || `<span class="meta">診断タグはまだありません。</span>`}</div>
+                <div class="chips">${(item.personalityTags || []).slice(0, 3).map((tag) => `<span class="badge muted">${esc(tag)}</span>`).join("") || `<span class="meta">診断タグはまだありません。</span>`}</div>
               </div>
             </div>
             <div class="listing-summary">
@@ -2485,7 +2487,7 @@
               <div><small>話す量</small>${item.talk === "自然に話せたらいい" ? "自然でOK" : esc(item.talk)}</div>
               <div><small>空気感</small>${esc(item.air[0].replace("な空気", ""))}</div>
             </div>
-            <p class="clamp" style="margin-top:12px">${esc(item.note || "無理のない範囲で、一緒に穏やかな時間を過ごしましょう。")}</p>
+            ${showNote ? `<p class="clamp" style="margin-top:12px">${esc(noteText)}</p>` : ""}
           </div>
           <div class="actions listing-actions">
             ${actionButtons}
