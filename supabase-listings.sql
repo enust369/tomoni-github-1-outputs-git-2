@@ -5,6 +5,7 @@ create table if not exists public.listings (
   owner_gender text not null check (owner_gender in ('女性', '男性')),
   title text not null check (char_length(title) between 1 and 60),
   activity text not null,
+  prefecture text,
   place text not null check (char_length(place) between 1 and 100),
   scheduled_at timestamptz not null,
   capacity smallint not null check (capacity between 1 and 5),
@@ -14,6 +15,7 @@ create table if not exists public.listings (
 );
 
 alter table public.listings add column if not exists status text not null default 'open';
+alter table public.listings add column if not exists prefecture text;
 
 do $$
 begin

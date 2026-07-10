@@ -1391,6 +1391,20 @@
               </select>
             </div>
             <div class="field">
+              <label for="prefecture">都道府県</label>
+              <select id="prefecture" required>
+                <option value="">選択してください</option>
+                <option>北海道</option><option>青森県</option><option>岩手県</option><option>宮城県</option><option>秋田県</option><option>山形県</option><option>福島県</option>
+                <option>茨城県</option><option>栃木県</option><option>群馬県</option><option>埼玉県</option><option>千葉県</option><option selected>東京都</option><option>神奈川県</option>
+                <option>新潟県</option><option>富山県</option><option>石川県</option><option>福井県</option><option>山梨県</option><option>長野県</option>
+                <option>岐阜県</option><option>静岡県</option><option>愛知県</option><option>三重県</option>
+                <option>滋賀県</option><option>京都府</option><option>大阪府</option><option>兵庫県</option><option>奈良県</option><option>和歌山県</option>
+                <option>鳥取県</option><option>島根県</option><option>岡山県</option><option>広島県</option><option>山口県</option>
+                <option>徳島県</option><option>香川県</option><option>愛媛県</option><option>高知県</option>
+                <option>福岡県</option><option>佐賀県</option><option>長崎県</option><option>熊本県</option><option>大分県</option><option>宮崎県</option><option>鹿児島県</option><option>沖縄県</option>
+              </select><span class="field-error"></span>
+            </div>
+            <div class="field">
               <label for="place">場所</label>
               <input id="place" value="新宿御苑の入口近く" required><span class="field-error"></span>
             </div>
@@ -2311,7 +2325,7 @@
             </div>
             <h3 style="margin-top:12px">${esc(item.title || item.activity)}</h3>
             <p class="meta">${esc(item.person)}さん</p>
-            <p class="meta">徒歩${item.distance}分 / ${esc(item.place)}</p>
+            <p class="meta">徒歩${item.distance}分 / ${item.prefecture ? `${esc(item.prefecture)} / ` : ""}${esc(item.place)}</p>
             <div class="listing-profile">
               ${item.profilePhoto ? `<img class="listing-avatar" src="${esc(item.profilePhoto)}" alt="${esc(item.person)}さんのプロフィール写真">` : `<div class="listing-avatar fallback" aria-label="${esc(item.person)}さんの頭文字">${esc((item.person || "と").slice(0, 1))}</div>`}
               <div>
@@ -2378,6 +2392,7 @@
         title: row.title,
         activity: row.activity,
         duration: "",
+        prefecture: row.prefecture || "",
         place: row.place,
         talk: "自然に話せたらいい",
         scheduledAt: row.scheduled_at,
@@ -2489,6 +2504,7 @@
         owner_gender: appState.profile.gender,
         title: document.getElementById("listingTitle").value.trim(),
         activity: document.getElementById("activity").value,
+        prefecture: document.getElementById("prefecture").value,
         place: document.getElementById("place").value.trim(),
         scheduled_at: new Date(document.getElementById("date").value).toISOString(),
         capacity: Number(document.getElementById("capacity").value),
@@ -2505,6 +2521,7 @@
       syncGenderControls();
       await loadSupabaseListings();
       document.getElementById("createForm").reset();
+      document.getElementById("prefecture").value = "東京都";
       setDefaultListingDate();
       jumpTo("listings");
     }
@@ -2741,7 +2758,7 @@
 
     function renderFavorites() {
       const favorites = listings.filter((item) => isFavorite(item));
-      document.getElementById("accountContent").innerHTML = favorites.length ? favorites.map((item) => `<article class="card managed-listing"><div><span class="badge">気になる</span><h3 style="margin-top:10px">${esc(item.activity)}</h3><p class="meta">${esc(item.person)}さん / ${esc(item.place)}</p><p class="meta">${esc(item.personalityTitle || "自然体で過ごせる人")}</p></div><div class="actions"><button class="btn small" data-action="open-detail" data-id="${item.id}">詳しく見る</button><button class="btn small quiet-action" data-action="toggle-favorite" data-id="${item.id}">気になるを解除</button></div></article>`).join("") : `<article class="card empty-state">気になる相手はまだありません。</article>`;
+      document.getElementById("accountContent").innerHTML = favorites.length ? favorites.map((item) => `<article class="card managed-listing"><div><span class="badge">気になる</span><h3 style="margin-top:10px">${esc(item.activity)}</h3><p class="meta">${esc(item.person)}さん / ${item.prefecture ? `${esc(item.prefecture)} / ` : ""}${esc(item.place)}</p><p class="meta">${esc(item.personalityTitle || "自然体で過ごせる人")}</p></div><div class="actions"><button class="btn small" data-action="open-detail" data-id="${item.id}">詳しく見る</button><button class="btn small quiet-action" data-action="toggle-favorite" data-id="${item.id}">気になるを解除</button></div></article>`).join("") : `<article class="card empty-state">気になる相手はまだありません。</article>`;
       bindJumpButtons(document.getElementById("accountContent"));
     }
 
@@ -2751,7 +2768,7 @@
         const item = listings.find((listing) => listing.ownerId === partnerId);
         const profile = profilesByUserId.get(partnerId) || {};
         const person = item?.person || profile.nickname || "相手";
-        const title = item ? `${item.activity} / ${item.place}` : "募集がない相手";
+        const title = item ? `${item.activity} / ${item.prefecture ? `${item.prefecture} / ` : ""}${item.place}` : "募集がない相手";
         return `<article class="card managed-listing"><div><span class="badge">マッチしました</span><h3 style="margin-top:10px">${esc(person)}さん</h3><p class="meta">${esc(title)}</p><p class="meta">${esc(item?.personalityTitle || profile.personality_title || "自然体で過ごせる人")}</p></div><div class="actions"><button class="btn small primary" data-action="open-match-chat" data-match-id="${esc(match.id)}" data-user-id="${esc(partnerId)}" data-person="${esc(person)}">チャットする</button>${item ? `<button class="btn small" data-action="open-detail" data-id="${item.id}">募集を見る</button>` : ""}</div></article>`;
       }).join("") : `<article class="card empty-state">まだマッチはありません。お互いに「気になる」になると、ここに表示されます。</article>`;
       bindJumpButtons(document.getElementById("accountContent"));
@@ -2767,7 +2784,7 @@
 
     function renderManaged() {
       const own = appState.customListings;
-      document.getElementById("accountContent").innerHTML = own.length ? own.map((item) => `<article class="card managed-listing"><div><span class="badge">公開中</span><h3 style="margin-top:10px">${esc(item.title || item.activity)}</h3><p class="meta">${esc(item.place)} / ${item.capacity}人募集</p></div><div class="actions"><button class="btn small primary" data-action="open-detail" data-id="${item.id}">詳細・チャット</button><button class="btn small" data-action="edit-listing" data-id="${item.id}">編集</button><button class="btn small quiet-action" data-action="delete-listing" data-id="${item.id}">削除</button></div></article>`).join("") : `<article class="card empty-state">作成した募集はまだありません。</article>`;
+      document.getElementById("accountContent").innerHTML = own.length ? own.map((item) => `<article class="card managed-listing"><div><span class="badge">公開中</span><h3 style="margin-top:10px">${esc(item.title || item.activity)}</h3><p class="meta">${item.prefecture ? `${esc(item.prefecture)} / ` : ""}${esc(item.place)} / ${item.capacity}人募集</p></div><div class="actions"><button class="btn small primary" data-action="open-detail" data-id="${item.id}">詳細・チャット</button><button class="btn small" data-action="edit-listing" data-id="${item.id}">編集</button><button class="btn small quiet-action" data-action="delete-listing" data-id="${item.id}">削除</button></div></article>`).join("") : `<article class="card empty-state">作成した募集はまだありません。</article>`;
     }
 
     function adminDate(value) {
@@ -3168,7 +3185,7 @@
       const statusElement = document.getElementById("participationStatus");
       statusElement.textContent = item.owner ? "参加申請を確認できます。" : status === "pending" ? "参加申請を送りました。募集主の確認をお待ちください。" : approved ? "承認されました。チャットを利用できます。" : status === "declined" ? "今回は見送られました。" : full ? "この募集は満員です。" : item.isDemo ? "動作確認用のサンプル募集です。" : "申請が承認されると、参加人数に反映されます。";
       statusElement.classList.toggle("caution", status === "declined" || (full && !approved));
-      document.getElementById("detailBadges").innerHTML = `<span class="badge">${item.verified ? "本人確認済み" : "本人確認欄あり"}</span>${isMatched(item) ? `<span class="badge">マッチ済み</span>` : ""}<span class="badge muted">${esc(item.place)}</span><span class="badge muted">${item.participantCount}/${item.capacity}人</span><span class="badge muted">${item.audience === "same_gender" ? "同性のみ" : "誰でも"}</span>`;
+      document.getElementById("detailBadges").innerHTML = `<span class="badge">${item.verified ? "本人確認済み" : "本人確認欄あり"}</span>${isMatched(item) ? `<span class="badge">マッチ済み</span>` : ""}${item.prefecture ? `<span class="badge muted">${esc(item.prefecture)}</span>` : ""}<span class="badge muted">${esc(item.place)}</span><span class="badge muted">${item.participantCount}/${item.capacity}人</span><span class="badge muted">${item.audience === "same_gender" ? "同性のみ" : "誰でも"}</span>`;
     }
 
     function updateDetailFavoriteUI(item) {
@@ -3859,6 +3876,7 @@
         editingListingId = item.id;
         document.getElementById("listingTitle").value = item.title || item.activity;
         document.getElementById("activity").value = [...document.getElementById("activity").options].some((option) => option.value === item.activity) ? item.activity : "何もしない 15分";
+        document.getElementById("prefecture").value = item.prefecture || "東京都";
         document.getElementById("place").value = item.place;
         document.getElementById("date").value = new Date(new Date(item.scheduledAt).getTime() - new Date(item.scheduledAt).getTimezoneOffset() * 60000).toISOString().slice(0, 16);
         document.getElementById("capacity").value = String(item.capacity);
