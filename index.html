@@ -2880,22 +2880,7 @@
 
     async function loadAdminReports() {
       document.getElementById("adminReports").innerHTML = `<div class="empty-state">読み込み中...</div>`;
-      const sessionDebugResult = await window.tomoniAuth?.getSession?.();
-      const userDebugResult = await window.tomoniAuth?.getUser?.();
-      console.log("tomoni admin reports auth debug", {
-        current_app_user_email: appState.user?.email || null,
-        session_result: sessionDebugResult,
-        session_user_email: sessionDebugResult?.data?.session?.user?.email || null,
-        user_result: userDebugResult,
-        user_email: userDebugResult?.data?.user?.email || null
-      });
       let result = await window.tomoniAuth.listAdminReports();
-      console.log("tomoni admin reports rpc debug", {
-        rpc_name: "get_admin_reports",
-        error: result?.error || null,
-        data_count: Array.isArray(result?.data) ? result.data.length : null,
-        raw_result: result
-      });
       if (result?.error && window.tomoniAuth?.listAdminReportsDirect) result = await window.tomoniAuth.listAdminReportsDirect();
       if (result?.error) throw result.error;
       adminReports = normalizeAdminList(result.data);
