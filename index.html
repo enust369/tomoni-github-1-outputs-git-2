@@ -2445,7 +2445,6 @@
       }
       const result = await window.tomoniAuth?.listMatches?.();
       if (result?.error) { toast(`マッチ一覧を読み込めませんでした：${result.error.message}`); return false; }
-      console.log("tomoni matches result", { current_user_id: appState.user.id, result });
       matchRecords = (result?.data || []).filter((match) => {
         const partnerId = match.user1_id === appState.user.id ? match.user2_id : match.user1_id;
         return !blockedUserIds.has(partnerId);
