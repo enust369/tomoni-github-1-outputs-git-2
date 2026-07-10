@@ -1382,13 +1382,11 @@
             </div>
             <div class="field full">
               <label for="activity">過ごし方</label>
-              <select id="activity" required>
-                <option>何もしない 15分</option>
-                <option selected>静かな散歩 20分</option>
-                <option>ベンチでのんびり 10分</option>
-                <option>漫画の話 30分</option>
-                <option>公園掃除 20分</option>
-              </select>
+              <select id="activity" required></select>
+            </div>
+            <div class="field">
+              <label for="duration">過ごす時間</label>
+              <select id="duration" required></select>
             </div>
             <div class="field">
               <label for="listingPrefecture">都道府県</label>
@@ -1780,7 +1778,7 @@
       {
         person: "ゆう",
         gender: "女性",
-        activity: "静かな散歩 20分",
+        activity: "静かな散歩",
         duration: "20分",
         place: "新宿御苑の入口近く",
         talk: "自然に話せたらいい",
@@ -1798,7 +1796,7 @@
       {
         person: "まこと",
         gender: "女性",
-        activity: "何もしない 15分",
+        activity: "何もしない",
         duration: "15分",
         place: "代々木公園のベンチ",
         talk: "話さなくても大丈夫",
@@ -1816,7 +1814,7 @@
       {
         person: "あい",
         gender: "女性",
-        activity: "ベンチでのんびり 10分",
+        activity: "ベンチでのんびり",
         duration: "10分",
         place: "近所の公園",
         talk: "話さなくても大丈夫",
@@ -1834,7 +1832,7 @@
       {
         person: "そう",
         gender: "男性",
-        activity: "小説の話 30分",
+        activity: "小説の話",
         duration: "30分",
         place: "駅前の静かなカフェ",
         talk: "たくさん話したい",
@@ -1852,7 +1850,7 @@
       {
         person: "はる",
         gender: "男性",
-        activity: "街歩き 20分",
+        activity: "街歩き",
         duration: "20分",
         place: "駅前の商店街",
         talk: "自然に話せたらいい",
@@ -1870,7 +1868,7 @@
       {
         person: "けん",
         gender: "男性",
-        activity: "キャッチボール 20分",
+        activity: "キャッチボール",
         duration: "20分",
         place: "区立公園の広場",
         talk: "自然に話せたらいい",
@@ -1985,19 +1983,40 @@
       "沖縄県": ["那覇市", "宜野湾市", "石垣市", "浦添市", "名護市", "糸満市", "沖縄市", "豊見城市", "うるま市", "宮古島市"]
     };
     const prefectureOptions = Object.keys(MUNICIPALITIES_BY_PREFECTURE);
+    const DURATION_OPTIONS = ["5分", "10分", "15分", "20分", "30分", "45分", "1時間", "1時間30分", "2時間", "時間を決めない"];
+    const DURATION_PATTERN = /(時間を決めない|1時間30分|[12]時間|45分|30分|20分|15分|10分|5分)$/;
+
+    function splitActivityAndDuration(value = "", fallbackDuration = "") {
+      const text = String(value || "").trim();
+      const duration = String(fallbackDuration || "").trim();
+      if (duration) return { activity: text, duration };
+      const matched = text.match(DURATION_PATTERN);
+      if (!matched) return { activity: text, duration: "" };
+      const activity = text.slice(0, matched.index).replace(/[・\s　-]+$/g, "").replace(/で$/g, "").trim();
+      return { activity: activity || text, duration: matched[1] };
+    }
+
+    function activityDisplay(item = {}) {
+      if (!item.activity) return "";
+      return item.duration ? `${item.activity}・${item.duration}` : item.activity;
+    }
+
+    function activityOptions() {
+      return [...new Set(categories.flatMap((category) => category.items.map(([title]) => splitActivityAndDuration(title).activity)).filter(Boolean))];
+    }
 
     // DEMO LISTINGS START: 本番公開前に、この関数とDEMO LISTINGS ENDまでを削除してください。
     function createDemoListings() {
       const inTwoHours = new Date(Date.now() + 2 * 60 * 60 * 1000).toISOString();
       const demoRows = [
-        { id: "00000000-0000-4000-8000-000000000101", person: "みずき", title: "夕方の公園をゆっくり散歩", activity: "静かな散歩 20分", prefecture: "東京都", city: "渋谷区", place: "代々木公園の入口近く", capacity: 5, participantCount: 2, note: "会話は少なめでも大丈夫です。夕方の空気を感じながら歩きましょう。", area: "渋谷区", distance: 6, activityType: "walk", pace: "slow" },
-        { id: "00000000-0000-4000-8000-000000000102", person: "なつ", title: "カフェで好きな本の話", activity: "小説の話 30分", prefecture: "東京都", city: "新宿区", place: "新宿駅近くのカフェ前", capacity: 3, participantCount: 1, note: "最近読んだ本を一冊ずつ、気軽に紹介し合えたらうれしいです。", area: "新宿区", distance: 9, activityType: "talk", pace: "deep" },
-        { id: "00000000-0000-4000-8000-000000000103", person: "あおい", title: "ベンチでのんびり休憩", activity: "ベンチでのんびり 10分", prefecture: "東京都", city: "渋谷区", place: "駅前公園の広場近く", capacity: 4, participantCount: 0, note: "急がず、話したくなったら少し話すくらいの時間にしましょう。", area: "渋谷区", distance: 12, activityType: "quiet", pace: "still" }
+        { id: "00000000-0000-4000-8000-000000000101", person: "みずき", title: "夕方の公園をゆっくり散歩", activity: "静かな散歩", duration: "20分", prefecture: "東京都", city: "渋谷区", place: "代々木公園の入口近く", capacity: 5, participantCount: 2, note: "会話は少なめでも大丈夫です。夕方の空気を感じながら歩きましょう。", area: "渋谷区", distance: 6, activityType: "walk", pace: "slow" },
+        { id: "00000000-0000-4000-8000-000000000102", person: "なつ", title: "カフェで好きな本の話", activity: "小説の話", duration: "30分", prefecture: "東京都", city: "新宿区", place: "新宿駅近くのカフェ前", capacity: 3, participantCount: 1, note: "最近読んだ本を一冊ずつ、気軽に紹介し合えたらうれしいです。", area: "新宿区", distance: 9, activityType: "talk", pace: "deep" },
+        { id: "00000000-0000-4000-8000-000000000103", person: "あおい", title: "ベンチでのんびり休憩", activity: "ベンチでのんびり", duration: "10分", prefecture: "東京都", city: "渋谷区", place: "駅前公園の広場近く", capacity: 4, participantCount: 0, note: "急がず、話したくなったら少し話すくらいの時間にしましょう。", area: "渋谷区", distance: 12, activityType: "quiet", pace: "still" }
       ];
       return demoRows.map((item) => ({
         ...item,
         participantCount: item.participantCount,
-        gender: "女性", audience: "anyone", scheduledAt: inTwoHours, duration: "", talk: "自然に話せたらいい",
+        gender: "女性", audience: "anyone", scheduledAt: inTwoHours, talk: "自然に話せたらいい",
         verified: true, air: ["静かで落ち着いた空気", "のんびりした空気"], traits: ["穏やかな人", "聞き上手な人"],
         availableToday: true, active: true, owner: false, ownerId: null, isDemo: true
       }));
@@ -2035,6 +2054,18 @@
         searchPrefecture.innerHTML = optionMarkup(prefectureOptions, "all", true);
         populateCitySelect("searchPrefecture", "searchCity", "all", true);
         searchPrefecture.addEventListener("change", () => { populateCitySelect("searchPrefecture", "searchCity", "all", true); renderRegionalProfiles(); });
+      }
+    }
+    function setupActivityInputs() {
+      const activitySelect = document.getElementById("activity");
+      const durationSelect = document.getElementById("duration");
+      if (activitySelect) {
+        activitySelect.innerHTML = optionMarkup(activityOptions(), "静かな散歩");
+        activitySelect.value = "静かな散歩";
+      }
+      if (durationSelect) {
+        durationSelect.innerHTML = optionMarkup(DURATION_OPTIONS, "20分");
+        durationSelect.value = "20分";
       }
     }
     function isAdult(value) {
@@ -2149,10 +2180,15 @@
     }
 
     function fillActivity(activity) {
-      document.getElementById("activity").value = [...document.getElementById("activity").options].some((option) => option.value === activity)
-        ? activity
-        : "何もしない 15分";
-      if (!document.getElementById("listingTitle").value) document.getElementById("listingTitle").value = activity;
+      const parsed = splitActivityAndDuration(activity);
+      const activitySelect = document.getElementById("activity");
+      const durationSelect = document.getElementById("duration");
+      if (![...activitySelect.options].some((option) => option.value === parsed.activity)) {
+        activitySelect.insertAdjacentHTML("beforeend", `<option value="${esc(parsed.activity)}">${esc(parsed.activity)}</option>`);
+      }
+      activitySelect.value = parsed.activity;
+      if (parsed.duration && [...durationSelect.options].some((option) => option.value === parsed.duration)) durationSelect.value = parsed.duration;
+      if (!document.getElementById("listingTitle").value) document.getElementById("listingTitle").value = parsed.activity;
       jumpTo("create");
     }
 
@@ -2182,7 +2218,7 @@
         secondary = "新店舗に行く";
       }
       const personLine = suggested
-        ? `<br><br>${suggested.person}さんの「${suggested.activity}」は、今日の距離感に近そうです。`
+        ? `<br><br>${suggested.person}さんの「${activityDisplay(suggested)}」は、今日の距離感に近そうです。`
         : "";
       document.getElementById("diagnosisResult").innerHTML = `今日のあなたには、<br>「${primary}」や「${secondary}」が合いそうです。<br><br>${profile.summary}${personLine}`;
       if (shouldPersist) persistPersonalityResult(buildPersonalityResult(profile));
@@ -2191,7 +2227,7 @@
           <span class="badge">今日のあなたなら</span>
           ${suggested.verified ? `<span class="badge">本人確認済み</span>` : ""}
           <h3 style="margin-top:12px">${suggested.person}さん</h3>
-          <p class="meta">${suggested.activity} / ${suggested.talk}</p>
+          <p class="meta">${activityDisplay(suggested)} / ${suggested.talk}</p>
           <div class="comfort-mark" aria-label="安心して過ごせそう"><i></i><i></i><i></i><i></i><i></i></div>
           <p style="margin-top:8px">自然に過ごせそうです。</p>
           <div class="actions"><button class="btn small primary" data-action="open-detail" data-id="${suggested.id}">詳しく見る</button><button class="btn small quiet-action" data-action="report" data-person="${esc(suggested.person)}" data-source="recommendation" data-id="${suggested.id}" data-user-id="${esc(suggested.ownerId || "")}">通報</button></div>
@@ -2326,7 +2362,7 @@
     function shortCard(item, number = "") {
       return `<div>
         ${number ? `<span class="flow-number">${number}</span>` : `<span class="badge">今日おすすめ</span>`} ${item.verified ? `<span class="badge">本人確認済み</span>` : ""}
-        <h3 style="margin-top:10px">${esc(item.activity)}</h3>
+        <h3 style="margin-top:10px">${esc(activityDisplay(item))}</h3>
         <p class="meta">${esc(item.person)}さん / 徒歩${item.distance}分 / ${esc(item.talk)}</p>
         <div style="margin-top:8px">${comfortDots()}</div>
       </div><div class="actions"><button class="btn small primary" data-action="open-detail" data-id="${item.id}">詳しく見る</button><button class="btn small quiet-action" data-action="report" data-person="${esc(item.person)}" data-source="recommendation" data-id="${item.id}" data-user-id="${esc(item.ownerId || "")}">通報</button></div>`;
@@ -2339,7 +2375,7 @@
       document.getElementById("homeRecommendation").innerHTML = shortCard(recommended, "1");
       const nearby = rankListings().filter((item) => item.active).slice(0, 3);
       document.getElementById("homeListings").innerHTML = nearby.map((item) => `
-        <div class="notice"><strong>${esc(item.person)}さん</strong><p class="meta">徒歩${item.distance}分 / ${esc(item.activity)}</p><button class="btn small" style="margin-top:10px" data-action="open-detail" data-id="${item.id}">見る</button></div>
+        <div class="notice"><strong>${esc(item.person)}さん</strong><p class="meta">徒歩${item.distance}分 / ${esc(activityDisplay(item))}</p><button class="btn small" style="margin-top:10px" data-action="open-detail" data-id="${item.id}">見る</button></div>
       `).join("");
       bindJumpButtons(document.getElementById("topRecommendation"));
       bindJumpButtons(document.getElementById("homeRecommendation"));
@@ -2364,7 +2400,7 @@
             ${isMatched(item) ? `<span class="badge">マッチ済み</span>` : ""}
           </div>
           <h3 style="margin-top:12px">${esc(item.person)}さん</h3>
-          <p class="meta">${esc(item.activity)} / ${esc(item.talk)}</p>
+          <p class="meta">${esc(activityDisplay(item))} / ${esc(item.talk)}</p>
           <p style="margin-top:8px">今日のあなたと心地よい時間を過ごせそうです。</p>
           <div class="actions">
             <button class="btn small primary" data-action="open-detail" data-id="${item.id}">一緒に過ごしませんか？</button>
@@ -2392,7 +2428,7 @@
               <span class="badge">${item.verified ? "本人確認済み" : "本人確認欄あり"}</span>
               ${isMatched(item) ? `<span class="badge">マッチ済み</span>` : ""}
             </div>
-            <h3 style="margin-top:12px">${esc(item.title || item.activity)}</h3>
+            <h3 style="margin-top:12px">${esc(item.title || activityDisplay(item))}</h3>
             <p class="meta">${esc(item.person)}さん</p>
             <p class="meta">徒歩${item.distance}分 / ${item.prefecture ? `${esc(item.prefecture)} / ` : ""}${item.city ? `${esc(item.city)} / ` : ""}${esc(item.place)}</p>
             <div class="listing-profile">
@@ -2407,7 +2443,7 @@
                 <div class="chips">${(item.personalityTags || []).slice(0, 5).map((tag) => `<span class="badge muted">${esc(tag)}</span>`).join("") || `<span class="meta">診断タグはまだありません。</span>`}</div>
               </div>
             </div>
-            <p style="margin-top:10px">${esc(item.activity)}</p>
+            <p style="margin-top:10px">${esc(activityDisplay(item))}</p>
             <div class="listing-summary">
               <div><small>安心の目安</small>${comfortDots()}</div>
               <div><small>話す量</small>${item.talk === "自然に話せたらいい" ? "自然でOK" : esc(item.talk)}</div>
@@ -2454,13 +2490,14 @@
 
     function listingFromRow(row) {
       const profile = row.profile || {};
+      const parsedActivity = splitActivityAndDuration(row.activity, row.duration);
       return {
         id: row.id,
         person: profile.nickname || row.person_name,
         gender: row.owner_gender,
         title: row.title,
-        activity: row.activity,
-        duration: "",
+        activity: parsedActivity.activity,
+        duration: parsedActivity.duration,
         prefecture: row.prefecture || "",
         city: row.city || row.area || "",
         place: row.place,
@@ -2574,6 +2611,7 @@
         owner_gender: appState.profile.gender,
         title: document.getElementById("listingTitle").value.trim(),
         activity: document.getElementById("activity").value,
+        duration: document.getElementById("duration").value,
         prefecture: document.getElementById("listingPrefecture").value,
         city: document.getElementById("listingCity").value,
         place: document.getElementById("place").value.trim(),
@@ -2592,6 +2630,7 @@
       syncGenderControls();
       await loadSupabaseListings();
       document.getElementById("createForm").reset();
+      setupActivityInputs();
       populateCitySelect("listingPrefecture", "listingCity");
       setDefaultListingDate();
       jumpTo("listings");
@@ -2829,7 +2868,7 @@
 
     function renderFavorites() {
       const favorites = listings.filter((item) => isFavorite(item));
-      document.getElementById("accountContent").innerHTML = favorites.length ? favorites.map((item) => `<article class="card managed-listing"><div><span class="badge">気になる</span><h3 style="margin-top:10px">${esc(item.activity)}</h3><p class="meta">${esc(item.person)}さん / ${item.prefecture ? `${esc(item.prefecture)} / ` : ""}${item.city ? `${esc(item.city)} / ` : ""}${esc(item.place)}</p><p class="meta">${esc(item.personalityTitle || "自然体で過ごせる人")}</p></div><div class="actions"><button class="btn small" data-action="open-detail" data-id="${item.id}">詳しく見る</button><button class="btn small quiet-action" data-action="toggle-favorite" data-id="${item.id}">気になるを解除</button></div></article>`).join("") : `<article class="card empty-state">気になる相手はまだありません。</article>`;
+      document.getElementById("accountContent").innerHTML = favorites.length ? favorites.map((item) => `<article class="card managed-listing"><div><span class="badge">気になる</span><h3 style="margin-top:10px">${esc(activityDisplay(item))}</h3><p class="meta">${esc(item.person)}さん / ${item.prefecture ? `${esc(item.prefecture)} / ` : ""}${item.city ? `${esc(item.city)} / ` : ""}${esc(item.place)}</p><p class="meta">${esc(item.personalityTitle || "自然体で過ごせる人")}</p></div><div class="actions"><button class="btn small" data-action="open-detail" data-id="${item.id}">詳しく見る</button><button class="btn small quiet-action" data-action="toggle-favorite" data-id="${item.id}">気になるを解除</button></div></article>`).join("") : `<article class="card empty-state">気になる相手はまだありません。</article>`;
       bindJumpButtons(document.getElementById("accountContent"));
     }
 
@@ -2839,7 +2878,7 @@
         const item = listings.find((listing) => listing.ownerId === partnerId);
         const profile = profilesByUserId.get(partnerId) || {};
         const person = item?.person || profile.nickname || "相手";
-        const title = item ? `${item.activity} / ${item.prefecture ? `${item.prefecture} / ` : ""}${item.city ? `${item.city} / ` : ""}${item.place}` : "募集がない相手";
+        const title = item ? `${activityDisplay(item)} / ${item.prefecture ? `${item.prefecture} / ` : ""}${item.city ? `${item.city} / ` : ""}${item.place}` : "募集がない相手";
         return `<article class="card managed-listing"><div><span class="badge">マッチしました</span><h3 style="margin-top:10px">${esc(person)}さん</h3><p class="meta">${esc(title)}</p><p class="meta">${esc(item?.personalityTitle || profile.personality_title || "自然体で過ごせる人")}</p></div><div class="actions"><button class="btn small primary" data-action="open-match-chat" data-match-id="${esc(match.id)}" data-user-id="${esc(partnerId)}" data-person="${esc(person)}">チャットする</button>${item ? `<button class="btn small" data-action="open-detail" data-id="${item.id}">募集を見る</button>` : ""}</div></article>`;
       }).join("") : `<article class="card empty-state">まだマッチはありません。お互いに「気になる」になると、ここに表示されます。</article>`;
       bindJumpButtons(document.getElementById("accountContent"));
@@ -2855,7 +2894,7 @@
 
     function renderManaged() {
       const own = appState.customListings;
-      document.getElementById("accountContent").innerHTML = own.length ? own.map((item) => `<article class="card managed-listing"><div><span class="badge">公開中</span><h3 style="margin-top:10px">${esc(item.title || item.activity)}</h3><p class="meta">${item.prefecture ? `${esc(item.prefecture)} / ` : ""}${item.city ? `${esc(item.city)} / ` : ""}${esc(item.place)} / ${item.capacity}人募集</p></div><div class="actions"><button class="btn small primary" data-action="open-detail" data-id="${item.id}">詳細・チャット</button><button class="btn small" data-action="edit-listing" data-id="${item.id}">編集</button><button class="btn small quiet-action" data-action="delete-listing" data-id="${item.id}">削除</button></div></article>`).join("") : `<article class="card empty-state">作成した募集はまだありません。</article>`;
+      document.getElementById("accountContent").innerHTML = own.length ? own.map((item) => `<article class="card managed-listing"><div><span class="badge">公開中</span><h3 style="margin-top:10px">${esc(item.title || activityDisplay(item))}</h3><p class="meta">${item.prefecture ? `${esc(item.prefecture)} / ` : ""}${item.city ? `${esc(item.city)} / ` : ""}${esc(item.place)} / ${item.capacity}人募集</p></div><div class="actions"><button class="btn small primary" data-action="open-detail" data-id="${item.id}">詳細・チャット</button><button class="btn small" data-action="edit-listing" data-id="${item.id}">編集</button><button class="btn small quiet-action" data-action="delete-listing" data-id="${item.id}">削除</button></div></article>`).join("") : `<article class="card empty-state">作成した募集はまだありません。</article>`;
     }
 
     function adminDate(value) {
@@ -3289,8 +3328,8 @@
         if (itemIndex >= 0) listings.splice(itemIndex, 1, item);
       }
       currentDetailListingId = item.id;
-      document.getElementById("detailTitle").innerHTML = `${esc(item.title || item.activity)}<br><span class="meta">${esc(item.person)}さんの募集</span>`;
-      document.getElementById("detailCopy").textContent = item.note;
+      document.getElementById("detailTitle").innerHTML = `${esc(item.title || activityDisplay(item))}<br><span class="meta">${esc(item.person)}さんの募集</span>`;
+      document.getElementById("detailCopy").textContent = `過ごし方：${activityDisplay(item)}。${item.note || ""}`;
       updateDetailParticipationUI(item);
       updateDetailFavoriteUI(item);
       document.getElementById("listingRequestsPanel").hidden = !item.owner;
@@ -3309,7 +3348,7 @@
       currentMeetingListingId = item.id;
       const counterpart = item.owner ? "参加者" : item.person;
       document.getElementById("meetingRecordTitle").textContent = `${counterpart}さんと過ごした記録`;
-      document.getElementById("meetingRecordListingTitle").textContent = item.title || item.activity;
+      document.getElementById("meetingRecordListingTitle").textContent = item.title || activityDisplay(item);
       [document.getElementById("meetingBlock"), document.getElementById("meetingReport")].forEach((button) => { button.dataset.person = counterpart; button.dataset.id = item.id; button.dataset.listingId = item.id; button.dataset.userId = item.owner ? "" : (item.ownerId || ""); });
       setLoading(true);
       const result = await window.tomoniAuth?.getMeetingRecord?.(item.id);
@@ -3506,7 +3545,7 @@
       currentMatchChatId = null;
       currentMatchChatReceiverId = null;
       currentChatMessages = new Map();
-      document.getElementById("chatTitle").textContent = item.title || item.activity;
+      document.getElementById("chatTitle").textContent = item.title || activityDisplay(item);
       document.getElementById("chatMeta").textContent = `${item.person}さんの募集についてのチャット`;
       document.getElementById("chatMessage").placeholder = "待ち合わせや当日の過ごし方について話しましょう";
       document.getElementById("chatMessage").disabled = false;
@@ -3945,8 +3984,12 @@
       if (action === "edit-listing") {
         const item = listings.find((listing) => listing.id === button.dataset.id); if (!item) return;
         editingListingId = item.id;
-        document.getElementById("listingTitle").value = item.title || item.activity;
-        document.getElementById("activity").value = [...document.getElementById("activity").options].some((option) => option.value === item.activity) ? item.activity : "何もしない 15分";
+        document.getElementById("listingTitle").value = item.title || activityDisplay(item);
+        if (![...document.getElementById("activity").options].some((option) => option.value === item.activity)) {
+          document.getElementById("activity").insertAdjacentHTML("beforeend", `<option value="${esc(item.activity)}">${esc(item.activity)}</option>`);
+        }
+        document.getElementById("activity").value = item.activity || "何もしない";
+        document.getElementById("duration").value = item.duration || "時間を決めない";
         document.getElementById("listingPrefecture").value = item.prefecture || "";
         populateCitySelect("listingPrefecture", "listingCity", item.city || "");
         document.getElementById("place").value = item.place;
@@ -4025,6 +4068,7 @@
     document.querySelectorAll("main section").forEach((section) => observer.observe(section));
 
     renderCategories();
+    setupActivityInputs();
     setupAreaSelects();
     setDefaultListingDate();
     renderActivities();
