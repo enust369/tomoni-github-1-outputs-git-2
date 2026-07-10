@@ -1391,18 +1391,12 @@
               </select>
             </div>
             <div class="field">
-              <label for="prefecture">都道府県</label>
-              <select id="prefecture" required>
-                <option value="">選択してください</option>
-                <option>北海道</option><option>青森県</option><option>岩手県</option><option>宮城県</option><option>秋田県</option><option>山形県</option><option>福島県</option>
-                <option>茨城県</option><option>栃木県</option><option>群馬県</option><option>埼玉県</option><option>千葉県</option><option selected>東京都</option><option>神奈川県</option>
-                <option>新潟県</option><option>富山県</option><option>石川県</option><option>福井県</option><option>山梨県</option><option>長野県</option>
-                <option>岐阜県</option><option>静岡県</option><option>愛知県</option><option>三重県</option>
-                <option>滋賀県</option><option>京都府</option><option>大阪府</option><option>兵庫県</option><option>奈良県</option><option>和歌山県</option>
-                <option>鳥取県</option><option>島根県</option><option>岡山県</option><option>広島県</option><option>山口県</option>
-                <option>徳島県</option><option>香川県</option><option>愛媛県</option><option>高知県</option>
-                <option>福岡県</option><option>佐賀県</option><option>長崎県</option><option>熊本県</option><option>大分県</option><option>宮崎県</option><option>鹿児島県</option><option>沖縄県</option>
-              </select><span class="field-error"></span>
+              <label for="listingPrefecture">都道府県</label>
+              <select id="listingPrefecture" required></select><span class="field-error"></span>
+            </div>
+            <div class="field">
+              <label for="listingCity">市区町村</label>
+              <select id="listingCity" required></select><span class="field-error"></span>
             </div>
             <div class="field">
               <label for="place">場所</label>
@@ -1456,8 +1450,8 @@
         <article class="card access-gate"><span class="badge">ログインが必要です</span><h3 style="margin-top:12px">地域から探すにはログインしてください。</h3><p class="meta" style="margin-top:8px">安心して利用できるよう、登録済みの方だけに表示しています。</p><div class="actions" style="justify-content:center"><button class="btn primary" data-action="open-auth">登録・ログイン</button></div></article>
         <div class="section-head"><div><p class="eyebrow">地域から探す</p><h2>近くで、今日過ごせる人。</h2><p class="meta" style="margin-top:10px">登録した性別と同じ方だけが表示されます。</p></div></div>
         <div class="card region-controls">
-          <div class="field"><label for="prefecture">都道府県</label><select id="prefecture"><option>東京都</option></select></div>
-          <div class="field"><label for="city">市区町村</label><select id="city"><option value="all">すべて</option><option>新宿</option><option>渋谷</option><option>代々木</option><option>中野</option><option>吉祥寺</option><option>杉並</option></select></div>
+          <div class="field"><label for="searchPrefecture">都道府県</label><select id="searchPrefecture"></select></div>
+          <div class="field"><label for="searchCity">市区町村</label><select id="searchCity"></select></div>
           <button class="btn small" id="distanceSort">近い順に見る</button>
         </div>
         <div class="profile-grid" id="regionalGrid"></div>
@@ -1941,13 +1935,64 @@
     let appState = loadState();
     listings.splice(0, listings.length);
 
+    const MUNICIPALITIES_BY_PREFECTURE = {
+      "北海道": ["札幌市", "函館市", "小樽市", "旭川市", "室蘭市", "釧路市", "帯広市", "北見市", "苫小牧市", "江別市"],
+      "青森県": ["青森市", "弘前市", "八戸市", "黒石市", "五所川原市", "十和田市", "三沢市", "むつ市", "つがる市", "平川市"],
+      "岩手県": ["盛岡市", "宮古市", "大船渡市", "花巻市", "北上市", "久慈市", "遠野市", "一関市", "奥州市", "滝沢市"],
+      "宮城県": ["仙台市", "石巻市", "塩竈市", "気仙沼市", "白石市", "名取市", "多賀城市", "岩沼市", "登米市", "大崎市"],
+      "秋田県": ["秋田市", "能代市", "横手市", "大館市", "男鹿市", "湯沢市", "鹿角市", "由利本荘市", "大仙市", "仙北市"],
+      "山形県": ["山形市", "米沢市", "鶴岡市", "酒田市", "新庄市", "寒河江市", "上山市", "天童市", "東根市", "南陽市"],
+      "福島県": ["福島市", "会津若松市", "郡山市", "いわき市", "白河市", "須賀川市", "喜多方市", "相馬市", "南相馬市", "伊達市"],
+      "茨城県": ["水戸市", "日立市", "土浦市", "古河市", "石岡市", "結城市", "龍ケ崎市", "取手市", "牛久市", "つくば市"],
+      "栃木県": ["宇都宮市", "足利市", "栃木市", "佐野市", "鹿沼市", "日光市", "小山市", "真岡市", "大田原市", "那須塩原市"],
+      "群馬県": ["前橋市", "高崎市", "桐生市", "伊勢崎市", "太田市", "沼田市", "館林市", "渋川市", "藤岡市", "富岡市"],
+      "埼玉県": ["さいたま市", "川越市", "熊谷市", "川口市", "行田市", "秩父市", "所沢市", "春日部市", "越谷市", "草加市"],
+      "千葉県": ["千葉市", "銚子市", "市川市", "船橋市", "館山市", "木更津市", "松戸市", "野田市", "佐倉市", "柏市"],
+      "東京都": ["千代田区", "中央区", "港区", "新宿区", "文京区", "台東区", "墨田区", "江東区", "品川区", "目黒区", "大田区", "世田谷区", "渋谷区", "中野区", "杉並区", "豊島区", "北区", "荒川区", "板橋区", "練馬区", "足立区", "葛飾区", "江戸川区", "八王子市", "立川市", "武蔵野市", "三鷹市", "青梅市", "府中市", "調布市", "町田市", "小金井市", "小平市", "日野市", "国分寺市", "国立市", "狛江市", "東大和市", "清瀬市", "東久留米市", "多摩市", "稲城市", "羽村市", "あきる野市", "西東京市"],
+      "神奈川県": ["横浜市", "川崎市", "相模原市", "横須賀市", "平塚市", "鎌倉市", "藤沢市", "小田原市", "茅ヶ崎市", "厚木市"],
+      "新潟県": ["新潟市", "長岡市", "三条市", "柏崎市", "新発田市", "小千谷市", "加茂市", "十日町市", "見附市", "上越市"],
+      "富山県": ["富山市", "高岡市", "魚津市", "氷見市", "滑川市", "黒部市", "砺波市", "小矢部市", "南砺市", "射水市"],
+      "石川県": ["金沢市", "七尾市", "小松市", "輪島市", "珠洲市", "加賀市", "羽咋市", "かほく市", "白山市", "能美市"],
+      "福井県": ["福井市", "敦賀市", "小浜市", "大野市", "勝山市", "鯖江市", "あわら市", "越前市", "坂井市"],
+      "山梨県": ["甲府市", "富士吉田市", "都留市", "山梨市", "大月市", "韮崎市", "南アルプス市", "北杜市", "甲斐市", "笛吹市"],
+      "長野県": ["長野市", "松本市", "上田市", "岡谷市", "飯田市", "諏訪市", "須坂市", "小諸市", "伊那市", "佐久市"],
+      "岐阜県": ["岐阜市", "大垣市", "高山市", "多治見市", "関市", "中津川市", "美濃市", "瑞浪市", "羽島市", "可児市"],
+      "静岡県": ["静岡市", "浜松市", "沼津市", "熱海市", "三島市", "富士宮市", "伊東市", "島田市", "富士市", "磐田市"],
+      "愛知県": ["名古屋市", "豊橋市", "岡崎市", "一宮市", "瀬戸市", "半田市", "春日井市", "豊川市", "津島市", "豊田市"],
+      "三重県": ["津市", "四日市市", "伊勢市", "松阪市", "桑名市", "鈴鹿市", "名張市", "尾鷲市", "亀山市", "志摩市"],
+      "滋賀県": ["大津市", "彦根市", "長浜市", "近江八幡市", "草津市", "守山市", "栗東市", "甲賀市", "野洲市", "東近江市"],
+      "京都府": ["京都市", "福知山市", "舞鶴市", "綾部市", "宇治市", "宮津市", "亀岡市", "城陽市", "向日市", "長岡京市"],
+      "大阪府": ["大阪市", "堺市", "岸和田市", "豊中市", "池田市", "吹田市", "泉大津市", "高槻市", "貝塚市", "枚方市"],
+      "兵庫県": ["神戸市", "姫路市", "尼崎市", "明石市", "西宮市", "洲本市", "芦屋市", "伊丹市", "相生市", "豊岡市"],
+      "奈良県": ["奈良市", "大和高田市", "大和郡山市", "天理市", "橿原市", "桜井市", "五條市", "御所市", "生駒市", "香芝市"],
+      "和歌山県": ["和歌山市", "海南市", "橋本市", "有田市", "御坊市", "田辺市", "新宮市", "紀の川市", "岩出市"],
+      "鳥取県": ["鳥取市", "米子市", "倉吉市", "境港市"],
+      "島根県": ["松江市", "浜田市", "出雲市", "益田市", "大田市", "安来市", "江津市", "雲南市"],
+      "岡山県": ["岡山市", "倉敷市", "津山市", "玉野市", "笠岡市", "井原市", "総社市", "高梁市", "新見市", "備前市"],
+      "広島県": ["広島市", "呉市", "竹原市", "三原市", "尾道市", "福山市", "府中市", "三次市", "庄原市", "東広島市"],
+      "山口県": ["下関市", "宇部市", "山口市", "萩市", "防府市", "下松市", "岩国市", "光市", "長門市", "柳井市"],
+      "徳島県": ["徳島市", "鳴門市", "小松島市", "阿南市", "吉野川市", "阿波市", "美馬市", "三好市"],
+      "香川県": ["高松市", "丸亀市", "坂出市", "善通寺市", "観音寺市", "さぬき市", "東かがわ市", "三豊市"],
+      "愛媛県": ["松山市", "今治市", "宇和島市", "八幡浜市", "新居浜市", "西条市", "大洲市", "伊予市", "四国中央市", "西予市"],
+      "高知県": ["高知市", "室戸市", "安芸市", "南国市", "土佐市", "須崎市", "宿毛市", "土佐清水市", "四万十市", "香南市", "香美市", "東洋町", "奈半利町", "田野町", "安田町", "北川村", "馬路村", "芸西村", "本山町", "大豊町", "土佐町", "大川村", "いの町", "仁淀川町", "中土佐町", "佐川町", "越知町", "梼原町", "日高村", "津野町", "四万十町", "大月町", "三原村", "黒潮町"],
+      "福岡県": ["北九州市", "福岡市", "大牟田市", "久留米市", "直方市", "飯塚市", "田川市", "柳川市", "八女市", "筑後市"],
+      "佐賀県": ["佐賀市", "唐津市", "鳥栖市", "多久市", "伊万里市", "武雄市", "鹿島市", "小城市", "嬉野市", "神埼市"],
+      "長崎県": ["長崎市", "佐世保市", "島原市", "諫早市", "大村市", "平戸市", "松浦市", "対馬市", "壱岐市", "五島市"],
+      "熊本県": ["熊本市", "八代市", "人吉市", "荒尾市", "水俣市", "玉名市", "山鹿市", "菊池市", "宇土市", "宇城市"],
+      "大分県": ["大分市", "別府市", "中津市", "日田市", "佐伯市", "臼杵市", "津久見市", "竹田市", "豊後高田市", "宇佐市"],
+      "宮崎県": ["宮崎市", "都城市", "延岡市", "日南市", "小林市", "日向市", "串間市", "西都市", "えびの市"],
+      "鹿児島県": ["鹿児島市", "鹿屋市", "枕崎市", "阿久根市", "出水市", "指宿市", "西之表市", "垂水市", "薩摩川内市", "霧島市"],
+      "沖縄県": ["那覇市", "宜野湾市", "石垣市", "浦添市", "名護市", "糸満市", "沖縄市", "豊見城市", "うるま市", "宮古島市"]
+    };
+    const prefectureOptions = Object.keys(MUNICIPALITIES_BY_PREFECTURE);
+
     // DEMO LISTINGS START: 本番公開前に、この関数とDEMO LISTINGS ENDまでを削除してください。
     function createDemoListings() {
       const inTwoHours = new Date(Date.now() + 2 * 60 * 60 * 1000).toISOString();
       const demoRows = [
-        { id: "00000000-0000-4000-8000-000000000101", person: "みずき", title: "夕方の公園をゆっくり散歩", activity: "静かな散歩 20分", place: "代々木公園の入口近く", capacity: 5, participantCount: 2, note: "会話は少なめでも大丈夫です。夕方の空気を感じながら歩きましょう。", area: "代々木", distance: 6, activityType: "walk", pace: "slow" },
-        { id: "00000000-0000-4000-8000-000000000102", person: "なつ", title: "カフェで好きな本の話", activity: "小説の話 30分", place: "新宿駅近くのカフェ前", capacity: 3, participantCount: 1, note: "最近読んだ本を一冊ずつ、気軽に紹介し合えたらうれしいです。", area: "新宿", distance: 9, activityType: "talk", pace: "deep" },
-        { id: "00000000-0000-4000-8000-000000000103", person: "あおい", title: "ベンチでのんびり休憩", activity: "ベンチでのんびり 10分", place: "駅前公園の広場近く", capacity: 4, participantCount: 0, note: "急がず、話したくなったら少し話すくらいの時間にしましょう。", area: "渋谷", distance: 12, activityType: "quiet", pace: "still" }
+        { id: "00000000-0000-4000-8000-000000000101", person: "みずき", title: "夕方の公園をゆっくり散歩", activity: "静かな散歩 20分", prefecture: "東京都", city: "渋谷区", place: "代々木公園の入口近く", capacity: 5, participantCount: 2, note: "会話は少なめでも大丈夫です。夕方の空気を感じながら歩きましょう。", area: "渋谷区", distance: 6, activityType: "walk", pace: "slow" },
+        { id: "00000000-0000-4000-8000-000000000102", person: "なつ", title: "カフェで好きな本の話", activity: "小説の話 30分", prefecture: "東京都", city: "新宿区", place: "新宿駅近くのカフェ前", capacity: 3, participantCount: 1, note: "最近読んだ本を一冊ずつ、気軽に紹介し合えたらうれしいです。", area: "新宿区", distance: 9, activityType: "talk", pace: "deep" },
+        { id: "00000000-0000-4000-8000-000000000103", person: "あおい", title: "ベンチでのんびり休憩", activity: "ベンチでのんびり 10分", prefecture: "東京都", city: "渋谷区", place: "駅前公園の広場近く", capacity: 4, participantCount: 0, note: "急がず、話したくなったら少し話すくらいの時間にしましょう。", area: "渋谷区", distance: 12, activityType: "quiet", pace: "still" }
       ];
       return demoRows.map((item) => ({
         ...item,
@@ -1969,6 +2014,29 @@
 
     function saveState() { localStorage.setItem(storageKey, JSON.stringify(appState)); }
     function esc(value = "") { const node = document.createElement("div"); node.textContent = String(value); return node.innerHTML; }
+    function optionMarkup(values, selected = "", includeAll = false) {
+      return `${includeAll ? `<option value="all">すべて</option>` : `<option value="">選択してください</option>`}${values.map((value) => `<option value="${esc(value)}" ${value === selected ? "selected" : ""}>${esc(value)}</option>`).join("")}`;
+    }
+    function populateCitySelect(prefectureId, cityId, selectedCity = "", includeAll = false) {
+      const prefecture = document.getElementById(prefectureId)?.value;
+      const citySelect = document.getElementById(cityId);
+      if (!citySelect) return;
+      citySelect.innerHTML = optionMarkup(prefecture && prefecture !== "all" ? (MUNICIPALITIES_BY_PREFECTURE[prefecture] || []) : [], selectedCity, includeAll);
+    }
+    function setupAreaSelects() {
+      const listingPrefecture = document.getElementById("listingPrefecture");
+      const searchPrefecture = document.getElementById("searchPrefecture");
+      if (listingPrefecture) {
+        listingPrefecture.innerHTML = optionMarkup(prefectureOptions);
+        populateCitySelect("listingPrefecture", "listingCity");
+        listingPrefecture.addEventListener("change", () => populateCitySelect("listingPrefecture", "listingCity"));
+      }
+      if (searchPrefecture) {
+        searchPrefecture.innerHTML = optionMarkup(prefectureOptions, "all", true);
+        populateCitySelect("searchPrefecture", "searchCity", "all", true);
+        searchPrefecture.addEventListener("change", () => { populateCitySelect("searchPrefecture", "searchCity", "all", true); renderRegionalProfiles(); });
+      }
+    }
     function isAdult(value) {
       if (!value) return false;
       const birth = new Date(`${value}T00:00:00`);
@@ -2280,9 +2348,10 @@
 
     function renderRegionalProfiles() {
       const grid = document.getElementById("regionalGrid");
-      const city = document.getElementById("city")?.value || "all";
+      const prefecture = document.getElementById("searchPrefecture")?.value || "all";
+      const city = document.getElementById("searchCity")?.value || "all";
       const profiles = rankListings()
-        .filter((item) => city === "all" || item.area === city)
+        .filter((item) => (prefecture === "all" || item.prefecture === prefecture) && (city === "all" || item.city === city))
         .sort((a, b) => a.distance - b.distance);
       grid.innerHTML = profiles.map((item) => `
         <article class="card">
@@ -2325,7 +2394,7 @@
             </div>
             <h3 style="margin-top:12px">${esc(item.title || item.activity)}</h3>
             <p class="meta">${esc(item.person)}さん</p>
-            <p class="meta">徒歩${item.distance}分 / ${item.prefecture ? `${esc(item.prefecture)} / ` : ""}${esc(item.place)}</p>
+            <p class="meta">徒歩${item.distance}分 / ${item.prefecture ? `${esc(item.prefecture)} / ` : ""}${item.city ? `${esc(item.city)} / ` : ""}${esc(item.place)}</p>
             <div class="listing-profile">
               ${item.profilePhoto ? `<img class="listing-avatar" src="${esc(item.profilePhoto)}" alt="${esc(item.person)}さんのプロフィール写真">` : `<div class="listing-avatar fallback" aria-label="${esc(item.person)}さんの頭文字">${esc((item.person || "と").slice(0, 1))}</div>`}
               <div>
@@ -2393,6 +2462,7 @@
         activity: row.activity,
         duration: "",
         prefecture: row.prefecture || "",
+        city: row.city || row.area || "",
         place: row.place,
         talk: "自然に話せたらいい",
         scheduledAt: row.scheduled_at,
@@ -2411,7 +2481,7 @@
         traits: selectedValues("withPerson"),
         pace: selectedValues("style")[0] === "軽く体を動かす" ? "active" : "slow",
         activityType: selectedValues("style")[0] === "歩く" ? "walk" : selectedValues("style")[0] === "軽く体を動かす" ? "move" : selectedValues("style")[0] === "語れるものを話す" ? "talk" : "quiet",
-        area: "現在地周辺",
+        area: row.city || row.area || "現在地周辺",
         distance: 3,
         availableToday: todayOpen,
         active: true,
@@ -2504,7 +2574,8 @@
         owner_gender: appState.profile.gender,
         title: document.getElementById("listingTitle").value.trim(),
         activity: document.getElementById("activity").value,
-        prefecture: document.getElementById("prefecture").value,
+        prefecture: document.getElementById("listingPrefecture").value,
+        city: document.getElementById("listingCity").value,
         place: document.getElementById("place").value.trim(),
         scheduled_at: new Date(document.getElementById("date").value).toISOString(),
         capacity: Number(document.getElementById("capacity").value),
@@ -2521,7 +2592,7 @@
       syncGenderControls();
       await loadSupabaseListings();
       document.getElementById("createForm").reset();
-      document.getElementById("prefecture").value = "東京都";
+      populateCitySelect("listingPrefecture", "listingCity");
       setDefaultListingDate();
       jumpTo("listings");
     }
@@ -2544,7 +2615,7 @@
       todayOpen = !todayOpen;
       syncTodayOpen();
     });
-    document.getElementById("city").addEventListener("change", renderRegionalProfiles);
+    document.getElementById("searchCity").addEventListener("change", renderRegionalProfiles);
     document.getElementById("distanceSort").addEventListener("click", renderRegionalProfiles);
     document.getElementById("distanceSort").addEventListener("click", () => toast("近い順に並べました。"));
     document.getElementById("feedbackSubmit").addEventListener("click", () => {
@@ -2758,7 +2829,7 @@
 
     function renderFavorites() {
       const favorites = listings.filter((item) => isFavorite(item));
-      document.getElementById("accountContent").innerHTML = favorites.length ? favorites.map((item) => `<article class="card managed-listing"><div><span class="badge">気になる</span><h3 style="margin-top:10px">${esc(item.activity)}</h3><p class="meta">${esc(item.person)}さん / ${item.prefecture ? `${esc(item.prefecture)} / ` : ""}${esc(item.place)}</p><p class="meta">${esc(item.personalityTitle || "自然体で過ごせる人")}</p></div><div class="actions"><button class="btn small" data-action="open-detail" data-id="${item.id}">詳しく見る</button><button class="btn small quiet-action" data-action="toggle-favorite" data-id="${item.id}">気になるを解除</button></div></article>`).join("") : `<article class="card empty-state">気になる相手はまだありません。</article>`;
+      document.getElementById("accountContent").innerHTML = favorites.length ? favorites.map((item) => `<article class="card managed-listing"><div><span class="badge">気になる</span><h3 style="margin-top:10px">${esc(item.activity)}</h3><p class="meta">${esc(item.person)}さん / ${item.prefecture ? `${esc(item.prefecture)} / ` : ""}${item.city ? `${esc(item.city)} / ` : ""}${esc(item.place)}</p><p class="meta">${esc(item.personalityTitle || "自然体で過ごせる人")}</p></div><div class="actions"><button class="btn small" data-action="open-detail" data-id="${item.id}">詳しく見る</button><button class="btn small quiet-action" data-action="toggle-favorite" data-id="${item.id}">気になるを解除</button></div></article>`).join("") : `<article class="card empty-state">気になる相手はまだありません。</article>`;
       bindJumpButtons(document.getElementById("accountContent"));
     }
 
@@ -2768,7 +2839,7 @@
         const item = listings.find((listing) => listing.ownerId === partnerId);
         const profile = profilesByUserId.get(partnerId) || {};
         const person = item?.person || profile.nickname || "相手";
-        const title = item ? `${item.activity} / ${item.prefecture ? `${item.prefecture} / ` : ""}${item.place}` : "募集がない相手";
+        const title = item ? `${item.activity} / ${item.prefecture ? `${item.prefecture} / ` : ""}${item.city ? `${item.city} / ` : ""}${item.place}` : "募集がない相手";
         return `<article class="card managed-listing"><div><span class="badge">マッチしました</span><h3 style="margin-top:10px">${esc(person)}さん</h3><p class="meta">${esc(title)}</p><p class="meta">${esc(item?.personalityTitle || profile.personality_title || "自然体で過ごせる人")}</p></div><div class="actions"><button class="btn small primary" data-action="open-match-chat" data-match-id="${esc(match.id)}" data-user-id="${esc(partnerId)}" data-person="${esc(person)}">チャットする</button>${item ? `<button class="btn small" data-action="open-detail" data-id="${item.id}">募集を見る</button>` : ""}</div></article>`;
       }).join("") : `<article class="card empty-state">まだマッチはありません。お互いに「気になる」になると、ここに表示されます。</article>`;
       bindJumpButtons(document.getElementById("accountContent"));
@@ -2784,7 +2855,7 @@
 
     function renderManaged() {
       const own = appState.customListings;
-      document.getElementById("accountContent").innerHTML = own.length ? own.map((item) => `<article class="card managed-listing"><div><span class="badge">公開中</span><h3 style="margin-top:10px">${esc(item.title || item.activity)}</h3><p class="meta">${item.prefecture ? `${esc(item.prefecture)} / ` : ""}${esc(item.place)} / ${item.capacity}人募集</p></div><div class="actions"><button class="btn small primary" data-action="open-detail" data-id="${item.id}">詳細・チャット</button><button class="btn small" data-action="edit-listing" data-id="${item.id}">編集</button><button class="btn small quiet-action" data-action="delete-listing" data-id="${item.id}">削除</button></div></article>`).join("") : `<article class="card empty-state">作成した募集はまだありません。</article>`;
+      document.getElementById("accountContent").innerHTML = own.length ? own.map((item) => `<article class="card managed-listing"><div><span class="badge">公開中</span><h3 style="margin-top:10px">${esc(item.title || item.activity)}</h3><p class="meta">${item.prefecture ? `${esc(item.prefecture)} / ` : ""}${item.city ? `${esc(item.city)} / ` : ""}${esc(item.place)} / ${item.capacity}人募集</p></div><div class="actions"><button class="btn small primary" data-action="open-detail" data-id="${item.id}">詳細・チャット</button><button class="btn small" data-action="edit-listing" data-id="${item.id}">編集</button><button class="btn small quiet-action" data-action="delete-listing" data-id="${item.id}">削除</button></div></article>`).join("") : `<article class="card empty-state">作成した募集はまだありません。</article>`;
     }
 
     function adminDate(value) {
@@ -3185,7 +3256,7 @@
       const statusElement = document.getElementById("participationStatus");
       statusElement.textContent = item.owner ? "参加申請を確認できます。" : status === "pending" ? "参加申請を送りました。募集主の確認をお待ちください。" : approved ? "承認されました。チャットを利用できます。" : status === "declined" ? "今回は見送られました。" : full ? "この募集は満員です。" : item.isDemo ? "動作確認用のサンプル募集です。" : "申請が承認されると、参加人数に反映されます。";
       statusElement.classList.toggle("caution", status === "declined" || (full && !approved));
-      document.getElementById("detailBadges").innerHTML = `<span class="badge">${item.verified ? "本人確認済み" : "本人確認欄あり"}</span>${isMatched(item) ? `<span class="badge">マッチ済み</span>` : ""}${item.prefecture ? `<span class="badge muted">${esc(item.prefecture)}</span>` : ""}<span class="badge muted">${esc(item.place)}</span><span class="badge muted">${item.participantCount}/${item.capacity}人</span><span class="badge muted">${item.audience === "same_gender" ? "同性のみ" : "誰でも"}</span>`;
+      document.getElementById("detailBadges").innerHTML = `<span class="badge">${item.verified ? "本人確認済み" : "本人確認欄あり"}</span>${isMatched(item) ? `<span class="badge">マッチ済み</span>` : ""}${item.prefecture ? `<span class="badge muted">${esc(item.prefecture)}</span>` : ""}${item.city ? `<span class="badge muted">${esc(item.city)}</span>` : ""}<span class="badge muted">${esc(item.place)}</span><span class="badge muted">${item.participantCount}/${item.capacity}人</span><span class="badge muted">${item.audience === "same_gender" ? "同性のみ" : "誰でも"}</span>`;
     }
 
     function updateDetailFavoriteUI(item) {
@@ -3876,7 +3947,8 @@
         editingListingId = item.id;
         document.getElementById("listingTitle").value = item.title || item.activity;
         document.getElementById("activity").value = [...document.getElementById("activity").options].some((option) => option.value === item.activity) ? item.activity : "何もしない 15分";
-        document.getElementById("prefecture").value = item.prefecture || "東京都";
+        document.getElementById("listingPrefecture").value = item.prefecture || "";
+        populateCitySelect("listingPrefecture", "listingCity", item.city || "");
         document.getElementById("place").value = item.place;
         document.getElementById("date").value = new Date(new Date(item.scheduledAt).getTime() - new Date(item.scheduledAt).getTimezoneOffset() * 60000).toISOString().slice(0, 16);
         document.getElementById("capacity").value = String(item.capacity);
@@ -3953,6 +4025,7 @@
     document.querySelectorAll("main section").forEach((section) => observer.observe(section));
 
     renderCategories();
+    setupAreaSelects();
     setDefaultListingDate();
     renderActivities();
     syncGenderControls();
