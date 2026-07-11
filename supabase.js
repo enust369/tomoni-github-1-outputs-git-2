@@ -215,6 +215,9 @@ window.tomoniAuth = {
   markNotificationRead: (id) => client
     ? client.from("notifications").update({ read_at: new Date().toISOString() }).eq("id", id)
     : Promise.resolve(notConfigured()),
+  markAllNotificationsRead: () => client
+    ? client.from("notifications").update({ read_at: new Date().toISOString() }).is("read_at", null)
+    : Promise.resolve(notConfigured()),
   syncListingEndNotifications: () => client
     ? client.rpc("sync_listing_end_notifications")
     : Promise.resolve(notConfigured()),
