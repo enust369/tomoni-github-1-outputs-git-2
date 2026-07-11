@@ -1214,15 +1214,15 @@
     <header class="topbar">
       <div class="brand"><span class="brand-mark">と</span><span>TOMONI</span></div>
       <nav class="nav" aria-label="画面">
-        <button class="active" data-jump="home">ホーム</button>
-        <button data-jump="diagnosis">診断</button>
-        <button data-jump="activities">過ごし方</button>
-        <button data-jump="create">募集作成</button>
-        <button data-jump="region">地域から探す</button>
-        <button data-jump="listings">募集一覧</button>
-        <button data-jump="profile">人材カード</button>
-        <button data-jump="listings">募集を見る</button>
-        <button data-jump="after">会った後</button>
+        <button class="active" data-jump="home" data-nav="home">ホーム</button>
+        <button data-jump="diagnosis" data-nav="diagnosis">診断</button>
+        <button data-jump="activities" data-nav="activities">過ごし方</button>
+        <button data-jump="create" data-nav="create">募集作成</button>
+        <button data-jump="region" data-nav="region">地域から探す</button>
+        <button data-jump="listings" data-nav="listings">募集一覧</button>
+        <button data-jump="profile" data-nav="profile">人材カード</button>
+        <button data-jump="listings" data-nav="detail">募集を見る</button>
+        <button data-jump="after" data-nav="after">会った後</button>
       </nav>
       <div class="header-actions"><button class="notification-button" id="notificationButton" type="button" data-action="open-notifications" aria-label="通知" aria-expanded="false">🔔<span class="notification-badge" id="notificationBadge" hidden>0</span></button><button class="account-button" id="accountButton" type="button" data-action="open-auth">登録・ログイン</button></div>
     </header>
@@ -2182,9 +2182,32 @@
       return { blocked, message, hits, hasPrivateInfo };
     }
 
+    function navIdForSection(id) {
+      if (id === "today") return "home";
+      if (id === "meeting-record") return "after";
+      if (id === "detail") return "detail";
+      return id;
+    }
+
+    function setActiveNav(id) {
+      const activeId = navIdForSection(id);
+      document.querySelectorAll(".nav button").forEach((button) => {
+        button.classList.toggle("active", button.dataset.nav === activeId);
+      });
+    }
+
+    function updateActiveNavFromScroll() {
+      const sections = [...document.querySelectorAll("main section")];
+      const headerHeight = document.querySelector(".site-header")?.offsetHeight || 0;
+      const marker = window.scrollY + headerHeight + 24;
+      const current = sections.reduce((active, section) => section.offsetTop <= marker ? section : active, sections[0]);
+      if (current) setActiveNav(current.id);
+    }
+
     const jumpTo = (id) => {
       if (id !== "chat" && currentChatChannel) closeChatRealtime();
       if (id !== "detail" && participationOwnerChannel) closeOwnerParticipationRealtime();
+      setActiveNav(id);
       document.getElementById(id)?.scrollIntoView({ behavior: "smooth", block: "start" });
     };
 
@@ -4253,12 +4276,7 @@
         if (entry.isIntersecting) entry.target.classList.add("is-visible");
         if (entry.isIntersecting && entry.target.id === "admin") ensureAdminInitialLoad();
       });
-      const visible = entries.filter((entry) => entry.isIntersecting).sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0];
-      if (!visible) return;
-      const activeId = visible.target.id === "today" ? "home" : visible.target.id;
-      document.querySelectorAll(".nav button").forEach((button) => {
-        button.classList.toggle("active", button.dataset.jump === activeId);
-      });
+      updateActiveNavFromScroll();
     }, { threshold: [.01, .25, .55] });
 
     document.querySelectorAll("main section").forEach((section) => observer.observe(section));
