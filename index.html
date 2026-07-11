@@ -1202,14 +1202,13 @@
     <header class="topbar">
       <div class="brand"><span class="brand-mark">と</span><span>TOMONI</span></div>
       <nav class="nav" aria-label="画面">
-        <button class="active" data-jump="top">トップ</button>
-        <button data-jump="home">ホーム</button>
+        <button class="active" data-jump="home">ホーム</button>
         <button data-jump="diagnosis">診断</button>
         <button data-jump="activities">過ごし方</button>
         <button data-jump="create">募集作成</button>
         <button data-jump="region">地域から探す</button>
         <button data-jump="listings">募集一覧</button>
-        <button data-jump="profile">人柄カード</button>
+        <button data-jump="profile">人材カード</button>
         <button data-jump="listings">募集を見る</button>
         <button data-jump="after">会った後</button>
       </nav>
@@ -1231,14 +1230,14 @@
     </aside>
 
     <main>
-      <section class="hero" id="top">
+      <section class="hero" id="home">
         <div class="hero-inner">
           <div>
             <h1>TOMONI</h1>
             <p class="lead">無理に話さなくていい。<br>一緒に静かな時間を過ごすサービスです。</p>
             <p class="sublead">散歩でも、ベンチでも、何もしなくても大丈夫。<br>ここなら、無理をしなくていい。</p>
             <div class="actions">
-              <button class="btn primary" data-jump="home">はじめる</button>
+              <button class="btn primary" data-jump="activities">はじめる</button>
               <button class="btn ghost" data-jump="activities">今日の過ごし方を見る</button>
             </div>
             <div class="assurance-note">
@@ -1256,7 +1255,7 @@
         </div>
       </section>
 
-      <section id="home">
+      <section id="today">
         <div class="section-head">
           <div>
             <p class="eyebrow">ホーム</p>
@@ -4191,8 +4190,9 @@
       });
       const visible = entries.filter((entry) => entry.isIntersecting).sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0];
       if (!visible) return;
+      const activeId = visible.target.id === "today" ? "home" : visible.target.id;
       document.querySelectorAll(".nav button").forEach((button) => {
-        button.classList.toggle("active", button.dataset.jump === visible.target.id);
+        button.classList.toggle("active", button.dataset.jump === activeId);
       });
     }, { threshold: [.01, .25, .55] });
 
