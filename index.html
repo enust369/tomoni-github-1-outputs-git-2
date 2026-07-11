@@ -1301,10 +1301,7 @@
             <span class="badge muted">安心のために</span>
             <h3 style="margin-top:12px">TOMONIは同性同士が安心して過ごすためのサービスです。</h3>
             <p class="meta">表示される募集は、登録した性別と同じ方のものだけです。</p>
-            <div class="same-gender-toggle" id="genderToggle" aria-label="登録時の性別">
-              <button class="chip selected" data-gender="女性">女性として見る</button>
-              <button class="chip" data-gender="男性">男性として見る</button>
-            </div>
+            <p class="meta" style="margin-top:10px">プロフィールの登録性別をもとに、自動で表示を絞り込みます。</p>
           </article>
         </div>
       </section>
@@ -1470,11 +1467,8 @@
               </select>
             </div>
             <div class="field">
-              <label for="audience">参加できる人</label>
-              <select id="audience" required>
-                <option value="same_gender">同性のみ</option>
-                <option value="anyone">誰でも</option>
-              </select>
+              <label>参加できる人</label>
+              <div class="safety-check">TOMONIは同性同士が安心して会えるサービスです。<br>この募集は、あなたと同じ性別の方にのみ表示されます。</div>
             </div>
             <div class="field full">
               <div class="safety-check" id="safetyCheck" role="status">公開前に、場所・募集文の安全性を確認します。</div>
@@ -2076,7 +2070,7 @@
       return demoRows.map((item) => ({
         ...item,
         participantCount: item.participantCount,
-        gender: "女性", audience: "anyone", scheduledAt: inTwoHours, talk: "自然に話せたらいい",
+        gender: "女性", audience: "same_gender", scheduledAt: inTwoHours, talk: "自然に話せたらいい",
         verified: true, air: ["静かで落ち着いた空気", "のんびりした空気"], traits: ["穏やかな人", "聞き上手な人"],
         availableToday: true, active: true, owner: false, ownerId: null, isDemo: true
       }));
@@ -2093,6 +2087,28 @@
 
     function saveState() { localStorage.setItem(storageKey, JSON.stringify(appState)); }
     function esc(value = "") { const node = document.createElement("div"); node.textContent = String(value); return node.innerHTML; }
+    function normalizeGender(value = "") {
+      const text = String(value || "").trim();
+      if (text.includes("女性")) return "女性";
+      if (text.includes("男性")) return "男性";
+      return "";
+    }
+    function viewerGender() {
+      return normalizeGender(appState.profileOwnerId === appState.user?.id ? appState.profile.gender : "");
+    }
+    function hasViewerGender() {
+      return Boolean(appState.user && viewerGender());
+    }
+    function isSameGenderUser(gender) {
+      return Boolean(hasViewerGender() && normalizeGender(gender) === viewerGender());
+    }
+    function canShowListingToViewer(item) {
+      if (!item || item.owner) return false;
+      return isSameGenderUser(item.gender);
+    }
+    function sameGenderRequiredMarkup() {
+      return `<article class="card empty-state"><h3>プロフィールの性別設定が必要です。</h3><p class="meta" style="margin-top:8px">TOMONIは同性同士が安心して会えるサービスです。プロフィールを設定すると、同じ性別の募集だけが表示されます。</p><div class="actions" style="justify-content:center"><button class="btn small primary" data-action="edit-profile">プロフィールを設定する</button></div></article>`;
+    }
     function optionMarkup(values, selected = "", includeAll = false) {
       return `${includeAll ? `<option value="all">すべて</option>` : `<option value="">選択してください</option>`}${values.map((value) => `<option value="${esc(value)}" ${value === selected ? "selected" : ""}>${esc(value)}</option>`).join("")}`;
     }
@@ -2399,9 +2415,13 @@
     }
 
     function rankListings() {
+      if (!hasViewerGender()) {
+        latestRankedListings = [];
+        return latestRankedListings;
+      }
       const profile = buildComfortProfile();
       latestRankedListings = listings
-        .filter((item) => (item.audience === "anyone" || item.gender === currentGender) && item.availableToday)
+        .filter((item) => canShowListingToViewer(item) && item.availableToday)
         .map((item) => ({ ...item, comfortScore: listingScore(item, profile) }))
         .sort((a, b) => b.comfortScore - a.comfortScore);
       return latestRankedListings;
@@ -2430,7 +2450,16 @@
 
     function renderRecommendations() {
       const recommended = rankListings().find((item) => item.active) || rankListings()[0];
-      if (!recommended) return;
+      if (!recommended) {
+        const message = hasViewerGender() ? `<article class="card empty-state">同じ性別のおすすめはまだありません。</article>` : sameGenderRequiredMarkup();
+        document.getElementById("topRecommendation").innerHTML = message;
+        document.getElementById("homeRecommendation").innerHTML = message;
+        document.getElementById("homeListings").innerHTML = message;
+        bindJumpButtons(document.getElementById("topRecommendation"));
+        bindJumpButtons(document.getElementById("homeRecommendation"));
+        bindJumpButtons(document.getElementById("homeListings"));
+        return;
+      }
       document.getElementById("topRecommendation").innerHTML = shortCard(recommended);
       document.getElementById("homeRecommendation").innerHTML = shortCard(recommended, "1");
       const nearby = rankListings().filter((item) => item.active).slice(0, 3);
@@ -2449,6 +2478,11 @@
       const profiles = rankListings()
         .filter((item) => (prefecture === "all" || item.prefecture === prefecture) && (city === "all" || item.city === city))
         .sort((a, b) => a.distance - b.distance);
+      if (!profiles.length) {
+        grid.innerHTML = hasViewerGender() ? `<article class="card empty-state">同じ性別の募集はまだありません。</article>` : sameGenderRequiredMarkup();
+        bindJumpButtons(grid);
+        return;
+      }
       grid.innerHTML = profiles.map((item) => `
         <article class="card">
           <div class="chips">
@@ -2476,6 +2510,11 @@
     function renderListings() {
       const grid = document.getElementById("listingGrid");
       const visibleListings = rankListings().filter((item) => item.active);
+      if (!visibleListings.length) {
+        grid.innerHTML = hasViewerGender() ? `<article class="card empty-state">同じ性別の募集はまだありません。</article>` : sameGenderRequiredMarkup();
+        bindJumpButtons(grid);
+        return;
+      }
       grid.innerHTML = visibleListings.map((item) => {
         const listingLabel = activityDisplay(item);
         const title = item.title || listingLabel;
@@ -2494,7 +2533,6 @@
               ${item.isDemo ? `<span class="badge">動作確認用</span>` : ""}
               ${item.capacity ? `<span class="badge muted">${item.capacity}人募集</span>` : ""}
               ${item.capacity ? `<span class="badge muted">${item.participantCount}/${item.capacity}人</span>` : ""}
-              ${item.audience ? `<span class="badge muted">${item.audience === "same_gender" ? "同性のみ" : "誰でも"}</span>` : ""}
               ${isMatched(item) ? `<span class="badge">マッチ済み</span>` : ""}
             </div>
             <h3 class="listing-title">${esc(title)}</h3>
@@ -2638,7 +2676,8 @@
       if (result?.error) { toast(`マッチ一覧を読み込めませんでした：${result.error.message}`); return false; }
       matchRecords = (result?.data || []).filter((match) => {
         const partnerId = match.user1_id === appState.user.id ? match.user2_id : match.user1_id;
-        return !blockedUserIds.has(partnerId);
+        const partnerGender = profilesByUserId.get(partnerId)?.gender || listings.find((item) => item.ownerId === partnerId)?.gender;
+        return !blockedUserIds.has(partnerId) && (!partnerGender || isSameGenderUser(partnerGender));
       });
       matchedUserIds = new Set(matchRecords.map((match) => match.user1_id === appState.user.id ? match.user2_id : match.user1_id).filter(Boolean));
       return true;
@@ -2661,6 +2700,11 @@
       const counts = new Map((countsResult?.data || []).map((item) => [item.listing_id, Number(item.participant_count)]));
       const profiles = new Map((profilesResult?.data || []).map((profile) => [profile.user_id, profile]));
       profilesByUserId = profiles;
+      matchRecords = matchRecords.filter((match) => {
+        const partnerId = match.user1_id === appState.user?.id ? match.user2_id : match.user1_id;
+        return isSameGenderUser(profiles.get(partnerId)?.gender);
+      });
+      matchedUserIds = new Set(matchRecords.map((match) => match.user1_id === appState.user.id ? match.user2_id : match.user1_id).filter(Boolean));
       participationStatuses = new Map((mineResult?.data || []).map((item) => [item.listing_id, item.status || "approved"]));
       participatingListingIds = new Set([...participationStatuses].filter(([, status]) => status === "approved").map(([id]) => id));
       const remote = (result?.data || []).filter((row) => (row.status || "open") !== "ended").map((row) => listingFromRow({ ...row, participantCount: counts.get(row.id) || 0, profile: profiles.get(row.owner_id) }));
@@ -2686,7 +2730,7 @@
         place: document.getElementById("place").value.trim(),
         scheduled_at: new Date(document.getElementById("date").value).toISOString(),
         capacity: Number(document.getElementById("capacity").value),
-        audience: document.getElementById("audience").value,
+        audience: "same_gender",
         updated_at: new Date().toISOString()
       };
       const result = editingListingId
@@ -2804,7 +2848,7 @@
 
     function updateAccountUI() {
       const button = document.getElementById("accountButton");
-      const profileComplete = Boolean(appState.user && appState.profileOwnerId === appState.user.id);
+      const profileComplete = hasMemberAccess();
       button.textContent = appState.user ? (profileComplete ? `${appState.profile.nickname}さん` : "プロフィール作成") : "登録・ログイン";
       button.dataset.action = appState.user ? "open-account" : "open-auth";
       document.getElementById("adminMenuButton").hidden = !isAdminUser();
@@ -2839,7 +2883,7 @@
     }
 
     function hasMemberAccess() {
-      return Boolean(appState.user && appState.profileOwnerId === appState.user.id);
+      return Boolean(appState.user && appState.profileOwnerId === appState.user.id && viewerGender());
     }
 
     async function loadSupabaseProfile(userId) {
@@ -2936,13 +2980,17 @@
     }
 
     function renderFavorites() {
-      const favorites = listings.filter((item) => isFavorite(item));
+      const favorites = listings.filter((item) => isFavorite(item) && canShowListingToViewer(item));
       document.getElementById("accountContent").innerHTML = favorites.length ? favorites.map((item) => `<article class="card managed-listing"><div><span class="badge">気になる</span><h3 style="margin-top:10px">${esc(activityDisplay(item))}</h3><p class="meta">${esc(item.person)}さん / ${item.prefecture ? `${esc(item.prefecture)} / ` : ""}${item.city ? `${esc(item.city)} / ` : ""}${esc(item.place)}</p><p class="meta">${esc(item.personalityTitle || "自然体で過ごせる人")}</p></div><div class="actions"><button class="btn small" data-action="open-detail" data-id="${item.id}">詳しく見る</button><button class="btn small quiet-action" data-action="toggle-favorite" data-id="${item.id}">気になるを解除</button></div></article>`).join("") : `<article class="card empty-state">気になる相手はまだありません。</article>`;
       bindJumpButtons(document.getElementById("accountContent"));
     }
 
     function renderMatches() {
-      document.getElementById("accountContent").innerHTML = matchRecords.length ? matchRecords.map((match) => {
+      const visibleMatches = matchRecords.filter((match) => {
+        const partnerId = match.user1_id === appState.user?.id ? match.user2_id : match.user1_id;
+        return isSameGenderUser(profilesByUserId.get(partnerId)?.gender);
+      });
+      document.getElementById("accountContent").innerHTML = visibleMatches.length ? visibleMatches.map((match) => {
         const partnerId = match.user1_id === appState.user?.id ? match.user2_id : match.user1_id;
         const item = listings.find((listing) => listing.ownerId === partnerId);
         const profile = profilesByUserId.get(partnerId) || {};
@@ -3435,7 +3483,7 @@
       const statusElement = document.getElementById("participationStatus");
       statusElement.textContent = item.owner ? "参加申請を確認できます。" : status === "pending" ? "参加申請を送りました。募集主の確認をお待ちください。" : approved ? "承認されました。チャットを利用できます。" : status === "declined" ? "今回は見送られました。" : full ? "この募集は満員です。" : item.isDemo ? "動作確認用のサンプル募集です。" : "申請が承認されると、参加人数に反映されます。";
       statusElement.classList.toggle("caution", status === "declined" || (full && !approved));
-      document.getElementById("detailBadges").innerHTML = `<span class="badge">${item.verified ? "本人確認済み" : "本人確認欄あり"}</span>${isMatched(item) ? `<span class="badge">マッチ済み</span>` : ""}${item.prefecture ? `<span class="badge muted">${esc(item.prefecture)}</span>` : ""}${item.city ? `<span class="badge muted">${esc(item.city)}</span>` : ""}<span class="badge muted">${esc(item.place)}</span><span class="badge muted">${item.participantCount}/${item.capacity}人</span><span class="badge muted">${item.audience === "same_gender" ? "同性のみ" : "誰でも"}</span>`;
+      document.getElementById("detailBadges").innerHTML = `<span class="badge">${item.verified ? "本人確認済み" : "本人確認欄あり"}</span>${isMatched(item) ? `<span class="badge">マッチ済み</span>` : ""}${item.prefecture ? `<span class="badge muted">${esc(item.prefecture)}</span>` : ""}${item.city ? `<span class="badge muted">${esc(item.city)}</span>` : ""}<span class="badge muted">${esc(item.place)}</span><span class="badge muted">${item.participantCount}/${item.capacity}人</span><span class="badge muted">同性のみ</span>`;
     }
 
     function updateDetailFavoriteUI(item) {
@@ -3467,6 +3515,7 @@
         const itemIndex = listings.findIndex((listing) => listing.id === id);
         if (itemIndex >= 0) listings.splice(itemIndex, 1, item);
       }
+      if (!item.owner && !canShowListingToViewer(item)) { showParticipationMessage("この募集は、募集者と同じ性別の方だけが確認できます。", true); jumpTo("listings"); return; }
       currentDetailListingId = item.id;
       document.getElementById("detailTitle").innerHTML = `${esc(item.title || activityDisplay(item))}<br><span class="meta">${esc(item.person)}さんの募集</span>`;
       document.getElementById("detailCopy").textContent = item.title ? `過ごし方：${activityDisplay(item)}` : (item.note || "募集内容を確認して、無理のない範囲で参加申請してください。");
@@ -3506,7 +3555,7 @@
     }
 
     function canUseChat(item) {
-      return Boolean(appState.user && item && !item.isDemo && (item.owner || participatingListingIds.has(item.id)));
+      return Boolean(appState.user && item && !item.isDemo && (item.owner || (participatingListingIds.has(item.id) && canShowListingToViewer(item))));
     }
 
     async function hasBlockRelationWith(userId) {
@@ -3678,6 +3727,7 @@
     async function openChat(listingId) {
       const item = listings.find((listing) => listing.id === listingId);
       if (!canUseChat(item)) { showParticipationMessage("チャットは募集主と参加済みのユーザーだけが利用できます。", true); return; }
+      if (!item.owner && !canShowListingToViewer(item)) { showParticipationMessage("この募集のチャットは、募集者と同じ性別の方だけが利用できます。", true); return; }
       if (!item.owner && await showBlockedRelationMessage(item.ownerId, "ブロック関係があるため、この募集のチャットは利用できません。")) return;
       await closeChatRealtime(false);
       currentChatMode = "listing";
@@ -3717,6 +3767,8 @@
       }
       if (match && !partnerUserId) partnerUserId = match.user1_id === appState.user.id ? match.user2_id : match.user1_id;
       console.log("tomoni match chat resolved", { match_id: match?.id || null, current_user_id: appState.user.id, other_user_id: partnerUserId || null });
+      const partnerGender = profilesByUserId.get(partnerUserId)?.gender || listings.find((item) => item.ownerId === partnerUserId)?.gender;
+      if (!isSameGenderUser(partnerGender)) { document.getElementById("chatStatus").textContent = "同性の相手とだけチャットできます。"; document.getElementById("chatStatus").classList.add("caution"); toast("同性の相手とだけチャットできます。"); return; }
       const includesCurrentUser = match && (match.user1_id === appState.user.id || match.user2_id === appState.user.id);
       const includesPartner = match && partnerUserId && (match.user1_id === partnerUserId || match.user2_id === partnerUserId);
       if (!match || !includesCurrentUser || !includesPartner || !matchedUserIds.has(partnerUserId)) { document.getElementById("chatStatus").textContent = "マッチした相手とだけチャットできます。"; document.getElementById("chatStatus").classList.add("caution"); toast("マッチした相手とだけチャットできます。"); return; }
@@ -4003,6 +4055,7 @@
         const id = button.dataset.id;
         const item = listings.find((listing) => listing.id === id);
         if (!item || item.isDemo) { toast("この募集は気になるに追加できません。"); return; }
+        if (!canShowListingToViewer(item)) { toast("気になるは同性の相手にだけ利用できます。"); return; }
         if (favoriteToggleInProgress.has(item.id)) return;
         favoriteToggleInProgress.add(item.id);
         button.disabled = true;
@@ -4058,6 +4111,7 @@
         if (!item) { showParticipationMessage("募集が見つかりません。画面を再読み込みしてください。", true); return; }
         if (!/^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(listingId)) { showParticipationMessage("募集IDが正しくありません。募集一覧からもう一度詳細を開いてください。", true); return; }
         if (item.owner) { showParticipationMessage("自分で作成した募集には参加できません。", true); return; }
+        if (!canShowListingToViewer(item)) { showParticipationMessage("この募集は、募集者と同じ性別の方だけが参加申請できます。", true); return; }
         if (await showBlockedRelationMessage(item.ownerId, "ブロック関係があるため、この募集には応募できません。")) return;
         if (participationStatuses.has(item.id)) return;
         if (item.participantCount >= item.capacity) { showParticipationMessage("この募集は満員です。", true); return; }
@@ -4137,7 +4191,6 @@
         document.getElementById("place").value = item.place;
         document.getElementById("date").value = new Date(new Date(item.scheduledAt).getTime() - new Date(item.scheduledAt).getTimezoneOffset() * 60000).toISOString().slice(0, 16);
         document.getElementById("capacity").value = String(item.capacity);
-        document.getElementById("audience").value = item.audience;
         document.getElementById("previewButton").textContent = "変更を保存する"; jumpTo("create"); toast("募集内容を編集できます。");
       }
       if (action === "delete-listing") openModal("募集を削除しますか？", `<p>削除した募集は一覧に表示されなくなります。</p><div class="actions"><button class="btn primary" data-action="confirm-delete" data-id="${button.dataset.id}">削除する</button><button class="btn" data-action="close-modal">戻る</button></div>`);

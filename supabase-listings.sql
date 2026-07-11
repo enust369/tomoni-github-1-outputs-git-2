@@ -45,23 +45,87 @@ begin
 end;
 $$;
 
+create table if not exists public.profiles (
+  user_id uuid primary key references auth.users(id) on delete cascade,
+  nickname text not null check (char_length(nickname) between 1 and 20),
+  age text not null check (age in ('20代', '30代', '40代', '50代以上')),
+  gender text not null check (gender in ('女性', '男性')),
+  area text not null check (char_length(area) between 1 and 30),
+  bio text not null check (char_length(bio) between 1 and 300),
+  tags text[] not null default '{}',
+  photo_urls text[] not null default '{}',
+  personality_type text,
+  personality_title text,
+  personality_description text,
+  personality_tags text[] not null default '{}',
+  quiet_score integer,
+  talk_score integer,
+  comfort_score integer,
+  created_at timestamptz not null default now(),
+  updated_at timestamptz not null default now(),
+  check (cardinality(photo_urls) <= 3)
+);
+
+create or replace function public.same_gender_users(p_user1 uuid, p_user2 uuid)
+returns boolean
+language sql
+stable
+security definer
+set search_path = public
+as $$
+  select p_user1 is not null
+    and p_user2 is not null
+    and p_user1 <> p_user2
+    and exists (
+      select 1
+      from public.profiles p1
+      join public.profiles p2 on p2.user_id = p_user2
+      where p1.user_id = p_user1
+        and p1.gender in ('女性', '男性')
+        and p1.gender = p2.gender
+    );
+$$;
+
+revoke all on function public.same_gender_users(uuid, uuid) from public, anon;
+grant execute on function public.same_gender_users(uuid, uuid) to authenticated;
+
 alter table public.listings enable row level security;
 
 drop policy if exists "listings are readable by everyone" on public.listings;
 create policy "listings are readable by everyone"
 on public.listings for select
-using (true);
+using (
+  auth.uid() is not null
+  and (
+    owner_id = auth.uid()
+    or public.same_gender_users(auth.uid(), owner_id)
+  )
+);
 
 drop policy if exists "signed-in users can create their own listings" on public.listings;
 create policy "signed-in users can create their own listings"
 on public.listings for insert to authenticated
-with check (auth.uid() = owner_id);
+with check (
+  auth.uid() = owner_id
+  and exists (
+    select 1 from public.profiles
+    where profiles.user_id = auth.uid()
+      and profiles.gender = owner_gender
+  )
+);
 
 drop policy if exists "owners can update their listings" on public.listings;
 create policy "owners can update their listings"
 on public.listings for update to authenticated
 using (auth.uid() = owner_id)
-with check (auth.uid() = owner_id);
+with check (
+  auth.uid() = owner_id
+  and exists (
+    select 1 from public.profiles
+    where profiles.user_id = auth.uid()
+      and profiles.gender = owner_gender
+  )
+);
 
 drop policy if exists "owners can delete their listings" on public.listings;
 create policy "owners can delete their listings"
@@ -158,6 +222,10 @@ begin
 
   if listing_owner_id = current_user_id then
     raise exception '自分の募集には参加できません。';
+  end if;
+
+  if not public.same_gender_users(current_user_id, listing_owner_id) then
+    raise exception 'この募集は、募集者と同じ性別の方だけが参加申請できます。';
   end if;
 
   if public.has_block_relation(listing_owner_id) then
@@ -279,9 +347,11 @@ as $$
       )
       or exists (
         select 1 from public.listing_participants
+        join public.listings on listings.id = listing_participants.listing_id
         where listing_participants.listing_id = target_listing_id
           and listing_participants.user_id = auth.uid()
           and listing_participants.status = 'approved'
+          and public.same_gender_users(auth.uid(), listings.owner_id)
       )
     );
 $$;
@@ -433,7 +503,10 @@ alter table public.profiles enable row level security;
 drop policy if exists "authenticated users can read profiles" on public.profiles;
 create policy "authenticated users can read profiles"
 on public.profiles for select to authenticated
-using (true);
+using (
+  user_id = auth.uid()
+  or public.same_gender_users(auth.uid(), user_id)
+);
 
 drop policy if exists "users can create their own profile" on public.profiles;
 create policy "users can create their own profile"
@@ -471,7 +544,22 @@ using (user_id = auth.uid());
 drop policy if exists "users can create their own favorites" on public.favorites;
 create policy "users can create their own favorites"
 on public.favorites for insert to authenticated
-with check (user_id = auth.uid());
+with check (
+  user_id = auth.uid()
+  and (
+    favorites.target_user_id is null
+    or public.same_gender_users(auth.uid(), favorites.target_user_id)
+  )
+  and (
+    favorites.listing_id is null
+    or exists (
+      select 1
+      from public.listings
+      where listings.id = favorites.listing_id
+        and public.same_gender_users(auth.uid(), listings.owner_id)
+    )
+  )
+);
 
 drop policy if exists "users can delete their own favorites" on public.favorites;
 create policy "users can delete their own favorites"
@@ -625,7 +713,10 @@ alter table public.matches enable row level security;
 drop policy if exists "matched users can read their own matches" on public.matches;
 create policy "matched users can read their own matches"
 on public.matches for select to authenticated
-using (auth.uid() = user1_id or auth.uid() = user2_id);
+using (
+  (auth.uid() = user1_id or auth.uid() = user2_id)
+  and public.same_gender_users(user1_id, user2_id)
+);
 
 grant select on public.matches to authenticated;
 
@@ -640,6 +731,10 @@ declare
   second_user uuid;
 begin
   if new.target_user_id is null or new.target_user_id = new.user_id then
+    return new;
+  end if;
+
+  if not public.same_gender_users(new.user_id, new.target_user_id) then
     return new;
   end if;
 
@@ -685,6 +780,10 @@ begin
 
   if p_target_user_id is null or p_target_user_id = current_user_id then
     raise exception '相手ユーザーが正しくありません。';
+  end if;
+
+  if not public.same_gender_users(current_user_id, p_target_user_id) then
+    raise exception '同性の相手とだけマッチできます。';
   end if;
 
   if not exists (
@@ -738,6 +837,7 @@ join public.favorites f2
  and f2.target_user_id = f1.user_id
 where f1.target_user_id is not null
   and f1.user_id <> f1.target_user_id
+  and public.same_gender_users(f1.user_id, f1.target_user_id)
 on conflict do nothing;
 
 create table if not exists public.match_messages (
@@ -766,6 +866,7 @@ as $$
       where matches.id = target_match_id
         and matches.status = 'active'
         and (matches.user1_id = auth.uid() or matches.user2_id = auth.uid())
+        and public.same_gender_users(matches.user1_id, matches.user2_id)
     );
 $$;
 
