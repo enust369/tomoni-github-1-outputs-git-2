@@ -71,16 +71,21 @@
 
     .app {
       min-height: 100vh;
+      padding-top: 69px;
     }
 
     .topbar {
-      position: sticky;
+      position: fixed;
       top: 0;
+      left: 0;
+      right: 0;
       z-index: 70;
       display: flex;
       align-items: center;
       justify-content: space-between;
+      box-sizing: border-box;
       gap: 16px;
+      width: 100%;
       padding: 13px clamp(18px, 4vw, 46px);
       background: rgba(255, 253, 248, .94);
       border-bottom: 1px solid rgba(219, 226, 214, .58);
@@ -1086,6 +1091,8 @@
 
     @media (max-width: 680px) {
       :root { --radius: 16px; }
+      .app { padding-top: 116px; }
+      section { scroll-margin-top: 128px; }
       main section { opacity: 1; transform: none; }
       .chat-form { grid-template-columns: 1fr; }
       .chat-bubble { max-width: 88%; }
@@ -1099,6 +1106,11 @@
       .nav {
         order: 3;
         width: calc(100vw - 24px);
+      }
+
+      .notification-panel {
+        top: 118px;
+        max-height: min(620px, calc(100vh - 136px));
       }
 
       .brand { font-size: 14px; }
