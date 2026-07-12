@@ -1956,6 +1956,7 @@
     const handledParticipationEvents = new Set();
     let notifications = [];
     let notificationChannel = null;
+    let passwordRecoveryMode = false;
     let favoriteRecords = [];
     let favoriteListingIds = new Set();
     let favoriteTargetUserIds = new Set();
@@ -2943,7 +2944,17 @@
       if (!againResult?.error) document.getElementById("profileMeetAgainCount").textContent = `${againResult.count || 0}件`;
     }
 
+    function hasPasswordRecoveryParams() {
+      const hash = new URLSearchParams(location.hash.replace(/^#/, ""));
+      const query = new URLSearchParams(location.search);
+      return hash.get("type") === "recovery" || query.get("type") === "recovery";
+    }
+
     async function restoreSupabaseUser() {
+      if (passwordRecoveryMode || hasPasswordRecoveryParams()) {
+        openPasswordUpdateModal();
+        return;
+      }
       const auth = window.tomoniAuth;
       if (!auth?.configured) { appState.user = null; updateAccountUI(); return; }
       const result = await auth.getUser();
@@ -2960,6 +2971,14 @@
         syncGenderControls();
       }
       await loadSupabaseListings();
+    }
+
+    function openPasswordUpdateModal() {
+      passwordRecoveryMode = true;
+      appState.user = null;
+      saveState();
+      updateAccountUI();
+      openModal("新しいパスワード設定", passwordUpdateMarkup());
     }
 
     function authMarkup(mode = "login") {
@@ -2982,9 +3001,14 @@
       return `<p class="meta" style="margin-bottom:18px">登録したメールアドレスへ、再設定用の案内を送ります。</p><form class="form" id="passwordResetForm" novalidate><div class="field full"><label for="passwordResetEmail">メールアドレス</label><input id="passwordResetEmail" name="email" type="email" autocomplete="email" required><span class="field-error" id="passwordResetError"></span></div><div class="field full"><button class="btn primary" id="passwordResetSubmit" type="submit">再設定メールを送信</button></div></form><button class="btn quiet-action" style="margin-top:12px" data-action="show-login">ログインへ戻る</button>`;
     }
 
+    function passwordUpdateMarkup() {
+      return `<p class="meta" style="margin-bottom:18px">新しいパスワードを設定してください。</p><form class="form" id="passwordUpdateForm" novalidate><div class="field full"><label for="passwordUpdateNew">新しいパスワード</label><input id="passwordUpdateNew" name="password" type="password" minlength="8" autocomplete="new-password" required><span class="field-error"></span></div><div class="field full"><label for="passwordUpdateConfirm">新しいパスワード（確認）</label><input id="passwordUpdateConfirm" name="passwordConfirm" type="password" minlength="8" autocomplete="new-password" required><span class="field-error" id="passwordUpdateError"></span></div><div class="field full"><button class="btn primary" id="passwordUpdateSubmit" type="submit">パスワードを変更する</button></div></form>`;
+    }
+
     function passwordResetErrorMessage(error) {
       const message = String(error?.message || error || "");
       if (/invalid.*email|email.*invalid/i.test(message)) return "メールアドレスを確認してください。";
+      if (/password/i.test(message) && /(weak|short|least|characters|length)/i.test(message)) return "パスワードは8文字以上で入力してください。";
       if (/rate limit|too many/i.test(message)) return "短時間に送信が続いています。少し時間をおいてからもう一度お試しください。";
       if (/Failed to fetch|NetworkError|fetch/i.test(message)) return "通信できませんでした。接続を確認して、もう一度お試しください。";
       return message || "再設定メールを送信できませんでした。しばらくしてからもう一度お試しください。";
@@ -3001,6 +3025,7 @@
         else if (field.minLength > 0 && field.value.length < field.minLength) message = `${field.minLength}文字以上で入力してください。`;
         else if (field.id === "resetCode" && field.value !== "123456") message = "確認コードが一致しません。";
         else if (field.id === "authPasswordConfirm" && field.value !== form.querySelector("#authPassword")?.value) message = "パスワードが一致しません。";
+        else if (field.id === "passwordUpdateConfirm" && field.value !== form.querySelector("#passwordUpdateNew")?.value) message = "パスワードが一致しません。";
         else if (field.id === "authBirthdate" && !isAdult(field.value)) message = "18歳以上の方のみ利用できます。";
         else if (["authNickname", "authBio", "profileNickname", "profileBio"].includes(field.id) && containsPrivateInfo(field.value)) message = "電話番号・メール・住所・SNSは公開プロフィールに入力できません。";
         field.setAttribute("aria-invalid", message ? "true" : "false");
@@ -3835,7 +3860,7 @@
 
     document.addEventListener("submit", async (event) => {
       const form = event.target;
-      if (!["createForm", "meetingRecordForm", "chatForm", "contactForm", "authForm", "passwordResetForm", "profileForm", "reportForm"].includes(form.id)) return;
+      if (!["createForm", "meetingRecordForm", "chatForm", "contactForm", "authForm", "passwordResetForm", "passwordUpdateForm", "profileForm", "reportForm"].includes(form.id)) return;
       event.preventDefault();
       if (!validateForm(form)) { toast("入力内容を確認してください。"); return; }
       if (form.id === "createForm") {
@@ -3978,6 +4003,29 @@
         setLoading(true); const result = await auth.resetPassword(email); setLoading(false);
         if (result.error) { const field = document.getElementById("passwordResetEmail"); field.setAttribute("aria-invalid", "true"); document.getElementById("passwordResetError").textContent = passwordResetErrorMessage(result.error); return; }
         openModal("メールを確認してください", `<p>パスワード再設定用メールを送信しました。<br>メール内のリンクから新しいパスワードを設定してください。</p><div class="actions"><button class="btn primary" data-action="show-login">ログインへ戻る</button></div>`);
+        return;
+      }
+      if (form.id === "passwordUpdateForm") {
+        const data = Object.fromEntries(new FormData(form));
+        const password = String(data.password || "");
+        const auth = window.tomoniAuth;
+        if (!auth?.configured) { toast("Supabaseの接続情報を設定してください。"); return; }
+        setLoading(true);
+        const result = await auth.updatePassword(password);
+        setLoading(false);
+        if (result?.error) {
+          const error = document.getElementById("passwordUpdateError");
+          if (error) error.textContent = passwordResetErrorMessage(result.error);
+          toast("パスワードを変更できませんでした。");
+          return;
+        }
+        await auth.signOut();
+        passwordRecoveryMode = false;
+        if (hasPasswordRecoveryParams()) history.replaceState(null, "", `${location.origin}${location.pathname}`);
+        appState.user = null;
+        saveState();
+        updateAccountUI();
+        openModal("パスワードを変更しました", `<p>パスワードを変更しました。新しいパスワードでログインしてください。</p><div class="actions"><button class="btn primary" data-action="show-login">ログインへ</button></div>`);
         return;
       }
       if (form.id === "profileForm") {
@@ -4273,6 +4321,9 @@
       if (participationUserChannel) window.tomoniAuth?.unsubscribeParticipationChanges?.(participationUserChannel);
       if (participationOwnerChannel) window.tomoniAuth?.unsubscribeParticipationChanges?.(participationOwnerChannel);
       if (notificationChannel) window.tomoniAuth?.unsubscribeNotifications?.(notificationChannel);
+    });
+    window.addEventListener("tomoni:auth-state", (event) => {
+      if (event.detail?.event === "PASSWORD_RECOVERY") openPasswordUpdateModal();
     });
     window.addEventListener("tomoni:auth-ready", restoreSupabaseUser);
     document.addEventListener("click", (event) => {

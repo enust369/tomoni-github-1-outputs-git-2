@@ -31,6 +31,12 @@ window.tomoniAuth = {
   resetPassword: (email) => client
     ? client.auth.resetPasswordForEmail(email, { redirectTo: window.location.href.split("#")[0] })
     : Promise.resolve(notConfigured()),
+  updatePassword: (password) => client
+    ? client.auth.updateUser({ password })
+    : Promise.resolve(notConfigured()),
+  onAuthStateChange: (callback) => client
+    ? client.auth.onAuthStateChange(callback)
+    : { data: { subscription: { unsubscribe: () => {} } } },
   listListings: () => client
     ? client.from("listings").select("*").order("created_at", { ascending: false })
     : Promise.resolve(notConfigured()),
@@ -257,5 +263,11 @@ window.tomoniAuth = {
     ? client.removeChannel(channel)
     : Promise.resolve(),
 };
+
+if (client) {
+  client.auth.onAuthStateChange((event, session) => {
+    window.dispatchEvent(new CustomEvent("tomoni:auth-state", { detail: { event, session } }));
+  });
+}
 
 window.dispatchEvent(new CustomEvent("tomoni:auth-ready"));
