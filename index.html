@@ -2979,12 +2979,12 @@
     }
 
     function passwordResetMarkup() {
-      return `<p class="meta" style="margin-bottom:18px">登録したメールアドレスへ、再設定用の案内を送ります。</p><form class="form" id="passwordResetForm" novalidate><div class="field full"><label for="resetEmail">メールアドレス</label><input id="resetEmail" name="email" type="email" autocomplete="email" required><span class="field-error"></span></div><div class="field full"><button class="btn primary" type="submit">再設定メールを送信</button></div></form><button class="btn quiet-action" style="margin-top:12px" data-action="show-login">ログインへ戻る</button>`;
+      return `<p class="meta" style="margin-bottom:18px">登録したメールアドレスへ、再設定用の案内を送ります。</p><form class="form" id="passwordResetForm" novalidate><div class="field full"><label for="passwordResetEmail">メールアドレス</label><input id="passwordResetEmail" name="email" type="email" autocomplete="email" required><span class="field-error" id="passwordResetError"></span></div><div class="field full"><button class="btn primary" id="passwordResetSubmit" type="submit">再設定メールを送信</button></div></form><button class="btn quiet-action" style="margin-top:12px" data-action="show-login">ログインへ戻る</button>`;
     }
 
     function passwordResetErrorMessage(error) {
       const message = String(error?.message || error || "");
-      if (/email|invalid/i.test(message)) return "メールアドレスを確認してください。";
+      if (/invalid.*email|email.*invalid/i.test(message)) return "メールアドレスを確認してください。";
       if (/rate limit|too many/i.test(message)) return "短時間に送信が続いています。少し時間をおいてからもう一度お試しください。";
       if (/Failed to fetch|NetworkError|fetch/i.test(message)) return "通信できませんでした。接続を確認して、もう一度お試しください。";
       return message || "再設定メールを送信できませんでした。しばらくしてからもう一度お試しください。";
@@ -3968,14 +3968,17 @@
         }
         if (appState.profileOwnerId !== user.id) showProfileEditor(true);
         else { currentGender = appState.profile.gender || currentGender; syncGenderControls(); await loadSupabaseListings(); toast("ログインしました。"); }
+        return;
       }
       if (form.id === "passwordResetForm") {
         const data = Object.fromEntries(new FormData(form));
+        const email = String(data.email || "").trim();
         const auth = window.tomoniAuth;
         if (!auth?.configured) { toast("Supabaseの接続情報を設定してください。"); return; }
-        setLoading(true); const result = await auth.resetPassword(data.email.trim()); setLoading(false);
-        if (result.error) { const field = document.getElementById("resetEmail"); field.setAttribute("aria-invalid", "true"); field.parentElement.querySelector(".field-error").textContent = passwordResetErrorMessage(result.error); return; }
+        setLoading(true); const result = await auth.resetPassword(email); setLoading(false);
+        if (result.error) { const field = document.getElementById("passwordResetEmail"); field.setAttribute("aria-invalid", "true"); document.getElementById("passwordResetError").textContent = passwordResetErrorMessage(result.error); return; }
         openModal("メールを確認してください", `<p>パスワード再設定用メールを送信しました。<br>メール内のリンクから新しいパスワードを設定してください。</p><div class="actions"><button class="btn primary" data-action="show-login">ログインへ戻る</button></div>`);
+        return;
       }
       if (form.id === "profileForm") {
         const formData = new FormData(form);
