@@ -67,9 +67,6 @@ window.tomoniAuth = {
     if (targetUserId) filters.push(`target_user_id.eq.${targetUserId}`);
     return client.from("favorites").delete().or(filters.join(","));
   },
-  listReports: () => client
-    ? client.from("reports").select("*").order("created_at", { ascending: false })
-    : Promise.resolve(notConfigured()),
   createReport: (report) => {
     if (!client) return Promise.resolve(notConfigured());
     const payload = Object.fromEntries(Object.entries(report).filter(([, value]) => value !== undefined && value !== null && value !== ""));
