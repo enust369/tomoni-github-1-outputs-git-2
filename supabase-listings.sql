@@ -66,6 +66,16 @@ create table if not exists public.profiles (
   check (cardinality(photo_urls) <= 3)
 );
 
+create table if not exists public.blocks (
+  id uuid primary key default gen_random_uuid(),
+  blocker_id uuid not null default auth.uid() references auth.users(id) on delete cascade,
+  blocked_user_id uuid not null references auth.users(id) on delete cascade,
+  reason text,
+  created_at timestamptz not null default now(),
+  constraint blocks_unique_pair unique (blocker_id, blocked_user_id),
+  check (blocker_id <> blocked_user_id)
+);
+
 create or replace function public.same_gender_users(p_user1 uuid, p_user2 uuid)
 returns boolean
 language sql
@@ -89,6 +99,27 @@ $$;
 revoke all on function public.same_gender_users(uuid, uuid) from public, anon;
 grant execute on function public.same_gender_users(uuid, uuid) to authenticated;
 
+create or replace function public.users_not_blocked(p_user1 uuid, p_user2 uuid)
+returns boolean
+language sql
+stable
+security definer
+set search_path = public
+as $$
+  select p_user1 is not null
+    and p_user2 is not null
+    and p_user1 <> p_user2
+    and not exists (
+      select 1
+      from public.blocks b
+      where (b.blocker_id = p_user1 and b.blocked_user_id = p_user2)
+         or (b.blocker_id = p_user2 and b.blocked_user_id = p_user1)
+    );
+$$;
+
+revoke all on function public.users_not_blocked(uuid, uuid) from public, anon;
+grant execute on function public.users_not_blocked(uuid, uuid) to authenticated;
+
 alter table public.listings enable row level security;
 
 drop policy if exists "listings are readable by everyone" on public.listings;
@@ -98,7 +129,10 @@ using (
   auth.uid() is not null
   and (
     owner_id = auth.uid()
-    or public.same_gender_users(auth.uid(), owner_id)
+    or (
+      public.same_gender_users(auth.uid(), owner_id)
+      and public.users_not_blocked(auth.uid(), owner_id)
+    )
   )
 );
 
@@ -352,6 +386,7 @@ as $$
           and listing_participants.user_id = auth.uid()
           and listing_participants.status = 'approved'
           and public.same_gender_users(auth.uid(), listings.owner_id)
+          and public.users_not_blocked(auth.uid(), listings.owner_id)
       )
     );
 $$;
@@ -505,7 +540,10 @@ create policy "authenticated users can read profiles"
 on public.profiles for select to authenticated
 using (
   user_id = auth.uid()
-  or public.same_gender_users(auth.uid(), user_id)
+  or (
+    public.same_gender_users(auth.uid(), user_id)
+    and public.users_not_blocked(auth.uid(), user_id)
+  )
 );
 
 drop policy if exists "users can create their own profile" on public.profiles;
@@ -548,7 +586,10 @@ with check (
   user_id = auth.uid()
   and (
     favorites.target_user_id is null
-    or public.same_gender_users(auth.uid(), favorites.target_user_id)
+    or (
+      public.same_gender_users(auth.uid(), favorites.target_user_id)
+      and public.users_not_blocked(auth.uid(), favorites.target_user_id)
+    )
   )
   and (
     favorites.listing_id is null
@@ -557,6 +598,7 @@ with check (
       from public.listings
       where listings.id = favorites.listing_id
         and public.same_gender_users(auth.uid(), listings.owner_id)
+        and public.users_not_blocked(auth.uid(), listings.owner_id)
     )
   )
 );
@@ -716,6 +758,7 @@ on public.matches for select to authenticated
 using (
   (auth.uid() = user1_id or auth.uid() = user2_id)
   and public.same_gender_users(user1_id, user2_id)
+  and public.users_not_blocked(user1_id, user2_id)
 );
 
 grant select on public.matches to authenticated;
@@ -735,6 +778,10 @@ begin
   end if;
 
   if not public.same_gender_users(new.user_id, new.target_user_id) then
+    return new;
+  end if;
+
+  if not public.users_not_blocked(new.user_id, new.target_user_id) then
     return new;
   end if;
 
@@ -784,6 +831,10 @@ begin
 
   if not public.same_gender_users(current_user_id, p_target_user_id) then
     raise exception '同性の相手とだけマッチできます。';
+  end if;
+
+  if not public.users_not_blocked(current_user_id, p_target_user_id) then
+    raise exception 'ブロック関係があるため、この相手とはマッチできません。';
   end if;
 
   if not exists (
@@ -838,6 +889,7 @@ join public.favorites f2
 where f1.target_user_id is not null
   and f1.user_id <> f1.target_user_id
   and public.same_gender_users(f1.user_id, f1.target_user_id)
+  and public.users_not_blocked(f1.user_id, f1.target_user_id)
 on conflict do nothing;
 
 create table if not exists public.match_messages (
@@ -867,6 +919,7 @@ as $$
         and matches.status = 'active'
         and (matches.user1_id = auth.uid() or matches.user2_id = auth.uid())
         and public.same_gender_users(matches.user1_id, matches.user2_id)
+        and public.users_not_blocked(matches.user1_id, matches.user2_id)
     );
 $$;
 
