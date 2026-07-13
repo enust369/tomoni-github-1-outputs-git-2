@@ -2302,8 +2302,11 @@
         primary = "展示会";
         secondary = "新店舗に行く";
       }
+      const suggestedPersonName = suggested?.person || "";
+      const suggestedActivityLabel = suggested ? activityDisplay(suggested) : "";
+      const suggestedTalkLabel = suggested?.talk || "";
       const personLine = suggested
-        ? `<br><br>${suggested.person}さんの「${activityDisplay(suggested)}」は、今日の距離感に近そうです。`
+        ? `<br><br>${esc(suggestedPersonName)}さんの「${esc(suggestedActivityLabel)}」は、今日の距離感に近そうです。`
         : "";
       document.getElementById("diagnosisResult").innerHTML = `今日のあなたには、<br>「${primary}」や「${secondary}」が合いそうです。<br><br>${profile.summary}${personLine}`;
       if (shouldPersist) persistPersonalityResult(buildPersonalityResult(profile));
@@ -2311,11 +2314,11 @@
         <div class="notice">
           <span class="badge">今日のあなたなら</span>
           ${suggested.verified ? `<span class="badge">本人確認済み</span>` : ""}
-          <h3 style="margin-top:12px">${suggested.person}さん</h3>
-          <p class="meta">${activityDisplay(suggested)} / ${suggested.talk}</p>
+          <h3 style="margin-top:12px">${esc(suggestedPersonName)}さん</h3>
+          <p class="meta">${esc(suggestedActivityLabel)} / ${esc(suggestedTalkLabel)}</p>
           <div class="comfort-mark" aria-label="安心して過ごせそう"><i></i><i></i><i></i><i></i><i></i></div>
           <p style="margin-top:8px">自然に過ごせそうです。</p>
-          <div class="actions"><button class="btn small primary" data-action="open-detail" data-id="${suggested.id}">詳しく見る</button><button class="btn small quiet-action" data-action="report" data-person="${esc(suggested.person)}" data-source="recommendation" data-id="${suggested.id}" data-user-id="${esc(suggested.ownerId || "")}">通報</button></div>
+          <div class="actions"><button class="btn small primary" data-action="open-detail" data-id="${esc(suggested.id || "")}">詳しく見る</button><button class="btn small quiet-action" data-action="report" data-person="${esc(suggestedPersonName)}" data-source="recommendation" data-id="${esc(suggested.id || "")}" data-user-id="${esc(suggested.ownerId || "")}">通報</button></div>
         </div>` : "";
       bindJumpButtons(document.getElementById("diagnosisPerson"));
       renderRecommendations();
