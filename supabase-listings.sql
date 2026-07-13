@@ -129,10 +129,7 @@ using (
   auth.uid() is not null
   and (
     owner_id = auth.uid()
-    or (
-      public.same_gender_users(auth.uid(), owner_id)
-      and public.users_not_blocked(auth.uid(), owner_id)
-    )
+    or public.same_gender_users(auth.uid(), owner_id)
   )
 );
 
@@ -540,10 +537,7 @@ create policy "authenticated users can read profiles"
 on public.profiles for select to authenticated
 using (
   user_id = auth.uid()
-  or (
-    public.same_gender_users(auth.uid(), user_id)
-    and public.users_not_blocked(auth.uid(), user_id)
-  )
+  or public.same_gender_users(auth.uid(), user_id)
 );
 
 drop policy if exists "users can create their own profile" on public.profiles;

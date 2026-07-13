@@ -2087,7 +2087,6 @@
     }
     function canShowListingToViewer(item) {
       if (!item || item.owner) return false;
-      if (item.ownerId && blockedUserIds.has(item.ownerId)) return false;
       return isSameGenderUser(item.gender);
     }
     function sameGenderRequiredMarkup() {
@@ -3165,9 +3164,11 @@
 
     async function loadAdminReports() {
       document.getElementById("adminReports").innerHTML = `<div class="empty-state">読み込み中...</div>`;
-      let result = await window.tomoniAuth.listAdminReports();
-      if (result?.error && window.tomoniAuth?.listAdminReportsDirect) result = await window.tomoniAuth.listAdminReportsDirect();
-      if (result?.error) throw result.error;
+      const result = await window.tomoniAuth.listAdminReports();
+      if (result?.error) {
+        document.getElementById("adminReports").innerHTML = `<div class="empty-state">通報一覧を取得できませんでした。管理者権限またはSupabaseの設定を確認してください。</div>`;
+        throw result.error;
+      }
       adminReports = normalizeAdminList(result.data);
       renderAdminReports();
     }
