@@ -3806,7 +3806,6 @@
     }
 
     async function openMatchChat(matchId, partnerUserId, partnerName) {
-      console.log("tomoni match chat", { match_id: matchId || null, current_user_id: appState.user?.id || null, other_user_id: partnerUserId || null });
       if (!appState.user) { openModal("ログイン", authMarkup("login")); toast("チャットはログイン後に利用できます。"); return; }
       let match = matchRecords.find((item) => item.id === matchId) || null;
       if (!match && partnerUserId) {
@@ -3819,7 +3818,6 @@
         }
       }
       if (match && !partnerUserId) partnerUserId = match.user1_id === appState.user.id ? match.user2_id : match.user1_id;
-      console.log("tomoni match chat resolved", { match_id: match?.id || null, current_user_id: appState.user.id, other_user_id: partnerUserId || null });
       const partnerGender = profilesByUserId.get(partnerUserId)?.gender || listings.find((item) => item.ownerId === partnerUserId)?.gender;
       if (!isSameGenderUser(partnerGender)) { document.getElementById("chatStatus").textContent = "同性の相手とだけチャットできます。"; document.getElementById("chatStatus").classList.add("caution"); toast("同性の相手とだけチャットできます。"); return; }
       const includesCurrentUser = match && (match.user1_id === appState.user.id || match.user2_id === appState.user.id);
@@ -3886,7 +3884,6 @@
         if (!body) return;
         document.getElementById("chatSend").disabled = true;
         try {
-          if (currentChatMode === "match") console.log("tomoni match message send", { match_id: currentMatchChatId, current_user_id: appState.user?.id || null, other_user_id: currentMatchChatReceiverId });
           const result = currentChatMode === "match"
             ? await window.tomoniAuth.sendMatchMessage(currentMatchChatId, currentMatchChatReceiverId, body)
             : await window.tomoniAuth.sendMessage(currentChatListingId, body);
@@ -4145,7 +4142,6 @@
           const active = isFavorite(item);
           if (active) {
             const result = await window.tomoniAuth?.removeFavorite?.(item.id, item.ownerId);
-            console.log("tomoni favorite result", { favorite_saved: false, current_user_id: appState.user.id, target_user_id: item.ownerId || null, listing_id: item.id, result });
             if (result?.error) throw result.error;
             await loadFavorites();
             await loadMatches();
@@ -4159,12 +4155,10 @@
           const alreadyExists = favoriteRecords.some((favorite) => favorite.listing_id === item.id || (item.ownerId && favorite.target_user_id === item.ownerId));
           let result = { data: alreadyExists ? favoriteRecords.find((favorite) => favorite.listing_id === item.id || favorite.target_user_id === item.ownerId) : null, error: null };
           if (!alreadyExists) result = await window.tomoniAuth?.addFavorite?.({ user_id: appState.user.id, target_user_id: item.ownerId || null, listing_id: item.id });
-          console.log("tomoni favorite result", { favorite_saved: true, skipped_existing: alreadyExists, current_user_id: appState.user.id, target_user_id: item.ownerId || null, listing_id: item.id, result });
           if (result?.error) throw result.error;
           let matchResult = null;
           if (item.ownerId) {
             matchResult = await window.tomoniAuth?.ensureMatchWithUser?.(item.ownerId);
-            console.log("tomoni match create result", { current_user_id: appState.user.id, target_user_id: item.ownerId, matchResult });
             if (matchResult?.error) throw matchResult.error;
             if (matchResult?.data && !matchRecords.some((match) => match.id === matchResult.data.id)) matchRecords.unshift(matchResult.data);
           }
