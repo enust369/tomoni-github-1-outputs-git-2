@@ -3494,6 +3494,15 @@
         renderNotifications();
       }
       setNotificationPanel(false);
+      if (notification.match_id) {
+        if (!matchRecords.some((item) => item.id === notification.match_id)) await loadMatches();
+        const match = matchRecords.find((item) => item.id === notification.match_id);
+        if (!match) { toast("マッチ情報を確認できませんでした。"); jumpTo("notifications"); return; }
+        const partnerUserId = match.user1_id === appState.user?.id ? match.user2_id : match.user1_id;
+        const partnerName = profilesByUserId.get(partnerUserId)?.nickname || listings.find((item) => item.ownerId === partnerUserId)?.person || "相手";
+        await openMatchChat(match.id, partnerUserId, partnerName);
+        return;
+      }
       if (!notification.listing_id) { jumpTo("notifications"); return; }
       if (!listings.some((item) => item.id === notification.listing_id)) await loadSupabaseListings();
       if (notification.type === "message") await openChat(notification.listing_id);

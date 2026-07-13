@@ -210,7 +210,7 @@ window.tomoniAuth = {
     return { data: { url: client.storage.from("profile-photos").getPublicUrl(path).data.publicUrl }, error: null };
   },
   listNotifications: () => client
-    ? client.from("notifications").select("id,listing_id,type,message,read_at,created_at").order("created_at", { ascending: false }).limit(100)
+    ? client.from("notifications").select("id,listing_id,match_id,type,message,read_at,created_at").order("created_at", { ascending: false }).limit(100)
     : Promise.resolve(notConfigured()),
   markNotificationRead: (id) => client
     ? client.from("notifications").update({ read_at: new Date().toISOString() }).eq("id", id)

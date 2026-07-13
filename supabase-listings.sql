@@ -978,12 +978,16 @@ create table if not exists public.notifications (
   recipient_id uuid not null references auth.users(id) on delete cascade,
   actor_id uuid references auth.users(id) on delete set null,
   listing_id uuid references public.listings(id) on delete cascade,
+  match_id uuid references public.matches(id) on delete cascade,
   type text not null check (type in ('participation_request', 'participation_approved', 'participation_declined', 'message', 'listing_ended')),
   message text not null,
   event_key text not null unique,
   read_at timestamptz,
   created_at timestamptz not null default now()
 );
+
+alter table public.notifications
+add column if not exists match_id uuid references public.matches(id) on delete cascade;
 
 alter table public.notifications enable row level security;
 
@@ -1418,6 +1422,63 @@ drop trigger if exists notify_new_listing_message_trigger on public.listing_mess
 create trigger notify_new_listing_message_trigger
 after insert on public.listing_messages
 for each row execute function public.notify_new_listing_message();
+
+create or replace function public.notify_new_match_message()
+returns trigger
+language plpgsql
+security definer
+set search_path = public
+as $$
+declare
+  match_user1 uuid;
+  match_user2 uuid;
+  notification_recipient uuid;
+begin
+  select user1_id, user2_id
+  into match_user1, match_user2
+  from public.matches
+  where id = new.match_id
+    and status = 'active';
+
+  if match_user1 is null then
+    return new;
+  end if;
+
+  if new.sender_id = match_user1 then
+    notification_recipient := match_user2;
+  elsif new.sender_id = match_user2 then
+    notification_recipient := match_user1;
+  else
+    return new;
+  end if;
+
+  if notification_recipient is null or notification_recipient = new.sender_id then
+    return new;
+  end if;
+
+  if not public.users_not_blocked(new.sender_id, notification_recipient) then
+    return new;
+  end if;
+
+  insert into public.notifications (recipient_id, actor_id, match_id, type, message, event_key)
+  values (
+    notification_recipient,
+    new.sender_id,
+    new.match_id,
+    'message',
+    '新しいメッセージが届きました',
+    'match-message:' || new.id || ':' || notification_recipient
+  )
+  on conflict (event_key) do nothing;
+
+  return new;
+end;
+$$;
+
+drop trigger if exists notify_new_match_message_trigger on public.match_messages;
+create trigger notify_new_match_message_trigger
+after insert on public.match_messages
+for each row execute function public.notify_new_match_message();
 
 create or replace function public.sync_listing_end_notifications()
 returns void
