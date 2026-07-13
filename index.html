@@ -2093,6 +2093,9 @@
     function sameGenderRequiredMarkup() {
       return `<article class="card empty-state"><h3>プロフィールの性別設定が必要です。</h3><p class="meta" style="margin-top:8px">TOMONIは同性同士が安心して会えるサービスです。プロフィールを設定すると、同じ性別の募集だけが表示されます。</p><div class="actions" style="justify-content:center"><button class="btn small primary" data-action="edit-profile">プロフィールを設定する</button></div></article>`;
     }
+    function noListingsMarkup() {
+      return `<article class="card empty-state"><h3>まだ募集がありません。</h3><p class="meta" style="margin-top:8px">最初の募集を作成してみましょう。</p><div class="actions" style="justify-content:center"><button class="btn small primary" data-jump="create">募集を作成する</button></div></article>`;
+    }
     function optionMarkup(values, selected = "", includeAll = false) {
       return `${includeAll ? `<option value="all">すべて</option>` : `<option value="">選択してください</option>`}${values.map((value) => `<option value="${esc(value)}" ${value === selected ? "selected" : ""}>${esc(value)}</option>`).join("")}`;
     }
@@ -2458,7 +2461,7 @@
     function renderRecommendations() {
       const recommended = rankListings().find((item) => item.active) || rankListings()[0];
       if (!recommended) {
-        const message = hasViewerGender() ? `<article class="card empty-state">同じ性別のおすすめはまだありません。</article>` : sameGenderRequiredMarkup();
+        const message = hasViewerGender() ? noListingsMarkup() : sameGenderRequiredMarkup();
         document.getElementById("topRecommendation").innerHTML = message;
         document.getElementById("homeRecommendation").innerHTML = message;
         document.getElementById("homeListings").innerHTML = message;
@@ -2486,7 +2489,7 @@
         .filter((item) => (prefecture === "all" || item.prefecture === prefecture) && (city === "all" || item.city === city))
         .sort((a, b) => a.distance - b.distance);
       if (!profiles.length) {
-        grid.innerHTML = hasViewerGender() ? `<article class="card empty-state">同じ性別の募集はまだありません。</article>` : sameGenderRequiredMarkup();
+        grid.innerHTML = hasViewerGender() ? noListingsMarkup() : sameGenderRequiredMarkup();
         bindJumpButtons(grid);
         return;
       }
@@ -2518,7 +2521,7 @@
       const grid = document.getElementById("listingGrid");
       const visibleListings = rankListings().filter((item) => item.active);
       if (!visibleListings.length) {
-        grid.innerHTML = hasViewerGender() ? `<article class="card empty-state">同じ性別の募集はまだありません。</article>` : sameGenderRequiredMarkup();
+        grid.innerHTML = hasViewerGender() ? noListingsMarkup() : sameGenderRequiredMarkup();
         bindJumpButtons(grid);
         return;
       }
