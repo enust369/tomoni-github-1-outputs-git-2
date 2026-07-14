@@ -1007,6 +1007,9 @@
     .chat-bubble { max-width: min(78%, 520px); padding: 12px 15px; border: 1px solid var(--line); border-radius: 18px 18px 18px 5px; background: var(--soft); white-space: pre-wrap; overflow-wrap: anywhere; }
     .chat-message.mine .chat-bubble { border-color: rgba(138,165,130,.55); border-radius: 18px 18px 5px 18px; background: var(--sage); }
     .chat-message small { color: var(--muted); }
+    .chat-safety-card { text-align: left; }
+    .chat-safety-card ul { margin: 10px 0 0; padding-left: 1.25em; color: var(--muted); }
+    .chat-safety-card .actions { margin-top: 14px; }
     .chat-form { display: grid; grid-template-columns: minmax(0,1fr) auto; gap: 10px; align-items: end; padding-top: 16px; border-top: 1px solid var(--line); }
     .chat-form textarea { min-height: 52px; max-height: 140px; }
     .modal-backdrop { position: fixed; inset: 0; z-index: 80; display: grid; place-items: center; padding: 20px; background: rgba(36,48,40,.34); backdrop-filter: blur(12px); opacity: 0; visibility: hidden; transition: opacity .25s var(--ease), visibility .25s var(--ease); }
@@ -1471,6 +1474,9 @@
               <div class="safety-check">TOMONIは同性同士が安心して会えるサービスです。<br>この募集は、あなたと同じ性別の方にのみ表示されます。</div>
             </div>
             <div class="field full">
+              <p class="meta">初めて会う方とは公共の場所で会うことをおすすめします。</p>
+            </div>
+            <div class="field full">
               <div class="safety-check" id="safetyCheck" role="status">公開前に、場所・募集文の安全性を確認します。</div>
             </div>
             <div class="field full">
@@ -1668,15 +1674,32 @@
       <section id="safety-guide-page">
         <article class="card utility-page">
           <p class="eyebrow">安全ガイド</p>
-          <h2>安心して会うために。</h2>
-          <p style="margin-top:12px">少し慎重なくらいで大丈夫です。違和感があれば、予定の前でも途中でも断れます。</p>
+          <h2>安心して利用するために。</h2>
+          <p style="margin-top:12px">TOMONIは、無理をせず、安心できる距離感で人と過ごすための場所です。少し慎重なくらいで大丈夫です。</p>
           <div class="safety-page-grid">
-            <article><h3>会う前に</h3><p class="meta">初回は昼間を選び、家族や身近な人に行き先と終了予定を伝えましょう。住所や連絡先は急いで共有しないでください。</p></article>
-            <article><h3>場所を選ぶ</h3><p class="meta">駅近く、カフェ、公園入口、公共施設など、人のいる場所を選びます。個人宅やホテルには行かず、相手の車にも乗らないでください。</p></article>
-            <article><h3>会っている間</h3><p class="meta">無理に話す必要はありません。予定を変える提案や勧誘に違和感があれば、その場を離れて大丈夫です。</p></article>
-            <article><h3>困ったとき</h3><p class="meta">プロフィールや募集の通報・ブロックを使えます。身の危険を感じた場合は、周囲の人や警察へ助けを求めてください。</p></article>
+            <article><h3>初めて会うとき</h3><p class="meta">昼間のカフェ、公園、公共施設など、人のいる場所をおすすめします。個人宅や密室で会うことは避けましょう。</p></article>
+            <article><h3>個人情報について</h3><p class="meta">住所、勤務先、連絡先、SNSなどは慎重に伝えてください。急いで共有しなくても大丈夫です。</p></article>
+            <article><h3>違和感があるとき</h3><p class="meta">少しでも不安を感じたら、無理をせず予定を変えたり、その場を離れたりして大丈夫です。</p></article>
+            <article><h3>困ったとき</h3><p class="meta">ブロック・通報・お問い合わせをご利用ください。身の危険を感じた場合は、周囲の人や警察へ助けを求めてください。</p></article>
           </div>
-          <div class="actions"><button class="btn primary" data-jump="home">ホームへ戻る</button><button class="btn" data-jump="contact">お問い合わせ</button></div>
+          <div class="notice" style="margin-top:24px">安心して利用するためのお願いは、相手を疑うためではなく、自分の心地よさを守るためのものです。</div>
+          <div class="actions"><button class="btn primary" data-jump="home">ホームへ戻る</button><button class="btn" data-jump="safety-commitment">安心・安全への取り組み</button><button class="btn" data-jump="contact">お問い合わせ</button></div>
+        </article>
+      </section>
+
+      <section id="safety-commitment">
+        <article class="card utility-page">
+          <p class="eyebrow">安心・安全への取り組み</p>
+          <h2>TOMONIが大切にしていること。</h2>
+          <p style="margin-top:12px">TOMONIは、恋愛目的ではなく、同性同士が安心して1対1の時間を過ごせることを大切にしています。</p>
+          <div class="safety-page-grid">
+            <article><h3>同性同士の交流</h3><p class="meta">登録された性別をもとに、同じ性別の方の募集やプロフィールだけが表示される設計です。</p></article>
+            <article><h3>ブロック機能</h3><p class="meta">不安を感じた相手とは、無理に関わり続ける必要はありません。相手に通知されずに距離を置けます。</p></article>
+            <article><h3>通報機能</h3><p class="meta">勧誘・営業、不適切な発言、強い違和感がある場合は、運営へ知らせることができます。</p></article>
+            <article><h3>管理者による確認</h3><p class="meta">通報やお問い合わせは、必要に応じて管理者が確認し、安全な利用環境づくりに役立てます。</p></article>
+          </div>
+          <div class="notice" style="margin-top:24px">TOMONIは、人を比べたり、関係を続けることを求めたりしません。その日その時の安心を、いちばん大切にします。</div>
+          <div class="actions"><button class="btn primary" data-jump="home">ホームへ戻る</button><button class="btn" data-jump="safety-guide-page">安全ガイドを見る</button></div>
         </article>
       </section>
 
@@ -1726,7 +1749,7 @@
 
     <footer class="footer">
       <p>TOMONI MVP / 目の前の一人を大切にする。今日が少し良い日になれば、それで十分。</p>
-      <div class="footer-links"><button data-jump="safety-guide-page">安全ガイド</button><button data-jump="prohibited">禁止事項</button><button data-jump="terms">利用規約</button><button data-jump="privacy">プライバシーポリシー</button><button data-jump="contact">お問い合わせ</button></div>
+      <div class="footer-links"><button data-jump="safety-guide-page">安全ガイド</button><button data-jump="safety-commitment">安心・安全への取り組み</button><button data-jump="prohibited">禁止事項</button><button data-jump="terms">利用規約</button><button data-jump="privacy">プライバシーポリシー</button><button data-jump="contact">お問い合わせ</button></div>
     </footer>
   </div>
 
@@ -1979,7 +2002,7 @@
     let adminInitialLoadStarted = false;
     let safetyGateActive = false;
     const storageKey = "tomoni-public-preview-v1";
-    const defaultState = { user: null, profileOwnerId: null, safetyOnboardingAccepted: false, saved: [], blocked: [], customListings: [], demoParticipations: [], moderation: { reports: [], blockCount: 0 }, feedbackHistory: [], profile: { nickname: "あなた", age: "30代", gender: "女性", area: "", bio: "静かな時間を大切にしています。", tags: [], photoUrls: [], personalityType: "", personalityTitle: "", personalityDescription: "", personalityTags: [], quietScore: null, talkScore: null, comfortScore: null } };
+    const defaultState = { user: null, profileOwnerId: null, safetyOnboardingAccepted: false, dismissedChatSafety: [], saved: [], blocked: [], customListings: [], demoParticipations: [], moderation: { reports: [], blockCount: 0 }, feedbackHistory: [], profile: { nickname: "あなた", age: "30代", gender: "女性", area: "", bio: "静かな時間を大切にしています。", tags: [], photoUrls: [], personalityType: "", personalityTitle: "", personalityDescription: "", personalityTags: [], quietScore: null, talkScore: null, comfortScore: null } };
     let appState = loadState();
     listings.splice(0, listings.length);
 
@@ -2063,7 +2086,7 @@
     function loadState() {
       try {
         const stored = JSON.parse(localStorage.getItem(storageKey) || "{}");
-        return { ...defaultState, ...stored, saved: Array.isArray(stored.saved) ? stored.saved : [], blocked: Array.isArray(stored.blocked) ? stored.blocked : [], customListings: Array.isArray(stored.customListings) ? stored.customListings : [], demoParticipations: Array.isArray(stored.demoParticipations) ? stored.demoParticipations : [], feedbackHistory: Array.isArray(stored.feedbackHistory) ? stored.feedbackHistory : [], moderation: { ...defaultState.moderation, ...(stored.moderation || {}), reports: Array.isArray(stored.moderation?.reports) ? stored.moderation.reports : [] }, profile: { ...defaultState.profile, ...(stored.profile || {}) } };
+        return { ...defaultState, ...stored, dismissedChatSafety: Array.isArray(stored.dismissedChatSafety) ? stored.dismissedChatSafety : [], saved: Array.isArray(stored.saved) ? stored.saved : [], blocked: Array.isArray(stored.blocked) ? stored.blocked : [], customListings: Array.isArray(stored.customListings) ? stored.customListings : [], demoParticipations: Array.isArray(stored.demoParticipations) ? stored.demoParticipations : [], feedbackHistory: Array.isArray(stored.feedbackHistory) ? stored.feedbackHistory : [], moderation: { ...defaultState.moderation, ...(stored.moderation || {}), reports: Array.isArray(stored.moderation?.reports) ? stored.moderation.reports : [] }, profile: { ...defaultState.profile, ...(stored.profile || {}) } };
       }
       catch { return { ...defaultState }; }
     }
@@ -3641,14 +3664,39 @@
       return `チャットを読み込めませんでした。${message || "しばらくしてからもう一度お試しください。"}`;
     }
 
+    function currentChatSafetyKey() {
+      if (currentChatMode === "match" && currentMatchChatId) return `match:${currentMatchChatId}`;
+      if (currentChatMode === "listing" && currentChatListingId) return `listing:${currentChatListingId}`;
+      return "";
+    }
+
+    function shouldShowChatSafetyCard() {
+      const key = currentChatSafetyKey();
+      return Boolean(key && !appState.dismissedChatSafety.includes(key));
+    }
+
+    function chatSafetyCardMarkup() {
+      return `<article class="notice chat-safety-card"><strong>安心してご利用いただくためのお願い</strong><ul><li>初回は公共の場所で会うことをおすすめします。</li><li>個人情報は慎重に共有してください。</li><li>違和感を感じたらブロック・通報をご利用ください。</li></ul><div class="actions"><button class="btn small quiet-action" type="button" data-action="dismiss-chat-safety">閉じる</button></div></article>`;
+    }
+
+    function dismissChatSafetyCard() {
+      const key = currentChatSafetyKey();
+      if (!key) return;
+      appState.dismissedChatSafety = [...new Set([...(appState.dismissedChatSafety || []), key])];
+      saveState();
+      renderChatMessages();
+    }
+
     function renderChatMessages() {
       const container = document.getElementById("chatMessages");
       const messages = [...currentChatMessages.values()].sort((a, b) => new Date(a.created_at) - new Date(b.created_at) || Number(a.id) - Number(b.id));
-      container.innerHTML = messages.length ? messages.map((message) => {
+      const safetyCard = shouldShowChatSafetyCard() ? chatSafetyCardMarkup() : "";
+      const messageList = messages.length ? messages.map((message) => {
         const mine = message.sender_id === appState.user?.id;
         const time = new Date(message.created_at).toLocaleString("ja-JP", { month: "numeric", day: "numeric", hour: "2-digit", minute: "2-digit" });
         return `<div class="chat-message ${mine ? "mine" : ""}"><small>${mine ? "あなた" : "相手"}・${esc(time)}</small><div class="chat-bubble">${esc(message.body)}</div></div>`;
       }).join("") : `<div class="empty-state">まだメッセージはありません。最初のひとことを送ってみましょう。</div>`;
+      container.innerHTML = safetyCard + messageList;
       container.scrollTop = container.scrollHeight;
     }
 
@@ -3849,7 +3897,7 @@
 
     function showProfileEditor(firstTime = false) {
       const tagOptions = ["散歩", "カフェ", "公園", "読書", "温泉", "映画", "ボードゲーム", "美術館", "食べ歩き", "ランニング", "写真", "神社", "自然", "ドライブ", "雑談", "無言OK"];
-      openModal(firstTime ? "プロフィール作成" : "プロフィール編集", `<form class="form" id="profileForm" data-first-time="${firstTime}" novalidate><div class="field full"><label for="profilePhotosInput">プロフィール写真（最大3枚）</label><input id="profilePhotosInput" type="file" accept="image/jpeg,image/png,image/webp" multiple><p class="meta">新しく選択すると現在の写真を置き換えます。1枚5MBまで。</p></div><div class="field full"><label for="profileNickname">ニックネーム</label><input id="profileNickname" name="nickname" maxlength="20" value="${esc(appState.profile.nickname === "あなた" ? "" : appState.profile.nickname)}" required><span class="field-error"></span></div><div class="field"><label for="profileGender">登録する性別</label><select id="profileGender" name="gender"><option ${appState.profile.gender === "女性" ? "selected" : ""}>女性</option><option ${appState.profile.gender === "男性" ? "selected" : ""}>男性</option></select></div><div class="field"><label for="profileAge">年代</label><select id="profileAge" name="age"><option ${appState.profile.age === "20代" ? "selected" : ""}>20代</option><option ${appState.profile.age === "30代" ? "selected" : ""}>30代</option><option ${appState.profile.age === "40代" ? "selected" : ""}>40代</option><option ${appState.profile.age === "50代以上" ? "selected" : ""}>50代以上</option></select></div><div class="field full"><label for="profileAreaInput">居住エリア（市まで）</label><input id="profileAreaInput" name="area" maxlength="30" placeholder="例：武蔵野市" value="${esc(appState.profile.area || "")}" required><span class="field-error"></span></div><div class="field full"><label for="profileBio">自己紹介（300文字まで）</label><textarea id="profileBio" name="bio" maxlength="300" required>${esc(appState.profile.bio)}</textarea><span class="field-error"></span></div><div class="field full"><label>趣味タグ（複数選択可）</label><div class="chips">${tagOptions.map((tag) => `<label class="check-row badge muted"><input type="checkbox" name="tags" value="${tag}" ${appState.profile.tags?.includes(tag) ? "checked" : ""}>${tag}</label>`).join("")}</div></div><div class="field full"><button class="btn primary" type="submit">${firstTime ? "プロフィールを作成する" : "プロフィールを保存"}</button></div></form>`);
+      openModal(firstTime ? "プロフィール作成" : "プロフィール編集", `<form class="form" id="profileForm" data-first-time="${firstTime}" novalidate><div class="field full"><label for="profilePhotosInput">プロフィール写真（最大3枚）</label><input id="profilePhotosInput" type="file" accept="image/jpeg,image/png,image/webp" multiple><p class="meta">プロフィール写真は任意です。顔写真だけでなく、後ろ姿・横顔・趣味・風景・イラストなどでも大丈夫です。個人が特定されやすい写真や個人情報が写っている写真は避けることをおすすめします。</p><p class="meta">新しく選択すると現在の写真を置き換えます。1枚5MBまで。</p></div><div class="field full"><label for="profileNickname">ニックネーム</label><input id="profileNickname" name="nickname" maxlength="20" value="${esc(appState.profile.nickname === "あなた" ? "" : appState.profile.nickname)}" required><span class="field-error"></span></div><div class="field"><label for="profileGender">登録する性別</label><select id="profileGender" name="gender"><option ${appState.profile.gender === "女性" ? "selected" : ""}>女性</option><option ${appState.profile.gender === "男性" ? "selected" : ""}>男性</option></select></div><div class="field"><label for="profileAge">年代</label><select id="profileAge" name="age"><option ${appState.profile.age === "20代" ? "selected" : ""}>20代</option><option ${appState.profile.age === "30代" ? "selected" : ""}>30代</option><option ${appState.profile.age === "40代" ? "selected" : ""}>40代</option><option ${appState.profile.age === "50代以上" ? "selected" : ""}>50代以上</option></select></div><div class="field full"><label for="profileAreaInput">居住エリア（市まで）</label><input id="profileAreaInput" name="area" maxlength="30" placeholder="例：武蔵野市" value="${esc(appState.profile.area || "")}" required><span class="field-error"></span></div><div class="field full"><label for="profileBio">自己紹介（300文字まで）</label><textarea id="profileBio" name="bio" maxlength="300" required>${esc(appState.profile.bio)}</textarea><span class="field-error"></span></div><div class="field full"><label>趣味タグ（複数選択可）</label><div class="chips">${tagOptions.map((tag) => `<label class="check-row badge muted"><input type="checkbox" name="tags" value="${tag}" ${appState.profile.tags?.includes(tag) ? "checked" : ""}>${tag}</label>`).join("")}</div></div><div class="field full"><button class="btn primary" type="submit">${firstTime ? "プロフィールを作成する" : "プロフィールを保存"}</button></div></form>`);
     }
 
     document.addEventListener("submit", async (event) => {
@@ -4075,6 +4123,7 @@
       if (action === "close-notification-panel") setNotificationPanel(false);
       if (action === "mark-all-notifications-read") await markAllNotificationsRead();
       if (action === "open-notification") await openNotification(button.dataset.id);
+      if (action === "dismiss-chat-safety") dismissChatSafetyCard();
       if (action === "open-detail") openListingDetail(button.dataset.id);
       if (action === "open-meeting-record") openMeetingRecord(currentDetailListingId || button.dataset.id);
       if (action === "open-chat") openChat(currentDetailListingId || button.dataset.id);
