@@ -1007,7 +1007,7 @@
     .chat-bubble { max-width: min(78%, 520px); padding: 12px 15px; border: 1px solid var(--line); border-radius: 18px 18px 18px 5px; background: var(--soft); white-space: pre-wrap; overflow-wrap: anywhere; }
     .chat-message.mine .chat-bubble { border-color: rgba(138,165,130,.55); border-radius: 18px 18px 5px 18px; background: var(--sage); }
     .chat-message small { color: var(--muted); }
-    .chat-safety-card { text-align: left; }
+    .chat-safety-card { text-align: left; margin-bottom: 12px; }
     .chat-safety-card ul { margin: 10px 0 0; padding-left: 1.25em; color: var(--muted); }
     .chat-safety-card .actions { margin-top: 14px; }
     .chat-form { display: grid; grid-template-columns: minmax(0,1fr) auto; gap: 10px; align-items: end; padding-top: 16px; border-top: 1px solid var(--line); }
@@ -1604,6 +1604,7 @@
       <section id="chat">
         <div class="section-head"><div><p class="eyebrow">チャット</p><h2 id="chatTitle">募集について話す。</h2><p class="meta" id="chatMeta">参加が決まった方と募集主だけが利用できます。</p></div><button class="btn small quiet-action" data-jump="listings">チャットを閉じる</button></div>
         <article class="card chat-shell">
+          <div id="chatSafetyCard"></div>
           <div class="chat-messages" id="chatMessages" role="log" aria-live="polite"><div class="empty-state">募集詳細からチャットを開いてください。</div></div>
           <form class="chat-form" id="chatForm" novalidate>
             <div class="field"><label for="chatMessage">メッセージ</label><textarea id="chatMessage" maxlength="1000" placeholder="待ち合わせや当日の過ごし方について話しましょう" required disabled></textarea><span class="field-error"></span></div>
@@ -3665,8 +3666,10 @@
     }
 
     function currentChatSafetyKey() {
-      if (currentChatMode === "match" && currentMatchChatId) return `match:${currentMatchChatId}`;
-      if (currentChatMode === "listing" && currentChatListingId) return `listing:${currentChatListingId}`;
+      const userId = appState.user?.id;
+      if (!userId) return "";
+      if (currentChatMode === "match" && currentMatchChatId) return `user:${userId}:match:${currentMatchChatId}`;
+      if (currentChatMode === "listing" && currentChatListingId) return `user:${userId}:listing:${currentChatListingId}`;
       return "";
     }
 
@@ -3679,24 +3682,30 @@
       return `<article class="notice chat-safety-card"><strong>安心してご利用いただくためのお願い</strong><ul><li>初回は公共の場所で会うことをおすすめします。</li><li>個人情報は慎重に共有してください。</li><li>違和感を感じたらブロック・通報をご利用ください。</li></ul><div class="actions"><button class="btn small quiet-action" type="button" data-action="dismiss-chat-safety">閉じる</button></div></article>`;
     }
 
+    function renderChatSafetyCard() {
+      const container = document.getElementById("chatSafetyCard");
+      if (!container) return;
+      container.innerHTML = shouldShowChatSafetyCard() ? chatSafetyCardMarkup() : "";
+    }
+
     function dismissChatSafetyCard() {
       const key = currentChatSafetyKey();
       if (!key) return;
       appState.dismissedChatSafety = [...new Set([...(appState.dismissedChatSafety || []), key])];
       saveState();
-      renderChatMessages();
+      renderChatSafetyCard();
     }
 
     function renderChatMessages() {
       const container = document.getElementById("chatMessages");
       const messages = [...currentChatMessages.values()].sort((a, b) => new Date(a.created_at) - new Date(b.created_at) || Number(a.id) - Number(b.id));
-      const safetyCard = shouldShowChatSafetyCard() ? chatSafetyCardMarkup() : "";
       const messageList = messages.length ? messages.map((message) => {
         const mine = message.sender_id === appState.user?.id;
         const time = new Date(message.created_at).toLocaleString("ja-JP", { month: "numeric", day: "numeric", hour: "2-digit", minute: "2-digit" });
         return `<div class="chat-message ${mine ? "mine" : ""}"><small>${mine ? "あなた" : "相手"}・${esc(time)}</small><div class="chat-bubble">${esc(message.body)}</div></div>`;
       }).join("") : `<div class="empty-state">まだメッセージはありません。最初のひとことを送ってみましょう。</div>`;
-      container.innerHTML = safetyCard + messageList;
+      renderChatSafetyCard();
+      container.innerHTML = messageList;
       container.scrollTop = container.scrollHeight;
     }
 
@@ -3726,6 +3735,7 @@
       currentMatchChatReceiverId = null;
       currentChatMode = "listing";
       currentChatMessages = new Map();
+      renderChatSafetyCard();
       document.getElementById("chatMessage").disabled = true;
       document.getElementById("chatSend").disabled = true;
       document.getElementById("chatReport").disabled = true;
