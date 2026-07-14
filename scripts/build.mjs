@@ -8,6 +8,9 @@ await rm(outputDir, { recursive: true, force: true });
 await mkdir(outputDir, { recursive: true });
 await cp(resolve(projectRoot, "index.html"), resolve(outputDir, "index.html"));
 await cp(resolve(projectRoot, "supabase.js"), resolve(outputDir, "supabase.js"));
+try {
+  await cp(resolve(projectRoot, "_headers"), resolve(outputDir, "_headers"));
+} catch {}
 
 let fileEnv = {};
 try {

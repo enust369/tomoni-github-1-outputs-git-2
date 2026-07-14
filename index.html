@@ -2094,6 +2094,41 @@
 
     function saveState() { localStorage.setItem(storageKey, JSON.stringify(appState)); }
     function esc(value = "") { const node = document.createElement("div"); node.textContent = String(value); return node.innerHTML; }
+    function resetUserScopedState(user = null) {
+      const safetyOnboardingAccepted = Boolean(appState?.safetyOnboardingAccepted);
+      const dismissedChatSafety = Array.isArray(appState?.dismissedChatSafety) ? appState.dismissedChatSafety : [];
+      appState = { ...defaultState, safetyOnboardingAccepted, dismissedChatSafety, user, profileOwnerId: null };
+      currentGender = "";
+      editingListingId = null;
+      currentDetailListingId = null;
+      currentMeetingListingId = null;
+      currentChatListingId = null;
+      currentMatchChatId = null;
+      currentMatchChatReceiverId = null;
+      currentChatMode = "listing";
+      currentChatMessages = new Map();
+      participatingListingIds = new Set();
+      participationStatuses = new Map();
+      favoriteRecords = [];
+      favoriteListingIds = new Set();
+      favoriteTargetUserIds = new Set();
+      favoriteToggleInProgress.clear();
+      matchRecords = [];
+      matchedUserIds = new Set();
+      profilesByUserId = new Map();
+      blockRecords = [];
+      blockedUserIds = new Set();
+      notifications = [];
+      adminUsers = [];
+      adminReports = [];
+      adminContacts = [];
+      adminListings = [];
+      adminBlocks = [];
+      adminUsersLoaded = false;
+      adminInitialLoadStarted = false;
+      listings.splice(0, listings.length);
+      saveState();
+    }
     function normalizeGender(value = "") {
       const text = String(value || "").trim();
       if (text.includes("女性")) return "女性";
@@ -2923,24 +2958,29 @@
 
     async function loadSupabaseProfile(userId) {
       const result = await window.tomoniAuth?.getProfile?.(userId);
-      if (result?.error || !result?.data) return false;
+      if (result?.error || !result?.data) {
+        appState.profile = { ...defaultState.profile, nickname: "", gender: "", age: "", area: "", bio: "", tags: [], photoUrls: [], personalityType: "", personalityTitle: "", personalityDescription: "", personalityTags: [], quietScore: null, talkScore: null, comfortScore: null };
+        appState.profileOwnerId = null;
+        saveState();
+        return false;
+      }
       const profile = result.data;
       appState.profile = {
-        ...appState.profile,
-        nickname: profile.nickname,
-        age: profile.age,
-        gender: profile.gender,
+        ...defaultState.profile,
+        nickname: profile.nickname || "",
+        age: profile.age || "",
+        gender: profile.gender || "",
         area: profile.area || "",
         bio: profile.bio || "",
         tags: profile.tags || [],
         photoUrls: profile.photo_urls || [],
-        personalityType: profile.personality_type || appState.profile.personalityType || "",
-        personalityTitle: profile.personality_title || appState.profile.personalityTitle || "",
-        personalityDescription: profile.personality_description || appState.profile.personalityDescription || "",
-        personalityTags: profile.personality_tags?.length ? profile.personality_tags : (appState.profile.personalityTags || []),
-        quietScore: Number.isFinite(profile.quiet_score) ? profile.quiet_score : appState.profile.quietScore,
-        talkScore: Number.isFinite(profile.talk_score) ? profile.talk_score : appState.profile.talkScore,
-        comfortScore: Number.isFinite(profile.comfort_score) ? profile.comfort_score : appState.profile.comfortScore
+        personalityType: profile.personality_type || "",
+        personalityTitle: profile.personality_title || "",
+        personalityDescription: profile.personality_description || "",
+        personalityTags: profile.personality_tags || [],
+        quietScore: Number.isFinite(profile.quiet_score) ? profile.quiet_score : null,
+        talkScore: Number.isFinite(profile.talk_score) ? profile.talk_score : null,
+        comfortScore: Number.isFinite(profile.comfort_score) ? profile.comfort_score : null
       };
       appState.profileOwnerId = userId;
       saveState();
@@ -2967,11 +3007,21 @@
         return;
       }
       const auth = window.tomoniAuth;
-      if (!auth?.configured) { appState.user = null; updateAccountUI(); return; }
+      if (!auth?.configured) { resetUserScopedState(null); updateAccountUI(); return; }
       const result = await auth.getUser();
       const user = result.data?.user;
-      appState.user = user ? { id: user.id, email: user.email, verified: Boolean(user.email_confirmed_at) } : null;
-      if (user) await loadSupabaseProfile(user.id);
+      if (!user) {
+        resetUserScopedState(null);
+        updateAccountUI();
+        await updateMetCount();
+        renderNotifications();
+        await loadSupabaseListings();
+        return;
+      }
+      const restoredUser = { id: user.id, email: user.email, verified: Boolean(user.email_confirmed_at) };
+      if (appState.user?.id !== restoredUser.id || appState.profileOwnerId !== restoredUser.id) resetUserScopedState(restoredUser);
+      else appState.user = restoredUser;
+      await loadSupabaseProfile(user.id);
       saveState(); updateAccountUI();
       await updateMetCount();
       await startUserParticipationRealtime();
@@ -2986,8 +3036,7 @@
 
     function openPasswordUpdateModal() {
       passwordRecoveryMode = true;
-      appState.user = null;
-      saveState();
+      resetUserScopedState(null);
       updateAccountUI();
       openModal("新しいパスワード設定", passwordUpdateMarkup());
     }
@@ -3264,7 +3313,9 @@
         const authResult = await window.tomoniAuth.getUser();
         if (authResult?.error) throw authResult.error;
         const user = authResult?.data?.user;
-        appState.user = user ? { id: user.id, email: user.email, verified: Boolean(user.email_confirmed_at) } : null;
+        const adminUser = user ? { id: user.id, email: user.email, verified: Boolean(user.email_confirmed_at) } : null;
+        if (adminUser && appState.user?.id !== adminUser.id) resetUserScopedState(adminUser);
+        else appState.user = adminUser;
         updateAccountUI();
 
         if (!isAdminEmail(user?.email)) {
@@ -4027,7 +4078,8 @@
         }
         const user = result.data?.user;
         if (!user) { form.dataset.submitting = "false"; toast("ログイン状態を確認できませんでした。"); return; }
-        appState.user = { id: user.id, email: user.email, verified: Boolean(user.email_confirmed_at) };
+        const loggedInUser = { id: user.id, email: user.email, verified: Boolean(user.email_confirmed_at) };
+        resetUserScopedState(loggedInUser);
         await loadSupabaseProfile(user.id);
         saveState(); updateAccountUI(); closeModal();
         await updateMetCount();
@@ -4073,8 +4125,7 @@
         await auth.signOut();
         passwordRecoveryMode = false;
         if (hasPasswordRecoveryParams()) history.replaceState(null, "", `${location.origin}${location.pathname}`);
-        appState.user = null;
-        saveState();
+        resetUserScopedState(null);
         updateAccountUI();
         openModal("パスワードを変更しました", `<p>パスワードを変更しました。新しいパスワードでログインしてください。</p><div class="actions"><button class="btn primary" data-action="show-login">ログインへ</button></div>`);
         return;
@@ -4184,7 +4235,27 @@
         closeModal(); await renderAdmin(); await loadBlocks(); toast("ブロックを解除しました。");
       }
       if (action === "show-managed") renderManaged();
-      if (action === "logout") { setLoading(true); await closeChatRealtime(); await closeOwnerParticipationRealtime(); await closeUserParticipationRealtime(); await closeNotificationRealtime(); const result = await window.tomoniAuth?.signOut(); if (!result?.error) await restoreSupabaseUser(); setLoading(false); if (result?.error) { toast(result.error.message); return; } notifications = []; renderNotifications(); setNotificationPanel(false); document.getElementById("chatMessages").innerHTML = `<div class="empty-state">ログインするとチャットを利用できます。</div>`; document.getElementById("accountContent").innerHTML = `<article class="card empty-state">ログアウトしました。またいつでも戻ってきてください。</article>`; toast("ログアウトしました。"); }
+      if (action === "logout") {
+        setLoading(true);
+        await closeChatRealtime();
+        await closeOwnerParticipationRealtime();
+        await closeUserParticipationRealtime();
+        await closeNotificationRealtime();
+        const result = await window.tomoniAuth?.signOut();
+        setLoading(false);
+        if (result?.error) { toast(result.error.message); return; }
+        resetUserScopedState(null);
+        updateAccountUI();
+        await updateMetCount();
+        renderNotifications();
+        renderListings();
+        renderRecommendations();
+        renderRegionalProfiles();
+        setNotificationPanel(false);
+        document.getElementById("chatMessages").innerHTML = `<div class="empty-state">ログインするとチャットを利用できます。</div>`;
+        document.getElementById("accountContent").innerHTML = `<article class="card empty-state">ログアウトしました。またいつでも戻ってきてください。</article>`;
+        toast("ログアウトしました。");
+      }
       if (action === "toggle-favorite") {
         if (!appState.user) { openModal("ログイン", authMarkup("login")); toast("気になる機能はログイン後に利用できます。"); return; }
         const id = button.dataset.id;
@@ -4388,6 +4459,7 @@
 
     document.querySelectorAll("main section").forEach((section) => observer.observe(section));
 
+    resetUserScopedState(null);
     renderCategories();
     setupActivityInputs();
     setupAreaSelects();
