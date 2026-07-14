@@ -1654,6 +1654,7 @@
             <button class="btn small" id="adminMenuButton" data-action="open-admin" hidden>管理画面</button>
             <button class="btn small" data-action="show-managed">自分の募集</button>
             <button class="btn small quiet-action" data-action="logout">ログアウト</button>
+            <button class="btn small quiet-action" data-action="delete-account">アカウント削除（退会）</button>
             <div class="chips"><span class="badge muted">SMS認証 準備中</span><span class="badge muted">本人確認書類 準備中</span></div>
           </aside>
           <div class="grid" id="accountContent"><article class="card empty-state">ログインすると、プロフィールや募集をここで管理できます。</article></div>
@@ -2094,9 +2095,10 @@
 
     function saveState() { localStorage.setItem(storageKey, JSON.stringify(appState)); }
     function esc(value = "") { const node = document.createElement("div"); node.textContent = String(value); return node.innerHTML; }
-    function resetUserScopedState(user = null) {
-      const safetyOnboardingAccepted = Boolean(appState?.safetyOnboardingAccepted);
-      const dismissedChatSafety = Array.isArray(appState?.dismissedChatSafety) ? appState.dismissedChatSafety : [];
+    function resetUserScopedState(user = null, options = {}) {
+      const preserveLocal = options.preserveLocal !== false;
+      const safetyOnboardingAccepted = preserveLocal ? Boolean(appState?.safetyOnboardingAccepted) : false;
+      const dismissedChatSafety = preserveLocal && Array.isArray(appState?.dismissedChatSafety) ? appState.dismissedChatSafety : [];
       appState = { ...defaultState, safetyOnboardingAccepted, dismissedChatSafety, user, profileOwnerId: null };
       currentGender = "";
       editingListingId = null;
@@ -2127,7 +2129,8 @@
       adminUsersLoaded = false;
       adminInitialLoadStarted = false;
       listings.splice(0, listings.length);
-      saveState();
+      if (options.removeStorage) localStorage.removeItem(storageKey);
+      else saveState();
     }
     function normalizeGender(value = "") {
       const text = String(value || "").trim();
@@ -4235,6 +4238,41 @@
         closeModal(); await renderAdmin(); await loadBlocks(); toast("ブロックを解除しました。");
       }
       if (action === "show-managed") renderManaged();
+      if (action === "delete-account") {
+        if (!appState.user) { openModal("ログイン", authMarkup("login")); toast("退会はログイン後に実行できます。"); return; }
+        openModal("アカウント削除（退会）", `<p>退会すると、プロフィール、募集、参加申請、気になる、マッチ、チャット、通知などのアカウントに紐づくデータを削除します。</p><div class="notice" style="margin-top:16px"><strong>この操作は取り消せません。</strong><p class="meta">もう一度利用する場合は、新しく会員登録が必要です。</p></div><div class="actions"><button class="btn" data-action="close-modal">キャンセル</button><button class="btn primary" data-action="confirm-delete-account">退会する</button></div>`);
+      }
+      if (action === "confirm-delete-account") {
+        if (!appState.user) { closeModal(); openModal("ログイン", authMarkup("login")); return; }
+        setLoading(true);
+        await closeChatRealtime();
+        await closeOwnerParticipationRealtime();
+        await closeUserParticipationRealtime();
+        await closeNotificationRealtime();
+        try {
+          const photoResult = await window.tomoniAuth?.deleteOwnProfilePhotos?.();
+          if (photoResult?.error) throw photoResult.error;
+          const deleteResult = await window.tomoniAuth?.deleteAccount?.();
+          if (deleteResult?.error) throw deleteResult.error;
+          try { await window.tomoniAuth?.signOut?.(); } catch {}
+          resetUserScopedState(null, { preserveLocal: false, removeStorage: true });
+          setLoading(false);
+          updateAccountUI();
+          await updateMetCount();
+          renderNotifications();
+          renderListings();
+          renderRecommendations();
+          renderRegionalProfiles();
+          setNotificationPanel(false);
+          document.getElementById("chatMessages").innerHTML = `<div class="empty-state">ログインするとチャットを利用できます。</div>`;
+          document.getElementById("accountContent").innerHTML = `<article class="card empty-state">退会しました。</article>`;
+          openModal("ログイン", authMarkup("login"));
+          toast("退会しました");
+        } catch (error) {
+          setLoading(false);
+          toast(`退会できませんでした：${error.message}`);
+        }
+      }
       if (action === "logout") {
         setLoading(true);
         await closeChatRealtime();

@@ -209,6 +209,21 @@ window.tomoniAuth = {
     if (result.error) return result;
     return { data: { url: client.storage.from("profile-photos").getPublicUrl(path).data.publicUrl }, error: null };
   },
+  deleteOwnProfilePhotos: async () => {
+    if (!client) return notConfigured();
+    const { data: userData, error: userError } = await client.auth.getUser();
+    if (userError) return { data: null, error: userError };
+    const userId = userData.user?.id;
+    if (!userId) return { data: null, error: new Error("ログイン状態を確認できませんでした。") };
+    const listed = await client.storage.from("profile-photos").list(userId, { limit: 100 });
+    if (listed.error) return listed;
+    const paths = (listed.data || []).map((item) => `${userId}/${item.name}`);
+    if (!paths.length) return { data: [], error: null };
+    return client.storage.from("profile-photos").remove(paths);
+  },
+  deleteAccount: () => client
+    ? client.rpc("delete_current_account")
+    : Promise.resolve(notConfigured()),
   listNotifications: () => client
     ? client.from("notifications").select("id,listing_id,match_id,type,message,read_at,created_at").order("created_at", { ascending: false }).limit(100)
     : Promise.resolve(notConfigured()),
