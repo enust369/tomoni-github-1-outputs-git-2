@@ -1563,10 +1563,6 @@ begin
     raise exception 'ログインが必要です。';
   end if;
 
-  delete from storage.objects
-  where bucket_id = 'profile-photos'
-    and (storage.foldername(name))[1] = current_user_id::text;
-
   delete from public.notifications
   where recipient_id = current_user_id
      or actor_id = current_user_id;
