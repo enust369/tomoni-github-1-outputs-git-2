@@ -118,12 +118,14 @@
       flex: 1 1 auto;
       gap: 8px;
       max-width: 100%;
-      overflow-x: auto;
-      scrollbar-width: none;
+      align-items: center;
+      justify-content: center;
+      overflow: visible;
     }
 
-    .nav::-webkit-scrollbar {
-      display: none;
+    .nav-group {
+      position: relative;
+      flex: 0 1 auto;
     }
 
     .nav button {
@@ -135,6 +137,56 @@
       color: var(--muted);
       white-space: nowrap;
       transition: background .28s var(--ease), border-color .28s var(--ease), color .28s var(--ease), transform .2s var(--ease);
+    }
+
+    .nav-category-tab {
+      min-width: 78px;
+      font-weight: 700;
+    }
+
+    .nav-category-tab::after {
+      content: "⌄";
+      display: inline-block;
+      margin-left: 7px;
+      color: var(--sage-strong);
+      transition: transform .2s var(--ease);
+    }
+
+    .nav-group.open .nav-category-tab::after {
+      transform: rotate(180deg);
+    }
+
+    .nav-group.current > .nav-category-tab,
+    .nav-group.open > .nav-category-tab {
+      color: var(--leaf);
+      background: var(--soft);
+      border-color: var(--line-strong);
+    }
+
+    .nav-submenu {
+      position: absolute;
+      top: calc(100% + 10px);
+      left: 50%;
+      z-index: 78;
+      display: none;
+      min-width: 178px;
+      padding: 8px;
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      background: rgba(255, 255, 255, .98);
+      box-shadow: 0 18px 46px rgba(35, 54, 74, .14);
+      transform: translateX(-50%);
+    }
+
+    .nav-group.open .nav-submenu {
+      display: grid;
+      gap: 3px;
+    }
+
+    .nav-submenu button {
+      width: 100%;
+      min-height: 42px;
+      text-align: left;
     }
 
     .nav button:hover,
@@ -1133,7 +1185,14 @@
       .nav {
         order: 3;
         width: calc(100vw - 24px);
+        gap: 4px;
+        justify-content: stretch;
       }
+
+      .nav-group { flex: 1 1 0; }
+      .nav-category-tab { width: 100%; min-width: 0; padding-inline: 8px; }
+      .nav-category-tab::after { margin-left: 3px; }
+      .nav-submenu { position: fixed; top: 118px; left: 12px; right: 12px; min-width: 0; transform: none; }
 
       .notification-panel {
         top: 118px;
@@ -1229,7 +1288,7 @@
     @media (max-width: 390px) {
       .hero h1 { font-size: 44px; }
       .lead { font-size: 20px; }
-      .nav button { padding-inline: 11px; }
+      .nav button { padding-inline: 10px; }
       .card, .activity-card { padding: 16px; }
       .modal-backdrop { padding: 10px; }
       .modal { max-height: calc(100vh - 20px); border-radius: 18px; }
@@ -1241,15 +1300,36 @@
     <header class="topbar">
       <div class="brand"><span class="brand-mark">と</span><span>TOMONI</span></div>
       <nav class="nav" aria-label="画面">
-        <button class="active" data-jump="home" data-nav="home">ホーム</button>
-        <button data-jump="diagnosis" data-nav="diagnosis">診断</button>
-        <button data-jump="activities" data-nav="activities">過ごし方</button>
-        <button data-jump="create" data-nav="create">募集作成</button>
-        <button data-jump="region" data-nav="region">地域から探す</button>
-        <button data-jump="listings" data-nav="listings">募集一覧</button>
-        <button data-jump="profile" data-nav="profile">人柄カード</button>
-        <button data-jump="listings" data-nav="detail">募集を見る</button>
-        <button data-jump="after" data-nav="after">会った後</button>
+        <div class="nav-group current" data-nav-group="home">
+          <button class="nav-category-tab" type="button" data-nav-category="home" aria-expanded="false">ホーム</button>
+          <div class="nav-submenu" aria-label="ホームのメニュー">
+            <button class="nav-subitem active" type="button" data-jump="home" data-nav="home">ホーム</button>
+            <button class="nav-subitem" type="button" data-jump="diagnosis" data-nav="diagnosis">診断</button>
+            <button class="nav-subitem" type="button" data-jump="activities" data-nav="activities">過ごし方</button>
+          </div>
+        </div>
+        <div class="nav-group" data-nav-group="search">
+          <button class="nav-category-tab" type="button" data-nav-category="search" aria-expanded="false">さがす</button>
+          <div class="nav-submenu" aria-label="さがすのメニュー">
+            <button class="nav-subitem" type="button" data-jump="region" data-nav="region">地域から探す</button>
+            <button class="nav-subitem" type="button" data-jump="listings" data-nav="listings">募集一覧</button>
+          </div>
+        </div>
+        <div class="nav-group" data-nav-group="recruit">
+          <button class="nav-category-tab" type="button" data-nav-category="recruit" aria-expanded="false">募集</button>
+          <div class="nav-submenu" aria-label="募集のメニュー">
+            <button class="nav-subitem" type="button" data-jump="create" data-nav="create">募集作成</button>
+            <button class="nav-subitem" type="button" data-action="show-managed" data-nav="managed">自分の募集</button>
+          </div>
+        </div>
+        <div class="nav-group" data-nav-group="mypage">
+          <button class="nav-category-tab" type="button" data-nav-category="mypage" aria-expanded="false">マイページ</button>
+          <div class="nav-submenu" aria-label="マイページのメニュー">
+            <button class="nav-subitem" type="button" data-jump="profile" data-nav="profile">人柄カード</button>
+            <button class="nav-subitem" type="button" data-jump="after" data-nav="after">会った後</button>
+            <button class="nav-subitem" type="button" data-action="open-account" data-nav="account">設定</button>
+          </div>
+        </div>
       </nav>
       <div class="header-actions"><button class="notification-button" id="notificationButton" type="button" data-action="open-notifications" aria-label="通知" aria-expanded="false">🔔<span class="notification-badge" id="notificationBadge" hidden>0</span></button><button class="account-button" id="accountButton" type="button" data-action="open-auth">登録・ログイン</button></div>
     </header>
@@ -1992,6 +2072,7 @@
     let currentMatchChatId = null;
     let currentMatchChatReceiverId = null;
     let currentChatMode = "listing";
+    let accountNavMode = "account";
     let currentMeetingListingId = null;
     let currentChatChannel = null;
     let currentChatSyncTimer = null;
@@ -2136,6 +2217,7 @@
       currentMatchChatId = null;
       currentMatchChatReceiverId = null;
       currentChatMode = "listing";
+      accountNavMode = "account";
       currentChatMessages = new Map();
       if (ageRefreshTimer) clearTimeout(ageRefreshTimer);
       ageRefreshTimer = null;
@@ -2286,20 +2368,43 @@
     function navIdForSection(id) {
       if (id === "today") return "home";
       if (id === "meeting-record") return "after";
-      if (id === "detail") return "detail";
+      if (id === "detail") return "listings";
+      if (id === "chat") return currentChatMode === "match" ? "account" : "listings";
+      if (id === "account") return accountNavMode;
+      if (["notifications", "admin", "safety-guide-page", "safety-commitment", "prohibited", "terms", "privacy", "contact"].includes(id)) return "account";
       return id;
+    }
+
+    function navCategoryForItem(id) {
+      if (["home", "diagnosis", "activities"].includes(id)) return "home";
+      if (["region", "listings"].includes(id)) return "search";
+      if (["create", "managed"].includes(id)) return "recruit";
+      if (["profile", "after", "account"].includes(id)) return "mypage";
+      return "";
+    }
+
+    function closeNavMenus(exceptGroup = null) {
+      document.querySelectorAll(".nav-group").forEach((group) => {
+        if (group === exceptGroup) return;
+        group.classList.remove("open");
+        group.querySelector(".nav-category-tab")?.setAttribute("aria-expanded", "false");
+      });
     }
 
     function setActiveNav(id) {
       const activeId = navIdForSection(id);
-      document.querySelectorAll(".nav button").forEach((button) => {
+      const activeCategory = navCategoryForItem(activeId);
+      document.querySelectorAll(".nav-subitem").forEach((button) => {
         button.classList.toggle("active", button.dataset.nav === activeId);
+      });
+      document.querySelectorAll(".nav-group").forEach((group) => {
+        group.classList.toggle("current", group.dataset.navGroup === activeCategory);
       });
     }
 
     function updateActiveNavFromScroll() {
       const sections = [...document.querySelectorAll("main section")];
-      const headerHeight = document.querySelector(".site-header")?.offsetHeight || 0;
+      const headerHeight = document.querySelector(".topbar")?.offsetHeight || 0;
       const marker = window.scrollY + headerHeight + 24;
       const current = sections.reduce((active, section) => section.offsetTop <= marker ? section : active, sections[0]);
       if (current) setActiveNav(current.id);
@@ -2314,6 +2419,28 @@
 
     document.querySelectorAll("[data-jump]").forEach((button) => {
       button.addEventListener("click", () => jumpTo(button.dataset.jump));
+    });
+
+    document.querySelectorAll(".nav-category-tab").forEach((tab) => {
+      tab.addEventListener("click", () => {
+        const group = tab.closest(".nav-group");
+        const willOpen = !group.classList.contains("open");
+        closeNavMenus(group);
+        group.classList.toggle("open", willOpen);
+        tab.setAttribute("aria-expanded", String(willOpen));
+      });
+    });
+
+    document.querySelectorAll(".nav-subitem").forEach((button) => {
+      button.addEventListener("click", () => closeNavMenus());
+    });
+
+    document.addEventListener("click", (event) => {
+      if (!event.target.closest(".nav")) closeNavMenus();
+    });
+
+    document.addEventListener("keydown", (event) => {
+      if (event.key === "Escape") closeNavMenus();
     });
 
     const setSelected = (button) => {
@@ -4288,7 +4415,7 @@
       if (action === "show-login") { modalTitle.textContent = "ログイン"; modalBody.innerHTML = authMarkup("login"); }
       if (action === "show-password-reset") { modalTitle.textContent = "パスワード再設定"; modalBody.innerHTML = passwordResetMarkup(); }
       if (action === "open-terms") { closeModal(); jumpTo("terms"); toast("内容を確認後、登録画面へ戻って同意してください。"); }
-      if (action === "open-account") { if (appState.profileOwnerId !== appState.user?.id) showProfileEditor(true); else { jumpTo("account"); renderManaged(); } }
+      if (action === "open-account") { if (!appState.user) openModal("ログイン", authMarkup("login")); else if (appState.profileOwnerId !== appState.user.id) showProfileEditor(true); else { accountNavMode = "account"; jumpTo("account"); renderManaged(); } }
       if (action === "open-notifications") await openNotificationPanel();
       if (action === "close-notification-panel") setNotificationPanel(false);
       if (action === "mark-all-notifications-read") await markAllNotificationsRead();
@@ -4299,9 +4426,9 @@
       if (action === "open-chat") openChat(currentDetailListingId || button.dataset.id);
       if (action === "open-match-chat") openMatchChat(button.dataset.matchId, button.dataset.userId, button.dataset.person);
       if (action === "edit-profile") { if (!appState.user) openModal("ログイン", authMarkup("login")); else showProfileEditor(); }
-      if (action === "show-favorites") { if (!appState.user) openModal("ログイン", authMarkup("login")); else { jumpTo("account"); renderFavorites(); } }
-      if (action === "show-matches") { if (!appState.user) openModal("ログイン", authMarkup("login")); else { await loadMatches(); jumpTo("account"); renderMatches(); } }
-      if (action === "show-blocks") { if (!appState.user) openModal("ログイン", authMarkup("login")); else { await loadBlocks(); jumpTo("account"); renderBlocks(); } }
+      if (action === "show-favorites") { if (!appState.user) openModal("ログイン", authMarkup("login")); else { accountNavMode = "account"; jumpTo("account"); renderFavorites(); } }
+      if (action === "show-matches") { if (!appState.user) openModal("ログイン", authMarkup("login")); else { await loadMatches(); accountNavMode = "account"; jumpTo("account"); renderMatches(); } }
+      if (action === "show-blocks") { if (!appState.user) openModal("ログイン", authMarkup("login")); else { await loadBlocks(); accountNavMode = "account"; jumpTo("account"); renderBlocks(); } }
       if (action === "open-admin") await renderAdmin("");
       if (action === "admin-resolve-report") {
         setLoading(true);
@@ -4343,7 +4470,7 @@
         if (result?.error) { toast(`ブロック解除できませんでした：${result.error.message}`); return; }
         closeModal(); await renderAdmin(); await loadBlocks(); toast("ブロックを解除しました。");
       }
-      if (action === "show-managed") renderManaged();
+      if (action === "show-managed") { if (!appState.user) openModal("ログイン", authMarkup("login")); else if (appState.profileOwnerId !== appState.user.id) showProfileEditor(true); else { accountNavMode = "managed"; jumpTo("account"); renderManaged(); } }
       if (action === "delete-account") {
         if (!appState.user) { openModal("ログイン", authMarkup("login")); toast("退会はログイン後に実行できます。"); return; }
         openModal("アカウント削除（退会）", `<p>退会すると、プロフィール、募集、参加申請、気になる、マッチ、チャット、通知などのアカウントに紐づくデータを削除します。</p><div class="notice" style="margin-top:16px"><strong>この操作は取り消せません。</strong><p class="meta">もう一度利用する場合は、新しく会員登録が必要です。</p></div><div class="actions"><button class="btn" data-action="close-modal">キャンセル</button><button class="btn primary" data-action="confirm-delete-account">退会する</button></div>`);
@@ -4589,6 +4716,7 @@
       const protectedLink = event.target.closest('[data-jump="create"], [data-jump="region"]');
       if (!protectedLink || hasMemberAccess()) return;
       event.preventDefault(); event.stopImmediatePropagation();
+      closeNavMenus();
       if (!appState.user) { openModal("ログイン", authMarkup("login")); toast("この機能はログイン後に利用できます。"); }
       else { showProfileEditor(true); toast("最初にプロフィールを作成してください。"); }
     }, true);
