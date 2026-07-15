@@ -13,8 +13,8 @@ const notConfigured = () => ({
 
 window.tomoniAuth = {
   configured,
-  signUp: (email, password) => client
-    ? client.auth.signUp({ email, password })
+  signUp: (email, password, birthDate) => client
+    ? client.auth.signUp({ email, password, options: { data: { birth_date: birthDate } } })
     : Promise.resolve(notConfigured()),
   signIn: (email, password) => client
     ? client.auth.signInWithPassword({ email, password })
@@ -34,6 +34,9 @@ window.tomoniAuth = {
   updatePassword: (password) => client
     ? client.auth.updateUser({ password })
     : Promise.resolve(notConfigured()),
+  clearSignupBirthDate: () => client
+    ? client.auth.updateUser({ data: { birth_date: null } })
+    : Promise.resolve(notConfigured()),
   onAuthStateChange: (callback) => client
     ? client.auth.onAuthStateChange(callback)
     : { data: { subscription: { unsubscribe: () => {} } } },
@@ -41,7 +44,7 @@ window.tomoniAuth = {
     ? client.from("listings").select("*").order("created_at", { ascending: false })
     : Promise.resolve(notConfigured()),
   listProfiles: () => client
-    ? client.from("profiles").select("user_id,nickname,age,gender,area,photo_urls,personality_title,personality_tags,is_verified")
+    ? client.rpc("list_public_profiles")
     : Promise.resolve(notConfigured()),
   getListing: (id) => client
     ? client.from("listings").select("*").eq("id", id).single()
@@ -191,10 +194,16 @@ window.tomoniAuth = {
     ? client.from("meeting_records").select("listing_id", { count: "exact", head: true }).eq("meet_again", true)
     : Promise.resolve(notConfigured()),
   getProfile: (userId) => client
-    ? client.from("profiles").select("user_id,nickname,age,gender,area,bio,tags,photo_urls,personality_type,personality_title,personality_description,personality_tags,quiet_score,talk_score,comfort_score").eq("user_id", userId).maybeSingle()
+    ? client.from("profiles").select("user_id,nickname,gender,area,bio,tags,photo_urls,personality_type,personality_title,personality_description,personality_tags,quiet_score,talk_score,comfort_score").eq("user_id", userId).maybeSingle()
+    : Promise.resolve(notConfigured()),
+  getOwnBirthDate: () => client
+    ? client.from("profile_birth_dates").select("birth_date").maybeSingle()
+    : Promise.resolve(notConfigured()),
+  saveOwnBirthDate: (birthDate) => client
+    ? client.rpc("save_my_birth_date", { p_birth_date: birthDate })
     : Promise.resolve(notConfigured()),
   saveProfile: (profile) => client
-    ? client.from("profiles").upsert(profile, { onConflict: "user_id" }).select().single()
+    ? client.from("profiles").upsert(profile, { onConflict: "user_id" }).select("user_id,nickname,gender,area,bio,tags,photo_urls,personality_type,personality_title,personality_description,personality_tags,quiet_score,talk_score,comfort_score,is_verified,created_at,updated_at").single()
     : Promise.resolve(notConfigured()),
   savePersonality: (profile) => {
     if (!client) return Promise.resolve(notConfigured());

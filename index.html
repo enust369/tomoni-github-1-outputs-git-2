@@ -1556,7 +1556,7 @@
             <div>
               <div class="profile-photos" id="profilePhotos"><div class="profile-photo profile-photo-placeholder">ゆ</div></div>
               <h3 id="profileDisplayName">ゆう</h3>
-              <p class="meta" id="profileDisplayMeta">30代 / 今日の気分：穏やか</p>
+              <p class="meta" id="profileDisplayMeta">年齢未登録 / 今日の気分：穏やか</p>
               <p class="meta" id="profileArea">居住エリア：未設定</p>
               <div class="assurance-grid"><div class="assurance-card"><strong id="profileVerified">確認中</strong><span class="meta">本人確認</span></div><div class="assurance-card"><strong id="profileMetCount">0人</strong><span class="meta">会った人数</span></div><div class="assurance-card"><strong id="profileMeetAgainCount">0件</strong><span class="meta">また会いたい登録数</span></div></div>
               <div class="actions" style="justify-content:center"><button class="btn small primary" data-action="edit-profile">プロフィールを編集</button><button class="btn small" data-action="show-favorites">気になる一覧</button><button class="btn small" data-action="show-matches">マッチしました</button><button class="btn small primary" id="profileMatchChatButton" data-action="open-match-chat" hidden>チャットする</button></div>
@@ -1995,6 +1995,7 @@
     let currentMeetingListingId = null;
     let currentChatChannel = null;
     let currentChatSyncTimer = null;
+    let ageRefreshTimer = null;
     let chatRealtimeSubscribed = false;
     let currentChatMessages = new Map();
     let participatingListingIds = new Set();
@@ -2028,7 +2029,7 @@
     let adminInitialLoadStarted = false;
     let safetyGateActive = false;
     const storageKey = "tomoni-public-preview-v1";
-    const defaultState = { user: null, profileOwnerId: null, safetyOnboardingAccepted: false, dismissedChatSafety: [], saved: [], blocked: [], customListings: [], demoParticipations: [], moderation: { reports: [], blockCount: 0 }, feedbackHistory: [], profile: { nickname: "あなた", age: "30代", gender: "女性", area: "", bio: "静かな時間を大切にしています。", tags: [], photoUrls: [], personalityType: "", personalityTitle: "", personalityDescription: "", personalityTags: [], quietScore: null, talkScore: null, comfortScore: null } };
+    const defaultState = { user: null, profileOwnerId: null, safetyOnboardingAccepted: false, dismissedChatSafety: [], saved: [], blocked: [], customListings: [], demoParticipations: [], moderation: { reports: [], blockCount: 0 }, feedbackHistory: [], profile: { nickname: "あなた", age: null, birthDate: "", gender: "女性", area: "", bio: "静かな時間を大切にしています。", tags: [], photoUrls: [], personalityType: "", personalityTitle: "", personalityDescription: "", personalityTags: [], quietScore: null, talkScore: null, comfortScore: null } };
     let appState = loadState();
     listings.splice(0, listings.length);
 
@@ -2112,12 +2113,15 @@
     function loadState() {
       try {
         const stored = JSON.parse(localStorage.getItem(storageKey) || "{}");
-        return { ...defaultState, ...stored, dismissedChatSafety: Array.isArray(stored.dismissedChatSafety) ? stored.dismissedChatSafety : [], saved: Array.isArray(stored.saved) ? stored.saved : [], blocked: Array.isArray(stored.blocked) ? stored.blocked : [], customListings: Array.isArray(stored.customListings) ? stored.customListings : [], demoParticipations: Array.isArray(stored.demoParticipations) ? stored.demoParticipations : [], feedbackHistory: Array.isArray(stored.feedbackHistory) ? stored.feedbackHistory : [], moderation: { ...defaultState.moderation, ...(stored.moderation || {}), reports: Array.isArray(stored.moderation?.reports) ? stored.moderation.reports : [] }, profile: { ...defaultState.profile, ...(stored.profile || {}) } };
+        return { ...defaultState, ...stored, dismissedChatSafety: Array.isArray(stored.dismissedChatSafety) ? stored.dismissedChatSafety : [], saved: Array.isArray(stored.saved) ? stored.saved : [], blocked: Array.isArray(stored.blocked) ? stored.blocked : [], customListings: Array.isArray(stored.customListings) ? stored.customListings : [], demoParticipations: Array.isArray(stored.demoParticipations) ? stored.demoParticipations : [], feedbackHistory: Array.isArray(stored.feedbackHistory) ? stored.feedbackHistory : [], moderation: { ...defaultState.moderation, ...(stored.moderation || {}), reports: Array.isArray(stored.moderation?.reports) ? stored.moderation.reports : [] }, profile: { ...defaultState.profile, ...(stored.profile || {}), birthDate: "" } };
       }
       catch { return { ...defaultState }; }
     }
 
-    function saveState() { localStorage.setItem(storageKey, JSON.stringify(appState)); }
+    function saveState() {
+      const safeState = { ...appState, profile: { ...appState.profile, birthDate: "" } };
+      localStorage.setItem(storageKey, JSON.stringify(safeState));
+    }
     function esc(value = "") { const node = document.createElement("div"); node.textContent = String(value); return node.innerHTML; }
     function resetUserScopedState(user = null, options = {}) {
       const preserveLocal = options.preserveLocal !== false;
@@ -2133,6 +2137,8 @@
       currentMatchChatReceiverId = null;
       currentChatMode = "listing";
       currentChatMessages = new Map();
+      if (ageRefreshTimer) clearTimeout(ageRefreshTimer);
+      ageRefreshTimer = null;
       participatingListingIds = new Set();
       participationStatuses = new Map();
       favoriteRecords = [];
@@ -2216,22 +2222,45 @@
         durationSelect.value = "20分";
       }
     }
-    function isAdult(value) {
-      if (!value) return false;
-      const birth = new Date(`${value}T00:00:00`);
-      const today = new Date();
+    function calculateAge(value, today = new Date()) {
+      if (!/^\d{4}-\d{2}-\d{2}$/.test(String(value || ""))) return null;
+      const [year, month, day] = value.split("-").map(Number);
+      const birth = new Date(year, month - 1, day);
+      if (birth.getFullYear() !== year || birth.getMonth() !== month - 1 || birth.getDate() !== day || birth > today) return null;
       let age = today.getFullYear() - birth.getFullYear();
       const beforeBirthday = today.getMonth() < birth.getMonth() || (today.getMonth() === birth.getMonth() && today.getDate() < birth.getDate());
       if (beforeBirthday) age -= 1;
-      return age >= 18;
+      return age;
     }
 
-    function ageLabel(value) {
-      const age = new Date().getFullYear() - new Date(`${value}T00:00:00`).getFullYear();
-      if (age < 30) return "20代";
-      if (age < 40) return "30代";
-      if (age < 50) return "40代";
-      return "50代以上";
+    function isAdult(value) {
+      const age = calculateAge(value);
+      return age !== null && age >= 18 && age <= 120;
+    }
+
+    function formatAge(value) {
+      const age = Number(value);
+      return Number.isInteger(age) && age >= 18 && age <= 120 ? `${age}歳` : "年齢未登録";
+    }
+
+    function latestAdultBirthDate() {
+      const today = new Date();
+      const year = today.getFullYear() - 18;
+      const month = today.getMonth();
+      const day = Math.min(today.getDate(), new Date(year, month + 1, 0).getDate());
+      return `${year}-${String(month + 1).padStart(2, "0")}-${String(day).padStart(2, "0")}`;
+    }
+
+    function scheduleAgeRefresh() {
+      if (ageRefreshTimer) clearTimeout(ageRefreshTimer);
+      const now = new Date();
+      const nextDay = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1, 0, 0, 2);
+      ageRefreshTimer = setTimeout(async () => {
+        appState.profile.age = calculateAge(appState.profile.birthDate);
+        updateAccountUI();
+        if (appState.user) await loadSupabaseListings();
+        scheduleAgeRefresh();
+      }, nextDay.getTime() - now.getTime());
     }
 
     function containsPrivateInfo(value) {
@@ -2541,7 +2570,7 @@
       return `<div>
         ${number ? `<span class="flow-number">${number}</span>` : `<span class="badge">今日おすすめ</span>`} ${item.verified ? `<span class="badge">本人確認済み</span>` : ""}
         <h3 style="margin-top:10px">${esc(activityDisplay(item))}</h3>
-        <p class="meta">${esc(item.person)}さん / 徒歩${item.distance}分 / ${esc(item.talk)}</p>
+        <p class="meta">${esc(item.person)}さん / ${esc(formatAge(item.age))} / 徒歩${item.distance}分 / ${esc(item.talk)}</p>
         <div style="margin-top:8px">${comfortDots()}</div>
       </div><div class="actions"><button class="btn small primary" data-action="open-detail" data-id="${item.id}">詳しく見る</button><button class="btn small quiet-action" data-action="report" data-person="${esc(item.person)}" data-source="recommendation" data-id="${item.id}" data-user-id="${esc(item.ownerId || "")}">通報</button></div>`;
     }
@@ -2562,7 +2591,7 @@
       document.getElementById("homeRecommendation").innerHTML = shortCard(recommended, "1");
       const nearby = rankListings().filter((item) => item.active).slice(0, 3);
       document.getElementById("homeListings").innerHTML = nearby.map((item) => `
-        <div class="notice"><strong>${esc(item.person)}さん</strong><p class="meta">徒歩${item.distance}分 / ${esc(activityDisplay(item))}</p><button class="btn small" style="margin-top:10px" data-action="open-detail" data-id="${item.id}">見る</button></div>
+        <div class="notice"><strong>${esc(item.person)}さん</strong><p class="meta">${esc(formatAge(item.age))} / 徒歩${item.distance}分 / ${esc(activityDisplay(item))}</p><button class="btn small" style="margin-top:10px" data-action="open-detail" data-id="${item.id}">見る</button></div>
       `).join("");
       bindJumpButtons(document.getElementById("topRecommendation"));
       bindJumpButtons(document.getElementById("homeRecommendation"));
@@ -2587,6 +2616,7 @@
             <span class="badge">今日は会えます</span>
             <span class="badge muted">${esc(item.gender)}同士</span>
             <span class="badge muted">${esc(item.area)}</span>
+            <span class="badge muted">${esc(formatAge(item.age))}</span>
             <span class="badge muted">徒歩${item.distance}分</span>
             ${item.verified ? `<span class="badge">本人確認済み</span>` : ""}
             ${isMatched(item) ? `<span class="badge">マッチ済み</span>` : ""}
@@ -2643,7 +2673,7 @@
               <div>
                 <div class="chips">
                   <span class="badge muted">${esc(item.person)}さん</span>
-                  ${item.age ? `<span class="badge muted">${esc(item.age)}</span>` : ""}
+                  <span class="badge muted">${esc(formatAge(item.age))}</span>
                   ${item.profileArea ? `<span class="badge muted">${esc(item.profileArea)}</span>` : ""}
                   <span class="badge">${item.verified ? "本人確認済み" : "本人確認欄あり"}</span>
                 </div>
@@ -2693,7 +2723,7 @@
     }
 
     function listingFromRow(row) {
-      const profile = row.profile || {};
+      const profile = row.profile || profilesByUserId.get(row.owner_id) || {};
       const parsedActivity = splitActivityAndDuration(row.activity, row.duration);
       return {
         id: row.id,
@@ -2712,7 +2742,7 @@
         audience: row.audience,
         status: row.status || "open",
         verified: Boolean(profile.is_verified || row.owner_id === appState.user?.id),
-        age: profile.age || "",
+        age: profile.age !== null && profile.age !== undefined && Number.isInteger(Number(profile.age)) ? Number(profile.age) : null,
         profileArea: profile.area || "",
         profilePhoto: profile.photo_urls?.[0] || "",
         personalityTitle: profile.personality_title || "",
@@ -2950,7 +2980,7 @@
       button.dataset.action = appState.user ? "open-account" : "open-auth";
       document.getElementById("adminMenuButton").hidden = !isAdminUser();
       document.getElementById("profileDisplayName").textContent = appState.profile.nickname;
-      document.getElementById("profileDisplayMeta").textContent = `${appState.profile.age} / 今日の気分：穏やか`;
+      document.getElementById("profileDisplayMeta").textContent = `${formatAge(appState.profile.age)} / 今日の気分：穏やか`;
       document.getElementById("profileArea").textContent = `居住エリア：${appState.profile.area || "未設定"}`;
       document.getElementById("profileBioDisplay").textContent = appState.profile.bio || "自己紹介はまだありません。";
       document.getElementById("profileTags").innerHTML = appState.profile.tags?.length ? appState.profile.tags.map((tag) => `<span class="badge muted">${esc(tag)}</span>`).join("") : `<span class="meta">タグはまだありません。</span>`;
@@ -2986,7 +3016,7 @@
     async function loadSupabaseProfile(userId) {
       const result = await window.tomoniAuth?.getProfile?.(userId);
       if (result?.error || !result?.data) {
-        appState.profile = { ...defaultState.profile, nickname: "", gender: "", age: "", area: "", bio: "", tags: [], photoUrls: [], personalityType: "", personalityTitle: "", personalityDescription: "", personalityTags: [], quietScore: null, talkScore: null, comfortScore: null };
+        appState.profile = { ...defaultState.profile, nickname: "", gender: "", age: null, birthDate: "", area: "", bio: "", tags: [], photoUrls: [], personalityType: "", personalityTitle: "", personalityDescription: "", personalityTags: [], quietScore: null, talkScore: null, comfortScore: null };
         appState.profileOwnerId = null;
         saveState();
         return false;
@@ -2995,7 +3025,8 @@
       appState.profile = {
         ...defaultState.profile,
         nickname: profile.nickname || "",
-        age: profile.age || "",
+        age: null,
+        birthDate: "",
         gender: profile.gender || "",
         area: profile.area || "",
         bio: profile.bio || "",
@@ -3013,6 +3044,31 @@
       saveState();
       await syncPersonalityToSupabase();
       return true;
+    }
+
+    async function loadOwnBirthDate() {
+      if (!appState.user) return false;
+      const result = await window.tomoniAuth?.getOwnBirthDate?.();
+      if (result?.error) {
+        toast(`生年月日の登録状態を確認できませんでした：${result.error.message}`);
+        return false;
+      }
+      const birthDate = result?.data?.birth_date || "";
+      appState.profile.birthDate = birthDate;
+      appState.profile.age = calculateAge(birthDate);
+      if (birthDate) scheduleAgeRefresh();
+      if (birthDate) await window.tomoniAuth?.clearSignupBirthDate?.();
+      updateAccountUI();
+      return Boolean(birthDate);
+    }
+
+    function birthDatePromptMarkup() {
+      return `<p><strong>実年齢表示へ変更しました。<br>一度だけ生年月日を入力してください。</strong></p><p class="meta" style="margin-top:10px">生年月日は本人専用の領域に保存され、他の利用者には「○○歳」だけが表示されます。</p><form class="form" id="birthDateForm" style="margin-top:20px" novalidate><div class="field full"><label for="requiredBirthDate">生年月日</label><input id="requiredBirthDate" name="birthDate" type="date" max="${latestAdultBirthDate()}" autocomplete="bday" required><span class="field-error"></span></div><div class="field full"><button class="btn primary" type="submit">生年月日を登録する</button></div></form>`;
+    }
+
+    function promptForBirthDateIfNeeded() {
+      if (!appState.user || appState.profile.birthDate || !appState.safetyOnboardingAccepted) return;
+      openModal("生年月日の登録", birthDatePromptMarkup());
     }
 
     async function updateMetCount() {
@@ -3049,6 +3105,7 @@
       if (appState.user?.id !== restoredUser.id || appState.profileOwnerId !== restoredUser.id) resetUserScopedState(restoredUser);
       else appState.user = restoredUser;
       await loadSupabaseProfile(user.id);
+      await loadOwnBirthDate();
       saveState(); updateAccountUI();
       await updateMetCount();
       await startUserParticipationRealtime();
@@ -3059,6 +3116,7 @@
         syncGenderControls();
       }
       await loadSupabaseListings();
+      promptForBirthDateIfNeeded();
     }
 
     function openPasswordUpdateModal() {
@@ -3074,6 +3132,7 @@
         <div class="field full"><label for="authEmail">メールアドレス</label><input id="authEmail" name="email" type="email" autocomplete="email" required><span class="field-error"></span></div>
         <div class="field full"><label for="authPassword">パスワード</label><input id="authPassword" name="password" type="password" minlength="8" autocomplete="${registering ? "new-password" : "current-password"}" required><span class="field-error"></span></div>
         ${registering ? `<div class="field full"><label for="authPasswordConfirm">パスワード（確認）</label><input id="authPasswordConfirm" name="passwordConfirm" type="password" minlength="8" autocomplete="new-password" required><span class="field-error"></span></div>` : ""}
+        ${registering ? `<div class="field full"><label for="authBirthdate">生年月日</label><input id="authBirthdate" name="birthDate" type="date" max="${latestAdultBirthDate()}" autocomplete="bday" required><p class="meta">生年月日は公開されません。他の利用者には実年齢だけが表示されます。</p><span class="field-error"></span></div>` : ""}
         ${registering ? `<div class="field full"><label class="check-row"><input id="termsAgreement" name="termsAgreement" type="checkbox" required><span><button class="btn quiet-action" type="button" data-action="open-terms">利用規約</button>とプライバシーポリシーに同意します</span></label><span class="field-error"></span></div>` : ""}
         <div class="field full"><button class="btn primary" type="submit">${registering ? "会員登録する" : "ログインする"}</button></div>
         ${registering ? "" : `<div class="field full" style="margin-top:-6px"><button class="btn quiet-action" type="button" data-action="show-password-reset">パスワードを忘れた方はこちら</button></div>`}
@@ -3113,7 +3172,7 @@
         else if (field.id === "resetCode" && field.value !== "123456") message = "確認コードが一致しません。";
         else if (field.id === "authPasswordConfirm" && field.value !== form.querySelector("#authPassword")?.value) message = "パスワードが一致しません。";
         else if (field.id === "passwordUpdateConfirm" && field.value !== form.querySelector("#passwordUpdateNew")?.value) message = "パスワードが一致しません。";
-        else if (field.id === "authBirthdate" && !isAdult(field.value)) message = "18歳以上の方のみ利用できます。";
+        else if (["authBirthdate", "profileBirthDate", "requiredBirthDate"].includes(field.id) && !isAdult(field.value)) message = "18歳以上の正しい生年月日を入力してください。";
         else if (["authNickname", "authBio", "profileNickname", "profileBio"].includes(field.id) && containsPrivateInfo(field.value)) message = "電話番号・メール・住所・SNSは公開プロフィールに入力できません。";
         field.setAttribute("aria-invalid", message ? "true" : "false");
         if (error) error.textContent = message;
@@ -3125,7 +3184,7 @@
 
     function renderFavorites() {
       const favorites = listings.filter((item) => isFavorite(item) && canShowListingToViewer(item));
-      document.getElementById("accountContent").innerHTML = favorites.length ? favorites.map((item) => `<article class="card managed-listing"><div><span class="badge">気になる</span><h3 style="margin-top:10px">${esc(activityDisplay(item))}</h3><p class="meta">${esc(item.person)}さん / ${item.prefecture ? `${esc(item.prefecture)} / ` : ""}${item.city ? `${esc(item.city)} / ` : ""}${esc(item.place)}</p><p class="meta">${esc(item.personalityTitle || "自然体で過ごせる人")}</p></div><div class="actions"><button class="btn small" data-action="open-detail" data-id="${item.id}">詳しく見る</button><button class="btn small quiet-action" data-action="toggle-favorite" data-id="${item.id}">気になるを解除</button></div></article>`).join("") : `<article class="card empty-state">気になる相手はまだありません。</article>`;
+      document.getElementById("accountContent").innerHTML = favorites.length ? favorites.map((item) => `<article class="card managed-listing"><div><span class="badge">気になる</span><h3 style="margin-top:10px">${esc(activityDisplay(item))}</h3><p class="meta">${esc(item.person)}さん / ${esc(formatAge(item.age))} / ${item.prefecture ? `${esc(item.prefecture)} / ` : ""}${item.city ? `${esc(item.city)} / ` : ""}${esc(item.place)}</p><p class="meta">${esc(item.personalityTitle || "自然体で過ごせる人")}</p></div><div class="actions"><button class="btn small" data-action="open-detail" data-id="${item.id}">詳しく見る</button><button class="btn small quiet-action" data-action="toggle-favorite" data-id="${item.id}">気になるを解除</button></div></article>`).join("") : `<article class="card empty-state">気になる相手はまだありません。</article>`;
       bindJumpButtons(document.getElementById("accountContent"));
     }
 
@@ -3140,7 +3199,7 @@
         const profile = profilesByUserId.get(partnerId) || {};
         const person = item?.person || profile.nickname || "相手";
         const title = item ? `${activityDisplay(item)} / ${item.prefecture ? `${item.prefecture} / ` : ""}${item.city ? `${item.city} / ` : ""}${item.place}` : "募集がない相手";
-        return `<article class="card managed-listing"><div><span class="badge">マッチしました</span><h3 style="margin-top:10px">${esc(person)}さん</h3><p class="meta">${esc(title)}</p><p class="meta">${esc(item?.personalityTitle || profile.personality_title || "自然体で過ごせる人")}</p></div><div class="actions"><button class="btn small primary" data-action="open-match-chat" data-match-id="${esc(match.id)}" data-user-id="${esc(partnerId)}" data-person="${esc(person)}">チャットする</button>${item ? `<button class="btn small" data-action="open-detail" data-id="${item.id}">募集を見る</button>` : ""}</div></article>`;
+        return `<article class="card managed-listing"><div><span class="badge">マッチしました</span><h3 style="margin-top:10px">${esc(person)}さん・${esc(formatAge(profile.age ?? item?.age))}</h3><p class="meta">${esc(title)}</p><p class="meta">${esc(item?.personalityTitle || profile.personality_title || "自然体で過ごせる人")}</p></div><div class="actions"><button class="btn small primary" data-action="open-match-chat" data-match-id="${esc(match.id)}" data-user-id="${esc(partnerId)}" data-person="${esc(person)}">チャットする</button>${item ? `<button class="btn small" data-action="open-detail" data-id="${item.id}">募集を見る</button>` : ""}</div></article>`;
       }).join("") : `<article class="card empty-state">まだマッチはありません。お互いに「気になる」になると、ここに表示されます。</article>`;
       bindJumpButtons(document.getElementById("accountContent"));
     }
@@ -3640,7 +3699,7 @@
       const statusElement = document.getElementById("participationStatus");
       statusElement.textContent = item.owner ? "参加申請を確認できます。" : status === "pending" ? "参加申請を送りました。募集主の確認をお待ちください。" : approved ? "承認されました。チャットを利用できます。" : status === "declined" ? "今回は見送られました。" : full ? "この募集は満員です。" : "申請が承認されると、参加人数に反映されます。";
       statusElement.classList.toggle("caution", status === "declined" || (full && !approved));
-      document.getElementById("detailBadges").innerHTML = `<span class="badge">${item.verified ? "本人確認済み" : "本人確認欄あり"}</span>${isMatched(item) ? `<span class="badge">マッチ済み</span>` : ""}${item.prefecture ? `<span class="badge muted">${esc(item.prefecture)}</span>` : ""}${item.city ? `<span class="badge muted">${esc(item.city)}</span>` : ""}<span class="badge muted">${esc(item.place)}</span><span class="badge muted">${item.participantCount}/${item.capacity}人</span><span class="badge muted">同性のみ</span>`;
+      document.getElementById("detailBadges").innerHTML = `<span class="badge">${item.verified ? "本人確認済み" : "本人確認欄あり"}</span>${isMatched(item) ? `<span class="badge">マッチ済み</span>` : ""}<span class="badge muted">${esc(formatAge(item.age))}</span>${item.prefecture ? `<span class="badge muted">${esc(item.prefecture)}</span>` : ""}${item.city ? `<span class="badge muted">${esc(item.city)}</span>` : ""}<span class="badge muted">${esc(item.place)}</span><span class="badge muted">${item.participantCount}/${item.capacity}人</span><span class="badge muted">同性のみ</span>`;
     }
 
     function updateDetailFavoriteUI(item) {
@@ -3925,7 +3984,7 @@
       currentMatchChatReceiverId = null;
       currentChatMessages = new Map();
       document.getElementById("chatTitle").textContent = item.title || activityDisplay(item);
-      document.getElementById("chatMeta").textContent = `${item.person}さんの募集についてのチャット`;
+      document.getElementById("chatMeta").textContent = `${item.person}さん（${formatAge(item.age)}）の募集についてのチャット`;
       document.getElementById("chatMessage").placeholder = "待ち合わせや当日の過ごし方について話しましょう";
       document.getElementById("chatMessage").disabled = false;
       document.getElementById("chatSend").disabled = false;
@@ -3967,7 +4026,7 @@
       currentMatchChatReceiverId = partnerUserId;
       currentChatMessages = new Map();
       document.getElementById("chatTitle").textContent = `${partnerName || "相手"}さんとのチャット`;
-      document.getElementById("chatMeta").textContent = "マッチした相手とだけ利用できます。";
+      document.getElementById("chatMeta").textContent = `${formatAge(profilesByUserId.get(partnerUserId)?.age)}・マッチした相手とだけ利用できます。`;
       document.getElementById("chatMessage").placeholder = "無理のない範囲で、まずは短く話してみましょう";
       document.getElementById("chatMessage").disabled = false;
       document.getElementById("chatSend").disabled = false;
@@ -3985,12 +4044,12 @@
 
     function showProfileEditor(firstTime = false) {
       const tagOptions = ["散歩", "カフェ", "公園", "読書", "温泉", "映画", "ボードゲーム", "美術館", "食べ歩き", "ランニング", "写真", "神社", "自然", "ドライブ", "雑談", "無言OK"];
-      openModal(firstTime ? "プロフィール作成" : "プロフィール編集", `<form class="form" id="profileForm" data-first-time="${firstTime}" novalidate><div class="field full"><label for="profilePhotosInput">プロフィール写真（最大3枚）</label><input id="profilePhotosInput" type="file" accept="image/jpeg,image/png,image/webp" multiple><p class="meta">プロフィール写真は任意です。顔写真だけでなく、後ろ姿・横顔・趣味・風景・イラストなどでも大丈夫です。個人が特定されやすい写真や個人情報が写っている写真は避けることをおすすめします。</p><p class="meta">新しく選択すると現在の写真を置き換えます。1枚5MBまで。</p></div><div class="field full"><label for="profileNickname">ニックネーム</label><input id="profileNickname" name="nickname" maxlength="20" value="${esc(appState.profile.nickname === "あなた" ? "" : appState.profile.nickname)}" required><span class="field-error"></span></div><div class="field"><label for="profileGender">登録する性別</label><select id="profileGender" name="gender"><option ${appState.profile.gender === "女性" ? "selected" : ""}>女性</option><option ${appState.profile.gender === "男性" ? "selected" : ""}>男性</option></select></div><div class="field"><label for="profileAge">年代</label><select id="profileAge" name="age"><option ${appState.profile.age === "20代" ? "selected" : ""}>20代</option><option ${appState.profile.age === "30代" ? "selected" : ""}>30代</option><option ${appState.profile.age === "40代" ? "selected" : ""}>40代</option><option ${appState.profile.age === "50代以上" ? "selected" : ""}>50代以上</option></select></div><div class="field full"><label for="profileAreaInput">居住エリア（市まで）</label><input id="profileAreaInput" name="area" maxlength="30" placeholder="例：武蔵野市" value="${esc(appState.profile.area || "")}" required><span class="field-error"></span></div><div class="field full"><label for="profileBio">自己紹介（300文字まで）</label><textarea id="profileBio" name="bio" maxlength="300" required>${esc(appState.profile.bio)}</textarea><span class="field-error"></span></div><div class="field full"><label>趣味タグ（複数選択可）</label><div class="chips">${tagOptions.map((tag) => `<label class="check-row badge muted"><input type="checkbox" name="tags" value="${tag}" ${appState.profile.tags?.includes(tag) ? "checked" : ""}>${tag}</label>`).join("")}</div></div><div class="field full"><button class="btn primary" type="submit">${firstTime ? "プロフィールを作成する" : "プロフィールを保存"}</button></div></form>`);
+      openModal(firstTime ? "プロフィール作成" : "プロフィール編集", `<form class="form" id="profileForm" data-first-time="${firstTime}" novalidate><div class="field full"><label for="profilePhotosInput">プロフィール写真（最大3枚）</label><input id="profilePhotosInput" type="file" accept="image/jpeg,image/png,image/webp" multiple><p class="meta">プロフィール写真は任意です。顔写真だけでなく、後ろ姿・横顔・趣味・風景・イラストなどでも大丈夫です。個人が特定されやすい写真や個人情報が写っている写真は避けることをおすすめします。</p><p class="meta">新しく選択すると現在の写真を置き換えます。1枚5MBまで。</p></div><div class="field full"><label for="profileNickname">ニックネーム</label><input id="profileNickname" name="nickname" maxlength="20" value="${esc(appState.profile.nickname === "あなた" ? "" : appState.profile.nickname)}" required><span class="field-error"></span></div><div class="field"><label for="profileGender">登録する性別</label><select id="profileGender" name="gender"><option ${appState.profile.gender === "女性" ? "selected" : ""}>女性</option><option ${appState.profile.gender === "男性" ? "selected" : ""}>男性</option></select></div><div class="field"><label for="profileBirthDate">生年月日</label><input id="profileBirthDate" name="birthDate" type="date" max="${latestAdultBirthDate()}" autocomplete="bday" value="${esc(appState.profile.birthDate || "")}" required><p class="meta">生年月日は公開されません。表示されるのは「${esc(formatAge(appState.profile.age))}」だけです。</p><span class="field-error"></span></div><div class="field full"><label for="profileAreaInput">居住エリア（市まで）</label><input id="profileAreaInput" name="area" maxlength="30" placeholder="例：武蔵野市" value="${esc(appState.profile.area || "")}" required><span class="field-error"></span></div><div class="field full"><label for="profileBio">自己紹介（300文字まで）</label><textarea id="profileBio" name="bio" maxlength="300" required>${esc(appState.profile.bio)}</textarea><span class="field-error"></span></div><div class="field full"><label>趣味タグ（複数選択可）</label><div class="chips">${tagOptions.map((tag) => `<label class="check-row badge muted"><input type="checkbox" name="tags" value="${tag}" ${appState.profile.tags?.includes(tag) ? "checked" : ""}>${tag}</label>`).join("")}</div></div><div class="field full"><button class="btn primary" type="submit">${firstTime ? "プロフィールを作成する" : "プロフィールを保存"}</button></div></form>`);
     }
 
     document.addEventListener("submit", async (event) => {
       const form = event.target;
-      if (!["createForm", "meetingRecordForm", "chatForm", "contactForm", "authForm", "passwordResetForm", "passwordUpdateForm", "profileForm", "reportForm"].includes(form.id)) return;
+      if (!["createForm", "meetingRecordForm", "chatForm", "contactForm", "authForm", "passwordResetForm", "passwordUpdateForm", "birthDateForm", "profileForm", "reportForm"].includes(form.id)) return;
       event.preventDefault();
       if (!validateForm(form)) { toast("入力内容を確認してください。"); return; }
       if (form.id === "createForm") {
@@ -4092,7 +4151,7 @@
         setLoading(true);
         const auth = window.tomoniAuth;
         if (!auth?.configured) { setLoading(false); form.dataset.submitting = "false"; toast("Supabaseの接続情報を設定してください。"); return; }
-        let result = registering ? await auth.signUp(data.email.trim(), data.password) : await auth.signIn(data.email.trim(), data.password);
+        let result = registering ? await auth.signUp(data.email.trim(), data.password, data.birthDate) : await auth.signIn(data.email.trim(), data.password);
         setLoading(false);
         if (result.error) { form.dataset.submitting = "false"; const passwordField = document.getElementById("authPassword"); passwordField.setAttribute("aria-invalid", "true"); passwordField.parentElement.querySelector(".field-error").textContent = result.error.message; passwordField.focus(); return; }
         if (registering && !result.data?.session) {
@@ -4107,7 +4166,12 @@
         if (!user) { form.dataset.submitting = "false"; toast("ログイン状態を確認できませんでした。"); return; }
         const loggedInUser = { id: user.id, email: user.email, verified: Boolean(user.email_confirmed_at) };
         resetUserScopedState(loggedInUser);
+        if (registering && data.birthDate) {
+          const birthResult = await auth.saveOwnBirthDate(data.birthDate);
+          if (birthResult?.error) toast(`生年月日を保存できませんでした：${birthResult.error.message}`);
+        }
         await loadSupabaseProfile(user.id);
+        await loadOwnBirthDate();
         saveState(); updateAccountUI(); closeModal();
         await updateMetCount();
         await startUserParticipationRealtime();
@@ -4123,6 +4187,21 @@
         }
         if (appState.profileOwnerId !== user.id) showProfileEditor(true);
         else { currentGender = appState.profile.gender || currentGender; syncGenderControls(); await loadSupabaseListings(); toast("ログインしました。"); }
+        return;
+      }
+      if (form.id === "birthDateForm") {
+        const birthDate = String(new FormData(form).get("birthDate") || "");
+        setLoading(true);
+        const result = await window.tomoniAuth?.saveOwnBirthDate?.(birthDate);
+        setLoading(false);
+        if (result?.error) { toast(`生年月日を登録できませんでした：${result.error.message}`); return; }
+        appState.profile.birthDate = birthDate;
+        appState.profile.age = calculateAge(birthDate);
+        scheduleAgeRefresh();
+        closeModal();
+        updateAccountUI();
+        await loadSupabaseListings();
+        toast("生年月日を登録しました。公開されるのは実年齢だけです。");
         return;
       }
       if (form.id === "passwordResetForm") {
@@ -4171,10 +4250,13 @@
             if (uploadError) throw uploadError;
             photoUrls = uploads.map((result) => result.data.url);
           }
-          const profile = { nickname: String(formData.get("nickname")).trim(), gender: String(formData.get("gender")), age: String(formData.get("age")), area: String(formData.get("area")).trim(), bio: String(formData.get("bio")).trim(), tags: formData.getAll("tags").map(String), photoUrls };
-          const result = await window.tomoniAuth.saveProfile({ user_id: appState.user.id, nickname: profile.nickname, gender: profile.gender, age: profile.age, area: profile.area, bio: profile.bio, tags: profile.tags, photo_urls: profile.photoUrls, ...personalitySupabasePayload(appState.profile), updated_at: new Date().toISOString() });
+          const birthDate = String(formData.get("birthDate") || "");
+          const birthResult = await window.tomoniAuth.saveOwnBirthDate(birthDate);
+          if (birthResult?.error) throw birthResult.error;
+          const profile = { nickname: String(formData.get("nickname")).trim(), gender: String(formData.get("gender")), age: calculateAge(birthDate), birthDate, area: String(formData.get("area")).trim(), bio: String(formData.get("bio")).trim(), tags: formData.getAll("tags").map(String), photoUrls };
+          const result = await window.tomoniAuth.saveProfile({ user_id: appState.user.id, nickname: profile.nickname, gender: profile.gender, area: profile.area, bio: profile.bio, tags: profile.tags, photo_urls: profile.photoUrls, ...personalitySupabasePayload(appState.profile), updated_at: new Date().toISOString() });
           if (result?.error) throw result.error;
-          appState.profile = { ...appState.profile, ...profile }; appState.profileOwnerId = appState.user.id; currentGender = profile.gender; saveState(); updateAccountUI(); closeModal(); syncGenderControls(); await loadSupabaseListings(); toast(form.dataset.firstTime === "true" ? "プロフィールを作成しました。" : "プロフィールを保存しました。");
+          appState.profile = { ...appState.profile, ...profile }; appState.profileOwnerId = appState.user.id; currentGender = profile.gender; scheduleAgeRefresh(); saveState(); updateAccountUI(); closeModal(); syncGenderControls(); await loadSupabaseListings(); toast(form.dataset.firstTime === "true" ? "プロフィールを作成しました。" : "プロフィールを保存しました。");
         } catch (error) { toast(`プロフィールを保存できませんでした：${error.message}`); }
         finally { setLoading(false); }
       }
@@ -4199,7 +4281,7 @@
       const action = button.dataset.action;
       if (action === "close-modal") closeModal();
       if (action === "confirm-safety-start") {
-        appState.safetyOnboardingAccepted = true; saveState(); safetyGateActive = false; closeModal(); toast("確認ありがとうございます。安心して始めましょう。");
+        appState.safetyOnboardingAccepted = true; saveState(); safetyGateActive = false; closeModal(); toast("確認ありがとうございます。安心して始めましょう。"); setTimeout(promptForBirthDateIfNeeded, 0);
       }
       if (action === "open-auth") openModal("ログイン", authMarkup("login"));
       if (action === "show-register") { modalTitle.textContent = "会員登録"; modalBody.innerHTML = authMarkup("register"); }
