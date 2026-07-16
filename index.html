@@ -638,6 +638,35 @@
       margin-top: 22px;
     }
 
+    .profile-detail-list {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+      margin-top: 20px;
+    }
+
+    .profile-detail-item {
+      min-width: 0;
+      padding: 14px 16px;
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      background: var(--soft);
+    }
+
+    .profile-detail-item dt { color: var(--muted); font-size: 12px; }
+    .profile-detail-item dd { margin: 3px 0 0; font-weight: 700; overflow-wrap: anywhere; }
+    .profile-preferences { display: grid; gap: 18px; margin-top: 22px; }
+    .profile-preference-block { padding-top: 18px; border-top: 1px solid var(--line); }
+    .profile-preference-block:first-child { padding-top: 0; border-top: 0; }
+    .profile-preference-label { margin-bottom: 8px; color: var(--muted); font-size: 13px; font-weight: 700; }
+    .profile-edit-group { grid-column: 1 / -1; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; padding: 20px; border: 1px solid var(--line); border-radius: 18px; background: var(--soft); }
+    .profile-edit-group > h3,
+    .profile-edit-group > .full { grid-column: 1 / -1; }
+    .profile-edit-group > h3 { font-size: 17px; color: var(--leaf); }
+    .profile-choice-grid { display: flex; flex-wrap: wrap; gap: 8px; }
+    .profile-choice-grid .check-row { align-items: center; padding: 8px 11px; border: 1px solid var(--line); border-radius: 999px; background: #fff; font-weight: 600; }
+    .profile-choice-grid .check-row input { width: 18px; height: 18px; margin-top: 0; }
+
     .meter-head,
     .meter-labels {
       display: flex;
@@ -1227,6 +1256,9 @@
         font-size: 22px;
       }
 
+      .profile-detail-list,
+      .profile-edit-group { grid-template-columns: 1fr; }
+
       .hero-visual {
         min-height: 320px;
         border-radius: 24px;
@@ -1645,14 +1677,15 @@
               <h3 id="profileDisplayName">ゆう</h3>
               <p class="meta" id="profileDisplayMeta">年齢未登録 / 今日の気分：穏やか</p>
               <p class="meta" id="profileArea">居住エリア：未設定</p>
+              <dl class="profile-detail-list" id="profileBasicDetails" hidden></dl>
               <div class="assurance-grid"><div class="assurance-card"><strong id="profileVerified">確認中</strong><span class="meta">本人確認</span></div><div class="assurance-card"><strong id="profileMetCount">0人</strong><span class="meta">会った人数</span></div><div class="assurance-card"><strong id="profileMeetAgainCount">0件</strong><span class="meta">また会いたい登録数</span></div></div>
               <div class="actions" style="justify-content:center"><button class="btn small primary" data-action="edit-profile">プロフィールを編集</button><button class="btn small" data-action="show-favorites">気になる一覧</button><button class="btn small" data-action="show-matches">マッチしました</button><button class="btn small primary" id="profileMatchChatButton" data-action="open-match-chat" hidden>チャットする</button></div>
               <div class="actions" style="justify-content:center"><button class="btn small" id="profileReportButton" data-action="report" data-person="相手" data-source="profile" disabled>通報</button><button class="btn small quiet-action" id="profileBlockButton" data-action="block" data-person="相手" disabled>ブロック</button></div>
             </div>
           </article>
           <article class="card basic-panel">
-            <p class="eyebrow">自己紹介</p><p id="profileBioDisplay">静かな時間を大切にしています。</p>
-            <p class="eyebrow" style="margin-top:28px">趣味タグ</p><div class="chips" id="profileTags"></div>
+            <p class="eyebrow">趣味タグ</p><div class="chips" id="profileTags"></div>
+            <p class="eyebrow" style="margin-top:28px">自己紹介</p><p id="profileBioDisplay">静かな時間を大切にしています。</p>
           </article>
           <article class="card personality-panel">
             <p class="eyebrow" style="margin-top:28px">心地よい時間診断</p>
@@ -1662,6 +1695,7 @@
               <p class="meta" id="profilePersonalityDescription" style="margin-top:8px">診断すると、あなたが心地よく過ごしやすい空気感がここに表示されます。</p>
               <div class="chips" id="profilePersonalityTags" style="margin-top:12px"></div>
             </div>
+            <div class="profile-preferences" id="profilePreferences" hidden></div>
             <div class="meters">
               <div><div class="meter-head"><strong>安心して過ごせる目安</strong><span class="meta">穏やか</span></div><div class="meter-track"><div class="meter-fill" style="width:86%"></div></div></div>
               <div><div class="meter-head"><strong>会話テンポ</strong><span class="meta">ゆっくり</span></div><div class="meter-track"><div class="meter-fill" style="width:34%"></div></div><div class="meter-labels"><span>ゆっくり</span><span>軽やか</span></div></div>
@@ -2131,7 +2165,18 @@
     let adminInitialLoadStarted = false;
     let safetyGateActive = false;
     const storageKey = "tomoni-public-preview-v1";
-    const defaultState = { user: null, profileOwnerId: null, safetyOnboardingAccepted: false, dismissedChatSafety: [], saved: [], blocked: [], customListings: [], demoParticipations: [], moderation: { reports: [], blockCount: 0 }, feedbackHistory: [], profile: { nickname: "あなた", age: null, birthDate: "", gender: "女性", area: "", bio: "静かな時間を大切にしています。", tags: [], photoUrls: [], personalityType: "", personalityTitle: "", personalityDescription: "", personalityTags: [], quietScore: null, talkScore: null, comfortScore: null } };
+    const PROFILE_META_PREFIX = "tomoni:profile:";
+    const profileOptionSets = {
+      bloodType: ["A型", "B型", "O型", "AB型"],
+      talkStyle: ["話す方", "聞く方", "半々"],
+      firstMeeting: ["すぐ話せる", "少し緊張する", "慣れると話せる"],
+      favoriteActivities: ["カフェ", "散歩", "ランチ", "お茶", "ドライブ", "温泉", "ボードゲーム", "映画", "ゲーム", "買い物", "スポーツ", "読書", "写真", "美術館", "神社・お寺", "動物", "その他"],
+      holiday: ["土日休み", "平日休み", "不定休", "その他"],
+      alcohol: ["飲む", "たまに飲む", "飲まない"],
+      tobacco: ["吸う", "電子タバコのみ", "吸わない"]
+    };
+    const emptyProfileExtras = { height: null, bloodType: "", talkStyle: "", firstMeeting: "", favoriteActivities: [], holiday: "", alcohol: "", tobacco: "" };
+    const defaultState = { user: null, profileOwnerId: null, safetyOnboardingAccepted: false, dismissedChatSafety: [], saved: [], blocked: [], customListings: [], demoParticipations: [], moderation: { reports: [], blockCount: 0 }, feedbackHistory: [], profile: { nickname: "あなた", age: null, birthDate: "", gender: "女性", area: "", bio: "静かな時間を大切にしています。", tags: [], photoUrls: [], ...emptyProfileExtras, personalityType: "", personalityTitle: "", personalityDescription: "", personalityTags: [], quietScore: null, talkScore: null, comfortScore: null } };
     let appState = loadState();
     listings.splice(0, listings.length);
 
@@ -2210,6 +2255,41 @@
 
     function activityOptions() {
       return [...new Set(categories.flatMap((category) => category.items.map(([title]) => splitActivityAndDuration(title).activity)).filter(Boolean))];
+    }
+
+    function decodeProfileTags(tags = []) {
+      const extras = { ...emptyProfileExtras, favoriteActivities: [] };
+      const hobbies = [];
+      (Array.isArray(tags) ? tags : []).forEach((tag) => {
+        const value = String(tag || "");
+        if (!value.startsWith(PROFILE_META_PREFIX)) { hobbies.push(value); return; }
+        const separator = value.indexOf("=", PROFILE_META_PREFIX.length);
+        if (separator < 0) return;
+        const key = value.slice(PROFILE_META_PREFIX.length, separator);
+        let decoded = "";
+        try { decoded = decodeURIComponent(value.slice(separator + 1)); } catch { return; }
+        if (key === "height") {
+          const height = Number(decoded);
+          if (Number.isInteger(height) && height >= 100 && height <= 250) extras.height = height;
+        } else if (key === "favoriteActivity") {
+          if (profileOptionSets.favoriteActivities.includes(decoded) && !extras.favoriteActivities.includes(decoded)) extras.favoriteActivities.push(decoded);
+        } else if (Object.hasOwn(profileOptionSets, key) && profileOptionSets[key].includes(decoded)) {
+          extras[key] = decoded;
+        }
+      });
+      return { hobbies, extras };
+    }
+
+    function encodeProfileTags(hobbies = [], extras = {}) {
+      const values = (Array.isArray(hobbies) ? hobbies : []).filter((tag) => tag && !String(tag).startsWith(PROFILE_META_PREFIX));
+      const add = (key, value) => { if (value) values.push(`${PROFILE_META_PREFIX}${key}=${encodeURIComponent(value)}`); };
+      const height = Number(extras.height);
+      if (Number.isInteger(height) && height >= 100 && height <= 250) add("height", String(height));
+      ["bloodType", "talkStyle", "firstMeeting", "holiday", "alcohol", "tobacco"].forEach((key) => {
+        if (profileOptionSets[key].includes(extras[key])) add(key, extras[key]);
+      });
+      (extras.favoriteActivities || []).filter((value) => profileOptionSets.favoriteActivities.includes(value)).forEach((value) => add("favoriteActivity", value));
+      return values;
     }
 
     function loadState() {
@@ -3181,11 +3261,29 @@
       document.getElementById("profileDisplayName").textContent = appState.profile.nickname;
       document.getElementById("profileDisplayMeta").textContent = `${formatAge(appState.profile.age)} / 今日の気分：穏やか`;
       document.getElementById("profileArea").textContent = `居住エリア：${appState.profile.area || "未設定"}`;
+      const basicDetails = [
+        appState.profile.height ? ["身長", `${appState.profile.height}cm`] : null,
+        appState.profile.bloodType ? ["血液型", appState.profile.bloodType] : null
+      ].filter(Boolean);
+      const basicDetailsElement = document.getElementById("profileBasicDetails");
+      basicDetailsElement.innerHTML = basicDetails.map(([label, value]) => `<div class="profile-detail-item"><dt>${esc(label)}</dt><dd>${esc(value)}</dd></div>`).join("");
+      basicDetailsElement.hidden = basicDetails.length === 0;
       document.getElementById("profileBioDisplay").textContent = appState.profile.bio || "自己紹介はまだありません。";
       document.getElementById("profileTags").innerHTML = appState.profile.tags?.length ? appState.profile.tags.map((tag) => `<span class="badge muted">${esc(tag)}</span>`).join("") : `<span class="meta">タグはまだありません。</span>`;
       document.getElementById("profilePersonalityTitle").textContent = appState.profile.personalityTitle || "まだ診断されていません";
       document.getElementById("profilePersonalityDescription").textContent = appState.profile.personalityDescription || "診断すると、あなたが心地よく過ごしやすい空気感がここに表示されます。";
       document.getElementById("profilePersonalityTags").innerHTML = appState.profile.personalityTags?.length ? appState.profile.personalityTags.map((tag) => `<span class="badge muted">${esc(tag)}</span>`).join("") : `<span class="meta">診断タグはまだありません。</span>`;
+      const preferenceItems = [
+        appState.profile.talkStyle ? ["話し方", appState.profile.talkStyle, false] : null,
+        appState.profile.firstMeeting ? ["初対面", appState.profile.firstMeeting, false] : null,
+        appState.profile.favoriteActivities?.length ? ["好きな過ごし方", appState.profile.favoriteActivities, true] : null,
+        appState.profile.holiday ? ["休日", appState.profile.holiday, false] : null,
+        appState.profile.alcohol ? ["お酒", appState.profile.alcohol, false] : null,
+        appState.profile.tobacco ? ["タバコ", appState.profile.tobacco, false] : null
+      ].filter(Boolean);
+      const preferencesElement = document.getElementById("profilePreferences");
+      preferencesElement.innerHTML = preferenceItems.map(([label, value, tags]) => `<div class="profile-preference-block"><p class="profile-preference-label">${esc(label)}</p>${tags ? `<div class="chips">${value.map((item) => `<span class="badge muted">${esc(item)}</span>`).join("")}</div>` : `<p><strong>${esc(value)}</strong></p>`}</div>`).join("");
+      preferencesElement.hidden = preferenceItems.length === 0;
       const photos = appState.profile.photoUrls || [];
       document.getElementById("profilePhotos").innerHTML = photos.length ? photos.map((url, index) => `<img class="profile-photo" src="${esc(url)}" alt="プロフィール写真 ${index + 1}">`).join("") : `<div class="profile-photo profile-photo-placeholder">${esc((appState.profile.nickname || "と").slice(0, 1))}</div>`;
       const latestMatch = matchRecords[0];
@@ -3223,6 +3321,7 @@
         return false;
       }
       const profile = result.data;
+      const decodedTags = decodeProfileTags(profile.tags || []);
       appState.profile = {
         ...defaultState.profile,
         nickname: profile.nickname || "",
@@ -3231,8 +3330,9 @@
         gender: profile.gender || "",
         area: profile.area || "",
         bio: profile.bio || "",
-        tags: profile.tags || [],
+        tags: decodedTags.hobbies,
         photoUrls: profile.photo_urls || [],
+        ...decodedTags.extras,
         personalityType: profile.personality_type || "",
         personalityTitle: profile.personality_title || "",
         personalityDescription: profile.personality_description || "",
@@ -3374,6 +3474,7 @@
         else if (field.id === "authPasswordConfirm" && field.value !== form.querySelector("#authPassword")?.value) message = "パスワードが一致しません。";
         else if (field.id === "passwordUpdateConfirm" && field.value !== form.querySelector("#passwordUpdateNew")?.value) message = "パスワードが一致しません。";
         else if (["authBirthdate", "profileBirthDate", "requiredBirthDate"].includes(field.id) && !isAdult(field.value)) message = "18歳以上の正しい生年月日を入力してください。";
+        else if (field.id === "profileHeight" && field.value && (!Number.isInteger(Number(field.value)) || Number(field.value) < 100 || Number(field.value) > 250)) message = "身長は100～250cmの整数で入力してください。";
         else if (["authNickname", "authBio", "profileNickname", "profileBio"].includes(field.id) && containsPrivateInfo(field.value)) message = "電話番号・メール・住所・SNSは公開プロフィールに入力できません。";
         field.setAttribute("aria-invalid", message ? "true" : "false");
         if (error) error.textContent = message;
@@ -4257,7 +4358,32 @@
 
     function showProfileEditor(firstTime = false) {
       const tagOptions = ["散歩", "カフェ", "公園", "読書", "温泉", "映画", "ボードゲーム", "美術館", "食べ歩き", "ランニング", "写真", "神社", "自然", "ドライブ", "雑談", "無言OK"];
-      openModal(firstTime ? "プロフィール作成" : "プロフィール編集", `<form class="form" id="profileForm" data-first-time="${firstTime}" novalidate><div class="field full"><label for="profilePhotosInput">プロフィール写真（最大3枚）</label><input id="profilePhotosInput" type="file" accept="image/jpeg,image/png,image/webp" multiple><p class="meta">プロフィール写真は任意です。顔写真だけでなく、後ろ姿・横顔・趣味・風景・イラストなどでも大丈夫です。個人が特定されやすい写真や個人情報が写っている写真は避けることをおすすめします。</p><p class="meta">新しく選択すると現在の写真を置き換えます。1枚5MBまで。</p></div><div class="field full"><label for="profileNickname">ニックネーム</label><input id="profileNickname" name="nickname" maxlength="20" value="${esc(appState.profile.nickname === "あなた" ? "" : appState.profile.nickname)}" required><span class="field-error"></span></div><div class="field"><label for="profileGender">登録する性別</label><select id="profileGender" name="gender"><option ${appState.profile.gender === "女性" ? "selected" : ""}>女性</option><option ${appState.profile.gender === "男性" ? "selected" : ""}>男性</option></select></div><div class="field"><label for="profileBirthDate">生年月日</label><input id="profileBirthDate" name="birthDate" type="date" max="${latestAdultBirthDate()}" autocomplete="bday" value="${esc(appState.profile.birthDate || "")}" required><p class="meta">生年月日は公開されません。表示されるのは「${esc(formatAge(appState.profile.age))}」だけです。</p><span class="field-error"></span></div><div class="field full"><label for="profileAreaInput">居住エリア（市まで）</label><input id="profileAreaInput" name="area" maxlength="30" placeholder="例：武蔵野市" value="${esc(appState.profile.area || "")}" required><span class="field-error"></span></div><div class="field full"><label for="profileBio">自己紹介（300文字まで）</label><textarea id="profileBio" name="bio" maxlength="300" required>${esc(appState.profile.bio)}</textarea><span class="field-error"></span></div><div class="field full"><label>趣味タグ（複数選択可）</label><div class="chips">${tagOptions.map((tag) => `<label class="check-row badge muted"><input type="checkbox" name="tags" value="${tag}" ${appState.profile.tags?.includes(tag) ? "checked" : ""}>${tag}</label>`).join("")}</div></div><div class="field full"><button class="btn primary" type="submit">${firstTime ? "プロフィールを作成する" : "プロフィールを保存"}</button></div></form>`);
+      const selectOptions = (options, selected) => `<option value="">未設定</option>${options.map((option) => `<option value="${esc(option)}" ${selected === option ? "selected" : ""}>${esc(option)}</option>`).join("")}`;
+      openModal(firstTime ? "プロフィール作成" : "プロフィール編集", `
+        <form class="form" id="profileForm" data-first-time="${firstTime}" novalidate>
+          <div class="profile-edit-group">
+            <h3>基本情報</h3>
+            <div class="field full"><label for="profilePhotosInput">プロフィール写真（最大3枚）</label><input id="profilePhotosInput" type="file" accept="image/jpeg,image/png,image/webp" multiple><p class="meta">プロフィール写真は任意です。顔写真だけでなく、後ろ姿・横顔・趣味・風景・イラストなどでも大丈夫です。個人が特定されやすい写真や個人情報が写っている写真は避けることをおすすめします。</p><p class="meta">新しく選択すると現在の写真を置き換えます。1枚5MBまで。</p></div>
+            <div class="field full"><label for="profileNickname">ニックネーム</label><input id="profileNickname" name="nickname" maxlength="20" value="${esc(appState.profile.nickname === "あなた" ? "" : appState.profile.nickname)}" required><span class="field-error"></span></div>
+            <div class="field"><label for="profileGender">登録する性別</label><select id="profileGender" name="gender"><option ${appState.profile.gender === "女性" ? "selected" : ""}>女性</option><option ${appState.profile.gender === "男性" ? "selected" : ""}>男性</option></select></div>
+            <div class="field"><label for="profileBirthDate">生年月日</label><input id="profileBirthDate" name="birthDate" type="date" max="${latestAdultBirthDate()}" autocomplete="bday" value="${esc(appState.profile.birthDate || "")}" required><p class="meta">生年月日は公開されません。表示されるのは「${esc(formatAge(appState.profile.age))}」だけです。</p><span class="field-error"></span></div>
+            <div class="field full"><label for="profileAreaInput">居住エリア（市まで）</label><input id="profileAreaInput" name="area" maxlength="30" placeholder="例：武蔵野市" value="${esc(appState.profile.area || "")}" required><span class="field-error"></span></div>
+            <div class="field"><label for="profileHeight">身長（任意）</label><input id="profileHeight" name="height" type="number" min="100" max="250" step="1" inputmode="numeric" placeholder="例：165" value="${esc(appState.profile.height || "")}"><p class="meta">100～250cmで入力してください。</p><span class="field-error"></span></div>
+            <div class="field"><label for="profileBloodType">血液型（任意）</label><select id="profileBloodType" name="bloodType">${selectOptions(profileOptionSets.bloodType, appState.profile.bloodType)}</select></div>
+            <div class="field full"><label>趣味タグ（複数選択可）</label><div class="profile-choice-grid">${tagOptions.map((tag) => `<label class="check-row"><input type="checkbox" name="tags" value="${tag}" ${appState.profile.tags?.includes(tag) ? "checked" : ""}>${tag}</label>`).join("")}</div></div>
+            <div class="field full"><label for="profileBio">自己紹介（300文字まで）</label><textarea id="profileBio" name="bio" maxlength="300" required>${esc(appState.profile.bio)}</textarea><span class="field-error"></span></div>
+          </div>
+          <div class="profile-edit-group">
+            <h3>人柄</h3>
+            <div class="field"><label for="profileTalkStyle">話し方（任意）</label><select id="profileTalkStyle" name="talkStyle">${selectOptions(profileOptionSets.talkStyle, appState.profile.talkStyle)}</select></div>
+            <div class="field"><label for="profileFirstMeeting">初対面（任意）</label><select id="profileFirstMeeting" name="firstMeeting">${selectOptions(profileOptionSets.firstMeeting, appState.profile.firstMeeting)}</select></div>
+            <div class="field full"><label>好きな過ごし方（複数選択可・任意）</label><div class="profile-choice-grid">${profileOptionSets.favoriteActivities.map((option) => `<label class="check-row"><input type="checkbox" name="favoriteActivities" value="${esc(option)}" ${appState.profile.favoriteActivities?.includes(option) ? "checked" : ""}>${esc(option)}</label>`).join("")}</div></div>
+            <div class="field"><label for="profileHoliday">休日（任意）</label><select id="profileHoliday" name="holiday">${selectOptions(profileOptionSets.holiday, appState.profile.holiday)}</select></div>
+            <div class="field"><label for="profileAlcohol">お酒（任意）</label><select id="profileAlcohol" name="alcohol">${selectOptions(profileOptionSets.alcohol, appState.profile.alcohol)}</select></div>
+            <div class="field"><label for="profileTobacco">タバコ（任意）</label><select id="profileTobacco" name="tobacco">${selectOptions(profileOptionSets.tobacco, appState.profile.tobacco)}</select></div>
+          </div>
+          <div class="field full"><button class="btn primary" type="submit">${firstTime ? "プロフィールを作成する" : "プロフィールを保存"}</button></div>
+        </form>`);
     }
 
     document.addEventListener("submit", async (event) => {
@@ -4466,8 +4592,20 @@
           const birthDate = String(formData.get("birthDate") || "");
           const birthResult = await window.tomoniAuth.saveOwnBirthDate(birthDate);
           if (birthResult?.error) throw birthResult.error;
-          const profile = { nickname: String(formData.get("nickname")).trim(), gender: String(formData.get("gender")), age: calculateAge(birthDate), birthDate, area: String(formData.get("area")).trim(), bio: String(formData.get("bio")).trim(), tags: formData.getAll("tags").map(String), photoUrls };
-          const result = await window.tomoniAuth.saveProfile({ user_id: appState.user.id, nickname: profile.nickname, gender: profile.gender, area: profile.area, bio: profile.bio, tags: profile.tags, photo_urls: profile.photoUrls, ...personalitySupabasePayload(appState.profile), updated_at: new Date().toISOString() });
+          const heightValue = String(formData.get("height") || "").trim();
+          const profileExtras = {
+            height: heightValue ? Number(heightValue) : null,
+            bloodType: String(formData.get("bloodType") || ""),
+            talkStyle: String(formData.get("talkStyle") || ""),
+            firstMeeting: String(formData.get("firstMeeting") || ""),
+            favoriteActivities: formData.getAll("favoriteActivities").map(String),
+            holiday: String(formData.get("holiday") || ""),
+            alcohol: String(formData.get("alcohol") || ""),
+            tobacco: String(formData.get("tobacco") || "")
+          };
+          const profile = { nickname: String(formData.get("nickname")).trim(), gender: String(formData.get("gender")), age: calculateAge(birthDate), birthDate, area: String(formData.get("area")).trim(), bio: String(formData.get("bio")).trim(), tags: formData.getAll("tags").map(String), photoUrls, ...profileExtras };
+          const storedTags = encodeProfileTags(profile.tags, profileExtras);
+          const result = await window.tomoniAuth.saveProfile({ user_id: appState.user.id, nickname: profile.nickname, gender: profile.gender, area: profile.area, bio: profile.bio, tags: storedTags, photo_urls: profile.photoUrls, ...personalitySupabasePayload(appState.profile), updated_at: new Date().toISOString() });
           if (result?.error) throw result.error;
           appState.profile = { ...appState.profile, ...profile }; appState.profileOwnerId = appState.user.id; currentGender = profile.gender; scheduleAgeRefresh(); saveState(); updateAccountUI(); closeModal(); syncGenderControls(); await loadSupabaseListings(); toast(form.dataset.firstTime === "true" ? "プロフィールを作成しました。" : "プロフィールを保存しました。");
         } catch (error) { toast(`プロフィールを保存できませんでした：${error.message}`); }
