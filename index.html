@@ -70,7 +70,7 @@
 
     .app {
       min-height: 100vh;
-      padding-top: 69px;
+      padding-top: 128px;
     }
 
     .topbar {
@@ -144,50 +144,58 @@
       font-weight: 700;
     }
 
-    .nav-category-tab::after {
-      content: "⌄";
-      display: inline-block;
-      margin-left: 7px;
-      color: var(--sage-strong);
-      transition: transform .2s var(--ease);
-    }
-
-    .nav-group.open .nav-category-tab::after {
-      transform: rotate(180deg);
-    }
-
-    .nav-group.current > .nav-category-tab,
-    .nav-group.open > .nav-category-tab {
+    .nav-group.current > .nav-category-tab {
       color: var(--leaf);
       background: var(--soft);
       border-color: var(--line-strong);
     }
 
-    .nav-submenu {
-      position: absolute;
-      top: calc(100% + 10px);
-      left: 50%;
-      z-index: 78;
-      display: none;
-      min-width: 178px;
-      padding: 8px;
-      border: 1px solid var(--line);
-      border-radius: 18px;
-      background: rgba(255, 255, 255, .98);
-      box-shadow: 0 18px 46px rgba(35, 54, 74, .14);
-      transform: translateX(-50%);
+    .page-tabs-wrap {
+      position: fixed;
+      top: 69px;
+      left: 0;
+      right: 0;
+      z-index: 60;
+      padding: 7px clamp(16px, 4vw, 46px) 8px;
+      border-bottom: 1px solid var(--line);
+      background: rgba(255, 255, 255, .97);
+      backdrop-filter: blur(18px);
     }
 
-    .nav-group.open .nav-submenu {
-      display: grid;
-      gap: 3px;
+    .page-tabs {
+      display: flex;
+      width: min(1160px, 100%);
+      margin: 0 auto;
+      gap: 4px;
+      overflow-x: auto;
+      overscroll-behavior-inline: contain;
+      scrollbar-width: thin;
     }
 
-    .nav-submenu button {
-      width: 100%;
+    .page-tab {
+      flex: 0 0 auto;
       min-height: 42px;
-      text-align: left;
+      padding: 8px 16px;
+      border: 0;
+      border-bottom: 3px solid transparent;
+      border-radius: 8px 8px 2px 2px;
+      background: #ffffff;
+      color: var(--muted);
+      font-weight: 700;
+      white-space: nowrap;
+      transition: color .16s ease, background .16s ease, border-color .16s ease;
     }
+
+    .page-tab:hover { color: var(--leaf); background: var(--soft); }
+    .page-tab[aria-selected="true"] { color: var(--leaf); background: var(--sage); border-bottom-color: var(--leaf); }
+    .page-tab:focus-visible { outline: 0; box-shadow: var(--focus); }
+    body.standalone-view .page-tabs-wrap { display: none; }
+    body.standalone-view .app { padding-top: 69px; }
+    main > section.tab-hidden { display: none !important; }
+    body[data-active-tab="mypage-basic"] #profile .personality-panel,
+    body[data-active-tab="mypage-personality"] #profile .basic-panel { display: none !important; }
+    body[data-active-tab="mypage-basic"] #profile .profile,
+    body[data-active-tab="mypage-personality"] #profile .profile { grid-template-columns: minmax(0, 820px); justify-content: center; }
 
     .nav button:hover,
     .nav button.active {
@@ -1170,8 +1178,8 @@
 
     @media (max-width: 680px) {
       :root { --radius: 16px; }
-      .app { padding-top: 116px; }
-      section { scroll-margin-top: 128px; }
+      .app { padding-top: 170px; }
+      section { scroll-margin-top: 182px; }
       main section { opacity: 1; transform: none; }
       .chat-form { grid-template-columns: 1fr; }
       .chat-bubble { max-width: 88%; }
@@ -1189,10 +1197,12 @@
         justify-content: stretch;
       }
 
-      .nav-group { flex: 1 1 0; }
+      .nav-group { flex: 1 1 0; min-width: 0; }
       .nav-category-tab { width: 100%; min-width: 0; padding-inline: 8px; }
-      .nav-category-tab::after { margin-left: 3px; }
-      .nav-submenu { position: fixed; top: 118px; left: 12px; right: 12px; min-width: 0; transform: none; }
+
+      .page-tabs-wrap { top: 116px; padding: 6px 12px 7px; }
+      .page-tab { min-height: 40px; padding: 7px 13px; font-size: 14px; }
+      body.standalone-view .app { padding-top: 116px; }
 
       .notification-panel {
         top: 118px;
@@ -1209,7 +1219,7 @@
         min-width: 0;
       }
 
-      section { padding: 46px 0; scroll-margin-top: 132px; }
+      section { padding: 38px 0; scroll-margin-top: 182px; }
       .hero { padding-top: 34px; }
       .hero h1 { font-size: 52px; }
 
@@ -1301,38 +1311,23 @@
       <div class="brand"><span class="brand-mark">と</span><span>TOMONI</span></div>
       <nav class="nav" aria-label="画面">
         <div class="nav-group current" data-nav-group="home">
-          <button class="nav-category-tab" type="button" data-nav-category="home" aria-expanded="false">ホーム</button>
-          <div class="nav-submenu" aria-label="ホームのメニュー">
-            <button class="nav-subitem active" type="button" data-jump="home" data-nav="home">ホーム</button>
-            <button class="nav-subitem" type="button" data-jump="diagnosis" data-nav="diagnosis">診断</button>
-            <button class="nav-subitem" type="button" data-jump="activities" data-nav="activities">過ごし方</button>
-          </div>
+          <button class="nav-category-tab" type="button" data-nav-category="home" aria-current="page">ホーム</button>
         </div>
         <div class="nav-group" data-nav-group="search">
-          <button class="nav-category-tab" type="button" data-nav-category="search" aria-expanded="false">さがす</button>
-          <div class="nav-submenu" aria-label="さがすのメニュー">
-            <button class="nav-subitem" type="button" data-jump="region" data-nav="region">地域から探す</button>
-            <button class="nav-subitem" type="button" data-jump="listings" data-nav="listings">募集一覧</button>
-          </div>
+          <button class="nav-category-tab" type="button" data-nav-category="search">さがす</button>
         </div>
         <div class="nav-group" data-nav-group="recruit">
-          <button class="nav-category-tab" type="button" data-nav-category="recruit" aria-expanded="false">募集</button>
-          <div class="nav-submenu" aria-label="募集のメニュー">
-            <button class="nav-subitem" type="button" data-jump="create" data-nav="create">募集作成</button>
-            <button class="nav-subitem" type="button" data-action="show-managed" data-nav="managed">自分の募集</button>
-          </div>
+          <button class="nav-category-tab" type="button" data-nav-category="recruit">募集</button>
         </div>
         <div class="nav-group" data-nav-group="mypage">
-          <button class="nav-category-tab" type="button" data-nav-category="mypage" aria-expanded="false">マイページ</button>
-          <div class="nav-submenu" aria-label="マイページのメニュー">
-            <button class="nav-subitem" type="button" data-jump="profile" data-nav="profile">人柄カード</button>
-            <button class="nav-subitem" type="button" data-jump="after" data-nav="after">会った後</button>
-            <button class="nav-subitem" type="button" data-action="open-account" data-nav="account">設定</button>
-          </div>
+          <button class="nav-category-tab" type="button" data-nav-category="mypage">マイページ</button>
         </div>
       </nav>
       <div class="header-actions"><button class="notification-button" id="notificationButton" type="button" data-action="open-notifications" aria-label="通知" aria-expanded="false">🔔<span class="notification-badge" id="notificationBadge" hidden>0</span></button><button class="account-button" id="accountButton" type="button" data-action="open-auth">登録・ログイン</button></div>
     </header>
+    <div class="page-tabs-wrap">
+      <div class="page-tabs" id="pageTabs" role="tablist" aria-label="ホーム内の表示切り替え"></div>
+    </div>
     <aside class="notification-panel" id="notificationPanel" hidden aria-label="通知パネル">
       <div class="notification-panel-head">
         <div>
@@ -1603,6 +1598,18 @@
         </div>
       </section>
 
+      <section id="managed" class="protected-section">
+        <article class="card access-gate"><span class="badge">ログインが必要です</span><h3 style="margin-top:12px">自分の募集を確認するにはログインしてください。</h3><div class="actions" style="justify-content:center"><button class="btn primary" data-action="open-auth">登録・ログイン</button></div></article>
+        <div class="section-head"><div><p class="eyebrow">自分の募集</p><h2>作成した募集を管理する。</h2><p class="meta">編集・削除・参加申請の確認は、これまでと同じ操作で行えます。</p></div></div>
+        <div class="grid" id="managedContent"><article class="card empty-state">ログインすると、自分の募集を確認できます。</article></div>
+      </section>
+
+      <section id="participating" class="protected-section">
+        <article class="card access-gate"><span class="badge">ログインが必要です</span><h3 style="margin-top:12px">参加状況を確認するにはログインしてください。</h3><div class="actions" style="justify-content:center"><button class="btn primary" data-action="open-auth">登録・ログイン</button></div></article>
+        <div class="section-head"><div><p class="eyebrow">参加中</p><h2>参加申請した募集を確認する。</h2><p class="meta">申請中・承認済み・見送り・辞退などの状態をまとめて表示します。</p></div></div>
+        <div class="grid" id="participatingContent"><article class="card empty-state">ログインすると、参加状況を確認できます。</article></div>
+      </section>
+
       <section id="region" class="protected-section">
         <article class="card access-gate"><span class="badge">ログインが必要です</span><h3 style="margin-top:12px">地域から探すにはログインしてください。</h3><p class="meta" style="margin-top:8px">安心して利用できるよう、登録済みの方だけに表示しています。</p><div class="actions" style="justify-content:center"><button class="btn primary" data-action="open-auth">登録・ログイン</button></div></article>
         <div class="section-head"><div><p class="eyebrow">地域から探す</p><h2>近くで、今日過ごせる人。</h2><p class="meta" style="margin-top:10px">登録した性別と同じ方だけが表示されます。</p></div></div>
@@ -1632,7 +1639,7 @@
           </div>
         </div>
         <div class="profile">
-          <article class="card person-block">
+          <article class="card person-block basic-panel">
             <div>
               <div class="profile-photos" id="profilePhotos"><div class="profile-photo profile-photo-placeholder">ゆ</div></div>
               <h3 id="profileDisplayName">ゆう</h3>
@@ -1643,9 +1650,11 @@
               <div class="actions" style="justify-content:center"><button class="btn small" id="profileReportButton" data-action="report" data-person="相手" data-source="profile" disabled>通報</button><button class="btn small quiet-action" id="profileBlockButton" data-action="block" data-person="相手" disabled>ブロック</button></div>
             </div>
           </article>
-          <article class="card">
+          <article class="card basic-panel">
             <p class="eyebrow">自己紹介</p><p id="profileBioDisplay">静かな時間を大切にしています。</p>
             <p class="eyebrow" style="margin-top:28px">趣味タグ</p><div class="chips" id="profileTags"></div>
+          </article>
+          <article class="card personality-panel">
             <p class="eyebrow" style="margin-top:28px">心地よい時間診断</p>
             <div class="notice" id="profilePersonalityCard">
               <span class="badge">診断結果</span>
@@ -1724,6 +1733,15 @@
         <div class="grid" id="notificationList"><div class="card empty-state">ログインすると通知を確認できます。</div></div>
       </section>
 
+      <section id="activity-overview">
+        <div class="section-head"><div><p class="eyebrow">活動</p><h2>これまでの活動を振り返る。</h2><p class="meta">会った記録、募集、参加履歴、また会いたいなど、現在ある活動情報への入口です。</p></div></div>
+        <div class="grid three">
+          <article class="card"><h3>会った記録</h3><p class="meta">募集終了後に、自分だけの記録を残せます。</p><div class="actions"><button class="btn small" data-jump="meeting-record">記録を見る</button></div></article>
+          <article class="card"><h3>募集・参加履歴</h3><p class="meta">自分の募集と、参加申請した募集を確認できます。</p><div class="actions"><button class="btn small" data-jump="managed">自分の募集</button><button class="btn small" data-jump="participating">参加中</button></div></article>
+          <article class="card"><h3>つながり</h3><p class="meta">気になる、マッチ、また会いたいなどの情報を確認できます。</p><div class="actions"><button class="btn small" data-action="show-favorites">気になる</button><button class="btn small" data-action="show-matches">マッチ</button></div></article>
+        </div>
+      </section>
+
       <section id="after">
         <article class="card thanks">
           <p class="eyebrow">会った後</p>
@@ -1751,12 +1769,15 @@
         <div class="account-layout">
           <aside class="card account-menu">
             <div class="notice" id="verificationStatus"><strong>本人確認</strong><p class="meta">登録後に確認状況を表示します。</p></div>
-            <button class="btn small" data-action="edit-profile">プロフィールを編集</button>
             <button class="btn small" data-action="show-favorites">気になる一覧</button>
             <button class="btn small" data-action="show-matches">マッチしました</button>
             <button class="btn small" data-action="show-blocks">ブロック一覧</button>
+            <button class="btn small" data-jump="notifications">通知設定・通知一覧</button>
+            <button class="btn small" data-jump="safety-guide-page">安全ガイド</button>
+            <button class="btn small" data-jump="terms">利用規約</button>
+            <button class="btn small" data-jump="privacy">プライバシーポリシー</button>
+            <button class="btn small" data-jump="contact">お問い合わせ</button>
             <button class="btn small" id="adminMenuButton" data-action="open-admin" hidden>管理画面</button>
-            <button class="btn small" data-action="show-managed">自分の募集</button>
             <button class="btn small quiet-action" data-action="logout">ログアウト</button>
             <button class="btn small quiet-action" data-action="delete-account">アカウント削除（退会）</button>
             <div class="chips"><span class="badge muted">SMS認証 準備中</span><span class="badge muted">本人確認書類 準備中</span></div>
@@ -2243,6 +2264,7 @@
       listings.splice(0, listings.length);
       if (options.removeStorage) localStorage.removeItem(storageKey);
       else saveState();
+      if (document.getElementById("pageTabs")) activateTab("home-recommended", { persist: false, scroll: false });
     }
     function normalizeGender(value = "") {
       const text = String(value || "").trim();
@@ -2365,55 +2387,108 @@
       return { blocked, message, hits, hasPrivateInfo };
     }
 
-    function navIdForSection(id) {
-      if (id === "today") return "home";
-      if (id === "meeting-record") return "after";
-      if (id === "detail") return "listings";
-      if (id === "chat") return currentChatMode === "match" ? "account" : "listings";
-      if (id === "account") return accountNavMode;
-      if (["notifications", "admin", "safety-guide-page", "safety-commitment", "prohibited", "terms", "privacy", "contact"].includes(id)) return "account";
-      return id;
+    const tabGroups = {
+      home: [
+        { id: "home-recommended", label: "おすすめ", sections: ["home", "today"] },
+        { id: "home-diagnosis", label: "診断", sections: ["diagnosis"] },
+        { id: "home-activities", label: "過ごし方", sections: ["activities"] }
+      ],
+      search: [
+        { id: "search-region", label: "地域から探す", sections: ["region"] },
+        { id: "search-listings", label: "募集一覧", sections: ["listings"] }
+      ],
+      recruit: [
+        { id: "recruit-create", label: "募集を作る", sections: ["create"] },
+        { id: "recruit-managed", label: "自分の募集", sections: ["managed"] },
+        { id: "recruit-participating", label: "参加中", sections: ["participating"] }
+      ],
+      mypage: [
+        { id: "mypage-basic", label: "基本情報", sections: ["profile"] },
+        { id: "mypage-personality", label: "人柄", sections: ["profile"] },
+        { id: "mypage-activity", label: "活動", sections: ["activity-overview", "after"] },
+        { id: "mypage-settings", label: "設定", sections: ["account"] }
+      ]
+    };
+    const tabManagedSections = new Set(Object.values(tabGroups).flat().flatMap((tab) => tab.sections));
+    let activeNavCategory = "home";
+    let activeTabId = "home-recommended";
+
+    function tabStateStorageKey() {
+      return appState?.user?.id ? `tomoni-tabs:${appState.user.id}` : "";
     }
 
-    function navCategoryForItem(id) {
-      if (["home", "diagnosis", "activities"].includes(id)) return "home";
-      if (["region", "listings"].includes(id)) return "search";
-      if (["create", "managed"].includes(id)) return "recruit";
-      if (["profile", "after", "account"].includes(id)) return "mypage";
-      return "";
+    function loadTabState(category) {
+      const key = tabStateStorageKey();
+      if (!key) return tabGroups[category][0].id;
+      try {
+        const stored = JSON.parse(localStorage.getItem(key) || "{}");
+        return tabGroups[category].some((tab) => tab.id === stored[category]) ? stored[category] : tabGroups[category][0].id;
+      } catch {
+        return tabGroups[category][0].id;
+      }
     }
 
-    function closeNavMenus(exceptGroup = null) {
+    function saveTabState(category, tabId) {
+      const key = tabStateStorageKey();
+      if (!key) return;
+      let stored = {};
+      try { stored = JSON.parse(localStorage.getItem(key) || "{}"); } catch {}
+      localStorage.setItem(key, JSON.stringify({ ...stored, [category]: tabId }));
+    }
+
+    function setActiveNav(category) {
       document.querySelectorAll(".nav-group").forEach((group) => {
-        if (group === exceptGroup) return;
-        group.classList.remove("open");
-        group.querySelector(".nav-category-tab")?.setAttribute("aria-expanded", "false");
+        const current = group.dataset.navGroup === category;
+        group.classList.toggle("current", current);
+        group.querySelector(".nav-category-tab")?.toggleAttribute("aria-current", current);
       });
     }
 
-    function setActiveNav(id) {
-      const activeId = navIdForSection(id);
-      const activeCategory = navCategoryForItem(activeId);
-      document.querySelectorAll(".nav-subitem").forEach((button) => {
-        button.classList.toggle("active", button.dataset.nav === activeId);
-      });
-      document.querySelectorAll(".nav-group").forEach((group) => {
-        group.classList.toggle("current", group.dataset.navGroup === activeCategory);
-      });
+    function renderPageTabs(category) {
+      const container = document.getElementById("pageTabs");
+      container.setAttribute("aria-label", `${document.querySelector(`[data-nav-category="${category}"]`)?.textContent || "ページ"}内の表示切り替え`);
+      container.innerHTML = tabGroups[category].map((tab) => `<button class="page-tab" type="button" role="tab" id="tab-${tab.id}" data-tab-id="${tab.id}" aria-selected="${tab.id === activeTabId}" tabindex="${tab.id === activeTabId ? "0" : "-1"}">${tab.label}</button>`).join("");
     }
 
-    function updateActiveNavFromScroll() {
-      const sections = [...document.querySelectorAll("main section")];
-      const headerHeight = document.querySelector(".topbar")?.offsetHeight || 0;
-      const marker = window.scrollY + headerHeight + 24;
-      const current = sections.reduce((active, section) => section.offsetTop <= marker ? section : active, sections[0]);
-      if (current) setActiveNav(current.id);
+    function activateTab(tabId, options = {}) {
+      const category = Object.keys(tabGroups).find((name) => tabGroups[name].some((tab) => tab.id === tabId));
+      if (!category) return activateTab(tabGroups[activeNavCategory]?.[0]?.id || "home-recommended", options);
+      const tab = tabGroups[category].find((item) => item.id === tabId) || tabGroups[category][0];
+      activeNavCategory = category;
+      activeTabId = tab.id;
+      document.body.classList.remove("standalone-view");
+      document.body.dataset.activeTab = tab.id;
+      setActiveNav(category);
+      renderPageTabs(category);
+      tabManagedSections.forEach((sectionId) => document.getElementById(sectionId)?.classList.toggle("tab-hidden", !tab.sections.includes(sectionId)));
+      document.querySelectorAll("main > section:not(.tab-hidden)").forEach((section) => {
+        if (!tabManagedSections.has(section.id)) section.classList.add("tab-hidden");
+      });
+      if (tab.id === "recruit-managed") renderManaged();
+      if (tab.id === "recruit-participating") renderParticipating();
+      if (options.persist !== false) saveTabState(category, tab.id);
+      if (options.scroll !== false) document.getElementById(tab.sections[0])?.scrollIntoView({ behavior: "smooth", block: "start" });
     }
+
+    function activateCategory(category, options = {}) {
+      const validCategory = tabGroups[category] ? category : "home";
+      activateTab(loadTabState(validCategory), options);
+    }
+
+    function showStandaloneSection(id) {
+      document.body.classList.add("standalone-view");
+      document.querySelectorAll("main > section").forEach((section) => section.classList.toggle("tab-hidden", section.id !== id));
+    }
+
+    function closeNavMenus() {}
+    function updateActiveNavFromScroll() {}
 
     const jumpTo = (id) => {
       if (id !== "chat" && currentChatChannel) closeChatRealtime();
       if (id !== "detail" && participationOwnerChannel) closeOwnerParticipationRealtime();
-      setActiveNav(id);
+      const tab = Object.values(tabGroups).flat().find((item) => item.sections.includes(id));
+      if (tab) activateTab(tab.id, { scroll: false });
+      else showStandaloneSection(id);
       document.getElementById(id)?.scrollIntoView({ behavior: "smooth", block: "start" });
     };
 
@@ -2422,25 +2497,22 @@
     });
 
     document.querySelectorAll(".nav-category-tab").forEach((tab) => {
-      tab.addEventListener("click", () => {
-        const group = tab.closest(".nav-group");
-        const willOpen = !group.classList.contains("open");
-        closeNavMenus(group);
-        group.classList.toggle("open", willOpen);
-        tab.setAttribute("aria-expanded", String(willOpen));
-      });
+      tab.addEventListener("click", () => activateCategory(tab.dataset.navCategory));
     });
 
-    document.querySelectorAll(".nav-subitem").forEach((button) => {
-      button.addEventListener("click", () => closeNavMenus());
+    document.getElementById("pageTabs").addEventListener("click", (event) => {
+      const tab = event.target.closest("[data-tab-id]");
+      if (tab) activateTab(tab.dataset.tabId);
     });
 
-    document.addEventListener("click", (event) => {
-      if (!event.target.closest(".nav")) closeNavMenus();
-    });
-
-    document.addEventListener("keydown", (event) => {
-      if (event.key === "Escape") closeNavMenus();
+    document.getElementById("pageTabs").addEventListener("keydown", (event) => {
+      if (!["ArrowLeft", "ArrowRight", "Home", "End"].includes(event.key)) return;
+      const tabs = [...event.currentTarget.querySelectorAll('[role="tab"]')];
+      const current = tabs.indexOf(document.activeElement);
+      const next = event.key === "Home" ? 0 : event.key === "End" ? tabs.length - 1 : (current + (event.key === "ArrowRight" ? 1 : -1) + tabs.length) % tabs.length;
+      event.preventDefault();
+      tabs[next]?.focus();
+      activateTab(tabs[next].dataset.tabId);
     });
 
     const setSelected = (button) => {
@@ -2967,7 +3039,7 @@
       appState.customListings = remote.filter((item) => item.owner);
       saveState();
       updateAccountUI();
-      renderListings(); renderRecommendations(); renderRegionalProfiles();
+      renderListings(); renderRecommendations(); renderRegionalProfiles(); renderManaged(); renderParticipating();
       return true;
     }
 
@@ -3134,6 +3206,8 @@
       document.getElementById("verificationStatus").innerHTML = appState.user?.verified ? `<strong>本人確認済み</strong><p class="meta">メール確認・年齢確認・規約同意・プロフィール入力済み</p>` : `<strong>本人確認</strong><p class="meta">登録後に確認状況を表示します。</p>`;
       document.getElementById("create").classList.toggle("is-locked", !profileComplete);
       document.getElementById("region").classList.toggle("is-locked", !profileComplete);
+      document.getElementById("managed").classList.toggle("is-locked", !profileComplete);
+      document.getElementById("participating").classList.toggle("is-locked", !profileComplete);
     }
 
     function hasMemberAccess() {
@@ -3341,7 +3415,19 @@
 
     function renderManaged() {
       const own = appState.customListings;
-      document.getElementById("accountContent").innerHTML = own.length ? own.map((item) => `<article class="card managed-listing"><div><span class="badge">公開中</span><h3 style="margin-top:10px">${esc(item.title || activityDisplay(item))}</h3><p class="meta">${item.prefecture ? `${esc(item.prefecture)} / ` : ""}${item.city ? `${esc(item.city)} / ` : ""}${esc(item.place)} / ${item.capacity}人募集</p></div><div class="actions"><button class="btn small primary" data-action="open-detail" data-id="${item.id}">詳細・チャット</button><button class="btn small" data-action="edit-listing" data-id="${item.id}">編集</button><button class="btn small quiet-action" data-action="delete-listing" data-id="${item.id}">削除</button></div></article>`).join("") : `<article class="card empty-state">作成した募集はまだありません。</article>`;
+      const container = document.getElementById("managedContent");
+      if (!container) return;
+      container.innerHTML = own.length ? own.map((item) => `<article class="card managed-listing"><div><span class="badge">公開中</span><h3 style="margin-top:10px">${esc(item.title || activityDisplay(item))}</h3><p class="meta">${item.prefecture ? `${esc(item.prefecture)} / ` : ""}${item.city ? `${esc(item.city)} / ` : ""}${esc(item.place)} / ${item.capacity}人募集</p></div><div class="actions"><button class="btn small primary" data-action="open-detail" data-id="${item.id}">詳細・参加申請</button><button class="btn small" data-action="edit-listing" data-id="${item.id}">編集</button><button class="btn small quiet-action" data-action="delete-listing" data-id="${item.id}">削除</button></div></article>`).join("") : `<article class="card empty-state">作成した募集はまだありません。</article>`;
+      bindJumpButtons(container);
+    }
+
+    function renderParticipating() {
+      const container = document.getElementById("participatingContent");
+      if (!container) return;
+      const statusLabels = { pending: "申請中", approved: "承認済み", declined: "見送り", withdrawn: "辞退", cancelled: "辞退" };
+      const rows = [...participationStatuses].map(([listingId, status]) => ({ item: listings.find((listing) => listing.id === listingId), listingId, status }));
+      container.innerHTML = rows.length ? rows.map(({ item, listingId, status }) => `<article class="card managed-listing"><div><span class="badge ${status === "approved" ? "" : "muted"}">${esc(statusLabels[status] || status || "参加状態")}</span><h3 style="margin-top:10px">${esc(item?.title || activityDisplay(item) || "募集")}</h3><p class="meta">${item ? `${item.prefecture ? `${esc(item.prefecture)} / ` : ""}${item.city ? `${esc(item.city)} / ` : ""}${esc(item.place)}` : "募集情報を確認しています。"}</p></div><div class="actions">${item ? `<button class="btn small primary" data-action="open-detail" data-id="${esc(listingId)}">詳細を見る</button>` : ""}</div></article>`).join("") : `<article class="card empty-state">参加申請した募集はまだありません。</article>`;
+      bindJumpButtons(container);
     }
 
     function adminDate(value) {
@@ -4415,7 +4501,7 @@
       if (action === "show-login") { modalTitle.textContent = "ログイン"; modalBody.innerHTML = authMarkup("login"); }
       if (action === "show-password-reset") { modalTitle.textContent = "パスワード再設定"; modalBody.innerHTML = passwordResetMarkup(); }
       if (action === "open-terms") { closeModal(); jumpTo("terms"); toast("内容を確認後、登録画面へ戻って同意してください。"); }
-      if (action === "open-account") { if (!appState.user) openModal("ログイン", authMarkup("login")); else if (appState.profileOwnerId !== appState.user.id) showProfileEditor(true); else { accountNavMode = "account"; jumpTo("account"); renderManaged(); } }
+      if (action === "open-account") { if (!appState.user) openModal("ログイン", authMarkup("login")); else if (appState.profileOwnerId !== appState.user.id) showProfileEditor(true); else { accountNavMode = "account"; activateTab("mypage-settings"); } }
       if (action === "open-notifications") await openNotificationPanel();
       if (action === "close-notification-panel") setNotificationPanel(false);
       if (action === "mark-all-notifications-read") await markAllNotificationsRead();
@@ -4470,7 +4556,7 @@
         if (result?.error) { toast(`ブロック解除できませんでした：${result.error.message}`); return; }
         closeModal(); await renderAdmin(); await loadBlocks(); toast("ブロックを解除しました。");
       }
-      if (action === "show-managed") { if (!appState.user) openModal("ログイン", authMarkup("login")); else if (appState.profileOwnerId !== appState.user.id) showProfileEditor(true); else { accountNavMode = "managed"; jumpTo("account"); renderManaged(); } }
+      if (action === "show-managed") { if (!appState.user) openModal("ログイン", authMarkup("login")); else if (appState.profileOwnerId !== appState.user.id) showProfileEditor(true); else { accountNavMode = "managed"; activateTab("recruit-managed"); } }
       if (action === "delete-account") {
         if (!appState.user) { openModal("ログイン", authMarkup("login")); toast("退会はログイン後に実行できます。"); return; }
         openModal("アカウント削除（退会）", `<p>退会すると、プロフィール、募集、参加申請、気になる、マッチ、チャット、通知などのアカウントに紐づくデータを削除します。</p><div class="notice" style="margin-top:16px"><strong>この操作は取り消せません。</strong><p class="meta">もう一度利用する場合は、新しく会員登録が必要です。</p></div><div class="actions"><button class="btn" data-action="close-modal">キャンセル</button><button class="btn primary" data-action="confirm-delete-account">退会する</button></div>`);
