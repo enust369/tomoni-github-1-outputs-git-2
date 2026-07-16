@@ -2167,7 +2167,6 @@
     const storageKey = "tomoni-public-preview-v1";
     const PROFILE_META_PREFIX = "tomoni:profile:";
     const profileOptionSets = {
-      bloodType: ["A型", "B型", "O型", "AB型"],
       talkStyle: ["話す方", "聞く方", "半々"],
       firstMeeting: ["すぐ話せる", "少し緊張する", "慣れると話せる"],
       favoriteActivities: ["カフェ", "散歩", "ランチ", "お茶", "ドライブ", "温泉", "ボードゲーム", "映画", "ゲーム", "買い物", "スポーツ", "読書", "写真", "美術館", "神社・お寺", "動物", "その他"],
@@ -2175,7 +2174,7 @@
       alcohol: ["飲む", "たまに飲む", "飲まない"],
       tobacco: ["吸う", "電子タバコのみ", "吸わない"]
     };
-    const emptyProfileExtras = { height: null, bloodType: "", talkStyle: "", firstMeeting: "", favoriteActivities: [], holiday: "", alcohol: "", tobacco: "" };
+    const emptyProfileExtras = { height: null, talkStyle: "", firstMeeting: "", favoriteActivities: [], holiday: "", alcohol: "", tobacco: "" };
     const defaultState = { user: null, profileOwnerId: null, safetyOnboardingAccepted: false, dismissedChatSafety: [], saved: [], blocked: [], customListings: [], demoParticipations: [], moderation: { reports: [], blockCount: 0 }, feedbackHistory: [], profile: { nickname: "あなた", age: null, birthDate: "", gender: "女性", area: "", bio: "静かな時間を大切にしています。", tags: [], photoUrls: [], ...emptyProfileExtras, personalityType: "", personalityTitle: "", personalityDescription: "", personalityTags: [], quietScore: null, talkScore: null, comfortScore: null } };
     let appState = loadState();
     listings.splice(0, listings.length);
@@ -2285,7 +2284,7 @@
       const add = (key, value) => { if (value) values.push(`${PROFILE_META_PREFIX}${key}=${encodeURIComponent(value)}`); };
       const height = Number(extras.height);
       if (Number.isInteger(height) && height >= 100 && height <= 250) add("height", String(height));
-      ["bloodType", "talkStyle", "firstMeeting", "holiday", "alcohol", "tobacco"].forEach((key) => {
+      ["talkStyle", "firstMeeting", "holiday", "alcohol", "tobacco"].forEach((key) => {
         if (profileOptionSets[key].includes(extras[key])) add(key, extras[key]);
       });
       (extras.favoriteActivities || []).filter((value) => profileOptionSets.favoriteActivities.includes(value)).forEach((value) => add("favoriteActivity", value));
@@ -3262,8 +3261,7 @@
       document.getElementById("profileDisplayMeta").textContent = `${formatAge(appState.profile.age)} / 今日の気分：穏やか`;
       document.getElementById("profileArea").textContent = `居住エリア：${appState.profile.area || "未設定"}`;
       const basicDetails = [
-        appState.profile.height ? ["身長", `${appState.profile.height}cm`] : null,
-        appState.profile.bloodType ? ["血液型", appState.profile.bloodType] : null
+        appState.profile.height ? ["身長", `${appState.profile.height}cm`] : null
       ].filter(Boolean);
       const basicDetailsElement = document.getElementById("profileBasicDetails");
       basicDetailsElement.innerHTML = basicDetails.map(([label, value]) => `<div class="profile-detail-item"><dt>${esc(label)}</dt><dd>${esc(value)}</dd></div>`).join("");
@@ -4369,7 +4367,6 @@
             <div class="field"><label for="profileBirthDate">生年月日</label><input id="profileBirthDate" name="birthDate" type="date" max="${latestAdultBirthDate()}" autocomplete="bday" value="${esc(appState.profile.birthDate || "")}" required><p class="meta">生年月日は公開されません。表示されるのは「${esc(formatAge(appState.profile.age))}」だけです。</p><span class="field-error"></span></div>
             <div class="field full"><label for="profileAreaInput">居住エリア（市まで）</label><input id="profileAreaInput" name="area" maxlength="30" placeholder="例：武蔵野市" value="${esc(appState.profile.area || "")}" required><span class="field-error"></span></div>
             <div class="field"><label for="profileHeight">身長（任意）</label><input id="profileHeight" name="height" type="number" min="100" max="250" step="1" inputmode="numeric" placeholder="例：165" value="${esc(appState.profile.height || "")}"><p class="meta">100～250cmで入力してください。</p><span class="field-error"></span></div>
-            <div class="field"><label for="profileBloodType">血液型（任意）</label><select id="profileBloodType" name="bloodType">${selectOptions(profileOptionSets.bloodType, appState.profile.bloodType)}</select></div>
             <div class="field full"><label>趣味タグ（複数選択可）</label><div class="profile-choice-grid">${tagOptions.map((tag) => `<label class="check-row"><input type="checkbox" name="tags" value="${tag}" ${appState.profile.tags?.includes(tag) ? "checked" : ""}>${tag}</label>`).join("")}</div></div>
             <div class="field full"><label for="profileBio">自己紹介（300文字まで）</label><textarea id="profileBio" name="bio" maxlength="300" required>${esc(appState.profile.bio)}</textarea><span class="field-error"></span></div>
           </div>
@@ -4595,7 +4592,6 @@
           const heightValue = String(formData.get("height") || "").trim();
           const profileExtras = {
             height: heightValue ? Number(heightValue) : null,
-            bloodType: String(formData.get("bloodType") || ""),
             talkStyle: String(formData.get("talkStyle") || ""),
             firstMeeting: String(formData.get("firstMeeting") || ""),
             favoriteActivities: formData.getAll("favoriteActivities").map(String),
