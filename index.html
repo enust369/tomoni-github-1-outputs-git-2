@@ -2210,6 +2210,7 @@
     let notifications = [];
     let notificationChannel = null;
     let passwordRecoveryMode = false;
+    let authSyncQueue = Promise.resolve();
     let favoriteRecords = [];
     let favoriteListingIds = new Set();
     let favoriteTargetUserIds = new Set();
@@ -2373,7 +2374,8 @@
     function esc(value = "") { const node = document.createElement("div"); node.textContent = String(value); return node.innerHTML; }
     function resetUserScopedState(user = null, options = {}) {
       const preserveLocal = options.preserveLocal !== false;
-      const safetyOnboardingAccepted = preserveLocal ? Boolean(appState?.safetyOnboardingAccepted) : false;
+      const preserveSafety = options.preserveSafety !== false;
+      const safetyOnboardingAccepted = preserveSafety ? Boolean(appState?.safetyOnboardingAccepted) : false;
       const dismissedChatSafety = preserveLocal && Array.isArray(appState?.dismissedChatSafety) ? appState.dismissedChatSafety : [];
       appState = { ...defaultState, safetyOnboardingAccepted, dismissedChatSafety, user, profileOwnerId: null };
       currentGender = "";
@@ -3459,41 +3461,93 @@
       return "home";
     }
 
+    async function stopUserRealtime() {
+      await closeChatRealtime();
+      await closeOwnerParticipationRealtime();
+      await closeUserParticipationRealtime();
+      await closeNotificationRealtime();
+    }
+
+    function renderSignedOutState() {
+      updateAccountUI();
+      renderNotifications();
+      renderListings();
+      renderRecommendations();
+      renderRegionalProfiles();
+      setNotificationPanel(false);
+      document.getElementById("chatMessages").innerHTML = `<div class="empty-state">ログインするとチャットを利用できます。</div>`;
+      document.getElementById("accountContent").innerHTML = `<article class="card empty-state">ログインするとマイページを利用できます。</article>`;
+    }
+
+    async function synchronizeSignedOutState(options = {}) {
+      await stopUserRealtime();
+      resetUserScopedState(null, { preserveLocal: false, removeStorage: true });
+      saveState();
+      renderSignedOutState();
+      await updateMetCount();
+      if (!passwordRecoveryMode) closeModal();
+      routeFromAuthState();
+      if (options.showLogin && !passwordRecoveryMode) openModal("ログイン", authMarkup("login"));
+    }
+
+    async function synchronizeSignedInState(user, options = {}) {
+      if (!user?.id) { await synchronizeSignedOutState(); return; }
+      const restoredUser = { id: user.id, email: user.email, verified: Boolean(user.email_confirmed_at) };
+      const userChanged = appState.user?.id !== restoredUser.id;
+      if (userChanged) {
+        await stopUserRealtime();
+        resetUserScopedState(restoredUser, { preserveLocal: false, removeStorage: true });
+      } else {
+        appState.user = restoredUser;
+      }
+      if (!userChanged && !options.refresh) {
+        saveState();
+        updateAccountUI();
+        return;
+      }
+      await loadSupabaseProfile(user.id);
+      await loadOwnBirthDate();
+      saveState();
+      updateAccountUI();
+      const destination = routeFromAuthState();
+      await updateMetCount();
+      await startUserParticipationRealtime();
+      await startNotificationRealtime();
+      await loadNotifications();
+      if (appState.user?.id !== user.id) return;
+      if (appState.profileOwnerId === user.id) {
+        currentGender = appState.profile.gender || currentGender;
+        syncGenderControls();
+      }
+      await loadSupabaseListings();
+      renderRecommendations();
+      renderRegionalProfiles();
+      if (destination === "home") promptForBirthDateIfNeeded();
+    }
+
+    function queueAuthSynchronization(event, session, options = {}) {
+      authSyncQueue = authSyncQueue.catch(() => {}).then(async () => {
+        if (event === "PASSWORD_RECOVERY") { await stopUserRealtime(); openPasswordUpdateModal(); return; }
+        if (event === "SIGNED_OUT") { await synchronizeSignedOutState({ showLogin: options.showLogin !== false }); return; }
+        if (!["SIGNED_IN", "TOKEN_REFRESHED", "USER_UPDATED", "INITIAL_RESTORE"].includes(event)) return;
+        const user = session?.user || null;
+        const userChanged = Boolean(user?.id && appState.user?.id !== user.id);
+        const refresh = options.refresh ?? (event === "SIGNED_IN" || event === "INITIAL_RESTORE" || userChanged);
+        await synchronizeSignedInState(user, { refresh });
+      });
+      return authSyncQueue;
+    }
+
     async function restoreSupabaseUser() {
       if (passwordRecoveryMode || hasPasswordRecoveryParams()) {
         openPasswordUpdateModal();
         return;
       }
       const auth = window.tomoniAuth;
-      if (!auth?.configured) { resetUserScopedState(null); updateAccountUI(); routeFromAuthState(); return; }
+      if (!auth?.configured) { await queueAuthSynchronization("SIGNED_OUT", null, { showLogin: false }); return; }
       const result = await auth.getUser();
       const user = result.data?.user;
-      if (!user) {
-        resetUserScopedState(null);
-        updateAccountUI();
-        await updateMetCount();
-        renderNotifications();
-        routeFromAuthState();
-        await loadSupabaseListings();
-        return;
-      }
-      const restoredUser = { id: user.id, email: user.email, verified: Boolean(user.email_confirmed_at) };
-      if (appState.user?.id !== restoredUser.id || appState.profileOwnerId !== restoredUser.id) resetUserScopedState(restoredUser);
-      else appState.user = restoredUser;
-      await loadSupabaseProfile(user.id);
-      await loadOwnBirthDate();
-      saveState(); updateAccountUI();
-      const destination = routeFromAuthState();
-      await updateMetCount();
-      await startUserParticipationRealtime();
-      await startNotificationRealtime();
-      await loadNotifications();
-      if (user && appState.profileOwnerId === user.id) {
-        currentGender = appState.profile.gender || currentGender;
-        syncGenderControls();
-      }
-      await loadSupabaseListings();
-      if (destination === "home") promptForBirthDateIfNeeded();
+      await queueAuthSynchronization(user ? "INITIAL_RESTORE" : "SIGNED_OUT", user ? { user } : null, { showLogin: false });
     }
 
     function openPasswordUpdateModal() {
@@ -4579,25 +4633,12 @@
         }
         const user = result.data?.user;
         if (!user) { form.dataset.submitting = "false"; toast("ログイン状態を確認できませんでした。"); return; }
-        const loggedInUser = { id: user.id, email: user.email, verified: Boolean(user.email_confirmed_at) };
-        resetUserScopedState(loggedInUser);
         if (registering && data.birthDate) {
           const birthResult = await auth.saveOwnBirthDate(data.birthDate);
           if (birthResult?.error) toast(`生年月日を保存できませんでした：${birthResult.error.message}`);
         }
-        await loadSupabaseProfile(user.id);
-        await loadOwnBirthDate();
-        saveState(); updateAccountUI(); closeModal();
-        const destination = routeFromAuthState();
-        await updateMetCount();
-        await startUserParticipationRealtime();
-        await startNotificationRealtime();
-        await loadNotifications();
-        if (destination === "home") {
-          currentGender = appState.profile.gender || currentGender;
-          syncGenderControls();
-        }
-        await loadSupabaseListings();
+        closeModal();
+        await queueAuthSynchronization("SIGNED_IN", result.data?.session || { user }, { refresh: false });
         toast(registering ? "登録してログインしました。" : "ログインしました。");
         return;
       }
@@ -4822,15 +4863,7 @@
         const result = await window.tomoniAuth?.signOut();
         setLoading(false);
         if (result?.error) { toast(result.error.message); return; }
-        resetUserScopedState(null);
-        updateAccountUI();
-        await updateMetCount();
-        renderNotifications();
-        renderListings();
-        renderRecommendations();
-        renderRegionalProfiles();
-        setNotificationPanel(false);
-        document.getElementById("chatMessages").innerHTML = `<div class="empty-state">ログインするとチャットを利用できます。</div>`;
+        await queueAuthSynchronization("SIGNED_OUT", null);
         document.getElementById("accountContent").innerHTML = `<article class="card empty-state">ログアウトしました。またいつでも戻ってきてください。</article>`;
         toast("ログアウトしました。");
       }
@@ -5016,7 +5049,7 @@
       if (notificationChannel) window.tomoniAuth?.unsubscribeNotifications?.(notificationChannel);
     });
     window.addEventListener("tomoni:auth-state", (event) => {
-      if (event.detail?.event === "PASSWORD_RECOVERY") openPasswordUpdateModal();
+      queueAuthSynchronization(event.detail?.event, event.detail?.session);
     });
     window.addEventListener("tomoni:auth-ready", restoreSupabaseUser);
     document.addEventListener("click", (event) => {

@@ -283,7 +283,15 @@ window.tomoniAuth = {
 };
 
 if (client) {
+  const forwardedAuthEvents = new Set([
+    "SIGNED_IN",
+    "SIGNED_OUT",
+    "TOKEN_REFRESHED",
+    "USER_UPDATED",
+    "PASSWORD_RECOVERY",
+  ]);
   client.auth.onAuthStateChange((event, session) => {
+    if (!forwardedAuthEvents.has(event)) return;
     window.dispatchEvent(new CustomEvent("tomoni:auth-state", { detail: { event, session } }));
   });
 }
