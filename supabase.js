@@ -135,7 +135,7 @@ window.tomoniAuth = {
     ? client.rpc("ensure_match_with_user", { p_target_user_id: userId })
     : Promise.resolve(notConfigured()),
   listParticipationCounts: () => client
-    ? client.from("listing_participant_counts").select("listing_id,participant_count")
+    ? client.rpc("list_visible_listing_participant_counts")
     : Promise.resolve(notConfigured()),
   listMyParticipations: () => client
     ? client.from("listing_participants").select("listing_id,status")
@@ -150,7 +150,7 @@ window.tomoniAuth = {
     ? client.rpc("review_listing_participation", { target_listing_id: listingId, p_target_user_id: userId, decision })
     : Promise.resolve(notConfigured()),
   getParticipationCount: (listingId) => client
-    ? client.from("listing_participant_counts").select("participant_count").eq("listing_id", listingId).maybeSingle()
+    ? client.rpc("list_visible_listing_participant_counts").eq("listing_id", listingId).maybeSingle()
     : Promise.resolve(notConfigured()),
   subscribeToParticipationChanges: async (filter, onChange, onStatus) => {
     if (!client) return null;
