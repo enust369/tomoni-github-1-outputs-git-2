@@ -53,6 +53,9 @@
       text-rendering: optimizeLegibility;
     }
 
+    body.auth-pending .app { visibility: hidden; }
+    body.auth-pending .loading-layer { display: grid; }
+
     button,
     input,
     select,
@@ -1393,7 +1396,7 @@
     }
   </style>
 </head>
-<body>
+<body class="auth-pending">
   <div class="app">
     <header class="topbar">
       <div class="brand"><span class="brand-mark">と</span><span>TOMONI</span></div>
@@ -3393,13 +3396,34 @@
       return hash.get("type") === "recovery" || query.get("type") === "recovery";
     }
 
+    function routeFromAuthState() {
+      document.body.classList.remove("auth-pending");
+      if (!appState.user) {
+        activateTab("home-recommended", { persist: false, scroll: false });
+        document.getElementById("home")?.scrollIntoView({ behavior: "auto", block: "start" });
+        if (!appState.safetyOnboardingAccepted) {
+          setTimeout(() => {
+            if (!appState.user && !appState.safetyOnboardingAccepted) openSafetyOnboarding();
+          }, 180);
+        }
+        return "landing";
+      }
+      if (appState.profileOwnerId !== appState.user.id) {
+        showProfileEditor(true);
+        return "profile";
+      }
+      activateTab("home-recommended", { scroll: false });
+      document.getElementById("home")?.scrollIntoView({ behavior: "auto", block: "start" });
+      return "home";
+    }
+
     async function restoreSupabaseUser() {
       if (passwordRecoveryMode || hasPasswordRecoveryParams()) {
         openPasswordUpdateModal();
         return;
       }
       const auth = window.tomoniAuth;
-      if (!auth?.configured) { resetUserScopedState(null); updateAccountUI(); return; }
+      if (!auth?.configured) { resetUserScopedState(null); updateAccountUI(); routeFromAuthState(); return; }
       const result = await auth.getUser();
       const user = result.data?.user;
       if (!user) {
@@ -3407,6 +3431,7 @@
         updateAccountUI();
         await updateMetCount();
         renderNotifications();
+        routeFromAuthState();
         await loadSupabaseListings();
         return;
       }
@@ -3416,6 +3441,7 @@
       await loadSupabaseProfile(user.id);
       await loadOwnBirthDate();
       saveState(); updateAccountUI();
+      const destination = routeFromAuthState();
       await updateMetCount();
       await startUserParticipationRealtime();
       await startNotificationRealtime();
@@ -3425,13 +3451,14 @@
         syncGenderControls();
       }
       await loadSupabaseListings();
-      promptForBirthDateIfNeeded();
+      if (destination === "home") promptForBirthDateIfNeeded();
     }
 
     function openPasswordUpdateModal() {
       passwordRecoveryMode = true;
       resetUserScopedState(null);
       updateAccountUI();
+      document.body.classList.remove("auth-pending");
       openModal("新しいパスワード設定", passwordUpdateMarkup());
     }
 
@@ -4519,20 +4546,17 @@
         await loadSupabaseProfile(user.id);
         await loadOwnBirthDate();
         saveState(); updateAccountUI(); closeModal();
+        const destination = routeFromAuthState();
         await updateMetCount();
         await startUserParticipationRealtime();
         await startNotificationRealtime();
         await loadNotifications();
-        if (registering) {
+        if (destination === "home") {
           currentGender = appState.profile.gender || currentGender;
           syncGenderControls();
-          await loadSupabaseListings();
-          jumpTo("home");
-          toast("登録してログインしました。");
-          return;
         }
-        if (appState.profileOwnerId !== user.id) showProfileEditor(true);
-        else { currentGender = appState.profile.gender || currentGender; syncGenderControls(); await loadSupabaseListings(); toast("ログインしました。"); }
+        await loadSupabaseListings();
+        toast(registering ? "登録してログインしました。" : "ログインしました。");
         return;
       }
       if (form.id === "birthDateForm") {
@@ -4613,7 +4637,18 @@
           const storedTags = encodeProfileTags(profile.tags, profileExtras);
           const result = await window.tomoniAuth.saveProfile({ user_id: appState.user.id, nickname: profile.nickname, gender: profile.gender, area: profile.area, bio: profile.bio, tags: storedTags, photo_urls: profile.photoUrls, ...personalitySupabasePayload(appState.profile), updated_at: new Date().toISOString() });
           if (result?.error) throw result.error;
-          appState.profile = { ...appState.profile, ...profile }; appState.profileOwnerId = appState.user.id; currentGender = profile.gender; scheduleAgeRefresh(); saveState(); updateAccountUI(); closeModal(); syncGenderControls(); await loadSupabaseListings(); toast(form.dataset.firstTime === "true" ? "プロフィールを作成しました。" : "プロフィールを保存しました。");
+          const firstTime = form.dataset.firstTime === "true";
+          appState.profile = { ...appState.profile, ...profile };
+          appState.profileOwnerId = appState.user.id;
+          currentGender = profile.gender;
+          scheduleAgeRefresh();
+          saveState();
+          updateAccountUI();
+          closeModal();
+          syncGenderControls();
+          await loadSupabaseListings();
+          if (firstTime) routeFromAuthState();
+          toast(firstTime ? "プロフィールを作成しました。" : "プロフィールを保存しました。");
         } catch (error) { toast(`プロフィールを保存できませんでした：${error.message}`); }
         finally { setLoading(false); }
       }
@@ -4977,7 +5012,6 @@
     renderRegionalProfiles();
     updateDiagnosis(false);
     if (location.hash === "#admin" || location.pathname.endsWith("/admin")) setTimeout(() => renderAdmin(""), 250);
-    if (!appState.safetyOnboardingAccepted) setTimeout(openSafetyOnboarding, 180);
   </script>
 </body>
 </html>
