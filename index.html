@@ -583,14 +583,31 @@
       gap: clamp(22px, 4vh, 34px);
     }
 
-    .home-welcome { text-align: center; }
+    .home-welcome { text-align: left; }
     .home-welcome h1 {
-      margin: 4px 0 8px;
-      font-size: clamp(30px, 4.5vw, 48px);
-      line-height: 1.3;
+      max-width: 820px;
+      margin: 6px 0 18px;
+      font-size: clamp(30px, 4.2vw, 46px);
+      line-height: 1.38;
       letter-spacing: 0;
     }
-    .home-welcome .lead { max-width: none; font-size: clamp(19px, 2.4vw, 25px); }
+    .home-intro-copy { display: grid; gap: 7px; max-width: 760px; color: var(--muted); font-size: 16px; }
+
+    .home-safety-card {
+      padding: 22px 24px;
+      border-color: var(--sage-strong);
+      background: var(--sage);
+      box-shadow: var(--shadow-soft);
+    }
+    .home-safety-card h2 { margin-bottom: 14px; font-size: 20px; color: var(--ink); }
+    .home-safety-list {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 8px 24px;
+      margin: 0;
+      padding-left: 1.25em;
+      color: var(--ink);
+    }
 
     .home-main-actions {
       display: grid;
@@ -1313,6 +1330,8 @@
       .home-dashboard { min-height: auto; padding-top: 28px; }
       .home-dashboard-inner { gap: 22px; }
       .home-welcome h1 { font-size: clamp(28px, 9vw, 38px); }
+      .home-safety-card { padding: 20px; }
+      .home-safety-list { grid-template-columns: 1fr; }
       .home-main-actions,
       .home-summary-grid { grid-template-columns: 1fr; }
       .home-primary-action { min-height: 62px; }
@@ -1439,9 +1458,23 @@
         <div class="home-dashboard-inner">
           <header class="home-welcome">
             <p class="eyebrow">ホーム</p>
-            <h1 id="homeGreeting">こんにちは</h1>
-            <p class="lead">今日はどんな時間を過ごしますか？</p>
+            <h1>同性同士で、気軽に会える時間をつくるサービスです。</h1>
+            <div class="home-intro-copy">
+              <p>無理に話さなくても大丈夫。</p>
+              <p>散歩でも、カフェでも、同じ場所で静かに過ごすだけでも構いません。</p>
+              <p>あなたのペースで、安心して過ごせる時間を大切にしています。</p>
+            </div>
           </header>
+
+          <article class="card home-safety-card">
+            <h2>🛡 安心して利用できる仕組み</h2>
+            <ul class="home-safety-list">
+              <li>同性同士のみ表示</li>
+              <li>通報・ブロック機能</li>
+              <li>公共の場所で会うことを推奨</li>
+              <li>安全ガイドを用意</li>
+            </ul>
+          </article>
 
           <div class="home-main-actions" aria-label="ホームの主な操作">
             <button class="btn primary home-primary-action" data-jump="region">人を探す</button>
@@ -3267,8 +3300,6 @@
       const profileComplete = hasMemberAccess();
       button.textContent = appState.user ? (profileComplete ? `${appState.profile.nickname}さん` : "プロフィール作成") : "登録・ログイン";
       button.dataset.action = appState.user ? "open-account" : "open-auth";
-      const greetingName = appState.user && appState.profile.nickname && appState.profile.nickname !== "あなた" ? `、${appState.profile.nickname}さん` : "";
-      document.getElementById("homeGreeting").textContent = `こんにちは${greetingName}`;
       document.getElementById("adminMenuButton").hidden = !isAdminUser();
       document.getElementById("profileDisplayName").textContent = appState.profile.nickname;
       document.getElementById("profileDisplayMeta").textContent = `${formatAge(appState.profile.age)} / 今日の気分：穏やか`;
