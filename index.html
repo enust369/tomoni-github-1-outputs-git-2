@@ -3169,7 +3169,9 @@
       matchedUserIds = new Set(matchRecords.map((match) => match.user1_id === appState.user.id ? match.user2_id : match.user1_id).filter(Boolean));
       participationStatuses = new Map((mineResult?.data || []).map((item) => [item.listing_id, item.status || "approved"]));
       participatingListingIds = new Set([...participationStatuses].filter(([, status]) => status === "approved").map(([id]) => id));
-      const remote = (result?.data || []).filter((row) => (row.status || "open") !== "ended").map((row) => listingFromRow({ ...row, participantCount: counts.get(row.id) || 0, profile: profiles.get(row.owner_id) }));
+      const remote = (result?.data || [])
+        .filter((row) => (row.status || "open") !== "ended" || row.owner_id === appState.user?.id)
+        .map((row) => listingFromRow({ ...row, participantCount: counts.get(row.id) || 0, profile: profiles.get(row.owner_id) }));
       listings.splice(0, listings.length);
       listings.unshift(...remote);
       appState.customListings = remote.filter((item) => item.owner);
@@ -3649,7 +3651,10 @@
       const own = appState.customListings;
       const container = document.getElementById("managedContent");
       if (!container) return;
-      container.innerHTML = own.length ? own.map((item) => `<article class="card managed-listing"><div><span class="badge">公開中</span><h3 style="margin-top:10px">${esc(item.title || activityDisplay(item))}</h3><p class="meta">${item.prefecture ? `${esc(item.prefecture)} / ` : ""}${item.city ? `${esc(item.city)} / ` : ""}${esc(item.place)} / ${item.capacity}人募集</p></div><div class="actions"><button class="btn small primary" data-action="open-detail" data-id="${item.id}">詳細・参加申請</button><button class="btn small" data-action="edit-listing" data-id="${item.id}">編集</button><button class="btn small quiet-action" data-action="delete-listing" data-id="${item.id}">削除</button></div></article>`).join("") : `<article class="card empty-state">作成した募集はまだありません。</article>`;
+      container.innerHTML = own.length ? own.map((item) => {
+        const ended = item.status === "ended";
+        return `<article class="card managed-listing"><div><span class="badge ${ended ? "muted" : ""}">${ended ? "終了済み" : "公開中"}</span><h3 style="margin-top:10px">${esc(item.title || activityDisplay(item))}</h3><p class="meta">${item.prefecture ? `${esc(item.prefecture)} / ` : ""}${item.city ? `${esc(item.city)} / ` : ""}${esc(item.place)} / ${item.capacity}人募集</p></div><div class="actions"><button class="btn small primary" data-action="open-detail" data-id="${esc(item.id)}">${ended ? "詳細を見る" : "詳細・参加申請"}</button><button class="btn small" data-action="edit-listing" data-id="${esc(item.id)}">編集</button>${ended ? "" : `<button class="btn small" data-action="end-listing" data-id="${esc(item.id)}">募集を終了する</button>`}<button class="btn small quiet-action" data-action="delete-listing" data-id="${esc(item.id)}">削除</button></div></article>`;
+      }).join("") : `<article class="card empty-state">作成した募集はまだありません。</article>`;
       bindJumpButtons(container);
     }
 
@@ -5001,6 +5006,23 @@
         document.getElementById("date").value = new Date(new Date(item.scheduledAt).getTime() - new Date(item.scheduledAt).getTimezoneOffset() * 60000).toISOString().slice(0, 16);
         document.getElementById("capacity").value = String(item.capacity);
         document.getElementById("previewButton").textContent = "変更を保存する"; jumpTo("create"); toast("募集内容を編集できます。");
+      }
+      if (action === "end-listing") {
+        const item = listings.find((listing) => listing.id === button.dataset.id);
+        if (!appState.user || !item?.owner || item.ownerId !== appState.user.id || item.status !== "open") { toast("この募集は終了できません。"); return; }
+        openModal("募集を終了しますか？", `<p>終了すると、新しい参加申請は受け付けません。<br>募集内容や会った記録は削除されません。</p><div class="actions"><button class="btn" data-action="close-modal">キャンセル</button><button class="btn primary" data-action="confirm-end-listing" data-id="${esc(item.id)}">募集を終了する</button></div>`);
+      }
+      if (action === "confirm-end-listing") {
+        const item = listings.find((listing) => listing.id === button.dataset.id);
+        if (!appState.user || !item?.owner || item.ownerId !== appState.user.id || item.status !== "open") { closeModal(); toast("この募集は終了できません。"); return; }
+        setLoading(true);
+        const result = await window.tomoniAuth?.endOwnListing?.(item.id, appState.user.id);
+        setLoading(false);
+        if (result?.error) { toast(`募集を終了できませんでした：${result.error.message}`); return; }
+        if (!result?.data || result.data.status !== "ended") { closeModal(); toast("募集を終了できませんでした。募集状態を再確認してください。"); await loadSupabaseListings(); return; }
+        closeModal();
+        await loadSupabaseListings();
+        toast("募集を終了しました");
       }
       if (action === "delete-listing") openModal("募集を削除しますか？", `<p>削除した募集は一覧に表示されなくなります。</p><div class="actions"><button class="btn primary" data-action="confirm-delete" data-id="${button.dataset.id}">削除する</button><button class="btn" data-action="close-modal">戻る</button></div>`);
       if (action === "confirm-delete") {

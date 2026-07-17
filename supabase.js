@@ -55,6 +55,15 @@ window.tomoniAuth = {
   updateListing: (id, listing) => client
     ? client.from("listings").update(listing).eq("id", id).select().single()
     : Promise.resolve(notConfigured()),
+  endOwnListing: (id, ownerId) => client
+    ? client.from("listings")
+      .update({ status: "ended", updated_at: new Date().toISOString() })
+      .eq("id", id)
+      .eq("owner_id", ownerId)
+      .eq("status", "open")
+      .select("id, status")
+      .maybeSingle()
+    : Promise.resolve(notConfigured()),
   deleteListing: (id) => client
     ? client.from("listings").delete().eq("id", id)
     : Promise.resolve(notConfigured()),
