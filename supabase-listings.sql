@@ -332,6 +332,10 @@ begin
     raise exception 'この参加申請を確認する権限がありません。';
   end if;
 
+  if not public.users_not_blocked(current_user_id, p_target_user_id) then
+    raise exception 'ブロック関係があるため、この参加申請は処理できません。';
+  end if;
+
   if listing_status <> 'open' then
     raise exception '募集は終了しています。';
   end if;
@@ -1552,10 +1556,18 @@ begin
   select owner_id into listing_owner_id from public.listings where id = new.listing_id;
 
   if tg_op = 'INSERT' and new.status = 'pending' then
+    if not public.users_not_blocked(new.user_id, listing_owner_id) then
+      return new;
+    end if;
+
     insert into public.notifications (recipient_id, actor_id, listing_id, type, message, event_key)
     values (listing_owner_id, new.user_id, new.listing_id, 'participation_request', coalesce(new.applicant_name, '参加申請者') || 'さんが参加申請しました', 'participation-request:' || new.listing_id || ':' || new.user_id)
     on conflict (event_key) do nothing;
   elsif tg_op = 'UPDATE' and old.status is distinct from new.status and new.status in ('approved', 'declined') then
+    if not public.users_not_blocked(listing_owner_id, new.user_id) then
+      return new;
+    end if;
+
     insert into public.notifications (recipient_id, actor_id, listing_id, type, message, event_key)
     values (
       new.user_id,
