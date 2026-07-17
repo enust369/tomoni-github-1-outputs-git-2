@@ -236,19 +236,31 @@ as $$
 declare
   current_user_id uuid := auth.uid();
   listing_owner_id uuid;
+  listing_status text;
+  listing_scheduled_at timestamptz;
+  listing_capacity smallint;
+  approved_count integer;
 begin
   if current_user_id is null then
     raise exception 'ログインが必要です。';
   end if;
 
-  select owner_id
-  into listing_owner_id
+  select owner_id, status, scheduled_at, capacity
+  into listing_owner_id, listing_status, listing_scheduled_at, listing_capacity
   from public.listings
   where id = target_listing_id
   for update;
 
   if not found then
     raise exception '募集が見つかりません。';
+  end if;
+
+  if listing_status <> 'open' then
+    raise exception '募集は終了しています。';
+  end if;
+
+  if listing_scheduled_at <= now() then
+    raise exception '開催日時を過ぎています。';
   end if;
 
   if listing_owner_id = current_user_id then
@@ -267,7 +279,16 @@ begin
     select 1 from public.listing_participants
     where listing_id = target_listing_id and user_id = current_user_id
   ) then
-    return;
+    raise exception 'すでに参加申請済みです。';
+  end if;
+
+  select count(*) into approved_count
+  from public.listing_participants
+  where listing_id = target_listing_id
+    and status = 'approved';
+
+  if approved_count >= listing_capacity then
+    raise exception 'この募集は満員です。';
   end if;
 
   insert into public.listing_participants (listing_id, user_id, applicant_name, status)
@@ -287,6 +308,9 @@ set search_path = public
 as $$
 declare
   current_user_id uuid := auth.uid();
+  listing_owner_id uuid;
+  listing_status text;
+  listing_scheduled_at timestamptz;
   listing_capacity smallint;
   approved_count integer;
 begin
@@ -294,13 +318,36 @@ begin
     raise exception '承認内容が正しくありません。';
   end if;
 
-  select capacity into listing_capacity
+  select owner_id, status, scheduled_at, capacity
+  into listing_owner_id, listing_status, listing_scheduled_at, listing_capacity
   from public.listings
-  where id = target_listing_id and owner_id = current_user_id
+  where id = target_listing_id
   for update;
 
   if not found then
+    raise exception '募集が見つかりません。';
+  end if;
+
+  if listing_owner_id <> current_user_id then
     raise exception 'この参加申請を確認する権限がありません。';
+  end if;
+
+  if listing_status <> 'open' then
+    raise exception '募集は終了しています。';
+  end if;
+
+  if listing_scheduled_at <= now() then
+    raise exception '開催日時を過ぎています。';
+  end if;
+
+  if not exists (
+    select 1
+    from public.listing_participants
+    where listing_id = target_listing_id
+      and user_id = p_target_user_id
+      and status = 'pending'
+  ) then
+    raise exception '参加申請が見つからないか、すでに処理されています。';
   end if;
 
   if decision = 'approved' then
@@ -319,7 +366,7 @@ begin
     and status = 'pending';
 
   if not found then
-    raise exception '参加申請が見つかりません。';
+    raise exception '参加申請が見つからないか、すでに処理されています。';
   end if;
 end;
 $$;
