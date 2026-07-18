@@ -3366,7 +3366,7 @@
     }
 
     function hasMemberAccess() {
-      return Boolean(appState.user && appState.profileOwnerId === appState.user.id && viewerGender());
+      return Boolean(appState.user?.verified && appState.profileOwnerId === appState.user.id && viewerGender());
     }
 
     async function loadSupabaseProfile(userId) {
@@ -3450,6 +3450,10 @@
 
     function routeFromAuthState() {
       document.body.classList.remove("auth-pending");
+      if (appState.user && !appState.user.verified) {
+        openEmailVerificationNotice(appState.user.email);
+        return "email-verification";
+      }
       showLatestHome();
       if (!appState.user) {
         if (!appState.safetyOnboardingAccepted) {
@@ -3497,6 +3501,15 @@
 
     async function synchronizeSignedInState(user, options = {}) {
       if (!user?.id) { await synchronizeSignedOutState(); return; }
+      if (!user.email_confirmed_at) {
+        await stopUserRealtime();
+        resetUserScopedState(null, { preserveLocal: false, removeStorage: true });
+        saveState();
+        renderSignedOutState();
+        document.body.classList.remove("auth-pending");
+        openEmailVerificationNotice(user.email);
+        return;
+      }
       const restoredUser = { id: user.id, email: user.email, verified: Boolean(user.email_confirmed_at) };
       const userChanged = appState.user?.id !== restoredUser.id;
       if (userChanged) {
@@ -3577,7 +3590,12 @@
     }
 
     function emailVerificationMarkup(email) {
-      return `<div class="thanks" style="padding:8px 0"><span class="badge">メール認証</span><h3 style="margin-top:16px">確認メールを送りました。</h3><p class="meta" style="margin-top:10px">${esc(email)} に届いたメールを開き、認証を完了してください。</p><div class="actions" style="justify-content:center"><button class="btn primary" data-action="show-login">認証後にログインする</button></div></div>`;
+      return `<div class="thanks" style="padding:8px 0"><span class="badge">メール認証</span><h3 style="margin-top:16px">確認メールを送信しました。</h3><p class="meta" style="margin-top:10px">${esc(email)} に届いたメールを開き、認証を完了してください。</p><div class="actions" style="justify-content:center"><button class="btn primary" data-action="show-login">認証後にログインする</button></div></div>`;
+    }
+
+    function openEmailVerificationNotice(email) {
+      document.body.classList.remove("auth-pending");
+      openModal("メール認証", emailVerificationMarkup(email || "登録したメールアドレス"));
     }
 
     function passwordResetMarkup() {
@@ -4628,19 +4646,25 @@
         setLoading(true);
         const auth = window.tomoniAuth;
         if (!auth?.configured) { setLoading(false); form.dataset.submitting = "false"; toast("Supabaseの接続情報を設定してください。"); return; }
-        let result = registering ? await auth.signUp(data.email.trim(), data.password, data.birthDate) : await auth.signIn(data.email.trim(), data.password);
+        const result = registering ? await auth.signUp(data.email.trim(), data.password, data.birthDate) : await auth.signIn(data.email.trim(), data.password);
         setLoading(false);
-        if (result.error) { form.dataset.submitting = "false"; const passwordField = document.getElementById("authPassword"); passwordField.setAttribute("aria-invalid", "true"); passwordField.parentElement.querySelector(".field-error").textContent = result.error.message; passwordField.focus(); return; }
-        if (registering && !result.data?.session) {
-          setLoading(true);
-          const signInResult = await auth.signIn(data.email.trim(), data.password);
-          setLoading(false);
-          if (!signInResult.error && signInResult.data?.session) result = signInResult;
-          else if (/email not confirmed|not confirmed|confirm/i.test(signInResult.error?.message || "")) { form.dataset.submitting = "false"; modalTitle.textContent = "メール認証"; modalBody.innerHTML = emailVerificationMarkup(data.email.trim()); return; }
-          else { form.dataset.submitting = "false"; toast("登録後のログイン状態を確認できませんでした。もう一度ログインしてください。"); modalTitle.textContent = "ログイン"; modalBody.innerHTML = authMarkup("login"); return; }
+        if (result.error) {
+          form.dataset.submitting = "false";
+          if (/email not confirmed|not confirmed|confirm/i.test(result.error.message || "")) { openEmailVerificationNotice(data.email.trim()); return; }
+          const passwordField = document.getElementById("authPassword");
+          passwordField.setAttribute("aria-invalid", "true");
+          passwordField.parentElement.querySelector(".field-error").textContent = result.error.message;
+          passwordField.focus();
+          return;
         }
         const user = result.data?.user;
+        if (registering && (!result.data?.session || !user?.email_confirmed_at)) {
+          form.dataset.submitting = "false";
+          openEmailVerificationNotice(data.email.trim());
+          return;
+        }
         if (!user) { form.dataset.submitting = "false"; toast("ログイン状態を確認できませんでした。"); return; }
+        if (!user.email_confirmed_at) { form.dataset.submitting = "false"; openEmailVerificationNotice(user.email || data.email.trim()); return; }
         if (registering && data.birthDate) {
           const birthResult = await auth.saveOwnBirthDate(data.birthDate);
           if (birthResult?.error) toast(`生年月日を保存できませんでした：${birthResult.error.message}`);
