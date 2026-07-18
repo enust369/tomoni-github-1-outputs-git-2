@@ -3442,24 +3442,27 @@
       return hash.get("type") === "recovery" || query.get("type") === "recovery";
     }
 
+    function showLatestHome() {
+      document.body.classList.remove("standalone-view");
+      activateTab("home-recommended", { persist: false, scroll: false });
+      document.getElementById("home")?.scrollIntoView({ behavior: "auto", block: "start" });
+    }
+
     function routeFromAuthState() {
       document.body.classList.remove("auth-pending");
+      showLatestHome();
       if (!appState.user) {
-        activateTab("home-recommended", { persist: false, scroll: false });
-        document.getElementById("home")?.scrollIntoView({ behavior: "auto", block: "start" });
         if (!appState.safetyOnboardingAccepted) {
           setTimeout(() => {
             if (!appState.user && !appState.safetyOnboardingAccepted) openSafetyOnboarding();
           }, 180);
         }
-        return "landing";
+        return "home";
       }
       if (appState.profileOwnerId !== appState.user.id) {
         showProfileEditor(true);
         return "profile";
       }
-      activateTab("home-recommended", { scroll: false });
-      document.getElementById("home")?.scrollIntoView({ behavior: "auto", block: "start" });
       return "home";
     }
 
@@ -4695,6 +4698,7 @@
         return;
       }
       if (form.id === "profileForm") {
+        const profileWasMissing = appState.profileOwnerId !== appState.user?.id;
         const formData = new FormData(form);
         const files = [...document.getElementById("profilePhotosInput").files];
         if (files.length > 3) { toast("プロフィール写真は3枚まで選択できます。"); return; }
@@ -4735,7 +4739,7 @@
           closeModal();
           syncGenderControls();
           await loadSupabaseListings();
-          if (firstTime) routeFromAuthState();
+          if (firstTime || profileWasMissing) routeFromAuthState();
           toast(firstTime ? "プロフィールを作成しました。" : "プロフィールを保存しました。");
         } catch (error) { toast(`プロフィールを保存できませんでした：${error.message}`); }
         finally { setLoading(false); }
