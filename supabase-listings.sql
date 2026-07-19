@@ -692,6 +692,12 @@ create table if not exists public.profile_birth_dates (
   updated_at timestamptz not null default now()
 );
 
+alter table public.profile_birth_dates
+drop constraint if exists profile_birth_dates_user_id_fkey;
+alter table public.profile_birth_dates
+add constraint profile_birth_dates_user_id_fkey
+foreign key (user_id) references auth.users(id) on delete cascade;
+
 alter table public.profile_birth_dates enable row level security;
 
 drop policy if exists "users can read their own birth date" on public.profile_birth_dates;
@@ -708,9 +714,14 @@ language plpgsql
 security definer
 set search_path = public, pg_temp
 as $$
+declare
+  current_user_id uuid := auth.uid();
 begin
-  if auth.uid() is null then
+  if current_user_id is null then
     raise exception 'ログインが必要です。';
+  end if;
+  if not exists (select 1 from auth.users where id = current_user_id) then
+    raise exception 'ログインユーザーを確認できませんでした。もう一度ログインしてください。';
   end if;
   if p_birth_date is null
     or p_birth_date > timezone('Asia/Tokyo', now())::date
@@ -720,7 +731,7 @@ begin
   end if;
 
   insert into public.profile_birth_dates (user_id, birth_date, updated_at)
-  values (auth.uid(), p_birth_date, now())
+  values (current_user_id, p_birth_date, now())
   on conflict (user_id) do update
   set birth_date = excluded.birth_date,
       updated_at = now();

@@ -3420,6 +3420,15 @@
       return Boolean(birthDate);
     }
 
+    async function getLatestAuthenticatedUser(expectedUserId = "") {
+      const result = await window.tomoniAuth?.getUser?.();
+      if (result?.error) throw result.error;
+      const user = result?.data?.user;
+      if (!user?.id) throw new Error("ログイン状態を確認できませんでした。もう一度ログインしてください。");
+      if (expectedUserId && user.id !== expectedUserId) throw new Error("ログインユーザーが変更されました。画面を再読み込みしてください。");
+      return user;
+    }
+
     function birthDatePromptMarkup() {
       return `<p><strong>実年齢表示へ変更しました。<br>一度だけ生年月日を入力してください。</strong></p><p class="meta" style="margin-top:10px">生年月日は本人専用の領域に保存され、他の利用者には「○○歳」だけが表示されます。</p><form class="form" id="birthDateForm" style="margin-top:20px" novalidate><div class="field full"><label for="requiredBirthDate">生年月日</label><input id="requiredBirthDate" name="birthDate" type="date" max="${latestAdultBirthDate()}" autocomplete="bday" required><span class="field-error"></span></div><div class="field full"><button class="btn primary" type="submit">生年月日を登録する</button></div></form>`;
     }
@@ -4665,10 +4674,6 @@
         }
         if (!user) { form.dataset.submitting = "false"; toast("ログイン状態を確認できませんでした。"); return; }
         if (!user.email_confirmed_at) { form.dataset.submitting = "false"; openEmailVerificationNotice(user.email || data.email.trim()); return; }
-        if (registering && data.birthDate) {
-          const birthResult = await auth.saveOwnBirthDate(data.birthDate);
-          if (birthResult?.error) toast(`生年月日を保存できませんでした：${birthResult.error.message}`);
-        }
         closeModal();
         await queueAuthSynchronization("SIGNED_IN", result.data?.session || { user }, { refresh: false });
         toast(registering ? "登録してログインしました。" : "ログインしました。");
@@ -4677,6 +4682,8 @@
       if (form.id === "birthDateForm") {
         const birthDate = String(new FormData(form).get("birthDate") || "");
         setLoading(true);
+        try { await getLatestAuthenticatedUser(); }
+        catch (error) { setLoading(false); toast(error.message); return; }
         const result = await window.tomoniAuth?.saveOwnBirthDate?.(birthDate);
         setLoading(false);
         if (result?.error) { toast(`生年月日を登録できませんでした：${result.error.message}`); return; }
@@ -4729,16 +4736,15 @@
         if (files.some((file) => file.size > 5 * 1024 * 1024)) { toast("プロフィール写真は1枚5MBまでです。"); return; }
         setLoading(true);
         try {
+          const userBeforeSave = await getLatestAuthenticatedUser();
           let photoUrls = appState.profile.photoUrls || [];
           if (files.length) {
-            const uploads = await Promise.all(files.map((file) => window.tomoniAuth.uploadProfilePhoto(appState.user.id, file)));
+            const uploads = await Promise.all(files.map((file) => window.tomoniAuth.uploadProfilePhoto(userBeforeSave.id, file)));
             const uploadError = uploads.find((result) => result.error)?.error;
             if (uploadError) throw uploadError;
             photoUrls = uploads.map((result) => result.data.url);
           }
           const birthDate = String(formData.get("birthDate") || "");
-          const birthResult = await window.tomoniAuth.saveOwnBirthDate(birthDate);
-          if (birthResult?.error) throw birthResult.error;
           const heightValue = String(formData.get("height") || "").trim();
           const profileExtras = {
             height: heightValue ? Number(heightValue) : null,
@@ -4751,11 +4757,15 @@
           };
           const profile = { nickname: String(formData.get("nickname")).trim(), gender: String(formData.get("gender")), age: calculateAge(birthDate), birthDate, area: String(formData.get("area")).trim(), bio: String(formData.get("bio")).trim(), tags: formData.getAll("tags").map(String), photoUrls, ...profileExtras };
           const storedTags = encodeProfileTags(profile.tags, profileExtras);
-          const result = await window.tomoniAuth.saveProfile({ user_id: appState.user.id, nickname: profile.nickname, gender: profile.gender, area: profile.area, bio: profile.bio, tags: storedTags, photo_urls: profile.photoUrls, ...personalitySupabasePayload(appState.profile), updated_at: new Date().toISOString() });
+          const result = await window.tomoniAuth.saveProfile({ user_id: userBeforeSave.id, nickname: profile.nickname, gender: profile.gender, area: profile.area, bio: profile.bio, tags: storedTags, photo_urls: profile.photoUrls, ...personalitySupabasePayload(appState.profile), updated_at: new Date().toISOString() });
           if (result?.error) throw result.error;
+          const userAfterSave = await getLatestAuthenticatedUser(userBeforeSave.id);
+          const birthResult = await window.tomoniAuth.saveOwnBirthDate(birthDate);
+          if (birthResult?.error) throw birthResult.error;
           const firstTime = form.dataset.firstTime === "true";
+          appState.user = { id: userAfterSave.id, email: userAfterSave.email, verified: Boolean(userAfterSave.email_confirmed_at) };
           appState.profile = { ...appState.profile, ...profile };
-          appState.profileOwnerId = appState.user.id;
+          appState.profileOwnerId = userAfterSave.id;
           currentGender = profile.gender;
           scheduleAgeRefresh();
           saveState();
