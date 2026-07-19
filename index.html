@@ -2211,6 +2211,9 @@
     let notificationChannel = null;
     let passwordRecoveryMode = false;
     let authSyncQueue = Promise.resolve();
+    let pendingVerificationEmail = "";
+    let verificationResendAvailableAt = 0;
+    let verificationResendTimer = null;
     let favoriteRecords = [];
     let favoriteListingIds = new Set();
     let favoriteTargetUserIds = new Set();
@@ -3519,6 +3522,7 @@
         openEmailVerificationNotice(user.email);
         return;
       }
+      clearVerificationResendState();
       const restoredUser = { id: user.id, email: user.email, verified: Boolean(user.email_confirmed_at) };
       const userChanged = appState.user?.id !== restoredUser.id;
       if (userChanged) {
@@ -3599,12 +3603,51 @@
     }
 
     function emailVerificationMarkup(email) {
-      return `<div class="thanks" style="padding:8px 0"><span class="badge">メール認証</span><h3 style="margin-top:16px">確認メールを送信しました。</h3><p class="meta" style="margin-top:10px">${esc(email)} に届いたメールを開き、認証を完了してください。</p><div class="actions" style="justify-content:center"><button class="btn primary" data-action="show-login">認証後にログインする</button></div></div>`;
+      return `<div class="thanks" style="padding:8px 0"><span class="badge">メール認証</span><h3 style="margin-top:16px">確認メールを送信しました。</h3><p class="meta" style="margin-top:10px">${esc(email)} に届いたメールを開き、認証を完了してください。</p><div class="actions" style="justify-content:center"><button class="btn" type="button" data-action="resend-verification-email">確認メールを再送する</button><button class="btn primary" type="button" data-action="show-login">認証後にログインする</button></div><p class="meta" id="verificationResendStatus" role="status" aria-live="polite" style="margin-top:12px"></p></div>`;
     }
 
     function openEmailVerificationNotice(email) {
+      const normalizedEmail = String(email || "").trim();
+      if (/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(normalizedEmail)) pendingVerificationEmail = normalizedEmail;
       document.body.classList.remove("auth-pending");
-      openModal("メール認証", emailVerificationMarkup(email || "登録したメールアドレス"));
+      openModal("メール認証", emailVerificationMarkup(pendingVerificationEmail || "登録したメールアドレス"));
+      updateVerificationResendButton();
+    }
+
+    function clearVerificationResendState() {
+      pendingVerificationEmail = "";
+      verificationResendAvailableAt = 0;
+      if (verificationResendTimer) clearInterval(verificationResendTimer);
+      verificationResendTimer = null;
+    }
+
+    function updateVerificationResendButton() {
+      const button = document.querySelector('[data-action="resend-verification-email"]');
+      if (!button) return;
+      const remainingSeconds = Math.max(0, Math.ceil((verificationResendAvailableAt - Date.now()) / 1000));
+      button.disabled = !pendingVerificationEmail || remainingSeconds > 0;
+      button.textContent = remainingSeconds > 0 ? `再送まで${remainingSeconds}秒` : "確認メールを再送する";
+    }
+
+    function startVerificationResendCooldown() {
+      verificationResendAvailableAt = Date.now() + 60000;
+      if (verificationResendTimer) clearInterval(verificationResendTimer);
+      updateVerificationResendButton();
+      verificationResendTimer = setInterval(() => {
+        updateVerificationResendButton();
+        if (Date.now() >= verificationResendAvailableAt) {
+          clearInterval(verificationResendTimer);
+          verificationResendTimer = null;
+        }
+      }, 1000);
+    }
+
+    function verificationResendErrorMessage(error) {
+      const message = String(error?.message || error || "");
+      if (Number(error?.status) === 429 || /429|rate.?limit|too many|over_email_send_rate_limit/i.test(`${error?.code || ""} ${message}`)) return "短時間に送信回数が多くなっています。しばらく待ってから再度お試しください。";
+      if (/invalid.*email|email.*invalid/i.test(message)) return "メールアドレスを確認できませんでした。登録したメールアドレスをご確認ください。";
+      if (/Failed to fetch|NetworkError|fetch/i.test(message)) return "通信できませんでした。接続を確認して、もう一度お試しください。";
+      return "確認メールを再送できませんでした。しばらく待ってから再度お試しください。";
     }
 
     function passwordResetMarkup() {
@@ -4804,6 +4847,18 @@
       if (action === "open-auth") openModal("ログイン", authMarkup("login"));
       if (action === "show-register") { modalTitle.textContent = "会員登録"; modalBody.innerHTML = authMarkup("register"); }
       if (action === "show-login") { modalTitle.textContent = "ログイン"; modalBody.innerHTML = authMarkup("login"); }
+      if (action === "resend-verification-email") {
+        const status = document.getElementById("verificationResendStatus");
+        if (!pendingVerificationEmail) { if (status) status.textContent = "登録したメールアドレスを確認できませんでした。もう一度会員登録画面からお試しください。"; return; }
+        if (Date.now() < verificationResendAvailableAt) { updateVerificationResendButton(); return; }
+        startVerificationResendCooldown();
+        const result = await window.tomoniAuth?.resendSignupEmail?.(pendingVerificationEmail);
+        if (result?.error) {
+          if (status) status.textContent = verificationResendErrorMessage(result.error);
+          return;
+        }
+        if (status) status.textContent = "確認メールを再送しました。迷惑メールフォルダもご確認ください。";
+      }
       if (action === "show-password-reset") { modalTitle.textContent = "パスワード再設定"; modalBody.innerHTML = passwordResetMarkup(); }
       if (action === "open-terms") { closeModal(); jumpTo("terms"); toast("内容を確認後、登録画面へ戻って同意してください。"); }
       if (action === "open-account") { if (!appState.user) openModal("ログイン", authMarkup("login")); else if (appState.profileOwnerId !== appState.user.id) showProfileEditor(true); else { accountNavMode = "account"; activateTab("mypage-settings"); } }

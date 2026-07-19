@@ -19,6 +19,13 @@ window.tomoniAuth = {
   signIn: (email, password) => client
     ? client.auth.signInWithPassword({ email, password })
     : Promise.resolve(notConfigured()),
+  resendSignupEmail: (email) => client
+    ? client.auth.resend({
+      type: "signup",
+      email,
+      options: { emailRedirectTo: window.location.origin },
+    })
+    : Promise.resolve(notConfigured()),
   signOut: () => client
     ? client.auth.signOut()
     : Promise.resolve(notConfigured()),
