@@ -11,6 +11,8 @@ await cp(resolve(projectRoot, "supabase.js"), resolve(outputDir, "supabase.js"))
 try {
   await cp(resolve(projectRoot, "_headers"), resolve(outputDir, "_headers"));
 } catch {}
+await cp(resolve(projectRoot, "sitemap.xml"), resolve(outputDir, "sitemap.xml"));
+await cp(resolve(projectRoot, "robots.txt"), resolve(outputDir, "robots.txt"));
 
 let fileEnv = {};
 try {
