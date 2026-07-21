@@ -242,6 +242,43 @@ window.tomoniAuth = {
     if (result.error) return result;
     return { data: { url: client.storage.from("profile-photos").getPublicUrl(path).data.publicUrl }, error: null };
   },
+  deleteOwnProfilePhoto: async (photoUrl) => {
+    if (!client) return { ...notConfigured(), stage: "auth" };
+    const { data: userData, error: userError } = await client.auth.getUser();
+    if (userError) return { data: null, error: userError, stage: "auth" };
+    const userId = userData.user?.id;
+    if (!userId) return { data: null, error: new Error("ログイン状態を確認できませんでした。"), stage: "auth" };
+
+    const profileResult = await client.from("profiles").select("photo_urls").eq("user_id", userId).maybeSingle();
+    if (profileResult.error) return { data: null, error: profileResult.error, stage: "profile-read" };
+    const photoUrls = Array.isArray(profileResult.data?.photo_urls) ? profileResult.data.photo_urls : [];
+    const targetIndex = photoUrls.indexOf(photoUrl);
+    if (targetIndex < 0) return { data: null, error: new Error("削除する写真を確認できませんでした。"), stage: "profile-read" };
+
+    let objectUrl;
+    try { objectUrl = new URL(photoUrl); }
+    catch { return { data: null, error: new Error("削除する写真の保存先を確認できませんでした。"), stage: "storage" }; }
+    const marker = "/storage/v1/object/public/profile-photos/";
+    const markerIndex = objectUrl.pathname.indexOf(marker);
+    const objectPath = markerIndex >= 0
+      ? objectUrl.pathname.slice(markerIndex + marker.length).split("/").map((part) => decodeURIComponent(part)).join("/")
+      : "";
+    if (objectUrl.origin !== new URL(supabaseUrl).origin || !objectPath.startsWith(`${userId}/`) || objectPath === `${userId}/`) {
+      return { data: null, error: new Error("削除する写真の保存先を確認できませんでした。"), stage: "storage" };
+    }
+
+    const storageResult = await client.storage.from("profile-photos").remove([objectPath]);
+    if (storageResult.error) return { data: null, error: storageResult.error, stage: "storage" };
+
+    const remainingPhotoUrls = photoUrls.filter((_, index) => index !== targetIndex);
+    const updateResult = await client.from("profiles")
+      .update({ photo_urls: remainingPhotoUrls, updated_at: new Date().toISOString() })
+      .eq("user_id", userId)
+      .select("photo_urls")
+      .single();
+    if (updateResult.error) return { data: null, error: updateResult.error, stage: "profile-update" };
+    return { data: updateResult.data, error: null, stage: null };
+  },
   deleteOwnProfilePhotos: async () => {
     if (!client) return notConfigured();
     const { data: userData, error: userError } = await client.auth.getUser();

@@ -4568,10 +4568,12 @@
     function showProfileEditor(firstTime = false) {
       const tagOptions = ["散歩", "カフェ", "公園", "読書", "温泉", "映画", "ボードゲーム", "美術館", "食べ歩き", "ランニング", "写真", "神社", "自然", "ドライブ", "雑談", "無言OK"];
       const selectOptions = (options, selected) => `<option value="">未設定</option>${options.map((option) => `<option value="${esc(option)}" ${selected === option ? "selected" : ""}>${esc(option)}</option>`).join("")}`;
+      const currentPhotos = appState.profile.photoUrls || [];
       openModal(firstTime ? "プロフィール作成" : "プロフィール編集", `
         <form class="form" id="profileForm" data-first-time="${firstTime}" novalidate>
           <div class="profile-edit-group">
             <h3>基本情報</h3>
+            ${currentPhotos.length ? `<div class="field full"><label>現在のプロフィール写真</label><div class="profile-photos">${currentPhotos.map((url, index) => `<div style="display:grid;gap:6px"><img class="profile-photo" src="${esc(url)}" alt="プロフィール写真 ${index + 1}"><button class="btn small quiet-action" type="button" data-action="delete-profile-photo" data-photo-index="${index}">削除</button></div>`).join("")}</div></div>` : ""}
             <div class="field full"><label for="profilePhotosInput">プロフィール写真（最大3枚）</label><input id="profilePhotosInput" type="file" accept="image/jpeg,image/png,image/webp" multiple><p class="meta">プロフィール写真は任意です。顔写真だけでなく、後ろ姿・横顔・趣味・風景・イラストなどでも大丈夫です。個人が特定されやすい写真や個人情報が写っている写真は避けることをおすすめします。</p><p class="meta">新しく選択すると現在の写真を置き換えます。1枚5MBまで。</p></div>
             <div class="field full"><label for="profileNickname">ニックネーム</label><input id="profileNickname" name="nickname" maxlength="20" value="${esc(appState.profile.nickname === "あなた" ? "" : appState.profile.nickname)}" required><span class="field-error"></span></div>
             <div class="field"><label for="profileGender">登録する性別</label><select id="profileGender" name="gender"><option ${appState.profile.gender === "女性" ? "selected" : ""}>女性</option><option ${appState.profile.gender === "男性" ? "selected" : ""}>男性</option></select></div>
@@ -4872,6 +4874,36 @@
       if (action === "open-chat") openChat(currentDetailListingId || button.dataset.id);
       if (action === "open-match-chat") openMatchChat(button.dataset.matchId, button.dataset.userId, button.dataset.person);
       if (action === "edit-profile") { if (!appState.user) openModal("ログイン", authMarkup("login")); else showProfileEditor(); }
+      if (action === "delete-profile-photo") {
+        if (!appState.user) { openModal("ログイン", authMarkup("login")); return; }
+        const photoIndex = Number.parseInt(button.dataset.photoIndex || "", 10);
+        const photoUrl = appState.profile.photoUrls?.[photoIndex];
+        if (!photoUrl) { toast("削除するプロフィール写真を確認できませんでした。"); return; }
+        button.disabled = true;
+        setLoading(true);
+        try {
+          const deleteResult = await window.tomoniAuth?.deleteOwnProfilePhoto?.(photoUrl);
+          if (!deleteResult) throw new Error("プロフィール写真を削除できませんでした。時間をおいて再度お試しください。");
+          if (deleteResult?.error) {
+            if (deleteResult.stage === "storage") throw new Error("プロフィール写真をStorageから削除できませんでした。時間をおいて再度お試しください。");
+            if (deleteResult.stage === "profile-update") throw new Error("写真ファイルは削除されましたが、プロフィールを更新できませんでした。もう一度削除をお試しください。");
+            throw new Error("プロフィール写真を削除できませんでした。時間をおいて再度お試しください。");
+          }
+          const profileResult = await window.tomoniAuth?.getProfile?.(appState.user.id);
+          if (profileResult?.error || !profileResult?.data) throw new Error("写真は削除されました。プロフィール画面を再読み込みしてください。");
+          appState.profile.photoUrls = profileResult.data.photo_urls || [];
+          saveState();
+          updateAccountUI();
+          showProfileEditor();
+          toast("プロフィール写真を削除しました。");
+        } catch (error) {
+          const message = String(error?.message || "");
+          toast(/^(プロフィール写真|写真)/.test(message) ? message : "プロフィール写真を削除できませんでした。時間をおいて再度お試しください。");
+        } finally {
+          setLoading(false);
+          button.disabled = false;
+        }
+      }
       if (action === "show-favorites") { if (!appState.user) openModal("ログイン", authMarkup("login")); else { accountNavMode = "account"; jumpTo("account"); renderFavorites(); } }
       if (action === "show-matches") { if (!appState.user) openModal("ログイン", authMarkup("login")); else { await loadMatches(); accountNavMode = "account"; jumpTo("account"); renderMatches(); } }
       if (action === "show-blocks") { if (!appState.user) openModal("ログイン", authMarkup("login")); else { await loadBlocks(); accountNavMode = "account"; jumpTo("account"); renderBlocks(); } }
