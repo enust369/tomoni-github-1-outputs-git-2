@@ -1,0 +1,19 @@
+{
+  "name": "TOMONI",
+  "short_name": "TOMONI",
+  "icons": [
+    {
+      "src": "/assets/brand/android-chrome-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/assets/brand/android-chrome-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ],
+  "theme_color": "#347FA8",
+  "background_color": "#F5FAFD",
+  "display": "standalone"
+}

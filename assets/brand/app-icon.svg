@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" role="img" aria-labelledby="title desc">
+  <title id="title">TOMONI app icon</title>
+  <desc id="desc">Two smiling people connected by a small heart and a hopeful light.</desc>
+  <rect width="1024" height="1024" fill="#F5FAFD"/>
+  <circle cx="512" cy="512" r="382" fill="#EAF6FC"/>
+  <path d="M512 128l14 32 34 4-26 23 8 34-30-18-30 18 8-34-26-23 34-4z" fill="#F3C84B"/>
+  <circle cx="350" cy="354" r="114" fill="#347FA8"/>
+  <circle cx="674" cy="354" r="114" fill="#286B91"/>
+  <path d="M304 366c14 27 34 40 46 40s32-13 46-40" fill="none" stroke="#FFFFFF" stroke-width="22" stroke-linecap="round"/>
+  <path d="M628 366c14 27 34 40 46 40s32-13 46-40" fill="none" stroke="#FFFFFF" stroke-width="22" stroke-linecap="round"/>
+  <path d="M154 790c8-175 84-270 196-270 91 0 151 61 164 164-47-20-94-6-126 34-39 49-78 84-119 108-45-5-83-17-115-36z" fill="#347FA8"/>
+  <path d="M870 790c-8-175-84-270-196-270-91 0-151 61-164 164 47-20 94-6 126 34 39 49 78 84 119 108 45-5 83-17 115-36z" fill="#286B91"/>
+  <path d="M512 674c-25-34-72-20-72 23 0 38 38 67 72 91 34-24 72-53 72-91 0-43-47-57-72-23z" fill="#F27C78"/>
+</svg>

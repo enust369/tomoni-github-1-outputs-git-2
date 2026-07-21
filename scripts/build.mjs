@@ -8,6 +8,8 @@ await rm(outputDir, { recursive: true, force: true });
 await mkdir(outputDir, { recursive: true });
 await cp(resolve(projectRoot, "index.html"), resolve(outputDir, "index.html"));
 await cp(resolve(projectRoot, "supabase.js"), resolve(outputDir, "supabase.js"));
+await cp(resolve(projectRoot, "assets"), resolve(outputDir, "assets"), { recursive: true });
+await cp(resolve(projectRoot, "site.webmanifest"), resolve(outputDir, "site.webmanifest"));
 try {
   await cp(resolve(projectRoot, "_headers"), resolve(outputDir, "_headers"));
 } catch {}
