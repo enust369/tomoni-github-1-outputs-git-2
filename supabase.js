@@ -2,6 +2,7 @@ const env = window.__TOMONI_ENV__ || {};
 const supabaseUrl = env.VITE_SUPABASE_URL || "https://qporjswbpfjfsnxequyd.supabase.co";
 const supabaseAnonKey = env.VITE_SUPABASE_ANON_KEY || "sb_publishable_JCk0iNVL30Kmgih4hknwug_Wj0sidGw";
 const configured = Boolean(supabaseUrl && supabaseAnonKey);
+const emailRedirectTo = window.location.origin;
 const client = configured
   ? (await import("https://esm.sh/@supabase/supabase-js@2")).createClient(supabaseUrl, supabaseAnonKey)
   : null;
@@ -14,7 +15,14 @@ const notConfigured = () => ({
 window.tomoniAuth = {
   configured,
   signUp: (email, password, birthDate) => client
-    ? client.auth.signUp({ email, password, options: { data: { birth_date: birthDate } } })
+    ? client.auth.signUp({
+      email,
+      password,
+      options: {
+        emailRedirectTo,
+        data: { birth_date: birthDate },
+      },
+    })
     : Promise.resolve(notConfigured()),
   signIn: (email, password) => client
     ? client.auth.signInWithPassword({ email, password })
@@ -23,7 +31,7 @@ window.tomoniAuth = {
     ? client.auth.resend({
       type: "signup",
       email,
-      options: { emailRedirectTo: window.location.origin },
+      options: { emailRedirectTo },
     })
     : Promise.resolve(notConfigured()),
   signOut: () => client
