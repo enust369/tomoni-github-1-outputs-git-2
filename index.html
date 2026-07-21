@@ -739,6 +739,7 @@
     .profile-choice-grid { display: flex; flex-wrap: wrap; gap: 8px; }
     .profile-choice-grid .check-row { align-items: center; padding: 8px 11px; border: 1px solid var(--line); border-radius: 999px; background: #fff; font-weight: 600; }
     .profile-choice-grid .check-row input { width: 18px; height: 18px; margin-top: 0; }
+    .holiday-choice-grid { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); }
 
     .meter-head,
     .meter-labels {
@@ -2247,11 +2248,16 @@
       talkStyle: ["話す方", "聞く方", "半々"],
       firstMeeting: ["すぐ話せる", "少し緊張する", "慣れると話せる"],
       favoriteActivities: ["カフェ", "散歩", "ランチ", "お茶", "ドライブ", "温泉", "ボードゲーム", "映画", "ゲーム", "買い物", "スポーツ", "読書", "写真", "美術館", "神社・お寺", "動物", "その他"],
-      holiday: ["土日休み", "平日休み", "不定休", "その他"],
+      holiday: ["月曜日", "火曜日", "水曜日", "木曜日", "金曜日", "土曜日", "日曜日", "不定休", "その他"],
       alcohol: ["飲む", "たまに飲む", "飲まない"],
       tobacco: ["吸う", "電子タバコのみ", "吸わない"]
     };
-    const emptyProfileExtras = { height: null, talkStyle: "", firstMeeting: "", favoriteActivities: [], holiday: "", alcohol: "", tobacco: "" };
+    function normalizeHolidayValues(value) {
+      const weekdays = ["月曜日", "火曜日", "水曜日", "木曜日", "金曜日"];
+      const values = Array.isArray(value) ? value : value ? [value] : [];
+      return [...new Set(values.flatMap((item) => item === "土日休み" ? ["土曜日", "日曜日"] : item === "平日休み" ? weekdays : [item]).filter((item) => profileOptionSets.holiday.includes(item)))];
+    }
+    const emptyProfileExtras = { height: null, talkStyle: "", firstMeeting: "", favoriteActivities: [], holiday: [], alcohol: "", tobacco: "" };
     const defaultState = { user: null, profileOwnerId: null, safetyOnboardingAccepted: false, dismissedChatSafety: [], saved: [], blocked: [], customListings: [], demoParticipations: [], moderation: { reports: [], blockCount: 0 }, feedbackHistory: [], profile: { nickname: "あなた", age: null, birthDate: "", gender: "女性", area: "", bio: "静かな時間を大切にしています。", tags: [], photoUrls: [], ...emptyProfileExtras, personalityType: "", personalityTitle: "", personalityDescription: "", personalityTags: [], quietScore: null, talkScore: null, comfortScore: null } };
     let appState = loadState();
     listings.splice(0, listings.length);
@@ -2334,7 +2340,7 @@
     }
 
     function decodeProfileTags(tags = []) {
-      const extras = { ...emptyProfileExtras, favoriteActivities: [] };
+      const extras = { ...emptyProfileExtras, favoriteActivities: [], holiday: [] };
       const hobbies = [];
       (Array.isArray(tags) ? tags : []).forEach((tag) => {
         const value = String(tag || "");
@@ -2349,6 +2355,8 @@
           if (Number.isInteger(height) && height >= 100 && height <= 250) extras.height = height;
         } else if (key === "favoriteActivity") {
           if (profileOptionSets.favoriteActivities.includes(decoded) && !extras.favoriteActivities.includes(decoded)) extras.favoriteActivities.push(decoded);
+        } else if (key === "holiday") {
+          normalizeHolidayValues(decoded).forEach((holiday) => { if (!extras.holiday.includes(holiday)) extras.holiday.push(holiday); });
         } else if (Object.hasOwn(profileOptionSets, key) && profileOptionSets[key].includes(decoded)) {
           extras[key] = decoded;
         }
@@ -2361,17 +2369,18 @@
       const add = (key, value) => { if (value) values.push(`${PROFILE_META_PREFIX}${key}=${encodeURIComponent(value)}`); };
       const height = Number(extras.height);
       if (Number.isInteger(height) && height >= 100 && height <= 250) add("height", String(height));
-      ["talkStyle", "firstMeeting", "holiday", "alcohol", "tobacco"].forEach((key) => {
+      ["talkStyle", "firstMeeting", "alcohol", "tobacco"].forEach((key) => {
         if (profileOptionSets[key].includes(extras[key])) add(key, extras[key]);
       });
       (extras.favoriteActivities || []).filter((value) => profileOptionSets.favoriteActivities.includes(value)).forEach((value) => add("favoriteActivity", value));
+      normalizeHolidayValues(extras.holiday).forEach((value) => add("holiday", value));
       return values;
     }
 
     function loadState() {
       try {
         const stored = JSON.parse(localStorage.getItem(storageKey) || "{}");
-        return { ...defaultState, ...stored, dismissedChatSafety: Array.isArray(stored.dismissedChatSafety) ? stored.dismissedChatSafety : [], saved: Array.isArray(stored.saved) ? stored.saved : [], blocked: Array.isArray(stored.blocked) ? stored.blocked : [], customListings: Array.isArray(stored.customListings) ? stored.customListings : [], demoParticipations: Array.isArray(stored.demoParticipations) ? stored.demoParticipations : [], feedbackHistory: Array.isArray(stored.feedbackHistory) ? stored.feedbackHistory : [], moderation: { ...defaultState.moderation, ...(stored.moderation || {}), reports: Array.isArray(stored.moderation?.reports) ? stored.moderation.reports : [] }, profile: { ...defaultState.profile, ...(stored.profile || {}), birthDate: "" } };
+        return { ...defaultState, ...stored, dismissedChatSafety: Array.isArray(stored.dismissedChatSafety) ? stored.dismissedChatSafety : [], saved: Array.isArray(stored.saved) ? stored.saved : [], blocked: Array.isArray(stored.blocked) ? stored.blocked : [], customListings: Array.isArray(stored.customListings) ? stored.customListings : [], demoParticipations: Array.isArray(stored.demoParticipations) ? stored.demoParticipations : [], feedbackHistory: Array.isArray(stored.feedbackHistory) ? stored.feedbackHistory : [], moderation: { ...defaultState.moderation, ...(stored.moderation || {}), reports: Array.isArray(stored.moderation?.reports) ? stored.moderation.reports : [] }, profile: { ...defaultState.profile, ...(stored.profile || {}), holiday: normalizeHolidayValues(stored.profile?.holiday), birthDate: "" } };
       }
       catch { return { ...defaultState }; }
     }
@@ -3343,7 +3352,7 @@
         appState.profile.talkStyle ? ["話し方", appState.profile.talkStyle, false] : null,
         appState.profile.firstMeeting ? ["初対面", appState.profile.firstMeeting, false] : null,
         appState.profile.favoriteActivities?.length ? ["好きな過ごし方", appState.profile.favoriteActivities, true] : null,
-        appState.profile.holiday ? ["休日", appState.profile.holiday, false] : null,
+        normalizeHolidayValues(appState.profile.holiday).length ? ["休日", normalizeHolidayValues(appState.profile.holiday), true] : null,
         appState.profile.alcohol ? ["お酒", appState.profile.alcohol, false] : null,
         appState.profile.tobacco ? ["タバコ", appState.profile.tobacco, false] : null
       ].filter(Boolean);
@@ -4575,6 +4584,7 @@
       const tagOptions = ["散歩", "カフェ", "公園", "読書", "温泉", "映画", "ボードゲーム", "美術館", "食べ歩き", "ランニング", "写真", "神社", "自然", "ドライブ", "雑談", "無言OK"];
       const selectOptions = (options, selected) => `<option value="">未設定</option>${options.map((option) => `<option value="${esc(option)}" ${selected === option ? "selected" : ""}>${esc(option)}</option>`).join("")}`;
       const currentPhotos = appState.profile.photoUrls || [];
+      const selectedHolidays = normalizeHolidayValues(appState.profile.holiday);
       openModal(firstTime ? "プロフィール作成" : "プロフィール編集", `
         <form class="form" id="profileForm" data-first-time="${firstTime}" novalidate>
           <div class="profile-edit-group">
@@ -4594,7 +4604,7 @@
             <div class="field"><label for="profileTalkStyle">話し方（任意）</label><select id="profileTalkStyle" name="talkStyle">${selectOptions(profileOptionSets.talkStyle, appState.profile.talkStyle)}</select></div>
             <div class="field"><label for="profileFirstMeeting">初対面（任意）</label><select id="profileFirstMeeting" name="firstMeeting">${selectOptions(profileOptionSets.firstMeeting, appState.profile.firstMeeting)}</select></div>
             <div class="field full"><label>好きな過ごし方（複数選択可・任意）</label><div class="profile-choice-grid">${profileOptionSets.favoriteActivities.map((option) => `<label class="check-row"><input type="checkbox" name="favoriteActivities" value="${esc(option)}" ${appState.profile.favoriteActivities?.includes(option) ? "checked" : ""}>${esc(option)}</label>`).join("")}</div></div>
-            <div class="field"><label for="profileHoliday">休日（任意）</label><select id="profileHoliday" name="holiday">${selectOptions(profileOptionSets.holiday, appState.profile.holiday)}</select></div>
+            <div class="field full"><label>休日（複数選択可・任意）</label><div class="profile-choice-grid holiday-choice-grid">${profileOptionSets.holiday.map((option) => `<label class="check-row"><input type="checkbox" name="holiday" value="${esc(option)}" ${selectedHolidays.includes(option) ? "checked" : ""}>${esc(option)}</label>`).join("")}</div></div>
             <div class="field"><label for="profileAlcohol">お酒（任意）</label><select id="profileAlcohol" name="alcohol">${selectOptions(profileOptionSets.alcohol, appState.profile.alcohol)}</select></div>
             <div class="field"><label for="profileTobacco">タバコ（任意）</label><select id="profileTobacco" name="tobacco">${selectOptions(profileOptionSets.tobacco, appState.profile.tobacco)}</select></div>
           </div>
@@ -4802,7 +4812,7 @@
             talkStyle: String(formData.get("talkStyle") || ""),
             firstMeeting: String(formData.get("firstMeeting") || ""),
             favoriteActivities: formData.getAll("favoriteActivities").map(String),
-            holiday: String(formData.get("holiday") || ""),
+            holiday: formData.getAll("holiday").map(String),
             alcohol: String(formData.get("alcohol") || ""),
             tobacco: String(formData.get("tobacco") || "")
           };
