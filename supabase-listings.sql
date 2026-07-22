@@ -902,6 +902,15 @@ as $$
       where tag like 'tomoni:profile:occupation=%'
          or tag like 'tomoni:profile:favoriteActivity=%'
          or tag like 'tomoni:profile:holiday=%'
+         or tag like 'tomoni:profile:personalityNature=%'
+         or tag like 'tomoni:profile:speechPreference=%'
+         or tag like 'tomoni:profile:conversationStyle=%'
+         or tag like 'tomoni:profile:shyness=%'
+         or tag like 'tomoni:profile:firstMeetingMood=%'
+         or tag like 'tomoni:profile:afterMeeting=%'
+         or tag like 'tomoni:profile:reassurancePoint=%'
+         or tag like 'tomoni:profile:talkStyle=%'
+         or tag like 'tomoni:profile:firstMeeting=%'
     ), '{}'::text[]) as public_tags,
     p.is_verified,
     exists (
