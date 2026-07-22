@@ -558,6 +558,19 @@
       margin-bottom: 22px;
     }
 
+    .member-grid {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    .member-grid > .empty-state { grid-column: 1 / -1; }
+
+    .member-card { display: grid; gap: 16px; align-content: start; min-width: 0; }
+    .member-card-head { display: grid; grid-template-columns: 72px minmax(0, 1fr); gap: 14px; align-items: center; }
+    .member-card-photo { width: 72px; height: 72px; border-radius: 16px; border: 1px solid var(--line); object-fit: cover; background: var(--soft); }
+    .member-card-photo-placeholder { display: grid; place-items: center; color: var(--leaf); font-size: 25px; }
+    .member-card-bio { display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 3; overflow: hidden; }
+    .member-card .actions { margin-top: auto; }
+
     .recommend-card {
       display: grid;
       grid-template-columns: minmax(0, 1fr) auto;
@@ -1277,6 +1290,8 @@
       .after-options {
         grid-template-columns: repeat(2, minmax(0, 1fr));
       }
+
+      .member-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
     }
 
     @media (max-width: 680px) {
@@ -1484,7 +1499,7 @@
           </article>
 
           <div class="home-main-actions" aria-label="ホームの主な操作">
-            <button class="btn primary home-primary-action" data-jump="region">人を探す</button>
+            <button class="btn primary home-primary-action" data-jump="members">人を探す</button>
             <button class="btn primary home-primary-action" data-jump="create">募集を作る</button>
           </div>
 
@@ -1703,6 +1718,12 @@
         <article class="card access-gate"><span class="badge">ログインが必要です</span><h3 style="margin-top:12px">参加状況を確認するにはログインしてください。</h3><div class="actions" style="justify-content:center"><button class="btn primary" data-action="open-auth">登録・ログイン</button></div></article>
         <div class="section-head"><div><p class="eyebrow">参加中</p><h2>参加申請した募集を確認する。</h2><p class="meta">申請中・承認済み・見送り・辞退などの状態をまとめて表示します。</p></div></div>
         <div class="grid" id="participatingContent"><article class="card empty-state">ログインすると、参加状況を確認できます。</article></div>
+      </section>
+
+      <section id="members" class="protected-section">
+        <article class="card access-gate"><span class="badge">ログインが必要です</span><h3 style="margin-top:12px">登録者を探すにはログインしてください。</h3><p class="meta" style="margin-top:8px">安心して利用できるよう、登録済みの方だけに表示しています。</p><div class="actions" style="justify-content:center"><button class="btn primary" data-action="open-auth">登録・ログイン</button></div></article>
+        <div class="section-head"><div><p class="eyebrow">登録者を探す</p><h2>一緒に過ごしてみたい人を見つける。</h2><p class="meta" style="margin-top:10px">登録した性別と同じ、ブロック関係のない方だけが表示されます。</p></div></div>
+        <div class="profile-grid member-grid" id="memberGrid"><article class="card empty-state">ログインすると、登録者を確認できます。</article></div>
       </section>
 
       <section id="region" class="protected-section">
@@ -2225,6 +2246,8 @@
     let favoriteListingIds = new Set();
     let favoriteTargetUserIds = new Set();
     const favoriteToggleInProgress = new Set();
+    let memberProfiles = [];
+    const memberFavoriteToggleInProgress = new Set();
     let matchRecords = [];
     let matchedUserIds = new Set();
     let profilesByUserId = new Map();
@@ -2415,6 +2438,8 @@
       favoriteListingIds = new Set();
       favoriteTargetUserIds = new Set();
       favoriteToggleInProgress.clear();
+      memberProfiles = [];
+      memberFavoriteToggleInProgress.clear();
       matchRecords = [];
       matchedUserIds = new Set();
       profilesByUserId = new Map();
@@ -2561,6 +2586,7 @@
         { id: "home-activities", label: "過ごし方", sections: ["activities"] }
       ],
       search: [
+        { id: "search-members", label: "登録者を探す", sections: ["members"] },
         { id: "search-region", label: "地域から探す", sections: ["region"] },
         { id: "search-listings", label: "募集一覧", sections: ["listings"] }
       ],
@@ -2952,6 +2978,74 @@
       bindJumpButtons(container);
     }
 
+    function normalizeDiscoverableProfile(row = {}) {
+      const decoded = decodeProfileTags(row.public_tags || []);
+      return {
+        profileKey: String(row.profile_key || ""),
+        nickname: String(row.nickname || ""),
+        age: Number.isInteger(Number(row.age)) ? Number(row.age) : null,
+        area: String(row.area || ""),
+        photoUrl: String(row.photo_urls?.[0] || ""),
+        bio: String(row.bio || ""),
+        occupation: decoded.extras.occupation || "",
+        favoriteActivities: decoded.extras.favoriteActivities || [],
+        holiday: normalizeHolidayValues(decoded.extras.holiday),
+        verified: Boolean(row.is_verified),
+        isFavorite: Boolean(row.is_favorite)
+      };
+    }
+
+    function memberProfileChips(profile) {
+      return [
+        profile.occupation ? `<span class="badge muted">${esc(profile.occupation)}</span>` : "",
+        ...profile.favoriteActivities.map((value) => `<span class="badge muted">${esc(value)}</span>`),
+        ...profile.holiday.map((value) => `<span class="badge muted">休み：${esc(value)}</span>`)
+      ].join("");
+    }
+
+    function renderMemberProfiles() {
+      const grid = document.getElementById("memberGrid");
+      if (!grid) return;
+      if (!appState.user) {
+        grid.innerHTML = `<article class="card empty-state">ログインすると、登録者を確認できます。</article>`;
+        return;
+      }
+      if (!hasViewerGender()) {
+        grid.innerHTML = sameGenderRequiredMarkup();
+        return;
+      }
+      if (!memberProfiles.length) {
+        grid.innerHTML = `<article class="card empty-state"><p>まだ表示できるメンバーがいません。<br>新しいメンバーが参加するまで、募集を見てみましょう。</p><div class="actions" style="justify-content:center"><button class="btn small primary" data-jump="listings">募集一覧を見る</button></div></article>`;
+        bindJumpButtons(grid);
+        return;
+      }
+      grid.innerHTML = memberProfiles.map((profile) => `<article class="card member-card">
+        <div class="member-card-head">
+          ${profile.photoUrl ? `<img class="member-card-photo" src="${esc(profile.photoUrl)}" alt="${esc(profile.nickname)}さんのプロフィール写真">` : `<div class="member-card-photo member-card-photo-placeholder" aria-hidden="true">${esc(profile.nickname.slice(0, 1) || "と")}</div>`}
+          <div><h3>${esc(profile.nickname)}さん</h3><p class="meta">${esc(formatAge(profile.age))}${profile.area ? ` / ${esc(profile.area)}` : ""}</p>${profile.verified ? `<span class="badge">本人確認済み</span>` : ""}</div>
+        </div>
+        ${memberProfileChips(profile) ? `<div class="chips">${memberProfileChips(profile)}</div>` : ""}
+        ${profile.bio ? `<p class="member-card-bio">${esc(profile.bio)}</p>` : ""}
+        <div class="actions"><button class="btn small primary" data-action="open-member-profile" data-profile-key="${esc(profile.profileKey)}">プロフィールを見る</button><button class="btn small" data-action="toggle-member-favorite" data-profile-key="${esc(profile.profileKey)}">${profile.isFavorite ? "気になる済み" : "気になる"}</button></div>
+      </article>`).join("");
+    }
+
+    function openMemberProfile(profileKey) {
+      const profile = memberProfiles.find((item) => item.profileKey === profileKey);
+      if (!profile) { toast("このプロフィールは現在表示できません。"); return; }
+      openModal("プロフィール", `<article class="member-card">
+        <div class="member-card-head">
+          ${profile.photoUrl ? `<img class="member-card-photo" src="${esc(profile.photoUrl)}" alt="${esc(profile.nickname)}さんのプロフィール写真">` : `<div class="member-card-photo member-card-photo-placeholder" aria-hidden="true">${esc(profile.nickname.slice(0, 1) || "と")}</div>`}
+          <div><h3>${esc(profile.nickname)}さん</h3><p class="meta">${esc(formatAge(profile.age))}${profile.area ? ` / ${esc(profile.area)}` : ""}</p></div>
+        </div>
+        ${profile.occupation ? `<p><strong>職業</strong><br>${esc(profile.occupation)}</p>` : ""}
+        ${profile.favoriteActivities.length ? `<div><strong>好きな過ごし方</strong><div class="chips" style="margin-top:8px">${profile.favoriteActivities.map((value) => `<span class="badge muted">${esc(value)}</span>`).join("")}</div></div>` : ""}
+        ${profile.holiday.length ? `<div><strong>休日</strong><div class="chips" style="margin-top:8px">${profile.holiday.map((value) => `<span class="badge muted">${esc(value)}</span>`).join("")}</div></div>` : ""}
+        ${profile.bio ? `<p><strong>自己紹介</strong><br>${esc(profile.bio)}</p>` : ""}
+        <div class="actions"><button class="btn primary" data-action="toggle-member-favorite" data-profile-key="${esc(profile.profileKey)}">${profile.isFavorite ? "気になるを解除" : "気になる"}</button></div>
+      </article>`);
+    }
+
     function renderRegionalProfiles() {
       const grid = document.getElementById("regionalGrid");
       const prefecture = document.getElementById("searchPrefecture")?.value || "all";
@@ -3164,20 +3258,44 @@
       return true;
     }
 
+    function applyDiscoverableProfiles(rows = []) {
+      const unique = new Map();
+      rows.map(normalizeDiscoverableProfile).forEach((profile) => {
+        if (profile.profileKey && !unique.has(profile.profileKey)) unique.set(profile.profileKey, profile);
+      });
+      memberProfiles = [...unique.values()];
+      renderMemberProfiles();
+    }
+
+    async function loadDiscoverableProfiles() {
+      if (!appState.user) { applyDiscoverableProfiles([]); return true; }
+      const result = await window.tomoniAuth?.listDiscoverableProfiles?.();
+      if (result?.error) {
+        applyDiscoverableProfiles([]);
+        toast("登録者一覧を読み込めませんでした。SQLの反映状況を確認してください。");
+        return false;
+      }
+      applyDiscoverableProfiles(result?.data || []);
+      return true;
+    }
+
     async function loadSupabaseListings() {
       await loadBlocks();
       await loadFavorites();
       await loadMatches();
-      const [result, countsResult, mineResult, profilesResult] = await Promise.all([
+      const [result, countsResult, mineResult, profilesResult, membersResult] = await Promise.all([
         window.tomoniAuth?.listListings?.(),
         window.tomoniAuth?.listParticipationCounts?.(),
         appState.user ? window.tomoniAuth?.listMyParticipations?.() : Promise.resolve({ data: [], error: null }),
-        appState.user ? window.tomoniAuth?.listProfiles?.() : Promise.resolve({ data: [], error: null })
+        appState.user ? window.tomoniAuth?.listProfiles?.() : Promise.resolve({ data: [], error: null }),
+        appState.user ? window.tomoniAuth?.listDiscoverableProfiles?.() : Promise.resolve({ data: [], error: null })
       ]);
       if (result?.error) { toast(`募集を読み込めませんでした：${result.error.message}`); return false; }
       if (countsResult?.error) { toast(`参加人数を読み込めませんでした：${countsResult.error.message}`); return false; }
       if (mineResult?.error) { toast(`参加状態を読み込めませんでした：${mineResult.error.message}`); return false; }
       if (profilesResult?.error) { toast(`プロフィール情報を読み込めませんでした：${profilesResult.error.message}`); return false; }
+      if (membersResult?.error) toast("登録者一覧を読み込めませんでした。SQLの反映状況を確認してください。");
+      applyDiscoverableProfiles(membersResult?.error ? [] : (membersResult?.data || []));
       const counts = new Map((countsResult?.data || []).map((item) => [item.listing_id, Number(item.participant_count)]));
       const profiles = new Map((profilesResult?.data || []).map((profile) => [profile.user_id, profile]));
       profilesByUserId = profiles;
@@ -3196,7 +3314,7 @@
       appState.customListings = remote.filter((item) => item.owner);
       saveState();
       updateAccountUI();
-      renderListings(); renderRecommendations(); renderRegionalProfiles(); renderManaged(); renderParticipating();
+      renderListings(); renderRecommendations(); renderRegionalProfiles(); renderMemberProfiles(); renderManaged(); renderParticipating();
       return true;
     }
 
@@ -3380,6 +3498,7 @@
       document.getElementById("profileVerified").textContent = appState.user?.verified ? "本人確認済" : "確認中";
       document.getElementById("verificationStatus").innerHTML = appState.user?.verified ? `<strong>本人確認済み</strong><p class="meta">メール確認・年齢確認・規約同意・プロフィール入力済み</p>` : `<strong>本人確認</strong><p class="meta">登録後に確認状況を表示します。</p>`;
       document.getElementById("create").classList.toggle("is-locked", !profileComplete);
+      document.getElementById("members").classList.toggle("is-locked", !profileComplete);
       document.getElementById("region").classList.toggle("is-locked", !profileComplete);
       document.getElementById("managed").classList.toggle("is-locked", !profileComplete);
       document.getElementById("participating").classList.toggle("is-locked", !profileComplete);
@@ -3709,7 +3828,10 @@
 
     function renderFavorites() {
       const favorites = listings.filter((item) => isFavorite(item) && canShowListingToViewer(item));
-      document.getElementById("accountContent").innerHTML = favorites.length ? favorites.map((item) => `<article class="card managed-listing"><div><span class="badge">気になる</span><h3 style="margin-top:10px">${esc(activityDisplay(item))}</h3><p class="meta">${esc(item.person)}さん / ${esc(formatAge(item.age))} / ${item.prefecture ? `${esc(item.prefecture)} / ` : ""}${item.city ? `${esc(item.city)} / ` : ""}${esc(item.place)}</p><p class="meta">${esc(item.personalityTitle || "自然体で過ごせる人")}</p></div><div class="actions"><button class="btn small" data-action="open-detail" data-id="${item.id}">詳しく見る</button><button class="btn small quiet-action" data-action="toggle-favorite" data-id="${item.id}">気になるを解除</button></div></article>`).join("") : `<article class="card empty-state">気になる相手はまだありません。</article>`;
+      const favoriteMembers = memberProfiles.filter((profile) => profile.isFavorite);
+      const listingMarkup = favorites.map((item) => `<article class="card managed-listing"><div><span class="badge">気になる</span><h3 style="margin-top:10px">${esc(activityDisplay(item))}</h3><p class="meta">${esc(item.person)}さん / ${esc(formatAge(item.age))} / ${item.prefecture ? `${esc(item.prefecture)} / ` : ""}${item.city ? `${esc(item.city)} / ` : ""}${esc(item.place)}</p><p class="meta">${esc(item.personalityTitle || "自然体で過ごせる人")}</p></div><div class="actions"><button class="btn small" data-action="open-detail" data-id="${item.id}">詳しく見る</button><button class="btn small quiet-action" data-action="toggle-favorite" data-id="${item.id}">気になるを解除</button></div></article>`).join("");
+      const memberMarkup = favoriteMembers.map((profile) => `<article class="card managed-listing"><div><span class="badge">気になる</span><h3 style="margin-top:10px">${esc(profile.nickname)}さん</h3><p class="meta">${esc(formatAge(profile.age))}${profile.area ? ` / ${esc(profile.area)}` : ""}</p><p class="meta">${esc(profile.bio)}</p></div><div class="actions"><button class="btn small" data-action="open-member-profile" data-profile-key="${esc(profile.profileKey)}">プロフィールを見る</button><button class="btn small quiet-action" data-action="toggle-member-favorite" data-profile-key="${esc(profile.profileKey)}">気になるを解除</button></div></article>`).join("");
+      document.getElementById("accountContent").innerHTML = listingMarkup || memberMarkup ? `${listingMarkup}${memberMarkup}` : `<article class="card empty-state">気になる相手はまだありません。</article>`;
       bindJumpButtons(document.getElementById("accountContent"));
     }
 
@@ -5017,6 +5139,34 @@
         document.getElementById("accountContent").innerHTML = `<article class="card empty-state">ログアウトしました。またいつでも戻ってきてください。</article>`;
         toast("ログアウトしました。");
       }
+      if (action === "open-member-profile") openMemberProfile(button.dataset.profileKey || "");
+      if (action === "toggle-member-favorite") {
+        if (!appState.user) { openModal("ログイン", authMarkup("login")); toast("気になる機能はログイン後に利用できます。"); return; }
+        const profileKey = button.dataset.profileKey || "";
+        const profile = memberProfiles.find((item) => item.profileKey === profileKey);
+        if (!profile) { toast("このプロフィールは現在表示できません。"); return; }
+        if (memberFavoriteToggleInProgress.has(profileKey)) return;
+        const keepDetailOpen = Boolean(button.closest("#modalBody"));
+        memberFavoriteToggleInProgress.add(profileKey);
+        button.disabled = true;
+        setLoading(true);
+        try {
+          const desired = !profile.isFavorite;
+          const result = await window.tomoniAuth?.setDiscoverableProfileFavorite?.(profileKey, desired);
+          if (result?.error) throw result.error;
+          await Promise.all([loadDiscoverableProfiles(), loadFavorites()]);
+          await loadMatches();
+          if (document.getElementById("account").classList.contains("is-visible")) renderFavorites();
+          if (keepDetailOpen) openMemberProfile(profileKey);
+          toast(desired ? "気になるに追加しました。相手には通知されません。" : "気になるを解除しました。");
+        } catch {
+          toast("気になるを更新できませんでした。時間をおいて、もう一度お試しください。");
+        } finally {
+          setLoading(false);
+          memberFavoriteToggleInProgress.delete(profileKey);
+          if (document.body.contains(button)) button.disabled = false;
+        }
+      }
       if (action === "toggle-favorite") {
         if (!appState.user) { openModal("ログイン", authMarkup("login")); toast("気になる機能はログイン後に利用できます。"); return; }
         const id = button.dataset.id;
@@ -5127,7 +5277,7 @@
         const result = await window.tomoniAuth?.createBlock?.({ blocker_id: appState.user.id, blocked_user_id: button.dataset.userId, reason: "user_block" });
         setLoading(false);
         if (result?.error) { toast(`ブロックできませんでした：${result.error.message}`); return; }
-        appState.blocked = [...new Set([...appState.blocked, button.dataset.person])]; appState.moderation.blockCount += 1; saveState(); closeModal(); await loadBlocks(); renderListings(); renderRegionalProfiles(); renderRecommendations(); toast("ブロックしました。応募とチャット送信が制限されます。");
+        appState.blocked = [...new Set([...appState.blocked, button.dataset.person])]; appState.moderation.blockCount += 1; saveState(); closeModal(); await loadBlocks(); await loadDiscoverableProfiles(); renderListings(); renderRegionalProfiles(); renderRecommendations(); toast("ブロックしました。応募とチャット送信が制限されます。");
       }
       if (action === "unblock-user") {
         setLoading(true);
@@ -5220,7 +5370,7 @@
     });
     window.addEventListener("tomoni:auth-ready", restoreSupabaseUser);
     document.addEventListener("click", (event) => {
-      const protectedLink = event.target.closest('[data-jump="create"], [data-jump="region"]');
+      const protectedLink = event.target.closest('[data-jump="create"], [data-jump="members"], [data-jump="region"]');
       if (!protectedLink || hasMemberAccess()) return;
       event.preventDefault(); event.stopImmediatePropagation();
       closeNavMenus();
@@ -5251,6 +5401,7 @@
     updateAccountUI();
     renderRecommendations();
     renderListings();
+    renderMemberProfiles();
     renderRegionalProfiles();
     updateDiagnosis(false);
     if (location.hash === "#admin" || location.pathname.endsWith("/admin")) setTimeout(() => renderAdmin(""), 250);

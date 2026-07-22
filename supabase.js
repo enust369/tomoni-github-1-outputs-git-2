@@ -61,6 +61,12 @@ window.tomoniAuth = {
   listProfiles: () => client
     ? client.rpc("list_public_profiles")
     : Promise.resolve(notConfigured()),
+  listDiscoverableProfiles: () => client
+    ? client.rpc("list_discoverable_profiles")
+    : Promise.resolve(notConfigured()),
+  setDiscoverableProfileFavorite: (profileKey, desired) => client
+    ? client.rpc("set_discoverable_profile_favorite", { target_profile_key: profileKey, desired })
+    : Promise.resolve(notConfigured()),
   getListing: (id) => client
     ? client.from("listings").select("*").eq("id", id).single()
     : Promise.resolve(notConfigured()),
