@@ -913,6 +913,7 @@ as $$
          or tag like 'tomoni:profile:firstMeeting=%'
          or tag like 'tomoni:profile:talkTopic=%'
          or tag like 'tomoni:profile:meetingValue=%'
+         or tag like 'tomoni:profile:currentInterest=%'
     ), '{}'::text[]) as public_tags,
     p.is_verified,
     exists (

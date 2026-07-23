@@ -750,7 +750,8 @@
     .member-value { padding-top: 10px; border-top: 1px solid var(--line); }
     .member-value:first-child { padding-top: 0; border-top: 0; }
     .member-value-label { color: var(--muted); font-size: 12px; font-weight: 700; }
-    .member-value-text { margin-top: 3px; font-weight: 700; overflow-wrap: anywhere; }
+    .member-value-text { margin-top: 3px; font-weight: 700; overflow-wrap: anywhere; white-space: pre-wrap; }
+    .profile-value-text { white-space: pre-wrap; overflow-wrap: anywhere; }
     .profile-edit-group { grid-column: 1 / -1; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; padding: 20px; border: 1px solid var(--line); border-radius: 18px; background: var(--soft); }
     .profile-edit-group > h3,
     .profile-edit-group > .full { grid-column: 1 / -1; }
@@ -2293,7 +2294,7 @@
       const values = Array.isArray(value) ? value : value ? [value] : [];
       return [...new Set(values.flatMap((item) => item === "土日休み" ? ["土曜日", "日曜日"] : item === "平日休み" ? weekdays : [item]).filter((item) => profileOptionSets.holiday.includes(item)))];
     }
-    const emptyProfileExtras = { height: null, occupation: "", personalityNature: "", speechPreference: "", conversationStyle: "", shyness: "", firstMeetingMood: "", afterMeeting: "", reassurancePoints: [], talkTopics: [], meetingValues: [], favoriteActivities: [], holiday: [], alcohol: "", tobacco: "" };
+    const emptyProfileExtras = { height: null, occupation: "", currentInterest: "", personalityNature: "", speechPreference: "", conversationStyle: "", shyness: "", firstMeetingMood: "", afterMeeting: "", reassurancePoints: [], talkTopics: [], meetingValues: [], favoriteActivities: [], holiday: [], alcohol: "", tobacco: "" };
     const defaultState = { user: null, profileOwnerId: null, safetyOnboardingAccepted: false, dismissedChatSafety: [], saved: [], blocked: [], customListings: [], demoParticipations: [], moderation: { reports: [], blockCount: 0 }, feedbackHistory: [], profile: { nickname: "あなた", age: null, birthDate: "", gender: "女性", area: "", bio: "静かな時間を大切にしています。", tags: [], photoUrls: [], ...emptyProfileExtras, personalityType: "", personalityTitle: "", personalityDescription: "", personalityTags: [], quietScore: null, talkScore: null, comfortScore: null } };
     let appState = loadState();
     listings.splice(0, listings.length);
@@ -2399,6 +2400,9 @@
           if (profileOptionSets.talkTopics.includes(decoded) && !extras.talkTopics.includes(decoded)) extras.talkTopics.push(decoded);
         } else if (key === "meetingValue") {
           if (profileOptionSets.meetingValues.includes(decoded) && !extras.meetingValues.includes(decoded)) extras.meetingValues.push(decoded);
+        } else if (key === "currentInterest") {
+          const interest = decoded.trim();
+          if (interest.length <= 100) extras.currentInterest = interest;
         } else if (key === "talkStyle") {
           const legacyValues = { "聞く方": "聞く方が好き", "半々": "半々くらい", "話す方": "話す方が好き" };
           if (!extras.conversationStyle && profileOptionSets.conversationStyle.includes(legacyValues[decoded])) extras.conversationStyle = legacyValues[decoded];
@@ -2420,6 +2424,8 @@
       ["occupation", "personalityNature", "speechPreference", "conversationStyle", "shyness", "firstMeetingMood", "afterMeeting", "alcohol", "tobacco"].forEach((key) => {
         if (profileOptionSets[key].includes(extras[key])) add(key, extras[key]);
       });
+      const currentInterest = String(extras.currentInterest || "").trim();
+      if (currentInterest.length <= 100) add("currentInterest", currentInterest);
       (extras.reassurancePoints || []).filter((value) => profileOptionSets.reassurancePoints.includes(value)).forEach((value) => add("reassurancePoint", value));
       (extras.talkTopics || []).filter((value) => profileOptionSets.talkTopics.includes(value)).forEach((value) => add("talkTopic", value));
       (extras.meetingValues || []).filter((value) => profileOptionSets.meetingValues.includes(value)).forEach((value) => add("meetingValue", value));
@@ -3015,6 +3021,7 @@
         photoUrl: String(row.photo_urls?.[0] || ""),
         bio: String(row.bio || ""),
         occupation: decoded.extras.occupation || "",
+        currentInterest: decoded.extras.currentInterest || "",
         personalityNature: decoded.extras.personalityNature || "",
         speechPreference: decoded.extras.speechPreference || "",
         conversationStyle: decoded.extras.conversationStyle || "",
@@ -3039,7 +3046,12 @@
       ].join("");
     }
 
-    function memberValuesMarkup(profile) {
+    function truncateProfileText(value, maximum = 50) {
+      const text = String(value || "");
+      return text.length > maximum ? `${text.slice(0, maximum)}…` : text;
+    }
+
+    function memberValuesMarkup(profile, compact = false) {
       const values = [
         profile.personalityNature ? ["性格", profile.personalityNature] : null,
         profile.speechPreference ? ["話し方", profile.speechPreference] : null,
@@ -3051,8 +3063,9 @@
       const reassurance = profile.reassurancePoints?.length ? `<div class="member-value"><p class="member-value-label">初対面で安心してもらうために</p><ul class="profile-value-list">${profile.reassurancePoints.map((value) => `<li>${esc(value)}</li>`).join("")}</ul></div>` : "";
       const talkTopics = profile.talkTopics?.length ? `<div class="member-value"><p class="member-value-label">話したいこと・相談したいこと</p><ul class="profile-value-list">${profile.talkTopics.map((value) => `<li>${esc(value)}</li>`).join("")}</ul></div>` : "";
       const meetingValues = profile.meetingValues?.length ? `<div class="member-value"><p class="member-value-label">会う時に大切にしたいこと</p><ul class="profile-value-list">${profile.meetingValues.map((value) => `<li>${esc(value)}</li>`).join("")}</ul></div>` : "";
-      if (!values.length && !reassurance && !talkTopics && !meetingValues) return "";
-      return `<div class="member-values">${values.map(([label, value]) => `<div class="member-value"><p class="member-value-label">${esc(label)}</p><p class="member-value-text">${esc(value)}</p></div>`).join("")}${reassurance}${talkTopics}${meetingValues}</div>`;
+      const currentInterest = profile.currentInterest ? `<div class="member-value"><p class="member-value-label">最近ハマっていること</p><p class="member-value-text">${esc(compact ? truncateProfileText(profile.currentInterest) : profile.currentInterest)}</p></div>` : "";
+      if (!values.length && !reassurance && !talkTopics && !meetingValues && !currentInterest) return "";
+      return `<div class="member-values">${values.map(([label, value]) => `<div class="member-value"><p class="member-value-label">${esc(label)}</p><p class="member-value-text">${esc(value)}</p></div>`).join("")}${currentInterest}${reassurance}${talkTopics}${meetingValues}</div>`;
     }
 
     function renderMemberProfiles() {
@@ -3076,7 +3089,7 @@
           ${profile.photoUrl ? `<img class="member-card-photo" src="${esc(profile.photoUrl)}" alt="${esc(profile.nickname)}さんのプロフィール写真">` : `<div class="member-card-photo member-card-photo-placeholder" aria-hidden="true">${esc(profile.nickname.slice(0, 1) || "と")}</div>`}
           <div><h3>${esc(profile.nickname)}さん</h3><p class="meta">${esc(formatAge(profile.age))}${profile.area ? ` / ${esc(profile.area)}` : ""}</p>${profile.verified ? `<span class="badge">本人確認済み</span>` : ""}</div>
         </div>
-        ${memberValuesMarkup(profile)}
+        ${memberValuesMarkup(profile, true)}
         ${memberProfileChips(profile) ? `<div class="chips">${memberProfileChips(profile)}</div>` : ""}
         ${profile.bio ? `<p class="member-card-bio">${esc(profile.bio)}</p>` : ""}
         <div class="actions"><button class="btn small primary" data-action="open-member-profile" data-profile-key="${esc(profile.profileKey)}">プロフィールを見る</button><button class="btn small" data-action="toggle-member-favorite" data-profile-key="${esc(profile.profileKey)}">${profile.isFavorite ? "気になる済み" : "気になる"}</button></div>
@@ -3435,6 +3448,11 @@
     });
     [document.getElementById("listingTitle"), document.getElementById("place")].forEach((field) => field.addEventListener("input", analyzeSafety));
     document.getElementById("privateMeetingNote").addEventListener("input", (event) => { document.getElementById("meetingNoteCount").textContent = String(event.target.value.length); });
+    document.addEventListener("input", (event) => {
+      if (event.target.id !== "profileCurrentInterest") return;
+      const counter = document.getElementById("profileCurrentInterestCount");
+      if (counter) counter.textContent = String(event.target.value.length);
+    });
     document.querySelectorAll("[data-gender]").forEach((button) => {
       button.addEventListener("click", () => {
         currentGender = button.dataset.gender;
@@ -3522,6 +3540,7 @@
       document.getElementById("profilePersonalityDescription").textContent = appState.profile.personalityDescription || "診断すると、あなたが心地よく過ごしやすい空気感がここに表示されます。";
       document.getElementById("profilePersonalityTags").innerHTML = appState.profile.personalityTags?.length ? appState.profile.personalityTags.map((tag) => `<span class="badge muted">${esc(tag)}</span>`).join("") : `<span class="meta">診断タグはまだありません。</span>`;
       const preferenceItems = [
+        appState.profile.currentInterest ? ["最近ハマっていること", appState.profile.currentInterest, "multiline"] : null,
         appState.profile.personalityNature ? ["性格", appState.profile.personalityNature, "text"] : null,
         appState.profile.speechPreference ? ["話し方", appState.profile.speechPreference, "text"] : null,
         appState.profile.conversationStyle ? ["会話スタイル", appState.profile.conversationStyle, "text"] : null,
@@ -3537,7 +3556,7 @@
         appState.profile.tobacco ? ["タバコ", appState.profile.tobacco, "text"] : null
       ].filter(Boolean);
       const preferencesElement = document.getElementById("profilePreferences");
-      preferencesElement.innerHTML = preferenceItems.map(([label, value, display]) => `<div class="profile-preference-block"><p class="profile-preference-label">${esc(label)}</p>${display === "chips" ? `<div class="chips">${value.map((item) => `<span class="badge muted">${esc(item)}</span>`).join("")}</div>` : display === "list" ? `<ul class="profile-value-list">${value.map((item) => `<li>${esc(item)}</li>`).join("")}</ul>` : `<p><strong>${esc(value)}</strong></p>`}</div>`).join("");
+      preferencesElement.innerHTML = preferenceItems.map(([label, value, display]) => `<div class="profile-preference-block"><p class="profile-preference-label">${esc(label)}</p>${display === "chips" ? `<div class="chips">${value.map((item) => `<span class="badge muted">${esc(item)}</span>`).join("")}</div>` : display === "list" ? `<ul class="profile-value-list">${value.map((item) => `<li>${esc(item)}</li>`).join("")}</ul>` : display === "multiline" ? `<p class="profile-value-text"><strong>${esc(value)}</strong></p>` : `<p><strong>${esc(value)}</strong></p>`}</div>`).join("");
       preferencesElement.hidden = preferenceItems.length === 0;
       const photos = appState.profile.photoUrls || [];
       document.getElementById("profilePhotos").innerHTML = photos.length ? photos.map((url, index) => `<img class="profile-photo" src="${esc(url)}" alt="プロフィール写真 ${index + 1}">`).join("") : `<div class="profile-photo profile-photo-placeholder">${esc((appState.profile.nickname || "と").slice(0, 1))}</div>`;
@@ -3877,6 +3896,7 @@
         else if (field.id === "passwordUpdateConfirm" && field.value !== form.querySelector("#passwordUpdateNew")?.value) message = "パスワードが一致しません。";
         else if (["authBirthdate", "profileBirthDate", "requiredBirthDate"].includes(field.id) && !isAdult(field.value)) message = "18歳以上の正しい生年月日を入力してください。";
         else if (field.id === "profileHeight" && field.value && (!Number.isInteger(Number(field.value)) || Number(field.value) < 100 || Number(field.value) > 250)) message = "身長は100～250cmの整数で入力してください。";
+        else if (field.id === "profileCurrentInterest" && field.value.length > 100) message = "最近ハマっていることは100文字以内で入力してください。";
         else if (["authNickname", "authBio", "profileNickname", "profileBio"].includes(field.id) && containsPrivateInfo(field.value)) message = "電話番号・メール・住所・SNSは公開プロフィールに入力できません。";
         field.setAttribute("aria-invalid", message ? "true" : "false");
         if (error) error.textContent = message;
@@ -4781,6 +4801,7 @@
             <div class="field"><label for="profileHeight">身長（任意）</label><input id="profileHeight" name="height" type="number" min="100" max="250" step="1" inputmode="numeric" placeholder="例：165" value="${esc(appState.profile.height || "")}"><p class="meta">100～250cmで入力してください。</p><span class="field-error"></span></div>
             <div class="field"><label for="profileOccupation">職業（任意）</label><select id="profileOccupation" name="occupation">${selectOptions(profileOptionSets.occupation, appState.profile.occupation)}</select></div>
             <div class="field full"><label for="profileBio">自己紹介（300文字まで）</label><textarea id="profileBio" name="bio" maxlength="300" required>${esc(appState.profile.bio)}</textarea><span class="field-error"></span></div>
+            <div class="field full"><label for="profileCurrentInterest">最近ハマっていること（任意）</label><textarea id="profileCurrentInterest" name="currentInterest" maxlength="100" rows="2" placeholder="例：休日はカフェ巡りをしています。最近は抹茶ラテにハマっています☕">${esc(appState.profile.currentInterest || "")}</textarea><div class="meta"><span id="profileCurrentInterestCount">${String(appState.profile.currentInterest || "").length}</span> / 100</div><span class="field-error"></span></div>
           </div>
           <div class="profile-edit-group">
             <h3>人柄</h3>
@@ -5000,6 +5021,7 @@
           const profileExtras = {
             height: heightValue ? Number(heightValue) : null,
             occupation: String(formData.get("occupation") || ""),
+            currentInterest: String(formData.get("currentInterest") || "").trim(),
             personalityNature: String(formData.get("personalityNature") || ""),
             speechPreference: String(formData.get("speechPreference") || ""),
             conversationStyle: String(formData.get("conversationStyle") || ""),
