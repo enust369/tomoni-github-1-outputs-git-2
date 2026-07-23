@@ -1671,15 +1671,7 @@
               <label for="place">場所</label>
               <input id="place" type="text" maxlength="100" placeholder="例：高知駅前 / スターバックス帯屋町店 / イオン高知 / 待ち合わせ後に相談"><span class="field-error"></span>
               <p class="meta">初めて会う方とは、駅・カフェ・商業施設など、人の多い公共の場所で待ち合わせすることをおすすめします。</p>
-              <div class="chips" aria-label="場所の入力候補">
-                <button class="chip" type="button" data-action="set-place-suggestion" data-place="高知駅">高知駅</button>
-                <button class="chip" type="button" data-action="set-place-suggestion" data-place="高知城">高知城</button>
-                <button class="chip" type="button" data-action="set-place-suggestion" data-place="イオン高知">イオン高知</button>
-                <button class="chip" type="button" data-action="set-place-suggestion" data-place="スターバックス">スターバックス</button>
-                <button class="chip" type="button" data-action="set-place-suggestion" data-place="蔦屋書店">蔦屋書店</button>
-                <button class="chip" type="button" data-action="set-place-suggestion" data-place="ひろめ市場">ひろめ市場</button>
-                <button class="chip" type="button" data-action="set-place-suggestion" data-place="待ち合わせ後に相談">待ち合わせ後に相談</button>
-              </div>
+              <div class="chips" id="placeSuggestions" aria-label="場所の入力候補"></div>
             </div>
             <div class="field">
               <label for="date">日時</label>
@@ -2356,6 +2348,12 @@
       "沖縄県": ["那覇市", "宜野湾市", "石垣市", "浦添市", "名護市", "糸満市", "沖縄市", "豊見城市", "うるま市", "宮古島市"]
     };
     const prefectureOptions = Object.keys(MUNICIPALITIES_BY_PREFECTURE);
+    const PLACE_SUGGESTIONS = {
+      kochiCity: ["高知駅", "帯屋町", "イオンモール高知", "高知蔦屋書店", "ひろめ市場", "中央公園", "待ち合わせ後に相談"],
+      tokyo: ["東京駅", "新宿駅", "渋谷駅", "上野駅", "駅近くのカフェ", "商業施設の入口", "待ち合わせ後に相談"],
+      osaka: ["大阪駅", "梅田駅", "なんば駅", "天王寺駅", "駅近くのカフェ", "商業施設の入口", "待ち合わせ後に相談"],
+      default: ["最寄り駅", "駅近くのカフェ", "商業施設の入口", "公共施設の入口", "人の多い待ち合わせ場所", "待ち合わせ後に相談"]
+    };
     const DURATION_OPTIONS = ["5分", "10分", "15分", "20分", "30分", "45分", "1時間", "1時間30分", "2時間", "時間を決めない"];
     const DURATION_PATTERN = /(時間を決めない|1時間30分|[12]時間|45分|30分|20分|15分|10分|5分)$/;
 
@@ -2531,14 +2529,39 @@
       const citySelect = document.getElementById(cityId);
       if (!citySelect) return;
       citySelect.innerHTML = optionMarkup(prefecture && prefecture !== "all" ? (MUNICIPALITIES_BY_PREFECTURE[prefecture] || []) : [], selectedCity, includeAll);
+      if (prefectureId === "listingPrefecture" && cityId === "listingCity") renderPlaceSuggestions();
+    }
+    function listingPlaceSuggestions(prefecture, city) {
+      if (prefecture === "高知県" && city === "高知市") return PLACE_SUGGESTIONS.kochiCity;
+      if (prefecture === "東京都") return PLACE_SUGGESTIONS.tokyo;
+      if (prefecture === "大阪府") return PLACE_SUGGESTIONS.osaka;
+      return PLACE_SUGGESTIONS.default;
+    }
+    function renderPlaceSuggestions() {
+      const container = document.getElementById("placeSuggestions");
+      if (!container) return;
+      const prefecture = document.getElementById("listingPrefecture")?.value || "";
+      const city = document.getElementById("listingCity")?.value || "";
+      const buttons = listingPlaceSuggestions(prefecture, city).map((place) => {
+        const button = document.createElement("button");
+        button.className = "chip";
+        button.type = "button";
+        button.dataset.action = "set-place-suggestion";
+        button.dataset.place = place;
+        button.textContent = place;
+        return button;
+      });
+      container.replaceChildren(...buttons);
     }
     function setupAreaSelects() {
       const listingPrefecture = document.getElementById("listingPrefecture");
+      const listingCity = document.getElementById("listingCity");
       const searchPrefecture = document.getElementById("searchPrefecture");
       if (listingPrefecture) {
         listingPrefecture.innerHTML = optionMarkup(prefectureOptions);
         populateCitySelect("listingPrefecture", "listingCity");
         listingPrefecture.addEventListener("change", () => populateCitySelect("listingPrefecture", "listingCity"));
+        listingCity?.addEventListener("change", renderPlaceSuggestions);
       }
       if (searchPrefecture) {
         searchPrefecture.innerHTML = optionMarkup(prefectureOptions, "all", true);
@@ -2610,7 +2633,7 @@
       const hits = dangerWords.filter((word) => checkedText.includes(word));
       const hasPrivateInfo = containsPrivateInfo(checkedText);
       const place = document.getElementById("place").value;
-      const isCoarsePlace = /(駅|公園|カフェ|公共施設|商業施設|入口|近く|前|広場|城|イオン|スターバックス|書店|市場|待ち合わせ後に相談)/.test(place);
+      const isCoarsePlace = /(駅|公園|カフェ|公共施設|商業施設|入口|近く|前|広場|城|イオン|スターバックス|書店|市場|帯屋町|待ち合わせ場所|待ち合わせ後に相談|場所未定)/.test(place);
       const blocked = hits.length > 0 || hasPrivateInfo || (place.trim() && !isCoarsePlace);
       const message = hits.length ? `「${hits.join("・")}」を含むため公開できません。公共の場所へ変更してください。` : hasPrivateInfo ? "連絡先・住所・SNSは公開できません。削除してください。" : !isCoarsePlace && place.trim() ? "待ち合わせ場所は「駅近く」「公園入口」「カフェ前」程度にしてください。" : "安全に配慮された内容です。正確な位置は予定が決まった後に共有されます。";
       const status = document.getElementById("safetyCheck");
