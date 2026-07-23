@@ -1667,9 +1667,19 @@
               <label for="listingCity">市区町村</label>
               <select id="listingCity" required></select><span class="field-error"></span>
             </div>
-            <div class="field">
+            <div class="field full">
               <label for="place">場所</label>
-              <input id="place" value="新宿御苑の入口近く" required><span class="field-error"></span>
+              <input id="place" type="text" maxlength="100" placeholder="例：高知駅前 / スターバックス帯屋町店 / イオン高知 / 待ち合わせ後に相談"><span class="field-error"></span>
+              <p class="meta">初めて会う方とは、駅・カフェ・商業施設など、人の多い公共の場所で待ち合わせすることをおすすめします。</p>
+              <div class="chips" aria-label="場所の入力候補">
+                <button class="chip" type="button" data-action="set-place-suggestion" data-place="高知駅">高知駅</button>
+                <button class="chip" type="button" data-action="set-place-suggestion" data-place="高知城">高知城</button>
+                <button class="chip" type="button" data-action="set-place-suggestion" data-place="イオン高知">イオン高知</button>
+                <button class="chip" type="button" data-action="set-place-suggestion" data-place="スターバックス">スターバックス</button>
+                <button class="chip" type="button" data-action="set-place-suggestion" data-place="蔦屋書店">蔦屋書店</button>
+                <button class="chip" type="button" data-action="set-place-suggestion" data-place="ひろめ市場">ひろめ市場</button>
+                <button class="chip" type="button" data-action="set-place-suggestion" data-place="待ち合わせ後に相談">待ち合わせ後に相談</button>
+              </div>
             </div>
             <div class="field">
               <label for="date">日時</label>
@@ -1688,9 +1698,6 @@
             <div class="field">
               <label>参加できる人</label>
               <div class="safety-check">TOMONIは同性同士が安心して会えるサービスです。<br>この募集は、あなたと同じ性別の方にのみ表示されます。</div>
-            </div>
-            <div class="field full">
-              <p class="meta">初めて会う方とは公共の場所で会うことをおすすめします。</p>
             </div>
             <div class="field full">
               <div class="safety-check" id="safetyCheck" role="status">公開前に、場所・募集文の安全性を確認します。</div>
@@ -2603,7 +2610,7 @@
       const hits = dangerWords.filter((word) => checkedText.includes(word));
       const hasPrivateInfo = containsPrivateInfo(checkedText);
       const place = document.getElementById("place").value;
-      const isCoarsePlace = /(駅|公園|カフェ|公共施設|入口|近く|前|広場)/.test(place);
+      const isCoarsePlace = /(駅|公園|カフェ|公共施設|商業施設|入口|近く|前|広場|城|イオン|スターバックス|書店|市場|待ち合わせ後に相談)/.test(place);
       const blocked = hits.length > 0 || hasPrivateInfo || (place.trim() && !isCoarsePlace);
       const message = hits.length ? `「${hits.join("・")}」を含むため公開できません。公共の場所へ変更してください。` : hasPrivateInfo ? "連絡先・住所・SNSは公開できません。削除してください。" : !isCoarsePlace && place.trim() ? "待ち合わせ場所は「駅近く」「公園入口」「カフェ前」程度にしてください。" : "安全に配慮された内容です。正確な位置は予定が決まった後に共有されます。";
       const status = document.getElementById("safetyCheck");
@@ -3395,7 +3402,7 @@
         duration: document.getElementById("duration").value,
         prefecture: document.getElementById("listingPrefecture").value,
         city: document.getElementById("listingCity").value,
-        place: document.getElementById("place").value.trim(),
+        place: document.getElementById("place").value.trim() || "待ち合わせ後に相談",
         scheduled_at: new Date(document.getElementById("date").value).toISOString(),
         capacity: Number(document.getElementById("capacity").value),
         audience: "same_gender",
@@ -3896,6 +3903,7 @@
         else if (field.id === "passwordUpdateConfirm" && field.value !== form.querySelector("#passwordUpdateNew")?.value) message = "パスワードが一致しません。";
         else if (["authBirthdate", "profileBirthDate", "requiredBirthDate"].includes(field.id) && !isAdult(field.value)) message = "18歳以上の正しい生年月日を入力してください。";
         else if (field.id === "profileHeight" && field.value && (!Number.isInteger(Number(field.value)) || Number(field.value) < 100 || Number(field.value) > 250)) message = "身長は100～250cmの整数で入力してください。";
+        else if (field.id === "place" && field.value.length > 100) message = "場所は100文字以内で入力してください。";
         else if (field.id === "profileCurrentInterest" && field.value.length > 100) message = "最近ハマっていることは100文字以内で入力してください。";
         else if (["authNickname", "authBio", "profileNickname", "profileBio"].includes(field.id) && containsPrivateInfo(field.value)) message = "電話番号・メール・住所・SNSは公開プロフィールに入力できません。";
         field.setAttribute("aria-invalid", message ? "true" : "false");
@@ -5079,6 +5087,12 @@
       if (!button) return;
       const action = button.dataset.action;
       if (action === "close-modal") closeModal();
+      if (action === "set-place-suggestion") {
+        const placeField = document.getElementById("place");
+        placeField.value = button.dataset.place || "";
+        placeField.dispatchEvent(new Event("input", { bubbles: true }));
+        placeField.focus();
+      }
       if (action === "confirm-safety-start") {
         appState.safetyOnboardingAccepted = true; saveState(); safetyGateActive = false; closeModal(); toast("確認ありがとうございます。安心して始めましょう。"); setTimeout(promptForBirthDateIfNeeded, 0);
       }
