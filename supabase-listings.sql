@@ -911,6 +911,8 @@ as $$
          or tag like 'tomoni:profile:reassurancePoint=%'
          or tag like 'tomoni:profile:talkStyle=%'
          or tag like 'tomoni:profile:firstMeeting=%'
+         or tag like 'tomoni:profile:talkTopic=%'
+         or tag like 'tomoni:profile:meetingValue=%'
     ), '{}'::text[]) as public_tags,
     p.is_verified,
     exists (

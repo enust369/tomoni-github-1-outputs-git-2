@@ -1,7 +1,6 @@
--- TOMONI 登録者一覧の安全な取得と「気になる」操作を追加します。
+-- TOMONI「話したいこと」と「会う時に大切にしたいこと」を登録者一覧へ反映します。
 -- Supabase SQL Editorへ、このファイル全体を貼り付けて実行してください。
-
-alter table public.favorites alter column listing_id drop not null;
+-- DBカラムは追加せず、既存 profiles.tags の公開許可対象だけを更新します。
 
 create or replace function public.list_discoverable_profiles()
 returns table (
@@ -74,58 +73,3 @@ $$;
 
 revoke all on function public.list_discoverable_profiles() from public, anon, authenticated;
 grant execute on function public.list_discoverable_profiles() to authenticated;
-
-create or replace function public.set_discoverable_profile_favorite(
-  target_profile_key text,
-  desired boolean
-)
-returns boolean
-language plpgsql
-security definer
-set search_path = public, pg_temp
-as $$
-declare
-  current_user_id uuid := auth.uid();
-  v_target_user_id uuid;
-begin
-  if current_user_id is null then
-    raise exception 'ログインが必要です。';
-  end if;
-
-  select p.user_id
-  into v_target_user_id
-  from public.profiles p
-  join auth.users u on u.id = p.user_id
-  where md5(p.user_id::text || ':tomoni-member-v1') = target_profile_key
-    and p.user_id <> current_user_id
-    and p.nickname <> ''
-    and p.area <> ''
-    and p.bio <> ''
-    and p.gender in ('女性', '男性')
-    and u.email_confirmed_at is not null
-    and u.deleted_at is null
-    and (u.banned_until is null or u.banned_until <= now())
-    and public.same_gender_users(current_user_id, p.user_id)
-    and public.users_not_blocked(current_user_id, p.user_id)
-  limit 1;
-
-  if v_target_user_id is null then
-    raise exception 'このプロフィールは表示できません。';
-  end if;
-
-  if coalesce(desired, false) then
-    insert into public.favorites (user_id, target_user_id, listing_id)
-    values (current_user_id, v_target_user_id, null)
-    on conflict (user_id, target_user_id) where target_user_id is not null do nothing;
-  else
-    delete from public.favorites
-    where user_id = current_user_id
-      and favorites.target_user_id = v_target_user_id;
-  end if;
-
-  return coalesce(desired, false);
-end;
-$$;
-
-revoke all on function public.set_discoverable_profile_favorite(text, boolean) from public, anon, authenticated;
-grant execute on function public.set_discoverable_profile_favorite(text, boolean) to authenticated;
