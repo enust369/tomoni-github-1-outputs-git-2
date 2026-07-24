@@ -627,6 +627,30 @@
       color: var(--ink);
     }
 
+    .home-stats-card {
+      display: grid;
+      gap: 16px;
+      padding: 22px 24px;
+      border-top: 3px solid var(--leaf);
+      background: #ffffff;
+      box-shadow: var(--shadow-soft);
+    }
+    .home-stats-card h2 { font-size: 20px; color: var(--ink); }
+    .home-stats-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+    }
+    .home-stat-item {
+      min-width: 0;
+      padding: 14px 16px;
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      background: var(--soft);
+    }
+    .home-stat-label { display: block; color: var(--muted); font-size: 13px; line-height: 1.5; }
+    .home-stat-value { display: block; margin-top: 5px; color: var(--leaf); font-size: 22px; line-height: 1.3; }
+
     .home-main-actions {
       display: grid;
       grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -1360,6 +1384,10 @@
       .home-welcome h1 { font-size: clamp(28px, 9vw, 38px); }
       .home-safety-card { padding: 20px; }
       .home-safety-list { grid-template-columns: 1fr; }
+      .home-stats-card { padding: 18px; }
+      .home-stats-grid { gap: 10px; }
+      .home-stat-item { padding: 13px 12px; }
+      .home-stat-value { font-size: 20px; }
       .home-main-actions,
       .home-summary-grid { grid-template-columns: 1fr; }
       .home-primary-action { min-height: 62px; }
@@ -1494,6 +1522,16 @@
               <p>あなたのペースで、安心して過ごせる時間を大切にしています。</p>
             </div>
           </header>
+
+          <article class="card home-stats-card" aria-labelledby="homeStatsHeading">
+            <h2 id="homeStatsHeading">今日のTOMONI</h2>
+            <div class="home-stats-grid" aria-live="polite">
+              <div class="home-stat-item"><span class="home-stat-label">📍 今日の募集</span><strong class="home-stat-value" id="homeTodayListings">--</strong></div>
+              <div class="home-stat-item"><span class="home-stat-label">🙋 今日会える募集</span><strong class="home-stat-value" id="homeTodayAvailableListings">--</strong></div>
+              <div class="home-stat-item"><span class="home-stat-label">✨ 今週成立したマッチ</span><strong class="home-stat-value" id="homeWeekMatches">--</strong></div>
+              <div class="home-stat-item"><span class="home-stat-label">🕒 最終更新</span><strong class="home-stat-value" id="homeStatsUpdatedAt">--</strong></div>
+            </div>
+          </article>
 
           <article class="card home-safety-card">
             <h2>🛡 安心して利用できる仕組み</h2>
@@ -2232,6 +2270,9 @@
     let currentChatChannel = null;
     let currentChatSyncTimer = null;
     let ageRefreshTimer = null;
+    let homeStats = { todayListings: null, todayAvailableListings: null, weekMatches: null, fetchedAt: null };
+    let homeStatsRequest = null;
+    let homeStatsClockTimer = null;
     let chatRealtimeSubscribed = false;
     let currentChatMessages = new Map();
     let participatingListingIds = new Set();
@@ -2742,6 +2783,7 @@
       });
       if (tab.id === "recruit-managed") renderManaged();
       if (tab.id === "recruit-participating") renderParticipating();
+      if (tab.id === "home-recommended") void loadHomeStats();
       if (options.persist !== false) saveTabState(category, tab.id);
       if (options.scroll !== false) document.getElementById(tab.sections[0])?.scrollIntoView({ behavior: "smooth", block: "start" });
     }
@@ -2830,6 +2872,51 @@
     function renderDailyMessage() {
       const index = new Date().getDate() % dailyMessages.length;
       document.getElementById("dailyMessage").textContent = dailyMessages[index];
+    }
+
+    function homeStatCountText(value) {
+      return Number.isInteger(value) && value >= 0 ? `${value.toLocaleString("ja-JP")}件` : "--";
+    }
+
+    function homeStatsUpdatedText(value) {
+      const timestamp = value ? new Date(value).getTime() : NaN;
+      if (!Number.isFinite(timestamp)) return "--";
+      const elapsedSeconds = Math.max(0, Math.floor((Date.now() - timestamp) / 1000));
+      if (elapsedSeconds <= 30) return "たった今";
+      return `${Math.max(1, Math.floor(elapsedSeconds / 60))}分前`;
+    }
+
+    function renderHomeStats() {
+      document.getElementById("homeTodayListings").textContent = homeStatCountText(homeStats.todayListings);
+      document.getElementById("homeTodayAvailableListings").textContent = homeStatCountText(homeStats.todayAvailableListings);
+      document.getElementById("homeWeekMatches").textContent = homeStatCountText(homeStats.weekMatches);
+      document.getElementById("homeStatsUpdatedAt").textContent = homeStatsUpdatedText(homeStats.fetchedAt);
+    }
+
+    async function loadHomeStats() {
+      if (homeStatsRequest) return homeStatsRequest;
+      homeStatsRequest = (async () => {
+        try {
+          const result = await window.tomoniAuth?.getHomeStats?.();
+          const row = Array.isArray(result?.data) ? result.data[0] : result?.data;
+          if (result?.error || !row) throw result?.error || new Error("統計データを取得できませんでした。");
+          const numberOrNull = (value) => {
+            const number = Number(value);
+            return Number.isInteger(number) && number >= 0 ? number : null;
+          };
+          homeStats = {
+            todayListings: numberOrNull(row.today_listings),
+            todayAvailableListings: numberOrNull(row.today_available_listings),
+            weekMatches: numberOrNull(row.week_matches),
+            fetchedAt: row.fetched_at || null
+          };
+        } catch {
+          homeStats = { todayListings: null, todayAvailableListings: null, weekMatches: null, fetchedAt: null };
+        }
+        renderHomeStats();
+        if (!homeStatsClockTimer) homeStatsClockTimer = setInterval(renderHomeStats, 30000);
+      })().finally(() => { homeStatsRequest = null; });
+      return homeStatsRequest;
     }
 
     function syncTodayOpen() {
@@ -3460,6 +3547,7 @@
       currentGender = appState.profile.gender;
       syncGenderControls();
       await loadSupabaseListings();
+      await loadHomeStats();
       document.getElementById("createForm").reset();
       setupActivityInputs();
       populateCitySelect("listingPrefecture", "listingCity");
@@ -5226,7 +5314,7 @@
         const result = await window.tomoniAuth?.endAdminListing?.(button.dataset.id);
         setLoading(false);
         if (result?.error) { toast(`募集を終了できませんでした：${result.error.message}`); return; }
-        closeModal(); await renderAdmin(); await loadSupabaseListings(); toast("募集を終了しました。");
+        closeModal(); await renderAdmin(); await loadSupabaseListings(); await loadHomeStats(); toast("募集を終了しました。");
       }
       if (action === "admin-delete-listing") openModal("募集を削除しますか？", `<p>この操作は取り消せません。関連する参加・チャット情報も削除される場合があります。</p><div class="actions"><button class="btn primary" data-action="confirm-admin-delete-listing" data-id="${esc(button.dataset.id)}">削除する</button><button class="btn" data-action="close-modal">戻る</button></div>`);
       if (action === "confirm-admin-delete-listing") {
@@ -5234,7 +5322,7 @@
         const result = await window.tomoniAuth?.deleteAdminListing?.(button.dataset.id);
         setLoading(false);
         if (result?.error) { toast(`募集を削除できませんでした：${result.error.message}`); return; }
-        closeModal(); await renderAdmin(); await loadSupabaseListings(); toast("募集を削除しました。");
+        closeModal(); await renderAdmin(); await loadSupabaseListings(); await loadHomeStats(); toast("募集を削除しました。");
       }
       if (action === "admin-unblock") openModal("ブロックを解除しますか？", `<p>このブロック状態を解除します。</p><div class="actions"><button class="btn primary" data-action="confirm-admin-unblock" data-id="${esc(button.dataset.id)}">解除する</button><button class="btn" data-action="close-modal">戻る</button></div>`);
       if (action === "confirm-admin-unblock") {
@@ -5471,6 +5559,7 @@
         if (!result?.data || result.data.status !== "ended") { closeModal(); toast("募集を終了できませんでした。募集状態を再確認してください。"); await loadSupabaseListings(); return; }
         closeModal();
         await loadSupabaseListings();
+        await loadHomeStats();
         toast("募集を終了しました");
       }
       if (action === "delete-listing") openModal("募集を削除しますか？", `<p>削除した募集は一覧に表示されなくなります。</p><div class="actions"><button class="btn primary" data-action="confirm-delete" data-id="${button.dataset.id}">削除する</button><button class="btn" data-action="close-modal">戻る</button></div>`);
@@ -5479,9 +5568,9 @@
         const result = await window.tomoniAuth.deleteListing(button.dataset.id);
         setLoading(false);
         if (result.error) { toast(`削除できませんでした：${result.error.message}`); return; }
-        closeModal(); await loadSupabaseListings(); renderManaged(); toast("募集を削除しました。");
+        closeModal(); await loadSupabaseListings(); await loadHomeStats(); renderManaged(); toast("募集を削除しました。");
       }
-      if (action === "retry") withLoading(() => { jumpTo("home"); toast("読み込み直しました。"); });
+      if (action === "retry") withLoading(async () => { jumpTo("home"); await loadHomeStats(); toast("読み込み直しました。"); });
     });
 
     modalBackdrop.addEventListener("click", (event) => { if (event.target === modalBackdrop) closeModal(); });
@@ -5523,6 +5612,9 @@
       queueAuthSynchronization(event.detail?.event, event.detail?.session);
     });
     window.addEventListener("tomoni:auth-ready", restoreSupabaseUser);
+    document.addEventListener("visibilitychange", () => {
+      if (document.visibilityState === "visible" && activeTabId === "home-recommended") void loadHomeStats();
+    });
     document.addEventListener("click", (event) => {
       const protectedLink = event.target.closest('[data-jump="create"], [data-jump="members"], [data-jump="region"]');
       if (!protectedLink || hasMemberAccess()) return;

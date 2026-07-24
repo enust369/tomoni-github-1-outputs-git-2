@@ -58,6 +58,9 @@ window.tomoniAuth = {
   listListings: () => client
     ? client.from("listings").select("*").order("created_at", { ascending: false })
     : Promise.resolve(notConfigured()),
+  getHomeStats: () => client
+    ? client.rpc("get_home_stats")
+    : Promise.resolve(notConfigured()),
   listProfiles: () => client
     ? client.rpc("list_public_profiles")
     : Promise.resolve(notConfigured()),
