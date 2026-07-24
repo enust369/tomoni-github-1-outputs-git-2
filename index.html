@@ -1669,7 +1669,7 @@
             </div>
             <div class="field full">
               <label for="place">場所</label>
-              <input id="place" type="text" maxlength="100" placeholder="例：高知駅前 / スターバックス帯屋町店 / イオン高知 / 待ち合わせ後に相談"><span class="field-error"></span>
+              <input id="place" type="text" maxlength="100" placeholder="例：最寄り駅 / 駅近くのカフェ / 商業施設の入口 / 待ち合わせ後に相談"><span class="field-error"></span>
               <p class="meta">初めて会う方とは、駅・カフェ・商業施設など、人の多い公共の場所で待ち合わせすることをおすすめします。</p>
               <div class="chips" id="placeSuggestions" aria-label="場所の入力候補"></div>
             </div>
@@ -2354,6 +2354,12 @@
       osaka: ["大阪駅", "梅田駅", "なんば駅", "天王寺駅", "駅近くのカフェ", "商業施設の入口", "待ち合わせ後に相談"],
       default: ["最寄り駅", "駅近くのカフェ", "商業施設の入口", "公共施設の入口", "人の多い待ち合わせ場所", "待ち合わせ後に相談"]
     };
+    const PLACE_PLACEHOLDERS = {
+      kochiCity: "例：高知駅前 / 帯屋町 / イオンモール高知 / 待ち合わせ後に相談",
+      tokyo: "例：東京駅 / 新宿駅 / 駅近くのカフェ / 待ち合わせ後に相談",
+      osaka: "例：大阪駅 / なんば駅 / 駅近くのカフェ / 待ち合わせ後に相談",
+      default: "例：最寄り駅 / 駅近くのカフェ / 商業施設の入口 / 待ち合わせ後に相談"
+    };
     const DURATION_OPTIONS = ["5分", "10分", "15分", "20分", "30分", "45分", "1時間", "1時間30分", "2時間", "時間を決めない"];
     const DURATION_PATTERN = /(時間を決めない|1時間30分|[12]時間|45分|30分|20分|15分|10分|5分)$/;
 
@@ -2531,18 +2537,21 @@
       citySelect.innerHTML = optionMarkup(prefecture && prefecture !== "all" ? (MUNICIPALITIES_BY_PREFECTURE[prefecture] || []) : [], selectedCity, includeAll);
       if (prefectureId === "listingPrefecture" && cityId === "listingCity") renderPlaceSuggestions();
     }
-    function listingPlaceSuggestions(prefecture, city) {
-      if (prefecture === "高知県" && city === "高知市") return PLACE_SUGGESTIONS.kochiCity;
-      if (prefecture === "東京都") return PLACE_SUGGESTIONS.tokyo;
-      if (prefecture === "大阪府") return PLACE_SUGGESTIONS.osaka;
-      return PLACE_SUGGESTIONS.default;
+    function listingPlaceRegionKey(prefecture, city) {
+      if (prefecture === "高知県" && city === "高知市") return "kochiCity";
+      if (prefecture === "東京都") return "tokyo";
+      if (prefecture === "大阪府") return "osaka";
+      return "default";
     }
     function renderPlaceSuggestions() {
       const container = document.getElementById("placeSuggestions");
       if (!container) return;
       const prefecture = document.getElementById("listingPrefecture")?.value || "";
       const city = document.getElementById("listingCity")?.value || "";
-      const buttons = listingPlaceSuggestions(prefecture, city).map((place) => {
+      const regionKey = listingPlaceRegionKey(prefecture, city);
+      const placeField = document.getElementById("place");
+      if (placeField) placeField.placeholder = PLACE_PLACEHOLDERS[regionKey];
+      const buttons = PLACE_SUGGESTIONS[regionKey].map((place) => {
         const button = document.createElement("button");
         button.className = "chip";
         button.type = "button";
