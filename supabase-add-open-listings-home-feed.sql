@@ -1,5 +1,5 @@
--- TOMONIホームに、実データから集計した公開統計だけを返します。
--- 日付境界はTOMONIの基準地域である日本時間（Asia/Tokyo）です。
+-- TOMONIホーム統計へ「現在募集中」を追加します。
+-- このファイルだけを既存環境のSupabase SQL Editorで実行できます。
 
 drop function if exists public.get_home_stats();
 

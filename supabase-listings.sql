@@ -2012,9 +2012,12 @@ $$;
 revoke all on function public.delete_current_account() from public, anon;
 grant execute on function public.delete_current_account() to authenticated;
 
+drop function if exists public.get_home_stats();
+
 create or replace function public.get_home_stats()
 returns table (
   today_listings bigint,
+  open_listings bigint,
   today_available_listings bigint,
   week_matches bigint,
   fetched_at timestamptz
@@ -2037,6 +2040,12 @@ as $$
       where l.created_at >= b.today_start
         and l.created_at < b.tomorrow_start
     ) as today_listings,
+    (
+      select count(*)
+      from public.listings l
+      where l.status = 'open'
+        and l.scheduled_at > now()
+    ) as open_listings,
     (
       select count(*)
       from public.listings l
