@@ -611,6 +611,28 @@
     }
     .home-intro-copy { display: grid; gap: 7px; max-width: 760px; color: var(--muted); font-size: 16px; }
 
+    .home-invitation-card {
+      display: grid;
+      gap: 14px;
+      padding: clamp(22px, 4vw, 32px);
+      border-color: var(--sage-strong);
+      border-left: 4px solid var(--leaf);
+      background: #ffffff;
+      box-shadow: var(--shadow-soft);
+      animation: home-invitation-in .3s ease-out both;
+      transition: transform .2s var(--ease), box-shadow .2s var(--ease);
+    }
+    .home-invitation-card:hover { transform: translateY(-2px); box-shadow: var(--shadow); }
+    .home-invitation-card h1 { font-size: clamp(25px, 3.6vw, 36px); line-height: 1.4; }
+    .home-invitation-card p { color: var(--muted); line-height: 1.8; }
+    .home-invitation-actions {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 220px));
+      gap: 12px;
+      margin-top: 2px;
+    }
+    .home-invitation-actions .btn { min-height: 52px; }
+
     .home-safety-card {
       padding: 22px 24px;
       border-color: var(--sage-strong);
@@ -1273,6 +1295,10 @@
     }
     @keyframes spin { to { transform: rotate(360deg); } }
     @keyframes toast-in { from { opacity: 0; transform: translateY(10px); } }
+    @keyframes home-invitation-in {
+      from { opacity: 0; transform: translateY(8px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
 
     @keyframes settle {
       from {
@@ -1407,6 +1433,7 @@
       .home-stat-item:last-child { grid-column: 1 / -1; }
       .home-stat-item { padding: 13px 12px; }
       .home-stat-value { font-size: 20px; }
+      .home-invitation-actions { grid-template-columns: 1fr; }
       .home-main-actions,
       .home-summary-grid { grid-template-columns: 1fr; }
       .home-primary-action { min-height: 62px; }
@@ -1532,15 +1559,17 @@
     <main>
       <section class="hero home-dashboard" id="home">
         <div class="home-dashboard-inner">
-          <header class="home-welcome">
-            <p class="eyebrow">ホーム</p>
-            <h1>同性同士で、気軽に会える時間をつくるサービスです。</h1>
-            <div class="home-intro-copy">
-              <p>無理に話さなくても大丈夫。</p>
-              <p>散歩でも、カフェでも、同じ場所で静かに過ごすだけでも構いません。</p>
-              <p>あなたのペースで、安心して過ごせる時間を大切にしています。</p>
+          <article class="card home-invitation-card" aria-labelledby="homeInvitationHeading">
+            <div>
+              <p class="eyebrow">今日の過ごし方を見つける</p>
+              <h1 id="homeInvitationHeading">今日も誰かと過ごしてみませんか？</h1>
             </div>
-          </header>
+            <p>30分のおしゃべりや散歩、<br>カフェなど気軽な募集が見つかります。</p>
+            <div class="home-invitation-actions">
+              <button class="btn primary" type="button" data-action="home-view-listings">募集を見る</button>
+              <button class="btn" type="button" data-action="home-create-listing">募集を作る</button>
+            </div>
+          </article>
 
           <article class="card home-stats-card" aria-labelledby="homeStatsHeading">
             <h2 id="homeStatsHeading">今日のTOMONI</h2>
@@ -1557,6 +1586,16 @@
             <h2 id="homeNewListingsHeading">🎉 今日の新着募集</h2>
             <div class="home-new-listings-list" id="homeNewListings"></div>
           </article>
+
+          <header class="home-welcome">
+            <p class="eyebrow">ホーム</p>
+            <h1>同性同士で、気軽に会える時間をつくるサービスです。</h1>
+            <div class="home-intro-copy">
+              <p>無理に話さなくても大丈夫。</p>
+              <p>散歩でも、カフェでも、同じ場所で静かに過ごすだけでも構いません。</p>
+              <p>あなたのペースで、安心して過ごせる時間を大切にしています。</p>
+            </div>
+          </header>
 
           <article class="card home-safety-card">
             <h2>🛡 安心して利用できる仕組み</h2>
@@ -5365,6 +5404,18 @@
         appState.safetyOnboardingAccepted = true; saveState(); safetyGateActive = false; closeModal(); toast("確認ありがとうございます。安心して始めましょう。"); setTimeout(promptForBirthDateIfNeeded, 0);
       }
       if (action === "open-auth") openModal("ログイン", authMarkup("login"));
+      if (action === "home-view-listings" || action === "home-create-listing") {
+        if (!appState.user) {
+          openModal("ログイン", authMarkup("login"));
+          return;
+        }
+        if (!hasMemberAccess()) {
+          showProfileEditor(true);
+          toast("最初にプロフィールを作成してください。");
+          return;
+        }
+        jumpTo(action === "home-view-listings" ? "listings" : "create");
+      }
       if (action === "show-register") { modalTitle.textContent = "会員登録"; modalBody.innerHTML = authMarkup("register"); }
       if (action === "show-login") { modalTitle.textContent = "ログイン"; modalBody.innerHTML = authMarkup("login"); }
       if (action === "resend-verification-email") {
