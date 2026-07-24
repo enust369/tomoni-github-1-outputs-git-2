@@ -2348,6 +2348,17 @@
       "沖縄県": ["那覇市", "宜野湾市", "石垣市", "浦添市", "名護市", "糸満市", "沖縄市", "豊見城市", "うるま市", "宮古島市"]
     };
     const prefectureOptions = Object.keys(MUNICIPALITIES_BY_PREFECTURE);
+    function parseProfileArea(value = "") {
+      const area = String(value || "").trim();
+      if (!area) return { prefecture: "", city: "" };
+      const storedPrefecture = prefectureOptions.find((prefecture) => area === prefecture || area.startsWith(`${prefecture} `));
+      if (storedPrefecture) return { prefecture: storedPrefecture, city: area.slice(storedPrefecture.length).trim() };
+      const inferredPrefectures = prefectureOptions.filter((prefecture) => (MUNICIPALITIES_BY_PREFECTURE[prefecture] || []).includes(area));
+      return { prefecture: inferredPrefectures.length === 1 ? inferredPrefectures[0] : "", city: area };
+    }
+    function formatProfileArea(prefecture, city) {
+      return `${String(prefecture || "").trim()} ${String(city || "").trim()}`.trim();
+    }
     const PLACE_SUGGESTIONS = {
       kochiCity: ["高知駅", "帯屋町", "イオンモール高知", "高知蔦屋書店", "ひろめ市場", "中央公園", "待ち合わせ後に相談"],
       tokyo: ["東京駅", "新宿駅", "渋谷駅", "上野駅", "駅近くのカフェ", "商業施設の入口", "待ち合わせ後に相談"],
@@ -3935,6 +3946,7 @@
         else if (field.id === "passwordUpdateConfirm" && field.value !== form.querySelector("#passwordUpdateNew")?.value) message = "パスワードが一致しません。";
         else if (["authBirthdate", "profileBirthDate", "requiredBirthDate"].includes(field.id) && !isAdult(field.value)) message = "18歳以上の正しい生年月日を入力してください。";
         else if (field.id === "profileHeight" && field.value && (!Number.isInteger(Number(field.value)) || Number(field.value) < 100 || Number(field.value) > 250)) message = "身長は100～250cmの整数で入力してください。";
+        else if (field.id === "profileCity" && formatProfileArea(form.querySelector("#profilePrefecture")?.value, field.value).length > 30) message = "都道府県と市区町村は合わせて30文字以内で入力してください。";
         else if (field.id === "place" && field.value.length > 100) message = "場所は100文字以内で入力してください。";
         else if (field.id === "profileCurrentInterest" && field.value.length > 100) message = "最近ハマっていることは100文字以内で入力してください。";
         else if (["authNickname", "authBio", "profileNickname", "profileBio"].includes(field.id) && containsPrivateInfo(field.value)) message = "電話番号・メール・住所・SNSは公開プロフィールに入力できません。";
@@ -4828,6 +4840,7 @@
       const selectOptions = (options, selected) => `<option value="">未設定</option>${options.map((option) => `<option value="${esc(option)}" ${selected === option ? "selected" : ""}>${esc(option)}</option>`).join("")}`;
       const currentPhotos = appState.profile.photoUrls || [];
       const selectedHolidays = normalizeHolidayValues(appState.profile.holiday);
+      const profileArea = parseProfileArea(appState.profile.area);
       openModal(firstTime ? "プロフィール作成" : "プロフィール編集", `
         <form class="form" id="profileForm" data-first-time="${firstTime}" novalidate>
           <div class="profile-edit-group">
@@ -4835,9 +4848,10 @@
             ${currentPhotos.length ? `<div class="field full"><label>現在のプロフィール写真</label><div class="profile-photos">${currentPhotos.map((url, index) => `<div style="display:grid;gap:6px"><img class="profile-photo" src="${esc(url)}" alt="プロフィール写真 ${index + 1}"><button class="btn small quiet-action" type="button" data-action="delete-profile-photo" data-photo-index="${index}">削除</button></div>`).join("")}</div></div>` : ""}
             <div class="field full"><label for="profilePhotosInput">プロフィール写真（最大3枚）</label><input id="profilePhotosInput" type="file" accept="image/jpeg,image/png,image/webp" multiple><p class="meta">プロフィール写真は任意です。顔写真だけでなく、後ろ姿・横顔・趣味・風景・イラストなどでも大丈夫です。個人が特定されやすい写真や個人情報が写っている写真は避けることをおすすめします。</p><p class="meta">新しく選択すると現在の写真を置き換えます。1枚5MBまで。</p></div>
             <div class="field full"><label for="profileNickname">ニックネーム</label><input id="profileNickname" name="nickname" maxlength="20" value="${esc(appState.profile.nickname === "あなた" ? "" : appState.profile.nickname)}" required><span class="field-error"></span></div>
-            <div class="field"><label for="profileGender">登録する性別</label><select id="profileGender" name="gender"><option ${appState.profile.gender === "女性" ? "selected" : ""}>女性</option><option ${appState.profile.gender === "男性" ? "selected" : ""}>男性</option></select></div>
-            <div class="field"><label for="profileBirthDate">生年月日</label><input id="profileBirthDate" name="birthDate" type="date" max="${latestAdultBirthDate()}" autocomplete="bday" value="${esc(appState.profile.birthDate || "")}" required><p class="meta">生年月日は公開されません。表示されるのは「${esc(formatAge(appState.profile.age))}」だけです。</p><span class="field-error"></span></div>
-            <div class="field full"><label for="profileAreaInput">居住エリア（市まで）</label><input id="profileAreaInput" name="area" maxlength="30" placeholder="例：武蔵野市" value="${esc(appState.profile.area || "")}" required><span class="field-error"></span></div>
+            <div class="field full"><label for="profileGender">登録する性別</label><select id="profileGender" name="gender"><option ${appState.profile.gender === "女性" ? "selected" : ""}>女性</option><option ${appState.profile.gender === "男性" ? "selected" : ""}>男性</option></select></div>
+            <div class="field full"><label for="profilePrefecture">都道府県（必須）</label><select id="profilePrefecture" name="prefecture" required>${optionMarkup(prefectureOptions, profileArea.prefecture)}</select><span class="field-error"></span></div>
+            <div class="field full"><label for="profileCity">市区町村（市まで・必須）</label><input id="profileCity" name="city" maxlength="30" placeholder="例：武蔵野市" value="${esc(profileArea.city)}" required><span class="field-error"></span></div>
+            <div class="field full"><label for="profileBirthDate">生年月日</label><input id="profileBirthDate" name="birthDate" type="date" max="${latestAdultBirthDate()}" autocomplete="bday" value="${esc(appState.profile.birthDate || "")}" required><p class="meta">生年月日は公開されません。表示されるのは「${esc(formatAge(appState.profile.age))}」だけです。</p><span class="field-error"></span></div>
             <div class="field"><label for="profileHeight">身長（任意）</label><input id="profileHeight" name="height" type="number" min="100" max="250" step="1" inputmode="numeric" placeholder="例：165" value="${esc(appState.profile.height || "")}"><p class="meta">100～250cmで入力してください。</p><span class="field-error"></span></div>
             <div class="field"><label for="profileOccupation">職業（任意）</label><select id="profileOccupation" name="occupation">${selectOptions(profileOptionSets.occupation, appState.profile.occupation)}</select></div>
             <div class="field full"><label for="profileBio">自己紹介（300文字まで）</label><textarea id="profileBio" name="bio" maxlength="300" required>${esc(appState.profile.bio)}</textarea><span class="field-error"></span></div>
@@ -5076,7 +5090,7 @@
             alcohol: String(formData.get("alcohol") || ""),
             tobacco: String(formData.get("tobacco") || "")
           };
-          const profile = { nickname: String(formData.get("nickname")).trim(), gender: String(formData.get("gender")), age: calculateAge(birthDate), birthDate, area: String(formData.get("area")).trim(), bio: String(formData.get("bio")).trim(), tags: [...(appState.profile.tags || [])], photoUrls, ...profileExtras };
+          const profile = { nickname: String(formData.get("nickname")).trim(), gender: String(formData.get("gender")), age: calculateAge(birthDate), birthDate, area: formatProfileArea(formData.get("prefecture"), formData.get("city")), bio: String(formData.get("bio")).trim(), tags: [...(appState.profile.tags || [])], photoUrls, ...profileExtras };
           const storedTags = encodeProfileTags(profile.tags, profileExtras);
           const result = await window.tomoniAuth.saveProfile({ user_id: userBeforeSave.id, nickname: profile.nickname, gender: profile.gender, area: profile.area, bio: profile.bio, tags: storedTags, photo_urls: profile.photoUrls, ...personalitySupabasePayload(appState.profile), updated_at: new Date().toISOString() });
           if (result?.error) throw result.error;
