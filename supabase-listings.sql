@@ -155,7 +155,10 @@ using (
   auth.uid() is not null
   and (
     owner_id = auth.uid()
-    or public.current_user_same_gender_with(owner_id)
+    or (
+      public.current_user_same_gender_with(owner_id)
+      and public.current_user_not_blocked_with(owner_id)
+    )
   )
 );
 
@@ -271,7 +274,10 @@ as $$
   where auth.uid() is not null
     and (
       listings.owner_id = auth.uid()
-      or public.same_gender_users(auth.uid(), listings.owner_id)
+      or (
+        public.same_gender_users(auth.uid(), listings.owner_id)
+        and public.users_not_blocked(auth.uid(), listings.owner_id)
+      )
     )
   group by listings.id;
 $$;
@@ -648,7 +654,10 @@ create policy "authenticated users can read profiles"
 on public.profiles for select to authenticated
 using (
   user_id = auth.uid()
-  or public.current_user_same_gender_with(user_id)
+  or (
+    public.current_user_same_gender_with(user_id)
+    and public.current_user_not_blocked_with(user_id)
+  )
 );
 
 drop policy if exists "users can create their own profile" on public.profiles;
@@ -776,7 +785,10 @@ as $$
   where auth.uid() is not null
     and (
       p.user_id = auth.uid()
-      or public.same_gender_users(auth.uid(), p.user_id)
+      or (
+        public.same_gender_users(auth.uid(), p.user_id)
+        and public.users_not_blocked(auth.uid(), p.user_id)
+      )
     );
 $$;
 

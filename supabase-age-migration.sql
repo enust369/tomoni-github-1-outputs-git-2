@@ -104,7 +104,10 @@ as $$
   where auth.uid() is not null
     and (
       p.user_id = auth.uid()
-      or public.same_gender_users(auth.uid(), p.user_id)
+      or (
+        public.same_gender_users(auth.uid(), p.user_id)
+        and public.users_not_blocked(auth.uid(), p.user_id)
+      )
     );
 $$;
 
