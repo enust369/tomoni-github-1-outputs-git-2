@@ -750,6 +750,7 @@ $$;
 revoke all on function public.save_my_birth_date(date) from public, anon;
 grant execute on function public.save_my_birth_date(date) to authenticated;
 
+drop function if exists public.list_public_profiles();
 create or replace function public.list_public_profiles()
 returns table (
   user_id uuid,
@@ -760,6 +761,8 @@ returns table (
   photo_urls text[],
   personality_title text,
   personality_tags text[],
+  email_confirmed boolean,
+  birth_date_registered boolean,
   is_verified boolean
 )
 language sql
@@ -779,8 +782,11 @@ as $$
     p.photo_urls,
     p.personality_title,
     p.personality_tags,
+    u.email_confirmed_at is not null as email_confirmed,
+    b.birth_date is not null as birth_date_registered,
     p.is_verified
   from public.profiles p
+  join auth.users u on u.id = p.user_id
   left join public.profile_birth_dates b on b.user_id = p.user_id
   where auth.uid() is not null
     and (
@@ -881,6 +887,7 @@ using (user_id = auth.uid());
 
 grant select, insert, delete on public.favorites to authenticated;
 
+drop function if exists public.list_discoverable_profiles();
 create or replace function public.list_discoverable_profiles()
 returns table (
   profile_key text,
@@ -890,6 +897,8 @@ returns table (
   photo_urls text[],
   bio text,
   public_tags text[],
+  email_confirmed boolean,
+  birth_date_registered boolean,
   is_verified boolean,
   is_favorite boolean
 )
@@ -927,6 +936,8 @@ as $$
          or tag like 'tomoni:profile:meetingValue=%'
          or tag like 'tomoni:profile:currentInterest=%'
     ), '{}'::text[]) as public_tags,
+    u.email_confirmed_at is not null as email_confirmed,
+    b.birth_date is not null as birth_date_registered,
     p.is_verified,
     exists (
       select 1
@@ -1427,11 +1438,19 @@ begin
 
   return jsonb_build_object(
     'users_count', (select count(*) from auth.users),
-    'verified_users_count', (
+    'email_confirmed_users_count', (
       select count(*)
       from auth.users u
-      left join public.profiles p on p.user_id = u.id
-      where coalesce(p.is_verified, false) or u.email_confirmed_at is not null
+      where u.email_confirmed_at is not null
+    ),
+    'birth_date_registered_users_count', (
+      select count(*)
+      from public.profile_birth_dates
+    ),
+    'verified_users_count', (
+      select count(*)
+      from public.profiles p
+      where coalesce(p.is_verified, false)
     ),
     'today_listings_count', (
       select count(*)
@@ -1475,7 +1494,13 @@ begin
         u.id as user_id,
         u.email,
         coalesce(p.nickname, '未設定') as nickname,
-        coalesce(p.is_verified, false) or u.email_confirmed_at is not null as is_verified,
+        u.email_confirmed_at is not null as email_confirmed,
+        exists (
+          select 1
+          from public.profile_birth_dates b
+          where b.user_id = u.id
+        ) as birth_date_registered,
+        coalesce(p.is_verified, false) as is_verified,
         u.last_sign_in_at,
         u.created_at,
         (select count(*) from public.listings l where l.owner_id = u.id) as listings_count,

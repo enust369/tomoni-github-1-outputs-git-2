@@ -1738,7 +1738,7 @@
               <p class="meta" id="profileDisplayMeta">年齢未登録 / 今日の気分：穏やか</p>
               <p class="meta" id="profileArea">居住エリア：未設定</p>
               <dl class="profile-detail-list" id="profileBasicDetails" hidden></dl>
-              <div class="assurance-grid"><div class="assurance-card"><strong id="profileVerified">確認中</strong><span class="meta">本人確認</span></div><div class="assurance-card"><strong id="profileMetCount">0人</strong><span class="meta">会った人数</span></div><div class="assurance-card"><strong id="profileMeetAgainCount">0件</strong><span class="meta">また会いたい登録数</span></div></div>
+              <div class="assurance-grid"><div class="assurance-card"><strong id="profileVerified">確認情報未登録</strong><span class="meta">確認状態</span></div><div class="assurance-card"><strong id="profileMetCount">0人</strong><span class="meta">会った人数</span></div><div class="assurance-card"><strong id="profileMeetAgainCount">0件</strong><span class="meta">また会いたい登録数</span></div></div>
               <div class="actions" style="justify-content:center"><button class="btn small primary" id="profileEditButton" data-action="edit-profile">プロフィールを編集</button><button class="btn small" data-action="show-favorites">気になる一覧</button><button class="btn small" data-action="show-matches">マッチしました</button><button class="btn small primary" id="profileMatchChatButton" data-action="open-match-chat" hidden>チャットする</button></div>
               <div class="actions" style="justify-content:center"><button class="btn small" id="profileReportButton" data-action="report" data-person="相手" data-source="profile" disabled>通報</button><button class="btn small quiet-action" id="profileBlockButton" data-action="block" data-person="相手" disabled>ブロック</button></div>
             </div>
@@ -1861,7 +1861,7 @@
         <div class="section-head"><div><p class="eyebrow">アカウント</p><h2>安心して使うための設定。</h2></div></div>
         <div class="account-layout">
           <aside class="card account-menu">
-            <div class="notice" id="verificationStatus"><strong>本人確認</strong><p class="meta">登録後に確認状況を表示します。</p></div>
+            <div class="notice" id="verificationStatus"><strong>確認状態</strong><p class="meta">登録後にメール・年齢情報・本人確認の状態を個別に表示します。</p></div>
             <button class="btn small" data-action="show-favorites">気になる一覧</button>
             <button class="btn small" data-action="show-matches">マッチしました</button>
             <button class="btn small" data-action="show-blocks">ブロック一覧</button>
@@ -2269,7 +2269,7 @@
       return [...new Set(values.flatMap((item) => item === "土日休み" ? ["土曜日", "日曜日"] : item === "平日休み" ? weekdays : [item]).filter((item) => profileOptionSets.holiday.includes(item)))];
     }
     const emptyProfileExtras = { height: null, occupation: "", currentInterest: "", personalityNature: "", speechPreference: "", conversationStyle: "", shyness: "", firstMeetingMood: "", afterMeeting: "", reassurancePoints: [], talkTopics: [], meetingValues: [], favoriteActivities: [], holiday: [], alcohol: "", tobacco: "" };
-    const defaultState = { user: null, profileOwnerId: null, safetyOnboardingAccepted: false, dismissedChatSafety: [], saved: [], blocked: [], customListings: [], demoParticipations: [], moderation: { reports: [], blockCount: 0 }, feedbackHistory: [], profile: { nickname: "あなた", age: null, birthDate: "", gender: "女性", area: "", bio: "静かな時間を大切にしています。", tags: [], photoUrls: [], ...emptyProfileExtras, personalityType: "", personalityTitle: "", personalityDescription: "", personalityTags: [], quietScore: null, talkScore: null, comfortScore: null } };
+    const defaultState = { user: null, profileOwnerId: null, safetyOnboardingAccepted: false, dismissedChatSafety: [], saved: [], blocked: [], customListings: [], demoParticipations: [], moderation: { reports: [], blockCount: 0 }, feedbackHistory: [], profile: { nickname: "あなた", age: null, birthDate: "", gender: "女性", area: "", bio: "静かな時間を大切にしています。", tags: [], photoUrls: [], ...emptyProfileExtras, isVerified: false, personalityType: "", personalityTitle: "", personalityDescription: "", personalityTags: [], quietScore: null, talkScore: null, comfortScore: null } };
     let appState = loadState();
     listings.splice(0, listings.length);
 
@@ -2494,6 +2494,17 @@
       if (text.includes("女性")) return "女性";
       if (text.includes("男性")) return "男性";
       return "";
+    }
+    function verificationLabels(status = {}, includeUnconfirmed = false) {
+      const labels = [
+        status.emailConfirmed ? "メール確認済み" : "",
+        status.ageInfoRegistered ? "年齢情報入力済み" : "",
+        status.isVerified ? "本人確認済み" : ""
+      ].filter(Boolean);
+      return labels.length || !includeUnconfirmed ? labels : ["確認情報未登録"];
+    }
+    function verificationBadgesMarkup(status = {}, includeUnconfirmed = false) {
+      return verificationLabels(status, includeUnconfirmed).map((label) => `<span class="badge ${label === "本人確認済み" ? "" : "muted"}">${esc(label)}</span>`).join("");
     }
     function viewerGender() {
       return normalizeGender(appState.profileOwnerId === appState.user?.id ? appState.profile.gender : "");
@@ -3026,7 +3037,7 @@
       document.getElementById("diagnosisPerson").innerHTML = suggested ? `
         <div class="notice">
           <span class="badge">今日のあなたなら</span>
-          ${suggested.verified ? `<span class="badge">本人確認済み</span>` : ""}
+          ${verificationBadgesMarkup({ emailConfirmed: suggested.emailConfirmed, ageInfoRegistered: suggested.ageInfoRegistered, isVerified: suggested.verified })}
           <h3 style="margin-top:12px">${esc(suggestedPersonName)}さん</h3>
           <p class="meta">${esc(suggestedActivityLabel)} / ${esc(suggestedTalkLabel)}</p>
           <div class="comfort-mark" aria-label="安心して過ごせそう"><i></i><i></i><i></i><i></i><i></i></div>
@@ -3166,7 +3177,7 @@
 
     function shortCard(item) {
       return `<div>
-        <span class="badge">今日おすすめ</span> ${item.verified ? `<span class="badge">本人確認済み</span>` : ""}
+        <span class="badge">今日おすすめ</span> ${verificationBadgesMarkup({ emailConfirmed: item.emailConfirmed, ageInfoRegistered: item.ageInfoRegistered, isVerified: item.verified })}
         <h3 style="margin-top:10px">${esc(activityDisplay(item))}</h3>
         <p class="meta">${esc(item.person)}さん / ${esc(formatAge(item.age))} / 徒歩${item.distance}分 / ${esc(item.talk)}</p>
         <div style="margin-top:8px">${comfortDots()}</div>
@@ -3206,7 +3217,9 @@
         meetingValues: decoded.extras.meetingValues || [],
         favoriteActivities: decoded.extras.favoriteActivities || [],
         holiday: normalizeHolidayValues(decoded.extras.holiday),
-        verified: Boolean(row.is_verified),
+        emailConfirmed: Boolean(row.email_confirmed),
+        ageInfoRegistered: Boolean(row.birth_date_registered),
+        isVerified: Boolean(row.is_verified),
         isFavorite: Boolean(row.is_favorite)
       };
     }
@@ -3260,7 +3273,7 @@
       grid.innerHTML = memberProfiles.map((profile) => `<article class="card member-card">
         <div class="member-card-head">
           ${profile.photoUrl ? `<img class="member-card-photo" src="${esc(profile.photoUrl)}" alt="${esc(profile.nickname)}さんのプロフィール写真">` : `<div class="member-card-photo member-card-photo-placeholder" aria-hidden="true">${esc(profile.nickname.slice(0, 1) || "と")}</div>`}
-          <div><h3>${esc(profile.nickname)}さん</h3><p class="meta">${esc(formatAge(profile.age))}${profile.area ? ` / ${esc(profile.area)}` : ""}</p>${profile.verified ? `<span class="badge">本人確認済み</span>` : ""}</div>
+          <div><h3>${esc(profile.nickname)}さん</h3><p class="meta">${esc(formatAge(profile.age))}${profile.area ? ` / ${esc(profile.area)}` : ""}</p><div class="chips">${verificationBadgesMarkup(profile)}</div></div>
         </div>
         ${memberValuesMarkup(profile, true)}
         ${memberProfileChips(profile) ? `<div class="chips">${memberProfileChips(profile)}</div>` : ""}
@@ -3275,7 +3288,7 @@
       openModal("プロフィール", `<article class="member-card">
         <div class="member-card-head">
           ${profile.photoUrl ? `<img class="member-card-photo" src="${esc(profile.photoUrl)}" alt="${esc(profile.nickname)}さんのプロフィール写真">` : `<div class="member-card-photo member-card-photo-placeholder" aria-hidden="true">${esc(profile.nickname.slice(0, 1) || "と")}</div>`}
-          <div><h3>${esc(profile.nickname)}さん</h3><p class="meta">${esc(formatAge(profile.age))}${profile.area ? ` / ${esc(profile.area)}` : ""}</p></div>
+          <div><h3>${esc(profile.nickname)}さん</h3><p class="meta">${esc(formatAge(profile.age))}${profile.area ? ` / ${esc(profile.area)}` : ""}</p><div class="chips">${verificationBadgesMarkup(profile)}</div></div>
         </div>
         ${memberValuesMarkup(profile)}
         ${profile.occupation ? `<p><strong>職業</strong><br>${esc(profile.occupation)}</p>` : ""}
@@ -3306,7 +3319,7 @@
             <span class="badge muted">${esc(item.area)}</span>
             <span class="badge muted">${esc(formatAge(item.age))}</span>
             <span class="badge muted">徒歩${item.distance}分</span>
-            ${item.verified ? `<span class="badge">本人確認済み</span>` : ""}
+            ${verificationBadgesMarkup({ emailConfirmed: item.emailConfirmed, ageInfoRegistered: item.ageInfoRegistered, isVerified: item.verified })}
             ${isMatched(item) ? `<span class="badge">マッチ済み</span>` : ""}
           </div>
           <h3 style="margin-top:12px">${esc(item.person)}さん</h3>
@@ -3363,7 +3376,7 @@
                   <span class="badge muted">${esc(item.person)}さん</span>
                   <span class="badge muted">${esc(formatAge(item.age))}</span>
                   ${item.profileArea ? `<span class="badge muted">${esc(item.profileArea)}</span>` : ""}
-                  <span class="badge">${item.verified ? "本人確認済み" : "本人確認欄あり"}</span>
+                  ${verificationBadgesMarkup({ emailConfirmed: item.emailConfirmed, ageInfoRegistered: item.ageInfoRegistered, isVerified: item.verified })}
                 </div>
                 <h4>${esc(item.personalityTitle || "自然体で過ごせる人")}</h4>
                 <div class="chips">${(item.personalityTags || []).slice(0, 3).map((tag) => `<span class="badge muted">${esc(tag)}</span>`).join("") || `<span class="meta">診断タグはまだありません。</span>`}</div>
@@ -3430,7 +3443,9 @@
         participantCount: row.participantCount || 0,
         audience: row.audience,
         status: row.status || "open",
-        verified: Boolean(profile.is_verified || row.owner_id === appState.user?.id),
+        verified: Boolean(profile.is_verified),
+        emailConfirmed: Boolean(profile.email_confirmed),
+        ageInfoRegistered: Boolean(profile.birth_date_registered),
         age: profile.age !== null && profile.age !== undefined && Number.isInteger(Number(profile.age)) ? Number(profile.age) : null,
         profileArea: profile.area || "",
         profilePhoto: profile.photo_urls?.[0] || "",
@@ -3775,8 +3790,13 @@
         button.dataset.person = latestPartnerName || "相手";
         button.dataset.source = "profile";
       });
-      document.getElementById("profileVerified").textContent = appState.user?.verified ? "本人確認済" : "確認中";
-      document.getElementById("verificationStatus").innerHTML = appState.user?.verified ? `<strong>本人確認済み</strong><p class="meta">メール確認・年齢確認・規約同意・プロフィール入力済み</p>` : `<strong>本人確認</strong><p class="meta">登録後に確認状況を表示します。</p>`;
+      const ownVerificationStatus = {
+        emailConfirmed: Boolean(appState.user?.verified),
+        ageInfoRegistered: Boolean(appState.profile.birthDate),
+        isVerified: Boolean(appState.profile.isVerified)
+      };
+      document.getElementById("profileVerified").textContent = verificationLabels(ownVerificationStatus, true).join("・");
+      document.getElementById("verificationStatus").innerHTML = `<strong>確認状態</strong><div class="chips" style="margin-top:10px">${verificationBadgesMarkup(ownVerificationStatus, true)}</div><p class="meta" style="margin-top:10px">メール確認、年齢情報の入力、公的な本人確認はそれぞれ別の状態です。</p>`;
       document.getElementById("create").classList.toggle("is-locked", !profileComplete);
       document.getElementById("members").classList.toggle("is-locked", !profileComplete);
       document.getElementById("region").classList.toggle("is-locked", !profileComplete);
@@ -3809,6 +3829,7 @@
         tags: decodedTags.hobbies,
         photoUrls: profile.photo_urls || [],
         ...decodedTags.extras,
+        isVerified: Boolean(profile.is_verified),
         personalityType: profile.personality_type || "",
         personalityTitle: profile.personality_title || "",
         personalityDescription: profile.personality_description || "",
@@ -4221,7 +4242,7 @@
         <article class="notice">
           <div class="actions" style="justify-content:space-between;align-items:flex-start">
             <div>
-              <span class="badge ${user.is_verified ? "" : "muted"}">${user.is_verified ? "本人確認済み" : "未確認"}</span>
+              <div class="chips">${verificationBadgesMarkup({ emailConfirmed: user.email_confirmed, ageInfoRegistered: user.birth_date_registered, isVerified: user.is_verified }, true)}</div>
               <h3 style="margin-top:10px">${esc(user.nickname || "未設定")}</h3>
               <p class="meta">${esc(user.email || "メールなし")}</p>
               <p class="meta">募集 ${esc(user.listings_count || 0)}件 / マッチ ${esc(user.matches_count || 0)}件</p>
@@ -4376,6 +4397,8 @@
           adminBlocks = normalizeAdminList(blocksResult.data);
           document.getElementById("adminStats").innerHTML = [
             ["総ユーザー数", summary.users_count],
+            ["メール確認済み人数", summary.email_confirmed_users_count],
+            ["年齢情報入力済み人数", summary.birth_date_registered_users_count],
             ["本人確認済み人数", summary.verified_users_count],
             ["今日の募集数", summary.today_listings_count],
             ["現在のマッチ数", summary.matches_count],
@@ -4644,7 +4667,7 @@
       const statusElement = document.getElementById("participationStatus");
       statusElement.textContent = item.owner ? "参加申請を確認できます。" : status === "pending" ? "参加申請を送りました。募集主の確認をお待ちください。" : approved ? "承認されました。チャットを利用できます。" : status === "declined" ? "今回は見送られました。" : full ? "この募集は満員です。" : "申請が承認されると、参加人数に反映されます。";
       statusElement.classList.toggle("caution", status === "declined" || (full && !approved));
-      document.getElementById("detailBadges").innerHTML = `<span class="badge">${item.verified ? "本人確認済み" : "本人確認欄あり"}</span>${isMatched(item) ? `<span class="badge">マッチ済み</span>` : ""}<span class="badge muted">${esc(formatAge(item.age))}</span>${item.prefecture ? `<span class="badge muted">${esc(item.prefecture)}</span>` : ""}${item.city ? `<span class="badge muted">${esc(item.city)}</span>` : ""}<span class="badge muted">${esc(item.place)}</span><span class="badge muted">${item.participantCount}/${item.capacity}人</span><span class="badge muted">同性のみ</span>`;
+      document.getElementById("detailBadges").innerHTML = `${verificationBadgesMarkup({ emailConfirmed: item.emailConfirmed, ageInfoRegistered: item.ageInfoRegistered, isVerified: item.verified })}${isMatched(item) ? `<span class="badge">マッチ済み</span>` : ""}<span class="badge muted">${esc(formatAge(item.age))}</span>${item.prefecture ? `<span class="badge muted">${esc(item.prefecture)}</span>` : ""}${item.city ? `<span class="badge muted">${esc(item.city)}</span>` : ""}<span class="badge muted">${esc(item.place)}</span><span class="badge muted">${item.participantCount}/${item.capacity}人</span><span class="badge muted">同性のみ</span>`;
     }
 
     function updateDetailFavoriteUI(item) {
@@ -5079,6 +5102,11 @@
               <div class="profile-completion-head"><strong>プロフィール完成度</strong><span class="profile-completion-value" id="profileCompletionValue">${completion}%</span></div>
               <div class="profile-completion-track" role="progressbar" aria-label="プロフィール完成度" aria-valuemin="0" aria-valuemax="100" aria-valuenow="${completion}"><div class="profile-completion-fill" id="profileCompletionFill" style="width:${completion}%"></div></div>
               <p class="meta" style="margin-top:10px">基本プロフィールだけでも利用できます。人柄を追加すると、安心して会える相手を見つけやすくなります。</p>
+            </div>
+            <div class="profile-editor-intro">
+              <strong>確認状態</strong>
+              <div class="chips" style="margin-top:10px">${verificationBadgesMarkup({ emailConfirmed: appState.user?.verified, ageInfoRegistered: appState.profile.birthDate, isVerified: appState.profile.isVerified }, true)}</div>
+              <p class="meta" style="margin-top:8px">メール確認、年齢情報の入力、公的な本人確認はそれぞれ別の状態です。</p>
             </div>`}
           <div class="profile-edit-group">
             <h3>基本プロフィール</h3>
