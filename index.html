@@ -699,6 +699,14 @@
     .profile-choice-grid .check-row { align-items: center; padding: 8px 11px; border: 1px solid var(--line); border-radius: 999px; background: #fff; font-weight: 600; }
     .profile-choice-grid .check-row input { width: 18px; height: 18px; margin-top: 0; }
     .holiday-choice-grid { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); }
+    .profile-editor-intro { grid-column: 1 / -1; padding: 16px 18px; border: 1px solid var(--line); border-radius: 16px; background: #fff; }
+    .profile-editor-intro h3 { margin-top: 8px; color: var(--leaf); }
+    .profile-completion { grid-column: 1 / -1; padding: 18px 20px; border: 1px solid #cfe5f1; border-radius: 18px; background: var(--pale); }
+    .profile-completion-head { display: flex; align-items: baseline; justify-content: space-between; gap: 16px; }
+    .profile-completion-value { color: var(--leaf); font-size: 24px; font-weight: 800; }
+    .profile-completion-track { height: 9px; margin-top: 10px; overflow: hidden; border-radius: 999px; background: #fff; }
+    .profile-completion-fill { height: 100%; border-radius: inherit; background: var(--leaf); transition: width .2s ease; }
+    .profile-bio-example { padding: 10px 12px; border-radius: 12px; background: #fff; line-height: 1.7; }
 
     .meter-head,
     .meter-labels {
@@ -1731,7 +1739,7 @@
               <p class="meta" id="profileArea">居住エリア：未設定</p>
               <dl class="profile-detail-list" id="profileBasicDetails" hidden></dl>
               <div class="assurance-grid"><div class="assurance-card"><strong id="profileVerified">確認中</strong><span class="meta">本人確認</span></div><div class="assurance-card"><strong id="profileMetCount">0人</strong><span class="meta">会った人数</span></div><div class="assurance-card"><strong id="profileMeetAgainCount">0件</strong><span class="meta">また会いたい登録数</span></div></div>
-              <div class="actions" style="justify-content:center"><button class="btn small primary" data-action="edit-profile">プロフィールを編集</button><button class="btn small" data-action="show-favorites">気になる一覧</button><button class="btn small" data-action="show-matches">マッチしました</button><button class="btn small primary" id="profileMatchChatButton" data-action="open-match-chat" hidden>チャットする</button></div>
+              <div class="actions" style="justify-content:center"><button class="btn small primary" id="profileEditButton" data-action="edit-profile">プロフィールを編集</button><button class="btn small" data-action="show-favorites">気になる一覧</button><button class="btn small" data-action="show-matches">マッチしました</button><button class="btn small primary" id="profileMatchChatButton" data-action="open-match-chat" hidden>チャットする</button></div>
               <div class="actions" style="justify-content:center"><button class="btn small" id="profileReportButton" data-action="report" data-person="相手" data-source="profile" disabled>通報</button><button class="btn small quiet-action" id="profileBlockButton" data-action="block" data-person="相手" disabled>ブロック</button></div>
             </div>
           </article>
@@ -3719,6 +3727,8 @@
       document.getElementById("profileDisplayName").textContent = appState.profile.nickname;
       document.getElementById("profileDisplayMeta").textContent = `${formatAge(appState.profile.age)} / 今日の気分：穏やか`;
       document.getElementById("profileArea").textContent = `居住エリア：${appState.profile.area || "未設定"}`;
+      const profileEditButton = document.getElementById("profileEditButton");
+      if (profileEditButton) profileEditButton.textContent = profileCompletionPercent(appState.profile) < 100 ? "プロフィールをもっと充実させる" : "プロフィールを編集";
       const basicDetails = [
         appState.profile.height ? ["身長", `${appState.profile.height}cm`] : null,
         appState.profile.occupation ? ["職業", appState.profile.occupation] : null
@@ -4977,45 +4987,121 @@
       jumpTo("chat");
     }
 
+    function profileCompletionPercent(profile = {}) {
+      const hasValue = (value) => Array.isArray(value) ? value.length > 0 : Boolean(String(value ?? "").trim());
+      const area = parseProfileArea(profile.area);
+      const requiredValues = [profile.nickname, normalizeGender(profile.gender), profile.birthDate, area.prefecture, area.city, profile.bio];
+      const optionalValues = [
+        profile.occupation,
+        profile.favoriteActivities,
+        normalizeHolidayValues(profile.holiday),
+        profile.personalityNature,
+        profile.speechPreference,
+        profile.conversationStyle,
+        profile.shyness,
+        profile.firstMeetingMood,
+        profile.afterMeeting,
+        profile.reassurancePoints,
+        profile.talkTopics,
+        profile.meetingValues,
+        profile.currentInterest
+      ];
+      const requiredScore = requiredValues.filter(hasValue).length / requiredValues.length * 40;
+      const optionalScore = optionalValues.filter(hasValue).length / optionalValues.length * 60;
+      return Math.min(100, Math.round(requiredScore + optionalScore));
+    }
+
+    function profileCandidateFromForm(form) {
+      const formData = new FormData(form);
+      const candidate = { ...appState.profile };
+      const readValue = (name, current = "") => form.elements.namedItem(name) ? String(formData.get(name) || "").trim() : current;
+      const readValues = (name, current = []) => form.elements.namedItem(name) ? formData.getAll(name).map(String) : current;
+      candidate.nickname = readValue("nickname", candidate.nickname);
+      candidate.gender = readValue("gender", candidate.gender);
+      candidate.birthDate = readValue("birthDate", candidate.birthDate);
+      candidate.area = formatProfileArea(readValue("prefecture"), readValue("city"));
+      candidate.bio = readValue("bio", candidate.bio);
+      ["occupation", "personalityNature", "speechPreference", "conversationStyle", "shyness", "firstMeetingMood", "afterMeeting", "currentInterest"].forEach((key) => {
+        candidate[key] = readValue(key, candidate[key]);
+      });
+      ["favoriteActivities", "holiday", "reassurancePoints", "talkTopics", "meetingValues"].forEach((key) => {
+        candidate[key] = readValues(key, candidate[key]);
+      });
+      return candidate;
+    }
+
+    function updateProfileCompletionPreview(form) {
+      const completion = profileCompletionPercent(profileCandidateFromForm(form));
+      const value = document.getElementById("profileCompletionValue");
+      const fill = document.getElementById("profileCompletionFill");
+      if (value) value.textContent = `${completion}%`;
+      if (fill) {
+        fill.style.width = `${completion}%`;
+        fill.parentElement.setAttribute("aria-valuenow", String(completion));
+      }
+    }
+
     function showProfileEditor(firstTime = false) {
       const selectOptions = (options, selected) => `<option value="">未設定</option>${options.map((option) => `<option value="${esc(option)}" ${selected === option ? "selected" : ""}>${esc(option)}</option>`).join("")}`;
       const currentPhotos = appState.profile.photoUrls || [];
       const selectedHolidays = normalizeHolidayValues(appState.profile.holiday);
       const profileArea = parseProfileArea(appState.profile.area);
-      openModal(firstTime ? "プロフィール作成" : "プロフィール編集", `
+      const completion = profileCompletionPercent(appState.profile);
+      const creatingProfile = firstTime && appState.profileOwnerId !== appState.user?.id;
+      const optionalProfileMarkup = firstTime ? "" : `
+        <div class="profile-edit-group">
+          <h3>人柄プロフィール</h3>
+          <div class="field"><label for="profileOccupation">職業（任意）</label><select id="profileOccupation" name="occupation">${selectOptions(profileOptionSets.occupation, appState.profile.occupation)}</select></div>
+          <div class="field full"><label>好きな過ごし方（複数選択可・任意）</label><div class="profile-choice-grid">${profileOptionSets.favoriteActivities.map((option) => `<label class="check-row"><input type="checkbox" name="favoriteActivities" value="${esc(option)}" ${appState.profile.favoriteActivities?.includes(option) ? "checked" : ""}>${esc(option)}</label>`).join("")}</div></div>
+          <div class="field full"><label>休日（複数選択可・任意）</label><div class="profile-choice-grid holiday-choice-grid">${profileOptionSets.holiday.map((option) => `<label class="check-row"><input type="checkbox" name="holiday" value="${esc(option)}" ${selectedHolidays.includes(option) ? "checked" : ""}>${esc(option)}</label>`).join("")}</div></div>
+          <div class="field"><label for="profilePersonalityNature">性格（任意）</label><select id="profilePersonalityNature" name="personalityNature">${selectOptions(profileOptionSets.personalityNature, appState.profile.personalityNature)}</select></div>
+          <div class="field"><label for="profileSpeechPreference">話し方（任意）</label><select id="profileSpeechPreference" name="speechPreference">${selectOptions(profileOptionSets.speechPreference, appState.profile.speechPreference)}</select></div>
+          <div class="field"><label for="profileConversationStyle">会話スタイル（任意）</label><select id="profileConversationStyle" name="conversationStyle">${selectOptions(profileOptionSets.conversationStyle, appState.profile.conversationStyle)}</select></div>
+          <div class="field"><label for="profileShyness">人見知り（任意）</label><select id="profileShyness" name="shyness">${selectOptions(profileOptionSets.shyness, appState.profile.shyness)}</select></div>
+          <div class="field"><label for="profileFirstMeetingMood">初対面の雰囲気（任意）</label><select id="profileFirstMeetingMood" name="firstMeetingMood">${selectOptions(profileOptionSets.firstMeetingMood, appState.profile.firstMeetingMood)}</select></div>
+          <div class="field"><label for="profileAfterMeeting">会った後（任意）</label><select id="profileAfterMeeting" name="afterMeeting">${selectOptions(profileOptionSets.afterMeeting, appState.profile.afterMeeting)}</select></div>
+          <div class="field full"><label>初対面で安心してもらうために（複数選択可・任意）</label><div class="profile-choice-grid">${profileOptionSets.reassurancePoints.map((option) => `<label class="check-row"><input type="checkbox" name="reassurancePoints" value="${esc(option)}" ${appState.profile.reassurancePoints?.includes(option) ? "checked" : ""}>${esc(option)}</label>`).join("")}</div></div>
+          <div class="field full"><label>話したいこと・相談したいこと（複数選択可・任意）</label><div class="profile-choice-grid">${profileOptionSets.talkTopics.map((option) => `<label class="check-row"><input type="checkbox" name="talkTopics" value="${esc(option)}" ${appState.profile.talkTopics?.includes(option) ? "checked" : ""}>${esc(option)}</label>`).join("")}</div></div>
+          <div class="field full"><label>会う時に大切にしたいこと（複数選択可・任意）</label><div class="profile-choice-grid">${profileOptionSets.meetingValues.map((option) => `<label class="check-row"><input type="checkbox" name="meetingValues" value="${esc(option)}" ${appState.profile.meetingValues?.includes(option) ? "checked" : ""}>${esc(option)}</label>`).join("")}</div></div>
+          <div class="field full"><label for="profileCurrentInterest">最近ハマっていること（任意）</label><textarea id="profileCurrentInterest" name="currentInterest" maxlength="100" rows="2" placeholder="例：休日はカフェ巡りをしています。最近は抹茶ラテにハマっています☕">${esc(appState.profile.currentInterest || "")}</textarea><div class="meta"><span id="profileCurrentInterestCount">${String(appState.profile.currentInterest || "").length}</span> / 100</div><span class="field-error"></span></div>
+          <div class="field"><label for="profileAlcohol">お酒（任意）</label><select id="profileAlcohol" name="alcohol">${selectOptions(profileOptionSets.alcohol, appState.profile.alcohol)}</select></div>
+          <div class="field"><label for="profileTobacco">タバコ（任意）</label><select id="profileTobacco" name="tobacco">${selectOptions(profileOptionSets.tobacco, appState.profile.tobacco)}</select></div>
+        </div>`;
+      openModal(firstTime ? "基本プロフィール作成" : "プロフィール編集", `
         <form class="form" id="profileForm" data-first-time="${firstTime}" novalidate>
+          ${firstTime ? `
+            <div class="profile-editor-intro">
+              <span class="badge">初回登録・約1分</span>
+              <h3>基本プロフィール</h3>
+              <p class="meta" style="margin-top:6px">まずは必須項目だけで登録できます。人柄プロフィールはあとから追加できます。</p>
+            </div>` : `
+            <div class="profile-completion" aria-label="プロフィール完成度 ${completion}%">
+              <div class="profile-completion-head"><strong>プロフィール完成度</strong><span class="profile-completion-value" id="profileCompletionValue">${completion}%</span></div>
+              <div class="profile-completion-track" role="progressbar" aria-label="プロフィール完成度" aria-valuemin="0" aria-valuemax="100" aria-valuenow="${completion}"><div class="profile-completion-fill" id="profileCompletionFill" style="width:${completion}%"></div></div>
+              <p class="meta" style="margin-top:10px">基本プロフィールだけでも利用できます。人柄を追加すると、安心して会える相手を見つけやすくなります。</p>
+            </div>`}
           <div class="profile-edit-group">
-            <h3>基本情報</h3>
-            ${currentPhotos.length ? `<div class="field full"><label>現在のプロフィール写真</label><div class="profile-photos">${currentPhotos.map((url, index) => `<div style="display:grid;gap:6px"><img class="profile-photo" src="${esc(url)}" alt="プロフィール写真 ${index + 1}"><button class="btn small quiet-action" type="button" data-action="delete-profile-photo" data-photo-index="${index}">削除</button></div>`).join("")}</div></div>` : ""}
-            <div class="field full"><label for="profilePhotosInput">プロフィール写真（最大3枚）</label><input id="profilePhotosInput" type="file" accept="image/jpeg,image/png,image/webp" multiple><p class="meta">プロフィール写真は任意です。顔写真だけでなく、後ろ姿・横顔・趣味・風景・イラストなどでも大丈夫です。個人が特定されやすい写真や個人情報が写っている写真は避けることをおすすめします。</p><p class="meta">新しく選択すると現在の写真を置き換えます。1枚5MBまで。</p></div>
-            <div class="field full"><label for="profileNickname">ニックネーム</label><input id="profileNickname" name="nickname" maxlength="20" value="${esc(appState.profile.nickname === "あなた" ? "" : appState.profile.nickname)}" required><span class="field-error"></span></div>
-            <div class="field full"><label for="profileGender">登録する性別</label><select id="profileGender" name="gender"><option ${appState.profile.gender === "女性" ? "selected" : ""}>女性</option><option ${appState.profile.gender === "男性" ? "selected" : ""}>男性</option></select></div>
+            <h3>基本プロフィール</h3>
+            ${firstTime ? "" : `${currentPhotos.length ? `<div class="field full"><label>現在のプロフィール写真</label><div class="profile-photos">${currentPhotos.map((url, index) => `<div style="display:grid;gap:6px"><img class="profile-photo" src="${esc(url)}" alt="プロフィール写真 ${index + 1}"><button class="btn small quiet-action" type="button" data-action="delete-profile-photo" data-photo-index="${index}">削除</button></div>`).join("")}</div></div>` : ""}
+            <div class="field full"><label for="profilePhotosInput">プロフィール写真（最大3枚）</label><input id="profilePhotosInput" type="file" accept="image/jpeg,image/png,image/webp" multiple><p class="meta">プロフィール写真は任意です。顔写真だけでなく、後ろ姿・横顔・趣味・風景・イラストなどでも大丈夫です。個人が特定されやすい写真や個人情報が写っている写真は避けることをおすすめします。</p><p class="meta">新しく選択すると現在の写真を置き換えます。1枚5MBまで。</p></div>`}
+            <div class="field full"><label for="profileNickname">ニックネーム（必須）</label><input id="profileNickname" name="nickname" maxlength="20" value="${esc(creatingProfile || appState.profile.nickname === "あなた" ? "" : appState.profile.nickname)}" required><span class="field-error"></span></div>
+            <div class="field full"><label for="profileGender">性別（必須）</label><select id="profileGender" name="gender" required><option value="">選択してください</option><option value="女性" ${!creatingProfile && appState.profile.gender === "女性" ? "selected" : ""}>女性</option><option value="男性" ${!creatingProfile && appState.profile.gender === "男性" ? "selected" : ""}>男性</option></select><span class="field-error"></span></div>
+            <div class="field full"><label for="profileBirthDate">生年月日（必須）</label><input id="profileBirthDate" name="birthDate" type="date" max="${latestAdultBirthDate()}" autocomplete="bday" value="${esc(appState.profile.birthDate || "")}" required><p class="meta">生年月日は公開されません。表示されるのは「${esc(formatAge(appState.profile.age))}」だけです。</p><span class="field-error"></span></div>
             <div class="field full"><label for="profilePrefecture">都道府県（必須）</label><select id="profilePrefecture" name="prefecture" required>${optionMarkup(prefectureOptions, profileArea.prefecture)}</select><span class="field-error"></span></div>
-            <div class="field full"><label for="profileCity">市区町村（市まで・必須）</label><input id="profileCity" name="city" maxlength="30" placeholder="例：武蔵野市" value="${esc(profileArea.city)}" required><span class="field-error"></span></div>
-            <div class="field full"><label for="profileBirthDate">生年月日</label><input id="profileBirthDate" name="birthDate" type="date" max="${latestAdultBirthDate()}" autocomplete="bday" value="${esc(appState.profile.birthDate || "")}" required><p class="meta">生年月日は公開されません。表示されるのは「${esc(formatAge(appState.profile.age))}」だけです。</p><span class="field-error"></span></div>
-            <div class="field"><label for="profileHeight">身長（任意）</label><input id="profileHeight" name="height" type="number" min="100" max="250" step="1" inputmode="numeric" placeholder="例：165" value="${esc(appState.profile.height || "")}"><p class="meta">100～250cmで入力してください。</p><span class="field-error"></span></div>
-            <div class="field"><label for="profileOccupation">職業（任意）</label><select id="profileOccupation" name="occupation">${selectOptions(profileOptionSets.occupation, appState.profile.occupation)}</select></div>
-            <div class="field full"><label for="profileBio">自己紹介（300文字まで）</label><textarea id="profileBio" name="bio" maxlength="300" required>${esc(appState.profile.bio)}</textarea><span class="field-error"></span></div>
-            <div class="field full"><label for="profileCurrentInterest">最近ハマっていること（任意）</label><textarea id="profileCurrentInterest" name="currentInterest" maxlength="100" rows="2" placeholder="例：休日はカフェ巡りをしています。最近は抹茶ラテにハマっています☕">${esc(appState.profile.currentInterest || "")}</textarea><div class="meta"><span id="profileCurrentInterestCount">${String(appState.profile.currentInterest || "").length}</span> / 100</div><span class="field-error"></span></div>
+            <div class="field full"><label for="profileCity">市区町村（必須）</label><input id="profileCity" name="city" maxlength="30" placeholder="例：武蔵野市" value="${esc(profileArea.city)}" required><span class="field-error"></span></div>
+            <div class="field full"><label for="profileBio">自己紹介（必須・300文字まで）</label><textarea id="profileBio" name="bio" maxlength="300" required>${esc(creatingProfile ? "" : appState.profile.bio)}</textarea><p class="meta profile-bio-example">入力例：<br>休日にカフェや散歩へ行くのが好きです。<br>気軽にお話できる方と出会えたら嬉しいです。</p><span class="field-error"></span></div>
+            ${firstTime ? `<div class="field full"><button class="btn primary" type="submit">基本プロフィールを保存する</button><p class="meta" style="margin-top:10px">保存後はホームへ進みます。人柄プロフィールはマイページからいつでも追加できます。</p></div>` : `
+              <div class="field full"><label for="profileHeight">身長（任意）</label><input id="profileHeight" name="height" type="number" min="100" max="250" step="1" inputmode="numeric" placeholder="例：165" value="${esc(appState.profile.height || "")}"><p class="meta">100～250cmで入力してください。</p><span class="field-error"></span></div>`}
           </div>
-          <div class="profile-edit-group">
-            <h3>人柄</h3>
-            <div class="field"><label for="profilePersonalityNature">性格（任意）</label><select id="profilePersonalityNature" name="personalityNature">${selectOptions(profileOptionSets.personalityNature, appState.profile.personalityNature)}</select></div>
-            <div class="field"><label for="profileSpeechPreference">話し方（任意）</label><select id="profileSpeechPreference" name="speechPreference">${selectOptions(profileOptionSets.speechPreference, appState.profile.speechPreference)}</select></div>
-            <div class="field"><label for="profileConversationStyle">会話スタイル（任意）</label><select id="profileConversationStyle" name="conversationStyle">${selectOptions(profileOptionSets.conversationStyle, appState.profile.conversationStyle)}</select></div>
-            <div class="field"><label for="profileShyness">人見知り（任意）</label><select id="profileShyness" name="shyness">${selectOptions(profileOptionSets.shyness, appState.profile.shyness)}</select></div>
-            <div class="field"><label for="profileFirstMeetingMood">初対面の雰囲気（任意）</label><select id="profileFirstMeetingMood" name="firstMeetingMood">${selectOptions(profileOptionSets.firstMeetingMood, appState.profile.firstMeetingMood)}</select></div>
-            <div class="field"><label for="profileAfterMeeting">会った後（任意）</label><select id="profileAfterMeeting" name="afterMeeting">${selectOptions(profileOptionSets.afterMeeting, appState.profile.afterMeeting)}</select></div>
-            <div class="field full"><label>初対面で安心してもらうために（複数選択可・任意）</label><div class="profile-choice-grid">${profileOptionSets.reassurancePoints.map((option) => `<label class="check-row"><input type="checkbox" name="reassurancePoints" value="${esc(option)}" ${appState.profile.reassurancePoints?.includes(option) ? "checked" : ""}>${esc(option)}</label>`).join("")}</div></div>
-            <div class="field full"><label>話したいこと・相談したいこと（複数選択可・任意）</label><div class="profile-choice-grid">${profileOptionSets.talkTopics.map((option) => `<label class="check-row"><input type="checkbox" name="talkTopics" value="${esc(option)}" ${appState.profile.talkTopics?.includes(option) ? "checked" : ""}>${esc(option)}</label>`).join("")}</div></div>
-            <div class="field full"><label>会う時に大切にしたいこと（複数選択可・任意）</label><div class="profile-choice-grid">${profileOptionSets.meetingValues.map((option) => `<label class="check-row"><input type="checkbox" name="meetingValues" value="${esc(option)}" ${appState.profile.meetingValues?.includes(option) ? "checked" : ""}>${esc(option)}</label>`).join("")}</div></div>
-            <div class="field full"><label>好きな過ごし方（複数選択可・任意）</label><div class="profile-choice-grid">${profileOptionSets.favoriteActivities.map((option) => `<label class="check-row"><input type="checkbox" name="favoriteActivities" value="${esc(option)}" ${appState.profile.favoriteActivities?.includes(option) ? "checked" : ""}>${esc(option)}</label>`).join("")}</div></div>
-            <div class="field full"><label>休日（複数選択可・任意）</label><div class="profile-choice-grid holiday-choice-grid">${profileOptionSets.holiday.map((option) => `<label class="check-row"><input type="checkbox" name="holiday" value="${esc(option)}" ${selectedHolidays.includes(option) ? "checked" : ""}>${esc(option)}</label>`).join("")}</div></div>
-            <div class="field"><label for="profileAlcohol">お酒（任意）</label><select id="profileAlcohol" name="alcohol">${selectOptions(profileOptionSets.alcohol, appState.profile.alcohol)}</select></div>
-            <div class="field"><label for="profileTobacco">タバコ（任意）</label><select id="profileTobacco" name="tobacco">${selectOptions(profileOptionSets.tobacco, appState.profile.tobacco)}</select></div>
-          </div>
-          <div class="field full"><button class="btn primary" type="submit">${firstTime ? "プロフィールを作成する" : "プロフィールを保存"}</button></div>
+          ${optionalProfileMarkup}
+          ${firstTime ? "" : `<div class="field full"><button class="btn primary" type="submit">プロフィールを保存</button></div>`}
         </form>`);
+      if (!firstTime) {
+        const form = document.getElementById("profileForm");
+        const updateCompletion = () => updateProfileCompletionPreview(form);
+        form.addEventListener("input", updateCompletion);
+        form.addEventListener("change", updateCompletion);
+      }
     }
 
     document.addEventListener("submit", async (event) => {
@@ -5198,7 +5284,11 @@
       if (form.id === "profileForm") {
         const profileWasMissing = appState.profileOwnerId !== appState.user?.id;
         const formData = new FormData(form);
-        const files = [...document.getElementById("profilePhotosInput").files];
+        const photoInput = document.getElementById("profilePhotosInput");
+        const files = photoInput ? [...photoInput.files] : [];
+        const hasField = (name) => Boolean(form.elements.namedItem(name));
+        const optionalValue = (name, current = "") => hasField(name) ? String(formData.get(name) || "").trim() : current;
+        const optionalValues = (name, current = []) => hasField(name) ? formData.getAll(name).map(String) : current;
         if (files.length > 3) { toast("プロフィール写真は3枚まで選択できます。"); return; }
         if (files.some((file) => file.size > 5 * 1024 * 1024)) { toast("プロフィール写真は1枚5MBまでです。"); return; }
         setLoading(true);
@@ -5212,24 +5302,24 @@
             photoUrls = uploads.map((result) => result.data.url);
           }
           const birthDate = String(formData.get("birthDate") || "");
-          const heightValue = String(formData.get("height") || "").trim();
+          const heightValue = optionalValue("height", appState.profile.height || "");
           const profileExtras = {
             height: heightValue ? Number(heightValue) : null,
-            occupation: String(formData.get("occupation") || ""),
-            currentInterest: String(formData.get("currentInterest") || "").trim(),
-            personalityNature: String(formData.get("personalityNature") || ""),
-            speechPreference: String(formData.get("speechPreference") || ""),
-            conversationStyle: String(formData.get("conversationStyle") || ""),
-            shyness: String(formData.get("shyness") || ""),
-            firstMeetingMood: String(formData.get("firstMeetingMood") || ""),
-            afterMeeting: String(formData.get("afterMeeting") || ""),
-            reassurancePoints: formData.getAll("reassurancePoints").map(String),
-            talkTopics: formData.getAll("talkTopics").map(String),
-            meetingValues: formData.getAll("meetingValues").map(String),
-            favoriteActivities: formData.getAll("favoriteActivities").map(String),
-            holiday: formData.getAll("holiday").map(String),
-            alcohol: String(formData.get("alcohol") || ""),
-            tobacco: String(formData.get("tobacco") || "")
+            occupation: optionalValue("occupation", appState.profile.occupation),
+            currentInterest: optionalValue("currentInterest", appState.profile.currentInterest),
+            personalityNature: optionalValue("personalityNature", appState.profile.personalityNature),
+            speechPreference: optionalValue("speechPreference", appState.profile.speechPreference),
+            conversationStyle: optionalValue("conversationStyle", appState.profile.conversationStyle),
+            shyness: optionalValue("shyness", appState.profile.shyness),
+            firstMeetingMood: optionalValue("firstMeetingMood", appState.profile.firstMeetingMood),
+            afterMeeting: optionalValue("afterMeeting", appState.profile.afterMeeting),
+            reassurancePoints: optionalValues("reassurancePoints", appState.profile.reassurancePoints),
+            talkTopics: optionalValues("talkTopics", appState.profile.talkTopics),
+            meetingValues: optionalValues("meetingValues", appState.profile.meetingValues),
+            favoriteActivities: optionalValues("favoriteActivities", appState.profile.favoriteActivities),
+            holiday: optionalValues("holiday", appState.profile.holiday),
+            alcohol: optionalValue("alcohol", appState.profile.alcohol),
+            tobacco: optionalValue("tobacco", appState.profile.tobacco)
           };
           const profile = { nickname: String(formData.get("nickname")).trim(), gender: String(formData.get("gender")), age: calculateAge(birthDate), birthDate, area: formatProfileArea(formData.get("prefecture"), formData.get("city")), bio: String(formData.get("bio")).trim(), tags: [...(appState.profile.tags || [])], photoUrls, ...profileExtras };
           const storedTags = encodeProfileTags(profile.tags, profileExtras);
@@ -5250,7 +5340,7 @@
           syncGenderControls();
           await loadSupabaseListings();
           if (firstTime || profileWasMissing) routeFromAuthState();
-          toast(firstTime ? "プロフィールを作成しました。" : "プロフィールを保存しました。");
+          toast(firstTime ? "基本プロフィールを作成しました。人柄プロフィールはマイページからいつでも追加できます。" : "プロフィールを保存しました。");
         } catch (error) { toast(`プロフィールを保存できませんでした：${error.message}`); }
         finally { setLoading(false); }
       }
