@@ -466,16 +466,6 @@
       gap: clamp(22px, 4vh, 34px);
     }
 
-    .home-welcome { text-align: left; }
-    .home-welcome h1 {
-      max-width: 820px;
-      margin: 6px 0 18px;
-      font-size: clamp(30px, 4.2vw, 46px);
-      line-height: 1.38;
-      letter-spacing: 0;
-    }
-    .home-intro-copy { display: grid; gap: 7px; max-width: 760px; color: var(--muted); font-size: 16px; }
-
     .home-invitation-card {
       display: grid;
       gap: 14px;
@@ -577,32 +567,6 @@
     }
     .home-new-listing:hover { border-color: var(--sage-strong); background: #ffffff; }
     .home-new-listing-title { font-weight: 800; }
-
-    .home-main-actions {
-      display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 16px;
-    }
-
-    .home-primary-action {
-      min-height: 74px;
-      font-size: 19px;
-      font-weight: 700;
-    }
-
-    .home-summary-grid {
-      display: grid;
-      grid-template-columns: minmax(0, 1.45fr) minmax(240px, .75fr);
-      gap: 16px;
-      align-items: stretch;
-    }
-
-    .home-summary-block { min-width: 0; }
-    .home-summary-heading { margin-bottom: 10px; font-size: 16px; }
-    .home-summary-block .recommend-card { height: calc(100% - 34px); margin-top: 0; padding: 20px; box-shadow: var(--shadow-soft); }
-    .home-daily-card { align-self: end; padding: 20px; box-shadow: var(--shadow-soft); }
-    .home-daily-card .result-text { margin-top: 8px; font-size: 17px; }
-    .home-recommendation-empty { margin: auto; color: var(--muted); text-align: center; }
 
     .listing-summary {
       display: grid;
@@ -1290,7 +1254,6 @@
 
       .home-dashboard { min-height: auto; padding-top: 28px; }
       .home-dashboard-inner { gap: 22px; }
-      .home-welcome h1 { font-size: clamp(28px, 9vw, 38px); }
       .home-safety-card { padding: 20px; }
       .home-safety-list { grid-template-columns: 1fr; }
       .home-stats-card { padding: 18px; }
@@ -1299,11 +1262,6 @@
       .home-stat-item { padding: 13px 12px; }
       .home-stat-value { font-size: 20px; }
       .home-invitation-actions { grid-template-columns: 1fr; }
-      .home-main-actions,
-      .home-summary-grid { grid-template-columns: 1fr; }
-      .home-primary-action { min-height: 62px; }
-      .home-summary-block .recommend-card { height: auto; }
-
       .section-head,
       .listing-card,
       .recommend-card {
@@ -1446,7 +1404,6 @@
               <h3>🌱 今日の募集はまだありません</h3>
               <p>あなたの募集が、<br>今日最初の一歩になるかもしれません。</p>
               <p>散歩やカフェなど、<br>30分程度の気軽な募集から始められます。</p>
-              <button class="btn primary" type="button" data-action="home-create-listing">募集を作る</button>
             </div>
           </article>
 
@@ -1454,16 +1411,6 @@
             <h2 id="homeNewListingsHeading">🎉 今日の新着募集</h2>
             <div class="home-new-listings-list" id="homeNewListings"></div>
           </article>
-
-          <header class="home-welcome">
-            <p class="eyebrow">ホーム</p>
-            <h1>同性同士で、気軽に会える時間をつくるサービスです。</h1>
-            <div class="home-intro-copy">
-              <p>無理に話さなくても大丈夫。</p>
-              <p>散歩でも、カフェでも、同じ場所で静かに過ごすだけでも構いません。</p>
-              <p>あなたのペースで、安心して過ごせる時間を大切にしています。</p>
-            </div>
-          </header>
 
           <article class="card home-safety-card">
             <h2>🛡 安心して利用できる仕組み</h2>
@@ -1474,22 +1421,6 @@
               <li>安全ガイドを用意</li>
             </ul>
           </article>
-
-          <div class="home-main-actions" aria-label="ホームの主な操作">
-            <button class="btn primary home-primary-action" data-jump="members">人を探す</button>
-            <button class="btn primary home-primary-action" data-jump="create">募集を作る</button>
-          </div>
-
-          <div class="home-summary-grid">
-            <div class="home-summary-block" role="region" aria-labelledby="homeRecommendationHeading">
-              <h2 class="home-summary-heading" id="homeRecommendationHeading">おすすめ募集</h2>
-              <article class="card recommend-card" id="topRecommendation"></article>
-            </div>
-            <article class="card home-daily-card">
-              <span class="badge muted">今日の一言</span>
-              <p class="result-text" id="dailyMessage">話さなくても大丈夫です。</p>
-            </article>
-          </div>
 
           <button id="todayOpenToggle" type="button" hidden aria-hidden="true" tabindex="-1">今日は会えます：ON</button>
         </div>
@@ -2069,13 +2000,6 @@
         ["応援しているものの話", "人や作品の話を、無理のない範囲で。"]
       ]
     });
-
-    const dailyMessages = [
-      "今日は少し歩いてみませんか。",
-      "話さなくても大丈夫です。",
-      "沈黙も大切な時間です。",
-      "ありがとうございました。その一言だけでも十分です。"
-    ];
 
     const listings = [
       {
@@ -2827,11 +2751,6 @@
       });
     }
 
-    function renderDailyMessage() {
-      const index = new Date().getDate() % dailyMessages.length;
-      document.getElementById("dailyMessage").textContent = dailyMessages[index];
-    }
-
     function homeStatCountText(value) {
       return Number.isInteger(value) && value >= 0 ? `${value.toLocaleString("ja-JP")}件` : "--";
     }
@@ -2926,8 +2845,7 @@
         .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
         .slice(0, 3);
       if (!items.length) {
-        container.innerHTML = `<div class="empty-state"><p>今日の新着募集はまだありません。<br>最初の募集を作ってみませんか？</p><div class="actions" style="justify-content:center"><button class="btn small primary" data-jump="create">募集を作る</button></div></div>`;
-        bindJumpButtons(container);
+        container.innerHTML = `<div class="empty-state"><p>今日の新着募集はまだありません。</p></div>`;
         return;
       }
       container.innerHTML = items.map((item) => {
@@ -3045,7 +2963,6 @@
           <div class="actions"><button class="btn small primary" data-action="open-detail" data-id="${esc(suggested.id || "")}">詳しく見る</button><button class="btn small quiet-action" data-action="report" data-person="${esc(suggestedPersonName)}" data-source="recommendation" data-id="${esc(suggested.id || "")}" data-user-id="${esc(suggested.ownerId || "")}">通報</button></div>
         </div>` : "";
       bindJumpButtons(document.getElementById("diagnosisPerson"));
-      renderRecommendations();
       renderListings();
       renderRegionalProfiles();
     }
@@ -3173,26 +3090,6 @@
 
     function comfortDots() {
       return `<span class="comfort-mark" aria-label="安心して過ごせそう"><i></i><i></i><i></i><i></i><i></i></span>`;
-    }
-
-    function shortCard(item) {
-      return `<div>
-        <span class="badge">今日おすすめ</span> ${verificationBadgesMarkup({ emailConfirmed: item.emailConfirmed, ageInfoRegistered: item.ageInfoRegistered, isVerified: item.verified })}
-        <h3 style="margin-top:10px">${esc(activityDisplay(item))}</h3>
-        <p class="meta">${esc(item.person)}さん / ${esc(formatAge(item.age))} / 徒歩${item.distance}分 / ${esc(item.talk)}</p>
-        <div style="margin-top:8px">${comfortDots()}</div>
-      </div><div class="actions"><button class="btn small" data-action="open-detail" data-id="${item.id}">詳しく見る</button><button class="btn small quiet-action" data-action="report" data-person="${esc(item.person)}" data-source="recommendation" data-id="${item.id}" data-user-id="${esc(item.ownerId || "")}">通報</button></div>`;
-    }
-
-    function renderRecommendations() {
-      const recommended = rankListings().find((item) => item.active) || rankListings()[0];
-      const container = document.getElementById("topRecommendation");
-      if (!recommended) {
-        container.innerHTML = `<p class="home-recommendation-empty">まだおすすめ募集はありません</p>`;
-        return;
-      }
-      container.innerHTML = shortCard(recommended);
-      bindJumpButtons(container);
     }
 
     function normalizeDiscoverableProfile(row = {}) {
@@ -3594,7 +3491,7 @@
       homeNewListingsStatus = "ready";
       saveState();
       updateAccountUI();
-      renderListings(); renderRecommendations(); renderRegionalProfiles(); renderMemberProfiles(); renderManaged(); renderParticipating(); renderHomeNewListings();
+      renderListings(); renderRegionalProfiles(); renderMemberProfiles(); renderManaged(); renderParticipating(); renderHomeNewListings();
       return true;
     }
 
@@ -3671,7 +3568,6 @@
       button.addEventListener("click", () => {
         currentGender = button.dataset.gender;
         syncGenderControls();
-        renderRecommendations();
         renderListings();
         renderRegionalProfiles();
       });
@@ -3930,7 +3826,6 @@
       updateAccountUI();
       renderNotifications();
       renderListings();
-      renderRecommendations();
       renderRegionalProfiles();
       setNotificationPanel(false);
       document.getElementById("chatMessages").innerHTML = `<div class="empty-state">ログインするとチャットを利用できます。</div>`;
@@ -3988,7 +3883,6 @@
         syncGenderControls();
       }
       await loadSupabaseListings();
-      renderRecommendations();
       renderRegionalProfiles();
       if (destination === "home") promptForBirthDateIfNeeded();
     }
@@ -5539,7 +5433,6 @@
           await updateMetCount();
           renderNotifications();
           renderListings();
-          renderRecommendations();
           renderRegionalProfiles();
           setNotificationPanel(false);
           document.getElementById("chatMessages").innerHTML = `<div class="empty-state">ログインするとチャットを利用できます。</div>`;
@@ -5702,7 +5595,7 @@
         const result = await window.tomoniAuth?.createBlock?.({ blocker_id: appState.user.id, blocked_user_id: button.dataset.userId, reason: "user_block" });
         setLoading(false);
         if (result?.error) { toast(`ブロックできませんでした：${result.error.message}`); return; }
-        appState.blocked = [...new Set([...appState.blocked, button.dataset.person])]; appState.moderation.blockCount += 1; saveState(); closeModal(); await loadBlocks(); await loadDiscoverableProfiles(); renderListings(); renderRegionalProfiles(); renderRecommendations(); toast("ブロックしました。応募とチャット送信が制限されます。");
+        appState.blocked = [...new Set([...appState.blocked, button.dataset.person])]; appState.moderation.blockCount += 1; saveState(); closeModal(); await loadBlocks(); await loadDiscoverableProfiles(); renderListings(); renderRegionalProfiles(); toast("ブロックしました。応募とチャット送信が制限されます。");
       }
       if (action === "unblock-user") {
         setLoading(true);
@@ -5827,10 +5720,8 @@
     renderActivities();
     syncGenderControls();
     syncTodayOpen();
-    renderDailyMessage();
     analyzeSafety();
     updateAccountUI();
-    renderRecommendations();
     renderListings();
     renderMemberProfiles();
     renderRegionalProfiles();
