@@ -3524,7 +3524,9 @@
       modalBackdrop.classList.add("open");
       modalBackdrop.setAttribute("aria-hidden", "false");
       modalBackdrop.querySelector('[data-action="close-modal"]').hidden = false;
-      modalBackdrop.querySelector("input, select, textarea, button")?.focus();
+      requestAnimationFrame(() => {
+        (modalBody.querySelector("input, select, textarea, button") || modalBackdrop.querySelector('[data-action="close-modal"]'))?.focus();
+      });
     }
 
     function closeModal() {
