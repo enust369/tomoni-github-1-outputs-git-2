@@ -8,7 +8,7 @@
   <link rel="icon" href="/assets/brand/favicon.svg" type="image/svg+xml">
   <link rel="apple-touch-icon" href="/assets/brand/apple-touch-icon.png">
   <link rel="manifest" href="/site.webmanifest">
-  <title>TOMONI MVP</title>
+  <title>TOMONI｜同性同士で気軽に会える時間をつくるサービス</title>
   <style>
     :root {
       color-scheme: light;
@@ -1874,7 +1874,7 @@
       </section>
 
       <section id="privacy">
-        <article class="card utility-page"><p class="eyebrow">プライバシーポリシー</p><h2>大切な情報の扱い方。</h2><p class="meta">最終更新日：2026年7月2日</p><h3>取得する情報</h3><p>登録情報、プロフィール、募集内容、サービス内の操作、会った後の回答、お問い合わせ内容を取得します。</p><h3>利用目的</h3><p>本人確認、安全な表示、心地よい時間の提案、通報対応、サービス改善のために利用します。会った後の回答は、次の提案を穏やかに整えるために使います。</p><h3>第三者提供</h3><p>法令に基づく場合を除き、本人の同意なく第三者へ提供しません。</p><h3>削除とお問い合わせ</h3><p>登録情報の確認・修正・削除は、お問い合わせから申請できます。</p></article>
+        <article class="card utility-page"><p class="eyebrow">プライバシーポリシー</p><h2>大切な情報の扱い方。</h2><p class="meta">最終更新日：2026年7月29日</p><h3>取得する情報</h3><p>登録情報、プロフィール、募集内容、サービス内の操作、会った後の回答、お問い合わせ内容を取得します。</p><h3>利用目的</h3><p>本人確認、安全な表示、心地よい時間の提案、通報対応、サービス改善のために利用します。会った後の回答は、次の提案を穏やかに整えるために使います。</p><h3>第三者提供</h3><p>法令に基づく場合を除き、本人の同意なく第三者へ提供しません。</p><h3>削除とお問い合わせ</h3><p>登録情報の確認・修正はプロフィール編集から行えます。退会は設定画面の「アカウント削除（退会）」から実行できます。退会時はプロフィール、募集、参加情報、気になる、マッチ、チャット、通知、会った記録、プロフィール画像など、アカウントに紐づくデータを削除します。他の利用者から受けた通報は対象ユーザーとの紐づきを外し、お問い合わせは対応記録として入力内容を保持する場合があります。</p></article>
       </section>
 
       <section id="contact">
@@ -1899,12 +1899,12 @@
     </main>
 
     <footer class="footer">
-      <p>TOMONI MVP / 目の前の一人を大切にする。今日が少し良い日になれば、それで十分。</p>
+      <p>TOMONI / 目の前の一人を大切にする。今日が少し良い日になれば、それで十分。</p>
       <div class="footer-links"><button data-jump="safety-guide-page">安全ガイド</button><button data-jump="safety-commitment">安心・安全への取り組み</button><button data-jump="prohibited">禁止事項</button><button data-jump="terms">利用規約</button><button data-jump="privacy">プライバシーポリシー</button><button data-jump="contact">お問い合わせ</button></div>
     </footer>
   </div>
 
-  <div class="modal-backdrop" id="modalBackdrop" aria-hidden="true"><div class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle"><div class="modal-head"><h2 id="modalTitle">アカウント</h2><button class="icon-button" type="button" data-action="close-modal" aria-label="閉じる">×</button></div><div id="modalBody"></div></div></div>
+  <div class="modal-backdrop" id="modalBackdrop" aria-hidden="true" inert><div class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle"><div class="modal-head"><h2 id="modalTitle">アカウント</h2><button class="icon-button" type="button" data-action="close-modal" aria-label="閉じる">×</button></div><div id="modalBody"></div></div></div>
   <div class="loading-layer" id="loadingLayer" aria-live="polite"><div><div class="spinner" aria-hidden="true"></div><p class="meta" style="margin-top:10px">少しお待ちください</p></div></div>
   <div class="toast-region" id="toastRegion" aria-live="polite" aria-atomic="true"></div>
 
@@ -2001,116 +2001,7 @@
       ]
     });
 
-    const listings = [
-      {
-        person: "ゆう",
-        gender: "女性",
-        activity: "静かな散歩",
-        duration: "20分",
-        place: "新宿御苑の入口近く",
-        talk: "自然に話せたらいい",
-        verified: true,
-        note: "会話は自由です。最初に自己紹介だけして、あとは歩きましょう。",
-        air: ["静かで落ち着いた空気", "のんびりした空気"],
-        traits: ["穏やかな人", "聞き上手な人", "のんびりした人"],
-        pace: "slow",
-        activityType: "walk",
-        area: "新宿",
-        distance: 5,
-        availableToday: true,
-        active: true
-      },
-      {
-        person: "まこと",
-        gender: "女性",
-        activity: "何もしない",
-        duration: "15分",
-        place: "代々木公園のベンチ",
-        talk: "話さなくても大丈夫",
-        verified: true,
-        note: "同じ場所で、ただ静かに過ごしましょう。",
-        air: ["静かで落ち着いた空気", "のんびりした空気"],
-        traits: ["穏やかな人", "聞き上手な人", "のんびりした人"],
-        pace: "still",
-        activityType: "quiet",
-        area: "代々木",
-        distance: 8,
-        availableToday: true,
-        active: true
-      },
-      {
-        person: "あい",
-        gender: "女性",
-        activity: "ベンチでのんびり",
-        duration: "10分",
-        place: "近所の公園",
-        talk: "話さなくても大丈夫",
-        verified: true,
-        note: "今日は募集は出していませんが、短い時間なら過ごせます。",
-        air: ["静かで落ち着いた空気", "のんびりした空気"],
-        traits: ["穏やかな人", "のんびりした人"],
-        pace: "still",
-        activityType: "quiet",
-        area: "渋谷",
-        distance: 12,
-        availableToday: true,
-        active: false
-      },
-      {
-        person: "そう",
-        gender: "男性",
-        activity: "小説の話",
-        duration: "30分",
-        place: "駅前の静かなカフェ",
-        talk: "たくさん話したい",
-        verified: false,
-        note: "最近読んだ本の話ができたらうれしいです。",
-        air: ["一緒に何かをする空気", "のんびりした空気"],
-        traits: ["話す時間を楽しむ人", "一つのことを深く話す"],
-        pace: "deep",
-        activityType: "talk",
-        area: "中野",
-        distance: 18,
-        availableToday: true,
-        active: true
-      },
-      {
-        person: "はる",
-        gender: "男性",
-        activity: "街歩き",
-        duration: "20分",
-        place: "駅前の商店街",
-        talk: "自然に話せたらいい",
-        verified: true,
-        note: "募集は出していませんが、今日は近くで少し歩けます。",
-        air: ["一緒に何かをする空気", "のんびりした空気"],
-        traits: ["穏やかな人", "聞き上手な人"],
-        pace: "slow",
-        activityType: "walk",
-        area: "吉祥寺",
-        distance: 24,
-        availableToday: true,
-        active: false
-      },
-      {
-        person: "けん",
-        gender: "男性",
-        activity: "キャッチボール",
-        duration: "20分",
-        place: "区立公園の広場",
-        talk: "自然に話せたらいい",
-        verified: true,
-        note: "軽く体を動かして、気が向いたら少し話しましょう。",
-        air: ["元気で行動的な空気", "一緒に何かをする空気"],
-        traits: ["行動的な人", "よく笑う人"],
-        pace: "active",
-        activityType: "move",
-        area: "杉並",
-        distance: 16,
-        availableToday: false,
-        active: true
-      }
-    ];
+    const listings = [];
 
     let currentGender = "女性";
     let latestRankedListings = [];
@@ -2193,10 +2084,8 @@
       return [...new Set(values.flatMap((item) => item === "土日休み" ? ["土曜日", "日曜日"] : item === "平日休み" ? weekdays : [item]).filter((item) => profileOptionSets.holiday.includes(item)))];
     }
     const emptyProfileExtras = { height: null, occupation: "", currentInterest: "", personalityNature: "", speechPreference: "", conversationStyle: "", shyness: "", firstMeetingMood: "", afterMeeting: "", reassurancePoints: [], talkTopics: [], meetingValues: [], favoriteActivities: [], holiday: [], alcohol: "", tobacco: "" };
-    const defaultState = { user: null, profileOwnerId: null, safetyOnboardingAccepted: false, dismissedChatSafety: [], saved: [], blocked: [], customListings: [], demoParticipations: [], moderation: { reports: [], blockCount: 0 }, feedbackHistory: [], profile: { nickname: "あなた", age: null, birthDate: "", gender: "女性", area: "", bio: "静かな時間を大切にしています。", tags: [], photoUrls: [], ...emptyProfileExtras, isVerified: false, personalityType: "", personalityTitle: "", personalityDescription: "", personalityTags: [], quietScore: null, talkScore: null, comfortScore: null } };
+    const defaultState = { user: null, profileOwnerId: null, safetyOnboardingAccepted: false, dismissedChatSafety: [], saved: [], blocked: [], customListings: [], moderation: { reports: [], blockCount: 0 }, feedbackHistory: [], profile: { nickname: "あなた", age: null, birthDate: "", gender: "女性", area: "", bio: "静かな時間を大切にしています。", tags: [], photoUrls: [], ...emptyProfileExtras, isVerified: false, personalityType: "", personalityTitle: "", personalityDescription: "", personalityTags: [], quietScore: null, talkScore: null, comfortScore: null } };
     let appState = loadState();
-    listings.splice(0, listings.length);
-
     const MUNICIPALITIES_BY_PREFECTURE = {
       "北海道": ["札幌市", "函館市", "小樽市", "旭川市", "室蘭市", "釧路市", "帯広市", "北見市", "苫小牧市", "江別市"],
       "青森県": ["青森市", "弘前市", "八戸市", "黒石市", "五所川原市", "十和田市", "三沢市", "むつ市", "つがる市", "平川市"],
@@ -2358,7 +2247,7 @@
     function loadState() {
       try {
         const stored = JSON.parse(localStorage.getItem(storageKey) || "{}");
-        return { ...defaultState, ...stored, dismissedChatSafety: Array.isArray(stored.dismissedChatSafety) ? stored.dismissedChatSafety : [], saved: Array.isArray(stored.saved) ? stored.saved : [], blocked: Array.isArray(stored.blocked) ? stored.blocked : [], customListings: Array.isArray(stored.customListings) ? stored.customListings : [], demoParticipations: Array.isArray(stored.demoParticipations) ? stored.demoParticipations : [], feedbackHistory: Array.isArray(stored.feedbackHistory) ? stored.feedbackHistory : [], moderation: { ...defaultState.moderation, ...(stored.moderation || {}), reports: Array.isArray(stored.moderation?.reports) ? stored.moderation.reports : [] }, profile: { ...defaultState.profile, ...(stored.profile || {}), reassurancePoints: Array.isArray(stored.profile?.reassurancePoints) ? stored.profile.reassurancePoints : [], talkTopics: Array.isArray(stored.profile?.talkTopics) ? stored.profile.talkTopics : [], meetingValues: Array.isArray(stored.profile?.meetingValues) ? stored.profile.meetingValues : [], holiday: normalizeHolidayValues(stored.profile?.holiday), birthDate: "" } };
+        return { ...defaultState, ...stored, dismissedChatSafety: Array.isArray(stored.dismissedChatSafety) ? stored.dismissedChatSafety : [], saved: Array.isArray(stored.saved) ? stored.saved : [], blocked: Array.isArray(stored.blocked) ? stored.blocked : [], customListings: Array.isArray(stored.customListings) ? stored.customListings : [], feedbackHistory: Array.isArray(stored.feedbackHistory) ? stored.feedbackHistory : [], moderation: { ...defaultState.moderation, ...(stored.moderation || {}), reports: Array.isArray(stored.moderation?.reports) ? stored.moderation.reports : [] }, profile: { ...defaultState.profile, ...(stored.profile || {}), reassurancePoints: Array.isArray(stored.profile?.reassurancePoints) ? stored.profile.reassurancePoints : [], talkTopics: Array.isArray(stored.profile?.talkTopics) ? stored.profile.talkTopics : [], meetingValues: Array.isArray(stored.profile?.meetingValues) ? stored.profile.meetingValues : [], holiday: normalizeHolidayValues(stored.profile?.holiday), birthDate: "" } };
       }
       catch { return { ...defaultState }; }
     }
@@ -3372,7 +3261,7 @@
         return true;
       }
       const result = await window.tomoniAuth?.listFavorites?.();
-      if (result?.error) { if (!options.silent) toast(`気になる一覧を読み込めませんでした：${result.error.message}`); return false; }
+      if (result?.error) { if (!options.silent) toast(userFacingErrorMessage(result.error, "気になる一覧を読み込めませんでした。しばらくしてからもう一度お試しください。")); return false; }
       favoriteRecords = result?.data || [];
       favoriteListingIds = new Set(favoriteRecords.map((item) => item.listing_id).filter(Boolean));
       favoriteTargetUserIds = new Set(favoriteRecords.map((item) => item.target_user_id).filter(Boolean));
@@ -3388,7 +3277,7 @@
         return true;
       }
       const result = await window.tomoniAuth?.listBlocks?.();
-      if (result?.error) { if (!options.silent) toast(`ブロック一覧を読み込めませんでした：${result.error.message}`); return false; }
+      if (result?.error) { if (!options.silent) toast(userFacingErrorMessage(result.error, "ブロック一覧を読み込めませんでした。しばらくしてからもう一度お試しください。")); return false; }
       blockRecords = result?.data || [];
       blockedUserIds = new Set(blockRecords.map((item) => item.blocked_user_id).filter(Boolean));
       return true;
@@ -3401,7 +3290,7 @@
         return true;
       }
       const result = await window.tomoniAuth?.listMatches?.();
-      if (result?.error) { if (!options.silent) toast(`マッチ一覧を読み込めませんでした：${result.error.message}`); return false; }
+      if (result?.error) { if (!options.silent) toast(userFacingErrorMessage(result.error, "マッチ一覧を読み込めませんでした。しばらくしてからもう一度お試しください。")); return false; }
       matchRecords = (result?.data || []).filter((match) => {
         const partnerId = match.user1_id === appState.user.id ? match.user2_id : match.user1_id;
         const partnerGender = profilesByUserId.get(partnerId)?.gender || listings.find((item) => item.ownerId === partnerId)?.gender;
@@ -3466,10 +3355,10 @@
         appState.user ? window.tomoniAuth?.listDiscoverableProfiles?.() : Promise.resolve({ data: [], error: null })
       ]);
       if ((appState.user?.id || "") !== expectedUserId) return false;
-      if (result?.error) { homeNewListingsStatus = "error"; renderHomeNewListings(); if (!options.silent) toast(`募集を読み込めませんでした：${result.error.message}`); return false; }
-      if (countsResult?.error) { homeNewListingsStatus = "error"; renderHomeNewListings(); if (!options.silent) toast(`参加人数を読み込めませんでした：${countsResult.error.message}`); return false; }
-      if (mineResult?.error) { homeNewListingsStatus = "error"; renderHomeNewListings(); if (!options.silent) toast(`参加状態を読み込めませんでした：${mineResult.error.message}`); return false; }
-      if (profilesResult?.error) { homeNewListingsStatus = "error"; renderHomeNewListings(); if (!options.silent) toast(`プロフィール情報を読み込めませんでした：${profilesResult.error.message}`); return false; }
+      if (result?.error) { homeNewListingsStatus = "error"; renderHomeNewListings(); if (!options.silent) toast(userFacingErrorMessage(result.error, "募集を読み込めませんでした。しばらくしてからもう一度お試しください。")); return false; }
+      if (countsResult?.error) { homeNewListingsStatus = "error"; renderHomeNewListings(); if (!options.silent) toast(userFacingErrorMessage(countsResult.error, "参加人数を読み込めませんでした。しばらくしてからもう一度お試しください。")); return false; }
+      if (mineResult?.error) { homeNewListingsStatus = "error"; renderHomeNewListings(); if (!options.silent) toast(userFacingErrorMessage(mineResult.error, "参加状態を読み込めませんでした。しばらくしてからもう一度お試しください。")); return false; }
+      if (profilesResult?.error) { homeNewListingsStatus = "error"; renderHomeNewListings(); if (!options.silent) toast(userFacingErrorMessage(profilesResult.error, "プロフィール情報を読み込めませんでした。しばらくしてからもう一度お試しください。")); return false; }
       if (membersResult?.error) toast("登録者一覧を読み込めませんでした。SQLの反映状況を確認してください。");
       applyDiscoverableProfiles(membersResult?.error ? [] : (membersResult?.data || []));
       const counts = new Map((countsResult?.data || []).map((item) => [item.listing_id, Number(item.participant_count)]));
@@ -3576,6 +3465,8 @@
     const modalBackdrop = document.getElementById("modalBackdrop");
     const modalBody = document.getElementById("modalBody");
     const modalTitle = document.getElementById("modalTitle");
+    const appRoot = document.querySelector(".app");
+    let modalReturnFocus = null;
 
     function toast(message) {
       const item = document.createElement("div");
@@ -3583,6 +3474,21 @@
       item.textContent = message;
       document.getElementById("toastRegion").appendChild(item);
       setTimeout(() => item.remove(), 3200);
+    }
+
+    function userFacingErrorMessage(error, fallback = "処理を完了できませんでした。しばらくしてからもう一度お試しください。") {
+      const message = String(error?.message || error || "").trim();
+      if (!message) return fallback;
+      if (/[\u3040-\u30ff\u3400-\u9fff]/.test(message)) return message;
+      if (/invalid login credentials/i.test(message)) return "メールアドレスまたはパスワードが正しくありません。";
+      if (/email not confirmed|not confirmed|confirm/i.test(message)) return "メール確認が完了していません。確認メールをご確認ください。";
+      if (/user already registered|already been registered/i.test(message)) return "このメールアドレスはすでに登録されています。";
+      if (/weak password|password.*(short|least|characters|length)/i.test(message)) return "パスワードは8文字以上で入力してください。";
+      if (/429|rate.?limit|too many|over_email_send_rate_limit/i.test(`${error?.status || ""} ${error?.code || ""} ${message}`)) return "短時間に操作が続いています。しばらく待ってから再度お試しください。";
+      if (/Failed to fetch|NetworkError|fetch/i.test(message)) return "通信できませんでした。接続を確認して、もう一度お試しください。";
+      if (/JWT|session|refresh token/i.test(message)) return "ログイン状態を確認できませんでした。もう一度ログインしてください。";
+      if (/row-level security|permission denied|42501/i.test(message)) return "この操作を行う権限がありません。";
+      return fallback;
     }
 
     function participationErrorMessage(error) {
@@ -3593,7 +3499,7 @@
       if (/見つかりません/.test(message)) return "募集が見つかりません。再読み込みしてください。";
       if (/PGRST202|Could not find the function|request_listing_participation|review_listing_participation/i.test(message)) return "参加申請機能のSQLがSupabaseに反映されていません。supabase-listings.sqlを実行してください。";
       if (/Failed to fetch|NetworkError|fetch/i.test(message)) return "通信できませんでした。接続を確認して、もう一度お試しください。";
-      return `参加状態を変更できませんでした。${message || "しばらくしてからもう一度お試しください。"}`;
+      return userFacingErrorMessage(error, "参加状態を変更できませんでした。しばらくしてからもう一度お試しください。");
     }
 
     function showParticipationMessage(message, isError = false) {
@@ -3608,8 +3514,13 @@
     function withLoading(callback) { setLoading(true); setTimeout(() => { setLoading(false); callback(); }, 450); }
 
     function openModal(title, content) {
+      if (!modalBackdrop.classList.contains("open")) {
+        modalReturnFocus = document.activeElement instanceof HTMLElement ? document.activeElement : null;
+      }
       modalTitle.textContent = title;
       modalBody.innerHTML = content;
+      modalBackdrop.inert = false;
+      appRoot.inert = true;
       modalBackdrop.classList.add("open");
       modalBackdrop.setAttribute("aria-hidden", "false");
       modalBackdrop.querySelector('[data-action="close-modal"]').hidden = false;
@@ -3620,13 +3531,30 @@
       if (safetyGateActive) return;
       modalBackdrop.classList.remove("open");
       modalBackdrop.setAttribute("aria-hidden", "true");
+      modalBackdrop.inert = true;
+      appRoot.inert = false;
       modalBody.innerHTML = "";
+      if (modalReturnFocus?.isConnected) modalReturnFocus.focus();
+      modalReturnFocus = null;
     }
 
     function openSafetyOnboarding() {
       safetyGateActive = true;
       openModal("TOMONIを始める前に", `<p>安心して同じ時間を過ごすために、最初に三つだけ確認してください。</p><div class="onboarding-points"><label class="check-row"><input type="checkbox" data-safety-confirm><span><strong>18歳以上です</strong><br><span class="meta">TOMONIは18歳未満の方は利用できません。</span></span></label><label class="check-row"><input type="checkbox" data-safety-confirm><span><strong>利用規約に同意します</strong><br><span class="meta">相手の意思と距離感を尊重します。</span></span></label><label class="check-row"><input type="checkbox" data-safety-confirm><span><strong>公共の場所で会います</strong><br><span class="meta">初回は昼間のカフェ、公園、公共施設などを選びます。</span></span></label></div><button class="btn primary" type="button" data-action="confirm-safety-start" disabled>TOMONIを始める</button><p class="meta" style="margin-top:14px">安全ガイド・利用規約・プライバシーポリシーは、いつでもフッターから確認できます。</p>`);
       modalBackdrop.querySelector('[data-action="close-modal"]').hidden = true;
+    }
+
+    function setProtectedSectionLocked(sectionId, locked) {
+      const section = document.getElementById(sectionId);
+      if (!section) return;
+      section.classList.toggle("is-locked", locked);
+      [...section.children].forEach((child) => {
+        const accessGate = child.classList.contains("access-gate");
+        child.inert = accessGate ? !locked : locked;
+        if (accessGate) child.setAttribute("aria-hidden", locked ? "false" : "true");
+        else if (locked) child.setAttribute("aria-hidden", "true");
+        else child.removeAttribute("aria-hidden");
+      });
     }
 
     function updateAccountUI() {
@@ -3693,11 +3621,7 @@
       };
       document.getElementById("profileVerified").textContent = verificationLabels(ownVerificationStatus, true).join("・");
       document.getElementById("verificationStatus").innerHTML = `<strong>確認状態</strong><div class="chips" style="margin-top:10px">${verificationBadgesMarkup(ownVerificationStatus, true)}</div><p class="meta" style="margin-top:10px">メール確認、年齢情報の入力、公的な本人確認はそれぞれ別の状態です。</p>`;
-      document.getElementById("create").classList.toggle("is-locked", !profileComplete);
-      document.getElementById("members").classList.toggle("is-locked", !profileComplete);
-      document.getElementById("region").classList.toggle("is-locked", !profileComplete);
-      document.getElementById("managed").classList.toggle("is-locked", !profileComplete);
-      document.getElementById("participating").classList.toggle("is-locked", !profileComplete);
+      ["create", "members", "region", "managed", "participating"].forEach((sectionId) => setProtectedSectionLocked(sectionId, !profileComplete));
     }
 
     function hasMemberAccess() {
@@ -3744,7 +3668,7 @@
       if (!appState.user) return false;
       const result = await window.tomoniAuth?.getOwnBirthDate?.();
       if (result?.error) {
-        toast(`生年月日の登録状態を確認できませんでした：${result.error.message}`);
+        toast(userFacingErrorMessage(result.error, "生年月日の登録状態を確認できませんでした。しばらくしてからもう一度お試しください。"));
         return false;
       }
       const birthDate = result?.data?.birth_date || "";
@@ -3995,7 +3919,7 @@
       if (/password/i.test(message) && /(weak|short|least|characters|length)/i.test(message)) return "パスワードは8文字以上で入力してください。";
       if (/rate limit|too many/i.test(message)) return "短時間に送信が続いています。少し時間をおいてからもう一度お試しください。";
       if (/Failed to fetch|NetworkError|fetch/i.test(message)) return "通信できませんでした。接続を確認して、もう一度お試しください。";
-      return message || "再設定メールを送信できませんでした。しばらくしてからもう一度お試しください。";
+      return userFacingErrorMessage(error, "再設定メールを送信できませんでした。しばらくしてからもう一度お試しください。");
     }
 
     function validateForm(form) {
@@ -4007,7 +3931,6 @@
         else if (field.required && !field.value.trim()) message = "入力してください。";
         else if (field.type === "email" && field.value && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(field.value)) message = "メールアドレスを確認してください。";
         else if (field.minLength > 0 && field.value.length < field.minLength) message = `${field.minLength}文字以上で入力してください。`;
-        else if (field.id === "resetCode" && field.value !== "123456") message = "確認コードが一致しません。";
         else if (field.id === "authPasswordConfirm" && field.value !== form.querySelector("#authPassword")?.value) message = "パスワードが一致しません。";
         else if (field.id === "passwordUpdateConfirm" && field.value !== form.querySelector("#passwordUpdateNew")?.value) message = "パスワードが一致しません。";
         else if (["authBirthdate", "profileBirthDate", "requiredBirthDate"].includes(field.id) && !isAdult(field.value)) message = "18歳以上の正しい生年月日を入力してください。";
@@ -4100,7 +4023,7 @@
       if (/JWT|session|ログイン|auth/i.test(message)) return "ログイン状態を確認できませんでした。管理者メールでログインし直してください。";
       if (/管理者|permission|denied|権限/i.test(message)) return "管理者のみ閲覧できます。";
       if (/Failed to fetch|NetworkError|fetch/i.test(message)) return "通信できませんでした。接続を確認してもう一度お試しください。";
-      return `管理画面を読み込めませんでした。${message || "しばらくしてからもう一度お試しください。"}`;
+      return userFacingErrorMessage(error, "管理画面を読み込めませんでした。しばらくしてからもう一度お試しください。");
     }
 
     function setAdminLoading() {
@@ -4618,7 +4541,7 @@
       setLoading(true);
       const result = await window.tomoniAuth?.getMeetingRecord?.(item.id);
       setLoading(false);
-      if (result?.error) { const message = `会った記録を読み込めませんでした：${result.error.message}`; document.getElementById("meetingRecordStatus").textContent = message; document.getElementById("meetingRecordStatus").classList.add("caution"); toast(message); return; }
+      if (result?.error) { const message = userFacingErrorMessage(result.error, "会った記録を読み込めませんでした。しばらくしてからもう一度お試しください。"); document.getElementById("meetingRecordStatus").textContent = message; document.getElementById("meetingRecordStatus").classList.add("caution"); toast(message); return; }
       const record = result?.data;
       document.getElementById("metSafely").checked = Boolean(record?.met_safely);
       document.getElementById("meetAgain").checked = Boolean(record?.meet_again);
@@ -4661,7 +4584,7 @@
       if (/Failed to fetch|NetworkError|fetch/i.test(message)) return "通信できませんでした。接続を確認して、もう一度お試しください。";
       if (/listing_messages|relation .* does not exist|42P01/i.test(message)) return "チャット用SQLがSupabaseに反映されていません。supabase-listings.sqlを実行してください。";
       if (/match_messages/i.test(message)) return "マッチチャット用SQLがSupabaseに反映されていません。supabase-listings.sqlを実行してください。";
-      return `チャットを読み込めませんでした。${message || "しばらくしてからもう一度お試しください。"}`;
+      return userFacingErrorMessage(error, "チャットを読み込めませんでした。しばらくしてからもう一度お試しください。");
     }
 
     function currentChatSafetyKey() {
@@ -4867,7 +4790,7 @@
       let match = matchRecords.find((item) => item.id === matchId) || null;
       if (!match && partnerUserId) {
         const result = await window.tomoniAuth?.getMatchWithUser?.(partnerUserId);
-        if (result?.error) { document.getElementById("chatStatus").textContent = `マッチ情報を取得できませんでした：${result.error.message}`; document.getElementById("chatStatus").classList.add("caution"); toast("マッチ情報を取得できませんでした。"); return; }
+        if (result?.error) { document.getElementById("chatStatus").textContent = userFacingErrorMessage(result.error, "マッチ情報を取得できませんでした。しばらくしてからもう一度お試しください。"); document.getElementById("chatStatus").classList.add("caution"); toast("マッチ情報を取得できませんでした。"); return; }
         match = result?.data || null;
         if (match && !matchRecords.some((item) => item.id === match.id)) {
           matchRecords.unshift(match);
@@ -5043,7 +4966,7 @@
           toast(wasEditing ? "募集を更新しました。" : "募集を公開しました。");
           renderManaged();
         } catch (error) {
-          toast(`保存できませんでした：${error.message}`);
+          toast(userFacingErrorMessage(error, "募集を保存できませんでした。しばらくしてからもう一度お試しください。"));
         } finally { setLoading(false); }
       }
       if (form.id === "chatForm") {
@@ -5089,7 +5012,7 @@
           await updateMetCount();
           toast("保存しました。この内容は自分だけが確認できます。");
         } catch (error) {
-          document.getElementById("meetingRecordStatus").textContent = `保存できませんでした：${error.message}`;
+          document.getElementById("meetingRecordStatus").textContent = userFacingErrorMessage(error, "会った記録を保存できませんでした。しばらくしてからもう一度お試しください。");
           document.getElementById("meetingRecordStatus").classList.add("caution");
         } finally { saveButton.disabled = false; }
       }
@@ -5114,9 +5037,9 @@
           status.classList.remove("caution");
           toast("お問い合わせを受け付けました。確認後、必要に応じてご連絡します。");
         } catch (error) {
-          status.textContent = `お問い合わせを送信できませんでした：${error.message}`;
+          status.textContent = userFacingErrorMessage(error, "お問い合わせを送信できませんでした。しばらくしてからもう一度お試しください。");
           status.classList.add("caution");
-          toast(`お問い合わせを送信できませんでした：${error.message}`);
+          toast(userFacingErrorMessage(error, "お問い合わせを送信できませんでした。しばらくしてからもう一度お試しください。"));
         } finally {
           setLoading(false);
           button.disabled = false;
@@ -5137,7 +5060,7 @@
           if (/email not confirmed|not confirmed|confirm/i.test(result.error.message || "")) { openEmailVerificationNotice(data.email.trim()); return; }
           const passwordField = document.getElementById("authPassword");
           passwordField.setAttribute("aria-invalid", "true");
-          passwordField.parentElement.querySelector(".field-error").textContent = result.error.message;
+          passwordField.parentElement.querySelector(".field-error").textContent = userFacingErrorMessage(result.error, registering ? "登録できませんでした。入力内容をご確認ください。" : "ログインできませんでした。入力内容をご確認ください。");
           passwordField.focus();
           return;
         }
@@ -5158,10 +5081,10 @@
         const birthDate = String(new FormData(form).get("birthDate") || "");
         setLoading(true);
         try { await getLatestAuthenticatedUser(); }
-        catch (error) { setLoading(false); toast(error.message); return; }
+        catch (error) { setLoading(false); toast(userFacingErrorMessage(error, "ログイン状態を確認できませんでした。もう一度お試しください。")); return; }
         const result = await window.tomoniAuth?.saveOwnBirthDate?.(birthDate);
         setLoading(false);
-        if (result?.error) { toast(`生年月日を登録できませんでした：${result.error.message}`); return; }
+        if (result?.error) { toast(userFacingErrorMessage(result.error, "生年月日を登録できませんでした。しばらくしてからもう一度お試しください。")); return; }
         appState.profile.birthDate = birthDate;
         appState.profile.age = calculateAge(birthDate);
         scheduleAgeRefresh();
@@ -5263,7 +5186,7 @@
           await loadSupabaseListings();
           if (firstTime || profileWasMissing) routeFromAuthState();
           toast(firstTime ? "基本プロフィールを作成しました。人柄プロフィールはマイページからいつでも追加できます。" : "プロフィールを保存しました。");
-        } catch (error) { toast(`プロフィールを保存できませんでした：${error.message}`); }
+        } catch (error) { toast(userFacingErrorMessage(error, "プロフィールを保存できませんでした。しばらくしてからもう一度お試しください。")); }
         finally { setLoading(false); }
       }
       if (form.id === "reportForm") {
@@ -5276,7 +5199,7 @@
         if (form.dataset.matchId) reportPayload.match_id = form.dataset.matchId;
         const result = await window.tomoniAuth?.createReport?.(reportPayload);
         setLoading(false);
-        if (result?.error) { toast(`通報を送信できませんでした：${result.error.message}`); return; }
+        if (result?.error) { toast(userFacingErrorMessage(result.error, "通報を送信できませんでした。しばらくしてからもう一度お試しください。")); return; }
         closeModal(); toast("通報を受け付けました。安全チームが確認します。");
       }
     });
@@ -5373,7 +5296,7 @@
         setLoading(true);
         const result = await window.tomoniAuth?.resolveAdminReport?.(button.dataset.id);
         setLoading(false);
-        if (result?.error) { toast(`通報を更新できませんでした：${result.error.message}`); return; }
+        if (result?.error) { toast(userFacingErrorMessage(result.error, "通報を更新できませんでした。しばらくしてからもう一度お試しください。")); return; }
         await renderAdmin();
         toast("通報を対応済みにしました。");
       }
@@ -5381,7 +5304,7 @@
         setLoading(true);
         const result = await window.tomoniAuth?.resolveAdminContact?.(button.dataset.id);
         setLoading(false);
-        if (result?.error) { toast(`お問い合わせを更新できませんでした：${result.error.message}`); return; }
+        if (result?.error) { toast(userFacingErrorMessage(result.error, "お問い合わせを更新できませんでした。しばらくしてからもう一度お試しください。")); return; }
         await renderAdmin();
         toast("お問い合わせを対応済みにしました。");
       }
@@ -5390,7 +5313,7 @@
         setLoading(true);
         const result = await window.tomoniAuth?.endAdminListing?.(button.dataset.id);
         setLoading(false);
-        if (result?.error) { toast(`募集を終了できませんでした：${result.error.message}`); return; }
+        if (result?.error) { toast(userFacingErrorMessage(result.error, "募集を終了できませんでした。しばらくしてからもう一度お試しください。")); return; }
         closeModal(); await renderAdmin(); await loadSupabaseListings(); await loadHomeStats({ force: true }); toast("募集を終了しました。");
       }
       if (action === "admin-delete-listing") openModal("募集を削除しますか？", `<p>この操作は取り消せません。関連する参加・チャット情報も削除される場合があります。</p><div class="actions"><button class="btn primary" data-action="confirm-admin-delete-listing" data-id="${esc(button.dataset.id)}">削除する</button><button class="btn" data-action="close-modal">戻る</button></div>`);
@@ -5398,7 +5321,7 @@
         setLoading(true);
         const result = await window.tomoniAuth?.deleteAdminListing?.(button.dataset.id);
         setLoading(false);
-        if (result?.error) { toast(`募集を削除できませんでした：${result.error.message}`); return; }
+        if (result?.error) { toast(userFacingErrorMessage(result.error, "募集を削除できませんでした。しばらくしてからもう一度お試しください。")); return; }
         closeModal(); await renderAdmin(); await loadSupabaseListings(); await loadHomeStats({ force: true }); toast("募集を削除しました。");
       }
       if (action === "admin-unblock") openModal("ブロックを解除しますか？", `<p>このブロック状態を解除します。</p><div class="actions"><button class="btn primary" data-action="confirm-admin-unblock" data-id="${esc(button.dataset.id)}">解除する</button><button class="btn" data-action="close-modal">戻る</button></div>`);
@@ -5406,7 +5329,7 @@
         setLoading(true);
         const result = await window.tomoniAuth?.unblockAdminUser?.(button.dataset.id);
         setLoading(false);
-        if (result?.error) { toast(`ブロック解除できませんでした：${result.error.message}`); return; }
+        if (result?.error) { toast(userFacingErrorMessage(result.error, "ブロック解除できませんでした。しばらくしてからもう一度お試しください。")); return; }
         closeModal(); await renderAdmin(); await loadBlocks(); toast("ブロックを解除しました。");
       }
       if (action === "show-managed") { if (!appState.user) openModal("ログイン", authMarkup("login")); else if (appState.profileOwnerId !== appState.user.id) showProfileEditor(true); else { accountNavMode = "managed"; activateTab("recruit-managed"); } }
@@ -5441,7 +5364,7 @@
           toast("退会しました");
         } catch (error) {
           setLoading(false);
-          toast(`退会できませんでした：${error.message}`);
+          toast(userFacingErrorMessage(error, "退会できませんでした。データは変更されていません。しばらくしてからもう一度お試しください。"));
         }
       }
       if (action === "logout") {
@@ -5452,7 +5375,7 @@
         await closeNotificationRealtime();
         const result = await window.tomoniAuth?.signOut();
         setLoading(false);
-        if (result?.error) { toast(result.error.message); return; }
+        if (result?.error) { toast(userFacingErrorMessage(result.error, "ログアウトできませんでした。しばらくしてからもう一度お試しください。")); return; }
         await queueAuthSynchronization("SIGNED_OUT", null);
         document.getElementById("accountContent").innerHTML = `<article class="card empty-state">ログアウトしました。またいつでも戻ってきてください。</article>`;
         toast("ログアウトしました。");
@@ -5529,7 +5452,7 @@
           if (document.getElementById("account").classList.contains("is-visible")) renderFavorites();
           toast(isMatched(item) ? "マッチしました。" : "気になるに追加しました。相手には通知されません。");
         } catch (error) {
-          toast(`気になるを更新できませんでした：${error.message}`);
+          toast(userFacingErrorMessage(error, "気になるを更新できませんでした。しばらくしてからもう一度お試しください。"));
         } finally {
           setLoading(false);
           favoriteToggleInProgress.delete(item.id);
@@ -5594,14 +5517,14 @@
         setLoading(true);
         const result = await window.tomoniAuth?.createBlock?.({ blocker_id: appState.user.id, blocked_user_id: button.dataset.userId, reason: "user_block" });
         setLoading(false);
-        if (result?.error) { toast(`ブロックできませんでした：${result.error.message}`); return; }
+        if (result?.error) { toast(userFacingErrorMessage(result.error, "ブロックできませんでした。しばらくしてからもう一度お試しください。")); return; }
         appState.blocked = [...new Set([...appState.blocked, button.dataset.person])]; appState.moderation.blockCount += 1; saveState(); closeModal(); await loadBlocks(); await loadDiscoverableProfiles(); renderListings(); renderRegionalProfiles(); toast("ブロックしました。応募とチャット送信が制限されます。");
       }
       if (action === "unblock-user") {
         setLoading(true);
         const result = await window.tomoniAuth?.removeBlock?.(button.dataset.userId);
         setLoading(false);
-        if (result?.error) { toast(`ブロック解除できませんでした：${result.error.message}`); return; }
+        if (result?.error) { toast(userFacingErrorMessage(result.error, "ブロック解除できませんでした。しばらくしてからもう一度お試しください。")); return; }
         await loadBlocks(); await loadSupabaseListings(); renderBlocks(); toast("ブロックを解除しました。");
       }
       if (action === "edit-listing") {
@@ -5631,7 +5554,7 @@
         setLoading(true);
         const result = await window.tomoniAuth?.endOwnListing?.(item.id, appState.user.id);
         setLoading(false);
-        if (result?.error) { toast(`募集を終了できませんでした：${result.error.message}`); return; }
+        if (result?.error) { toast(userFacingErrorMessage(result.error, "募集を終了できませんでした。しばらくしてからもう一度お試しください。")); return; }
         if (!result?.data || result.data.status !== "ended") { closeModal(); toast("募集を終了できませんでした。募集状態を再確認してください。"); await loadSupabaseListings(); return; }
         closeModal();
         await loadSupabaseListings();
@@ -5643,7 +5566,7 @@
         setLoading(true);
         const result = await window.tomoniAuth.deleteListing(button.dataset.id);
         setLoading(false);
-        if (result.error) { toast(`削除できませんでした：${result.error.message}`); return; }
+        if (result.error) { toast(userFacingErrorMessage(result.error, "募集を削除できませんでした。しばらくしてからもう一度お試しください。")); return; }
         closeModal(); await loadSupabaseListings(); await loadHomeStats({ force: true }); renderManaged(); toast("募集を削除しました。");
       }
       if (action === "retry") withLoading(async () => { jumpTo("home"); await loadHomeStats(); toast("読み込み直しました。"); });
