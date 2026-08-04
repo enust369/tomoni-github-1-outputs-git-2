@@ -3491,6 +3491,15 @@
       return fallback;
     }
 
+    function reportAuthFailure(action, error) {
+      console.error(`[TOMONI Auth] ${action} failed`, {
+        name: String(error?.name || "AuthError"),
+        message: String(error?.message || error || "Unknown authentication error"),
+        status: error?.status ?? null,
+        code: error?.code ?? null
+      });
+    }
+
     function participationErrorMessage(error) {
       const message = String(error?.message || error || "");
       if (/ログイン|JWT|session/i.test(message)) return "ログイン状態を確認できませんでした。もう一度ログインしてください。";
@@ -5054,10 +5063,32 @@
         const registering = form.dataset.mode === "register";
         setLoading(true);
         const auth = window.tomoniAuth;
-        if (!auth?.configured) { setLoading(false); form.dataset.submitting = "false"; toast("Supabaseの接続情報を設定してください。"); return; }
-        const result = registering ? await auth.signUp(data.email.trim(), data.password, data.birthDate) : await auth.signIn(data.email.trim(), data.password);
+        if (!auth?.configured) {
+          const error = new Error("Supabase authentication client is not configured.");
+          reportAuthFailure(registering ? "signUp" : "signIn", error);
+          setLoading(false);
+          form.dataset.submitting = "false";
+          toast("認証サービスへ接続できませんでした。画面を再読み込みしてもう一度お試しください。");
+          return;
+        }
+        let result;
+        try {
+          result = registering
+            ? await auth.signUp(data.email.trim(), data.password, data.birthDate)
+            : await auth.signIn(data.email.trim(), data.password);
+        } catch (error) {
+          reportAuthFailure(registering ? "signUp" : "signIn", error);
+          setLoading(false);
+          form.dataset.submitting = "false";
+          const passwordField = document.getElementById("authPassword");
+          passwordField.setAttribute("aria-invalid", "true");
+          passwordField.parentElement.querySelector(".field-error").textContent = userFacingErrorMessage(error, registering ? "登録できませんでした。通信状態を確認してもう一度お試しください。" : "ログインできませんでした。通信状態を確認してもう一度お試しください。");
+          passwordField.focus();
+          return;
+        }
         setLoading(false);
-        if (result.error) {
+        if (result?.error) {
+          reportAuthFailure(registering ? "signUp" : "signIn", result.error);
           form.dataset.submitting = "false";
           if (/email not confirmed|not confirmed|confirm/i.test(result.error.message || "")) { openEmailVerificationNotice(data.email.trim()); return; }
           const passwordField = document.getElementById("authPassword");
@@ -5066,8 +5097,8 @@
           passwordField.focus();
           return;
         }
-        const user = result.data?.user;
-        if (registering && (!result.data?.session || !user?.email_confirmed_at)) {
+        const user = result?.data?.user;
+        if (registering && (!result?.data?.session || !user?.email_confirmed_at)) {
           form.dataset.submitting = "false";
           openEmailVerificationNotice(data.email.trim());
           return;
@@ -5075,7 +5106,7 @@
         if (!user) { form.dataset.submitting = "false"; toast("ログイン状態を確認できませんでした。"); return; }
         if (!user.email_confirmed_at) { form.dataset.submitting = "false"; openEmailVerificationNotice(user.email || data.email.trim()); return; }
         closeModal();
-        await queueAuthSynchronization("SIGNED_IN", result.data?.session || { user }, { refresh: false });
+        await queueAuthSynchronization("SIGNED_IN", result?.data?.session || { user }, { refresh: false });
         toast(registering ? "登録してログインしました。" : "ログインしました。");
         return;
       }

@@ -1,11 +1,21 @@
 const env = window.__TOMONI_ENV__ || {};
 const supabaseUrl = env.VITE_SUPABASE_URL || "https://qporjswbpfjfsnxequyd.supabase.co";
 const supabaseAnonKey = env.VITE_SUPABASE_ANON_KEY || "sb_publishable_JCk0iNVL30Kmgih4hknwug_Wj0sidGw";
-const configured = Boolean(supabaseUrl && supabaseAnonKey);
+const hasConfiguration = Boolean(supabaseUrl && supabaseAnonKey);
 const emailRedirectTo = window.location.origin;
-const client = configured
-  ? (await import("https://esm.sh/@supabase/supabase-js@2")).createClient(supabaseUrl, supabaseAnonKey)
-  : null;
+let client = null;
+if (hasConfiguration) {
+  try {
+    const { createClient } = await import("https://esm.sh/@supabase/supabase-js@2");
+    client = createClient(supabaseUrl, supabaseAnonKey);
+  } catch (error) {
+    console.error("[TOMONI Auth] client initialization failed", {
+      name: String(error?.name || "AuthClientError"),
+      message: String(error?.message || error || "Unknown authentication client error")
+    });
+  }
+}
+const configured = Boolean(client);
 
 const notConfigured = () => ({
   data: null,
