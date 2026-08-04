@@ -6,7 +6,10 @@ const emailRedirectTo = window.location.origin;
 let client = null;
 if (hasConfiguration) {
   try {
-    const { createClient } = await import("https://esm.sh/@supabase/supabase-js@2");
+    const createClient = window.supabase?.createClient;
+    if (typeof createClient !== "function") {
+      throw new Error("Supabase client SDK could not be loaded.");
+    }
     client = createClient(supabaseUrl, supabaseAnonKey);
   } catch (error) {
     console.error("[TOMONI Auth] client initialization failed", {

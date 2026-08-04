@@ -1909,7 +1909,8 @@
   <div class="toast-region" id="toastRegion" aria-live="polite" aria-atomic="true"></div>
 
   <script src="./supabase-env.js"></script>
-  <script type="module" src="./supabase.js"></script>
+  <script src="./assets/vendor/client-sdk-2.110.1.js"></script>
+  <script src="./supabase.js"></script>
   <script>
     const categories = [
       {
@@ -3858,7 +3859,7 @@
     function authMarkup(mode = "login") {
       const registering = mode === "register";
       return `<form class="form" id="authForm" data-mode="${mode}" novalidate>
-        <div class="field full"><label for="authEmail">メールアドレス</label><input id="authEmail" name="email" type="email" autocomplete="email" required><span class="field-error"></span></div>
+        <div class="field full"><label for="authEmail">メールアドレス</label><input id="authEmail" name="email" type="email" inputmode="email" autocomplete="email" autocapitalize="none" autocorrect="off" spellcheck="false" required><span class="field-error"></span></div>
         <div class="field full"><label for="authPassword">パスワード</label><input id="authPassword" name="password" type="password" minlength="8" autocomplete="${registering ? "new-password" : "current-password"}" required><span class="field-error"></span></div>
         ${registering ? `<div class="field full"><label for="authPasswordConfirm">パスワード（確認）</label><input id="authPasswordConfirm" name="passwordConfirm" type="password" minlength="8" autocomplete="new-password" required><span class="field-error"></span></div>` : ""}
         ${registering ? `<div class="field full"><label for="authBirthdate">生年月日</label><input id="authBirthdate" name="birthDate" type="date" max="${latestAdultBirthDate()}" autocomplete="bday" required><p class="meta">生年月日は公開されません。他の利用者には実年齢だけが表示されます。</p><span class="field-error"></span></div>` : ""}
@@ -4964,6 +4965,10 @@
       const form = event.target;
       if (!["createForm", "meetingRecordForm", "chatForm", "contactForm", "authForm", "passwordResetForm", "passwordUpdateForm", "birthDateForm", "profileForm", "reportForm"].includes(form.id)) return;
       event.preventDefault();
+      if (form.id === "authForm") {
+        const emailField = form.elements.namedItem("email");
+        if (emailField instanceof HTMLInputElement) emailField.value = emailField.value.trim();
+      }
       if (!validateForm(form)) { toast("入力内容を確認してください。"); return; }
       if (form.id === "createForm") {
         if (!appState.user) { openModal("ログイン", authMarkup("login")); toast("募集の作成にはログインが必要です。"); return; }
