@@ -6,7 +6,27 @@ const outputDir = resolve(projectRoot, "dist");
 
 await rm(outputDir, { recursive: true, force: true });
 await mkdir(outputDir, { recursive: true });
-await cp(resolve(projectRoot, "index.html"), resolve(outputDir, "index.html"));
+
+const sourceIndex = await readFile(resolve(projectRoot, "index.html"), "utf8");
+const seoMeta = `
+  <meta name="description" content="TOMONIは、地域で同性同士が気軽につながり、一緒に過ごせる時間を見つけるためのサービスです。">
+  <link rel="canonical" href="https://tomoni-app.com/">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="TOMONI">
+  <meta property="og:title" content="TOMONI｜同性同士で気軽に会える時間をつくるサービス">
+  <meta property="og:description" content="地域で同性同士が気軽につながり、一緒に過ごせる時間を見つけるためのサービスです。">
+  <meta property="og:url" content="https://tomoni-app.com/">
+  <meta property="og:image" content="https://tomoni-app.com/assets/brand/app-icon-1024x1024.png">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="TOMONI｜同性同士で気軽に会える時間をつくるサービス">
+  <meta name="twitter:description" content="地域で同性同士が気軽につながり、一緒に過ごせる時間を見つけるためのサービスです。">
+  <meta name="twitter:image" content="https://tomoni-app.com/assets/brand/app-icon-1024x1024.png">
+`;
+const builtIndex = sourceIndex.includes('rel="canonical"')
+  ? sourceIndex
+  : sourceIndex.replace("  <title>", `${seoMeta}  <title>`);
+await writeFile(resolve(outputDir, "index.html"), builtIndex);
+
 await cp(resolve(projectRoot, "supabase.js"), resolve(outputDir, "supabase.js"));
 await cp(resolve(projectRoot, "assets"), resolve(outputDir, "assets"), { recursive: true });
 await cp(resolve(projectRoot, "site.webmanifest"), resolve(outputDir, "site.webmanifest"));
