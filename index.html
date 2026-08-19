@@ -1081,7 +1081,8 @@
     }
 
     .footer-links { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 14px; }
-    .footer-links button { border: 0; background: transparent; color: var(--leaf); padding: 4px 0; margin-right: 16px; }
+    .footer-links button,
+    .footer-links a { border: 0; background: transparent; color: var(--leaf); padding: 4px 0; margin-right: 16px; font: inherit; text-decoration: none; }
     .field-error { min-height: 18px; color: var(--muted); font-size: 12px; }
     [aria-invalid="true"] { border-color: var(--line-strong); box-shadow: var(--focus); }
     .empty-state { grid-column: 1 / -1; padding: 34px 20px; text-align: center; color: var(--muted); }
@@ -1901,7 +1902,7 @@
 
     <footer class="footer">
       <p>TOMONI / 目の前の一人を大切にする。今日が少し良い日になれば、それで十分。</p>
-      <div class="footer-links"><button data-jump="safety-guide-page">安全ガイド</button><button data-jump="safety-commitment">安心・安全への取り組み</button><button data-jump="prohibited">禁止事項</button><button data-jump="terms">利用規約</button><button data-jump="privacy">プライバシーポリシー</button><button data-jump="contact">お問い合わせ</button></div>
+      <div class="footer-links"><a href="/40s-friends/">40代からの友達作り</a><button data-jump="safety-guide-page">安全ガイド</button><button data-jump="safety-commitment">安心・安全への取り組み</button><button data-jump="prohibited">禁止事項</button><button data-jump="terms">利用規約</button><button data-jump="privacy">プライバシーポリシー</button><button data-jump="contact">お問い合わせ</button></div>
     </footer>
   </div>
 

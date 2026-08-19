@@ -1,0 +1,316 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="index, follow">
+  <meta name="theme-color" content="#347fa8">
+  <title>40代からの友達作り｜近くで気軽につながるTOMONI</title>
+  <meta name="description" content="40代になると新しい友達を作る機会が減ったと感じることもあります。TOMONIなら、近くに住む同性の人と、趣味や食事、散歩などをきっかけに無理なくつながれます。">
+  <link rel="canonical" href="https://tomoni-app.com/40s-friends/">
+  <link rel="icon" href="/assets/brand/favicon.ico" sizes="any">
+  <link rel="icon" href="/assets/brand/favicon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="/assets/brand/apple-touch-icon.png">
+  <link rel="manifest" href="/site.webmanifest">
+  <style>
+    :root {
+      color-scheme: light;
+      --ink: #23364a;
+      --muted: #687789;
+      --line: #e1e8ef;
+      --line-strong: #cad8e4;
+      --soft: #f5fafd;
+      --sage: #eaf6fc;
+      --sage-strong: #8ec9e6;
+      --leaf: #347fa8;
+      --leaf-deep: #286b91;
+      --shadow: 0 14px 40px rgba(35, 54, 74, .07);
+      font-family: -apple-system, BlinkMacSystemFont, "Hiragino Sans", "Yu Gothic", "YuGothic", "Noto Sans JP", sans-serif;
+    }
+
+    * { box-sizing: border-box; }
+
+    html { text-size-adjust: 100%; }
+
+    body {
+      margin: 0;
+      background: #fff;
+      color: var(--ink);
+      font-size: 16px;
+      line-height: 1.85;
+      -webkit-font-smoothing: antialiased;
+      text-rendering: optimizeLegibility;
+    }
+
+    a { color: var(--leaf); }
+
+    a:focus-visible {
+      outline: 3px solid rgba(52, 127, 168, .25);
+      outline-offset: 3px;
+    }
+
+    .topbar {
+      border-bottom: 1px solid var(--line);
+      background: rgba(255, 255, 255, .96);
+    }
+
+    .topbar-inner,
+    main,
+    .footer {
+      width: min(100% - 32px, 920px);
+      margin-inline: auto;
+    }
+
+    .topbar-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      min-height: 68px;
+      gap: 18px;
+    }
+
+    .brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      color: var(--ink);
+      font-weight: 700;
+      letter-spacing: .08em;
+      text-decoration: none;
+    }
+
+    .brand-mark {
+      display: grid;
+      width: 31px;
+      height: 31px;
+      place-items: center;
+      border-radius: 50%;
+      background: var(--sage);
+      color: var(--leaf);
+      font-size: 17px;
+      line-height: 1;
+      box-shadow: 0 5px 16px rgba(52, 127, 168, .12);
+    }
+
+    .top-link {
+      font-size: 14px;
+      font-weight: 700;
+      text-decoration: none;
+    }
+
+    .hero {
+      padding: clamp(54px, 10vw, 92px) 0 clamp(46px, 8vw, 74px);
+      text-align: center;
+    }
+
+    .eyebrow {
+      margin: 0 0 12px;
+      color: var(--leaf);
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: .04em;
+    }
+
+    h1,
+    h2 { text-wrap: balance; }
+
+    h1 {
+      max-width: 760px;
+      margin: 0 auto;
+      font-size: clamp(32px, 7vw, 52px);
+      font-weight: 680;
+      line-height: 1.35;
+    }
+
+    .lead {
+      max-width: 690px;
+      margin: 24px auto 0;
+      color: var(--muted);
+      font-size: clamp(17px, 2.8vw, 20px);
+    }
+
+    .hero-note {
+      max-width: 690px;
+      margin: 30px auto 0;
+      padding: 18px 20px;
+      border: 1px solid var(--sage-strong);
+      border-radius: 18px;
+      background: var(--sage);
+      text-align: left;
+    }
+
+    .content {
+      display: grid;
+      gap: 20px;
+      padding-bottom: clamp(58px, 10vw, 96px);
+    }
+
+    .section-card {
+      padding: clamp(24px, 5vw, 38px);
+      border: 1px solid var(--line);
+      border-radius: 24px;
+      background: #fff;
+      box-shadow: var(--shadow);
+    }
+
+    h2 {
+      margin: 0;
+      font-size: clamp(24px, 4.5vw, 34px);
+      font-weight: 680;
+      line-height: 1.45;
+    }
+
+    .section-card p { margin: 16px 0 0; }
+
+    .examples {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      margin: 24px 0 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .examples li {
+      padding: 16px;
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      background: var(--soft);
+      font-weight: 700;
+      text-align: center;
+    }
+
+    .safety-card {
+      border-color: var(--sage-strong);
+      background: var(--soft);
+    }
+
+    .safety-list {
+      margin: 18px 0 0;
+      padding-left: 1.3em;
+    }
+
+    .safety-list li + li { margin-top: 8px; }
+
+    .cta {
+      padding: clamp(32px, 7vw, 52px) clamp(22px, 5vw, 40px);
+      border-radius: 24px;
+      background: var(--sage);
+      text-align: center;
+    }
+
+    .cta p {
+      max-width: 630px;
+      margin: 16px auto 0;
+    }
+
+    .cta-button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 52px;
+      margin-top: 26px;
+      padding: 11px 24px;
+      border: 1px solid var(--leaf);
+      border-radius: 15px;
+      background: var(--leaf);
+      color: #fff;
+      font-weight: 700;
+      text-decoration: none;
+      box-shadow: 0 9px 24px rgba(52, 127, 168, .2);
+    }
+
+    .cta-button:hover { background: var(--leaf-deep); }
+
+    .footer {
+      padding: 32px 0 46px;
+      border-top: 1px solid var(--line);
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .footer p { margin: 0; }
+    .footer a { display: inline-block; margin-top: 10px; text-decoration: none; }
+
+    @media (max-width: 680px) {
+      .topbar-inner,
+      main,
+      .footer { width: min(100% - 24px, 920px); }
+
+      .topbar-inner { min-height: 60px; }
+      .hero { text-align: left; }
+      h1, .lead { margin-inline: 0; }
+      .hero-note { padding: 16px; }
+      .section-card { border-radius: 18px; }
+      .examples { grid-template-columns: 1fr; }
+      .examples li { text-align: left; }
+      .cta { border-radius: 18px; text-align: left; }
+      .cta-button { width: 100%; }
+    }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <div class="topbar-inner">
+      <a class="brand" href="https://tomoni-app.com/" aria-label="TOMONIトップページへ">
+        <span class="brand-mark" aria-hidden="true">と</span>
+        <span>TOMONI</span>
+      </a>
+      <a class="top-link" href="https://tomoni-app.com/">トップページへ</a>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero" aria-labelledby="page-title">
+      <p class="eyebrow">40代の友達作り</p>
+      <h1 id="page-title">40代から、気軽に話せる友達を見つけよう</h1>
+      <p class="lead">生活のリズムや人付き合いが変わる40代。新しい友達との出会いは、趣味や食事、散歩など、日常の小さなきっかけから始められます。</p>
+      <p class="hero-note">TOMONIは40代専用ではなく、18歳以上の大人が、近くに住む同性の人と気軽につながるためのサービスです。恋愛や婚活を目的としたサービスではありません。</p>
+    </section>
+
+    <div class="content">
+      <section class="section-card">
+        <p class="eyebrow">暮らしの変化</p>
+        <h2>40代になると、友達を作る機会が減りやすい理由</h2>
+        <p>仕事や家のことに使う時間が増え、引っ越しや環境の変化も重なると、学生時代のように自然と新しい人に出会う場は少なくなりがちです。人間関係を大切にしていても、予定や生活圏が合わず、会う機会が減ることもあります。</p>
+        <p>だからこそ、構えすぎず、今の暮らしに合う短い時間から始めることが、友達作りの自然な一歩になります。</p>
+      </section>
+
+      <section class="section-card">
+        <p class="eyebrow">小さなきっかけ</p>
+        <h2>共通の過ごし方が、会話の入口になる</h2>
+        <p>最初から深い関係を目指す必要はありません。「同じ趣味の話をする」「近くのお店で昼ご飯を食べる」「明るい時間に少し歩く」など、目的がひとつあるだけで声をかけやすくなります。</p>
+        <ul class="examples" aria-label="友達作りのきっかけの例">
+          <li>趣味の話をする</li>
+          <li>一緒にご飯を食べる</li>
+          <li>近所を散歩する</li>
+        </ul>
+        <p>まずは30分話してみる、一度ご飯を食べてみる。そのくらいの距離感なら、お互いに無理なく始められます。親友を急いで作るのではなく、心地よく過ごせる時間を少しずつ重ねていけます。</p>
+      </section>
+
+      <section class="section-card safety-card">
+        <p class="eyebrow">TOMONIの考え方</p>
+        <h2>同性同士で、安心できるつながりを</h2>
+        <p>TOMONIは恋愛目的ではなく、近くに住む同性同士で、趣味や日常の時間を一緒に過ごす相手を探すサービスです。性別や地域などのプロフィールをもとに、自分と同じ性別の人とつながれます。</p>
+        <ul class="safety-list">
+          <li>初対面は、駅・カフェ・商業施設など人の多い公共の場所を選ぶ</li>
+          <li>最初は昼間の短い時間から会ってみる</li>
+          <li>無理に個人情報を伝えず、自分のペースを大切にする</li>
+        </ul>
+      </section>
+
+      <section class="cta" aria-labelledby="cta-title">
+        <p class="eyebrow">気軽な一歩から</p>
+        <h2 id="cta-title">今の暮らしに合う友達を探してみませんか</h2>
+        <p>TOMONIでは、趣味や食事、散歩など、近くで一緒に過ごしたいことをきっかけに相手を探せます。</p>
+        <a class="cta-button" href="https://tomoni-app.com/">近くの友達を探してみる</a>
+      </section>
+    </div>
+  </main>
+
+  <footer class="footer">
+    <p>TOMONI / 目の前の一人を大切にする。今日が少し良い日になれば、それで十分。</p>
+    <a href="https://tomoni-app.com/">TOMONIトップページへ戻る</a>
+  </footer>
+</body>
+</html>
