@@ -31,6 +31,7 @@ await cp(resolve(projectRoot, "supabase.js"), resolve(outputDir, "supabase.js"))
 await cp(resolve(projectRoot, "assets"), resolve(outputDir, "assets"), { recursive: true });
 await cp(resolve(projectRoot, "40s-friends"), resolve(outputDir, "40s-friends"), { recursive: true });
 await cp(resolve(projectRoot, "50s-friends"), resolve(outputDir, "50s-friends"), { recursive: true });
+await cp(resolve(projectRoot, "hobby-friends"), resolve(outputDir, "hobby-friends"), { recursive: true });
 await cp(resolve(projectRoot, "site.webmanifest"), resolve(outputDir, "site.webmanifest"));
 try {
   await cp(resolve(projectRoot, "_headers"), resolve(outputDir, "_headers"));
