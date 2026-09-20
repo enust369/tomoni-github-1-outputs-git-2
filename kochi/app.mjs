@@ -17,6 +17,21 @@ function filterCourses(){const f=document.querySelector('#course-filter');if(!f)
 export function matchesPeriod(e,period,now=new Date()){const date=new Intl.DateTimeFormat('sv-SE',{timeZone:'Asia/Tokyo'}).format(now),today=new Date(date+'T00:00:00+09:00'),start=new Date(e.start_date+'T00:00:00+09:00'),end=new Date(e.end_date+'T23:59:59+09:00');if(!period)return true;if(period==='今日'||period==='開催中')return start<=now&&end>=today;if(period==='これから')return start>now;let until;if(period==='今週'){const day=new Date(date+'T00:00:00Z').getUTCDay();until=new Date(today.getTime()+((7-day)%7+1)*86400000-1)}else{const [y,m]=date.split('-').map(Number);until=new Date(Date.UTC(y,m,1)-9*3600000-1)}return start<=until&&end>=today}
 function filterEvents(){const form=document.querySelector('#event-filter');if(!form)return;const d=new FormData(form),show=document.querySelector('#show-demo')?.checked;const items=events.filter(e=>(!e.is_demo||show)&&(!d.get('category')||e.category===d.get('category'))&&matchesPeriod(e,d.get('period')));document.querySelector('#event-results').innerHTML=items.length?`<div class="grid">${items.map(eventCard).join('')}</div>`:'<div class="empty">この条件の開催情報はありません。</div>'}
 
+// Presentation-only enhancement: keep the existing select/FormData filter contract.
+function enhanceFilters(){
+ for(const form of document.querySelectorAll('.filterbar')){
+  if(form.classList.contains('enhanced'))continue;
+  for(const select of form.querySelectorAll('select')){
+   const row=document.createElement('div');row.className='filter-row';
+   const title=document.createElement('span');title.className='filter-title';title.textContent=select.parentElement.firstChild.textContent;
+   const group=document.createElement('div');group.className='filter-chips';group.setAttribute('role','group');group.setAttribute('aria-label',title.textContent);
+   for(const option of select.options){const button=document.createElement('button');button.type='button';button.className='filter-chip';button.textContent=option.textContent;button.dataset.value=option.value;button.setAttribute('aria-pressed',String(select.value===option.value));button.addEventListener('click',()=>{select.value=option.value;form.requestSubmit()});group.append(button)}
+   const update=()=>group.querySelectorAll('button').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.value===select.value)));
+   form.addEventListener('submit',update);select.addEventListener('change',update);row.append(title,group);form.append(row);
+  }
+  form.classList.add('enhanced');
+ }
+}
 function bind(){
  ['spot','course','event'].forEach(type=>{const f=document.querySelector(`#${type}-filter`);if(!f)return;preserveQuery(f);const fn={spot:filterSpots,course:filterCourses,event:filterEvents}[type];f.addEventListener('submit',e=>{e.preventDefault();setQuery(f);fn()});fn()});
  document.querySelector('#show-demo')?.addEventListener('change',filterEvents);
@@ -31,6 +46,7 @@ function bind(){
    form.addEventListener('submit',async e=>{e.preventDefault();const btn=form.querySelector('[type=submit]');btn.disabled=true;const result=document.querySelector('#form-result'),payload=Object.fromEntries(new FormData(form));try{if(live){payload.anonymous_id=anonymousId;await api(form.dataset.kind==='suggest'?'/api/suggest':'/api/correction',payload);result.textContent='提案を受け付けました。運営が確認後に対応します。';form.reset()}else{localStorage.setItem('kochi-draft-'+form.dataset.kind,JSON.stringify(payload));result.textContent='このブラウザに下書きを保存しました。運営には送信されていません。'}}catch(error){result.textContent=error.message}finally{btn.disabled=false}});
    if(!live){const draft=readLocal('kochi-draft-'+form.dataset.kind,{});for(const [key,value]of Object.entries(draft))if(form.elements.namedItem(key))form.elements.namedItem(key).value=value}
  }
+ enhanceFilters();
  syncButtons();
 }
 
@@ -60,7 +76,7 @@ async function start(){
      bind();
    }else{
      voted=new Set(readLocal('kochi-demo-votes',[]));spots.forEach(s=>s.recommend_count=voted.has(s.id)?1:0);
-     const note=document.createElement('div');note.className='notice wrap';note.textContent='プレビュー：おすすめはこのブラウザ内の体験用です。公開ランキングへの投票はまだ開始していません。';document.querySelector('main').prepend(note);
+     const note=document.createElement('div');note.className='notice wrap';note.textContent='プレビュー：投票・申請はこのブラウザ内の体験用です。';document.querySelector('main').prepend(note);
    }
    ready=true;filterSpots();syncButtons();
  }catch(error){toast(error.message);document.querySelectorAll('[data-vote]').forEach(b=>b.disabled=true)}
