@@ -9,7 +9,9 @@
   },
   "d1_databases": [
     {
-      "binding": "DB"
+      "binding": "DB",
+      "database_name": "kochi-kanko-ranking-db",
+      "database_id": "6806fb7e-fbef-4347-a1b3-14d0289cafb3"
     }
   ]
 }
