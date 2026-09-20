@@ -6,7 +6,10 @@
   "scripts": {
     "dev": "node scripts/server.mjs",
     "build": "node scripts/build.mjs",
-    "preview": "node scripts/server.mjs dist"
+    "preview": "node scripts/server.mjs dist",
+    "dev:kochi": "node kochi/scripts/server.mjs",
+    "build:kochi": "node kochi/scripts/build.mjs",
+    "test:kochi": "node --test kochi/scripts/test.mjs"
   },
   "engines": {
     "node": ">=20.0.0"

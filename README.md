@@ -66,3 +66,7 @@ Cloudflare PagesでGitHubリポジトリを連携し、上記のビルド設定�
 ## ライセンス
 
 ライセンスは未設定です。公開リポジトリで第三者による利用・改変・再配布を許可する場合は、目的に合う `LICENSE` を追加してください。
+
+## 高知観光ランキング（独立MVP）
+
+既存TOMONIとは別のサイトを [`kochi/`](./kochi/README.md) に追加しています。`npm run dev:kochi` で専用ポート4174から起動し、`npm run build:kochi` で `kochi/dist` へ出力します。既存のTOMONIの起動・ビルド・DB設定はそのままです。

@@ -1,0 +1,7 @@
+// Generates opt-in demo fixtures. Never run these fixtures against production.
+import {spots,courses,events} from '../data.mjs';import {writeFile} from 'node:fs/promises';
+const quote=v=>"'"+JSON.stringify(v).replaceAll("'","''")+"'::jsonb";
+let sql='-- DEMO ONLY: separate development Supabase project. Unverified candidate records.\n-- Never add synthetic recommendations. All counts begin at zero.\nbegin;\n';
+for(const s of spots){const record={...s,source_url:null,last_verified_at:null};sql+=`insert into public.spots select * from jsonb_populate_record(null::public.spots,${quote({...record,review_count:0,updated_at:s.created_at})}) on conflict(slug) do nothing;\n`}
+for(const [i,c]of courses.entries()){const id=`10000000-0000-4000-8000-${String(i+1).padStart(12,'0')}`;const record={id,slug:c.slug,name:c.name,area:c.area,theme:c.theme,duration:c.duration,transport:c.transport,audience:c.audience,season:c.season,notes:'仮の旅程です。所要時間・予約・営業情報は未確認。',main_image_url:c.image,initial_rank:c.initial_rank,is_published:true,created_at:new Date().toISOString()};sql+=`insert into public.courses select * from jsonb_populate_record(null::public.courses,${quote(record)}) on conflict(slug) do nothing;\n`;for(const [n,slug]of c.stops.entries())sql+=`insert into public.course_spots(course_id,spot_id,position,stay_minutes) values('${id}','${spots.find(s=>s.slug===slug).id}',${n+1},60) on conflict do nothing;\n`}
+sql+='commit;\n';await writeFile(new URL('../supabase/demo-seed.sql',import.meta.url),sql);
