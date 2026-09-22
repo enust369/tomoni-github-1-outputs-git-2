@@ -125,5 +125,47 @@ export const photos={
     "height": 853,
     "position": "50% 50%",
     "checkedAt": "2026-09-21"
+  },
+  "yasui": {
+    "src": "/assets/photos/yasui.jpg",
+    "name": "安居渓谷",
+    "alt": "安居渓谷・飛龍の滝",
+    "author": "ball banban",
+    "source": "https://commons.wikimedia.org/wiki/File:%E9%A3%9B%E9%BE%8D%E3%81%AE%E6%BB%9D_-_panoramio.jpg",
+    "title": "飛龍の滝 - panoramio.jpg",
+    "license": "CC BY 3.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by/3.0",
+    "width": 1067,
+    "height": 1600,
+    "position": "62% 58%",
+    "checkedAt": "2026-09-23"
+  },
+  "yusuhara": {
+    "src": "/assets/photos/yusuhara.jpg",
+    "name": "梼原",
+    "alt": "梼原町のゆすはら座外観",
+    "author": "osami",
+    "source": "https://commons.wikimedia.org/wiki/File:1yusuharaza.jpg",
+    "title": "1yusuharaza.jpg",
+    "license": "CC0",
+    "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/deed.en",
+    "width": 1280,
+    "height": 960,
+    "position": "50% 48%",
+    "checkedAt": "2026-09-23"
+  },
+  "ashizuri": {
+    "src": "/assets/photos/ashizuri.jpg",
+    "name": "足摺岬",
+    "alt": "足摺岬の断崖と足摺岬灯台",
+    "author": "Reggaeman",
+    "source": "https://commons.wikimedia.org/wiki/File:Ashizuri_Cape_01.JPG",
+    "title": "Ashizuri Cape 01.JPG",
+    "license": "CC BY-SA 3.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0",
+    "width": 1280,
+    "height": 850,
+    "position": "50% 54%",
+    "checkedAt": "2026-09-23"
   }
 };
