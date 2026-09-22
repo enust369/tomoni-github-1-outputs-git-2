@@ -43,6 +43,7 @@ npm run test:kochi
 export KOCHI_SUPABASE_URL='https://YOUR_PROJECT.supabase.co'
 export KOCHI_SUPABASE_ANON_KEY='YOUR_PUBLIC_ANON_KEY'
 export KOCHI_SITE_URL='https://YOUR_DOMAIN'
+export KOCHI_SEARCH_INDEXING='false' # 公開準備中は必ずfalse
 npm run build:kochi
 ```
 
@@ -62,7 +63,7 @@ npm run build:kochi
 - 2030年の架空イベントは表示検証用。通常の一覧から除外し、チェックを入れたときだけ表示。イベントseedには含めていません。
 - 所要時間は仮の目安。移動時間、予約、日跨ぎの詳細行程、体験場所は公開前に精査が必要。
 - 公式サイトURL等は公開前に確認。利用規約・プライバシーは草案。運営者情報と一般問い合わせ窓口を確定してください。
-- 未設定ドメインのプレビューはnoindex。`KOCHI_SITE_URL` 設定でcanonicalとsitemap.xmlが有効になります。公開作業は今回実施していません。
+- canonical・OGP URL・sitemap.xml は `KOCHI_SITE_URL`（未設定時は本番Workersドメイン）を基準に生成します。検索公開は `KOCHI_SEARCH_INDEXING=true` のときだけ有効です。現在は `false` のため、全ページは `noindex,nofollow`、robots.txt はクロール禁止のままです。最終公開時はこの環境変数だけを `true` に変更して再ビルドしてください。404、検索、ログイン、マイページ、架空イベントは公開後もnoindexです。
 
 ## 検証
 
