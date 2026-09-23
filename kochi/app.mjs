@@ -42,14 +42,22 @@ function initCarousels(){
   if(!track||slides.length<2)continue;
   const reduced=matchMedia('(prefers-reduced-motion: reduce)').matches;
   const index=()=>Math.max(0,Math.min(slides.length-1,Math.round(track.scrollLeft/Math.max(track.clientWidth,1))));
-  const active=i=>{slides.forEach((slide,n)=>slide.setAttribute('aria-hidden',String(n!==i)));dots.forEach((dot,n)=>dot.setAttribute('aria-current',String(n===i)));};
+  const number=carousel.querySelector('[data-carousel-number]');
+  const active=i=>{slides.forEach((slide,n)=>slide.setAttribute('aria-hidden',String(n!==i)));dots.forEach((dot,n)=>dot.setAttribute('aria-current',String(n===i)));if(number)number.textContent=String(i+1).padStart(2,'0');};
   const move=delta=>{const next=(index()+delta+slides.length)%slides.length;track.scrollTo({left:slides[next].offsetLeft,behavior:reduced?'auto':'smooth'});active(next)};
-  carousel.querySelector('[data-carousel-prev]')?.addEventListener('click',()=>move(-1));
-  carousel.querySelector('[data-carousel-next]')?.addEventListener('click',()=>move(1));
-  dots.forEach((dot,n)=>dot.addEventListener('click',()=>{track.scrollTo({left:slides[n].offsetLeft,behavior:reduced?'auto':'smooth'});active(n)}));
+  let timer=0,resumeTimer=0;
+  const stop=()=>{clearInterval(timer);timer=0;clearTimeout(resumeTimer);};
+  const start=()=>{if(!reduced&&!timer)timer=setInterval(()=>move(1),6500);};
+  const resume=()=>{stop();resumeTimer=setTimeout(start,8500)};
+  carousel.querySelector('[data-carousel-prev]')?.addEventListener('click',()=>{move(-1);resume()});
+  carousel.querySelector('[data-carousel-next]')?.addEventListener('click',()=>{move(1);resume()});
+  dots.forEach((dot,n)=>dot.addEventListener('click',()=>{track.scrollTo({left:slides[n].offsetLeft,behavior:reduced?'auto':'smooth'});active(n);resume()}));
   let ticking=false;track.addEventListener('scroll',()=>{if(ticking)return;ticking=true;requestAnimationFrame(()=>{active(index());ticking=false})},{passive:true});
-  carousel.addEventListener('keydown',event=>{if(event.key==='ArrowLeft'){event.preventDefault();move(-1)}if(event.key==='ArrowRight'){event.preventDefault();move(1)}});
+  carousel.addEventListener('keydown',event=>{if(event.key==='ArrowLeft'){event.preventDefault();move(-1);resume()}if(event.key==='ArrowRight'){event.preventDefault();move(1);resume()}});
+  track.addEventListener('pointerdown',resume,{passive:true});
+  carousel.addEventListener('mouseenter',stop);carousel.addEventListener('mouseleave',start);carousel.addEventListener('focusin',stop);carousel.addEventListener('focusout',start);
   active(0);
+  start();
  }
 }
 function bind(){
