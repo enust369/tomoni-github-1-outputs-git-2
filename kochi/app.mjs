@@ -32,6 +32,26 @@ function enhanceFilters(){
   form.classList.add('enhanced');
  }
 }
+function initCarousels(){
+ for(const carousel of document.querySelectorAll('[data-carousel]')){
+  if(carousel.dataset.carouselReady)continue;
+  carousel.dataset.carouselReady='true';
+  const track=carousel.querySelector('.home-slider-track');
+  const slides=[...carousel.querySelectorAll('[data-carousel-slide]')];
+  const dots=[...carousel.querySelectorAll('[data-carousel-dot]')];
+  if(!track||slides.length<2)continue;
+  const reduced=matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const index=()=>Math.max(0,Math.min(slides.length-1,Math.round(track.scrollLeft/Math.max(track.clientWidth,1))));
+  const active=i=>{slides.forEach((slide,n)=>slide.setAttribute('aria-hidden',String(n!==i)));dots.forEach((dot,n)=>dot.setAttribute('aria-current',String(n===i)));};
+  const move=delta=>{const next=(index()+delta+slides.length)%slides.length;track.scrollTo({left:slides[next].offsetLeft,behavior:reduced?'auto':'smooth'});active(next)};
+  carousel.querySelector('[data-carousel-prev]')?.addEventListener('click',()=>move(-1));
+  carousel.querySelector('[data-carousel-next]')?.addEventListener('click',()=>move(1));
+  dots.forEach((dot,n)=>dot.addEventListener('click',()=>{track.scrollTo({left:slides[n].offsetLeft,behavior:reduced?'auto':'smooth'});active(n)}));
+  let ticking=false;track.addEventListener('scroll',()=>{if(ticking)return;ticking=true;requestAnimationFrame(()=>{active(index());ticking=false})},{passive:true});
+  carousel.addEventListener('keydown',event=>{if(event.key==='ArrowLeft'){event.preventDefault();move(-1)}if(event.key==='ArrowRight'){event.preventDefault();move(1)}});
+  active(0);
+ }
+}
 function bind(){
  ['spot','course','event'].forEach(type=>{const f=document.querySelector(`#${type}-filter`);if(!f)return;preserveQuery(f);const fn={spot:filterSpots,course:filterCourses,event:filterEvents}[type];f.addEventListener('submit',e=>{e.preventDefault();setQuery(f);fn()});fn()});
  document.querySelector('#show-demo')?.addEventListener('change',filterEvents);
@@ -47,6 +67,7 @@ function bind(){
    if(!live){const draft=readLocal('kochi-draft-'+form.dataset.kind,{});for(const [key,value]of Object.entries(draft))if(form.elements.namedItem(key))form.elements.namedItem(key).value=value}
  }
  enhanceFilters();
+ initCarousels();
  syncButtons();
 }
 
