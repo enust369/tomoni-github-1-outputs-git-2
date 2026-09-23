@@ -78,7 +78,7 @@ body:has(.page-home) header .nav a:nth-child(n+3):nth-child(-n+10){display:none}
 
 /* Top hero alignment: keep every control anchored to the photo, then let the
    search card reflow independently at tablet widths. */
-.home-slide-content{width:min(1240px,86%);padding:0;transform:translateY(2%)}
+.home-slide-content{width:min(1240px,86%);padding:0 0 0 48px;transform:translateY(2%)}
 .home-slide h1{margin:12px 0;line-height:1.16}
 .home-slide p{margin:0 0 26px;line-height:1.6}
 .home-slide .button{min-height:58px;padding:14px 32px}
@@ -102,7 +102,7 @@ body:has(.page-home) header .nav a:nth-child(n+3):nth-child(-n+10){display:none}
 .home-search .primary{padding-inline:22px}
 
 @media (min-width:701px) and (max-width:1100px){
-  .home-slide-content{width:86%}
+  .home-slide-content{width:86%;padding-left:40px}
   .home-search-section{width:90%;margin:-42px auto 0}
   .home-search{grid-template-columns:200px repeat(4,minmax(0,1fr));gap:10px;padding:24px}
   .home-search-heading{grid-column:1;grid-row:1;align-self:center}
