@@ -64,3 +64,13 @@ body:has(.page-home) header .nav a:nth-child(n+3):nth-child(-n+10){display:none}
   .home-search-fields{grid-template-columns:minmax(0,2fr) repeat(3,minmax(86px,1fr)) auto;gap:6px}
   .home-search .primary{padding-inline:16px}
 }
+
+/* Keep the shared section padding outside the full-bleed slide area. */
+.home-slider{padding:0}
+/* Give the absolute image layer a definite containing height at every breakpoint. */
+.home-slide{height:clamp(590px,76svh,830px);min-height:0;background:transparent}
+.home-slide>img{display:block;position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:0}
+.home-slide-shade{position:absolute;inset:0;z-index:1;background:linear-gradient(90deg,rgba(1,18,29,.62),rgba(2,24,36,.31) 47%,rgba(2,24,36,.07) 76%,rgba(2,24,36,.16))}
+.home-slide-content{position:relative;z-index:2}
+@media(max-width:700px){.home-slide{height:555px;min-height:0}}
+@media(max-width:340px){.home-slide{height:520px;min-height:0}}
