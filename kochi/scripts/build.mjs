@@ -10,7 +10,7 @@ const origin=process.env.KOCHI_SITE_URL||DEFAULT_SITE_ORIGIN;
 const indexing=isSearchIndexingEnabled(process.env.KOCHI_SEARCH_INDEXING);
 if(!/^https:\/\/[^/]+\/?$/.test(origin))throw new Error('KOCHI_SITE_URL must be an https origin');
 await rm(out,{recursive:true,force:true});await mkdir(out,{recursive:true});
-for(const f of ['styles.css','app.mjs','data.mjs','render.mjs','content.mjs','photos.mjs','site.mjs','favicon.svg'])await copyFile(resolve(root,f),resolve(out,f));
+for(const f of ['styles.css','app.mjs','data.mjs','render.mjs','content.mjs','photos.mjs','home-content.mjs','site.mjs','favicon.svg'])await copyFile(resolve(root,f),resolve(out,f));
 await cp(resolve(root,'assets/photos'),resolve(out,'assets/photos'),{recursive:true});
 await writeFile(resolve(out,'config.js'),`window.KOCHI_CONFIG=${JSON.stringify({supabaseUrl:process.env.KOCHI_SUPABASE_URL||'',supabaseAnonKey:process.env.KOCHI_SUPABASE_ANON_KEY||'',siteUrl:origin})};`);
 for(const path of routes){const dir=resolve(out,'.'+path);await mkdir(dir,{recursive:true});await writeFile(resolve(dir,'index.html'),render(path,origin,indexing).html)}
