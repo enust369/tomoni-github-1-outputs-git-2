@@ -42,8 +42,8 @@ function initCarousels(){
   if(!track||slides.length<2)continue;
   const reduced=matchMedia('(prefers-reduced-motion: reduce)').matches;
   const index=()=>Math.max(0,Math.min(slides.length-1,Math.round(track.scrollLeft/Math.max(track.clientWidth,1))));
-  const number=carousel.querySelector('[data-carousel-number]');
-  const active=i=>{slides.forEach((slide,n)=>slide.setAttribute('aria-hidden',String(n!==i)));dots.forEach((dot,n)=>dot.setAttribute('aria-current',String(n===i)));if(number)number.textContent=String(i+1).padStart(2,'0');};
+  const numbers=[...carousel.querySelectorAll('[data-carousel-index]')];
+  const active=i=>{slides.forEach((slide,n)=>slide.setAttribute('aria-hidden',String(n!==i)));dots.forEach((dot,n)=>dot.setAttribute('aria-current',String(n===i)));numbers.forEach((number,n)=>number.setAttribute('aria-current',String(n===i)));};
   const move=delta=>{const next=(index()+delta+slides.length)%slides.length;track.scrollTo({left:slides[next].offsetLeft,behavior:reduced?'auto':'smooth'});active(next)};
   let timer=0,resumeTimer=0;
   const stop=()=>{clearInterval(timer);timer=0;clearTimeout(resumeTimer);};
