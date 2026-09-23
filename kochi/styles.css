@@ -50,3 +50,17 @@ body:has(.page-home) header .nav a:nth-child(n+3):nth-child(-n+10){display:none}
 
 /* Photo provenance stays visible after client-side card re-rendering. */
 .photo-credit{font-size:10px;line-height:1.5;color:var(--muted);overflow-wrap:anywhere;margin:6px 0 12px}.photo-credit a{text-decoration:underline;text-underline-offset:2px}.photo-credit span{display:block;font-size:9px}.card>.photo-credit{padding:0 15px;margin:0 0 10px}.card .photo-credit{font-size:10px;line-height:1.5}.rank-card>.photo-credit{grid-column:2;grid-row:3;padding:0!important;margin:5px 0 0}.rank-card .vote-container{grid-row:2}.hero .photo-credit{color:white;margin:0;max-width:90%;text-align:right;line-height:1.4;font-size:10px}.hero .photo-credit a{color:inherit}.hero .inner{padding-bottom:45px}.stop .photo-credit{margin:4px 0 8px;font-size:10px}.detail-photo{height:auto;aspect-ratio:16/9}.card img{height:auto}.rank-card img{height:100%}@media(max-width:700px){.rank-card .photo-credit{display:block!important}.card>.photo-credit{padding:0 12px}.hero .photo-credit{font-size:9px}.hero .inner{padding-bottom:55px}.hero .photo-credit span{font-size:8px}}
+
+/* Keep the photo as the actual background and give tablet-width search cards their own row. */
+.home-slide>img{z-index:0}.home-slide-shade{z-index:1}.home-slide-content{z-index:2}.home-slide-note,.home-slide-credit{z-index:3}.home-slider-controls{z-index:4}
+@media (min-width:701px) and (max-width:1100px){
+  body:has(.page-home) header{gap:14px;padding-inline:24px;overflow:hidden}
+  body:has(.page-home) header .topbar{min-width:0;gap:12px}
+  body:has(.page-home) header .brand{font-size:17px}
+  body:has(.page-home) header .nav{min-width:0;flex:0 1 auto;gap:18px;overflow-x:auto;scrollbar-width:none}
+  body:has(.page-home) header .nav::-webkit-scrollbar{display:none}
+  .home-search-section{width:90%}
+  .home-search-heading+.home-search-fields{margin:16px 0 0}
+  .home-search-fields{grid-template-columns:minmax(0,2fr) repeat(3,minmax(86px,1fr)) auto;gap:6px}
+  .home-search .primary{padding-inline:16px}
+}
