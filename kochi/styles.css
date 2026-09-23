@@ -36,6 +36,7 @@ body{overflow-x:clip}.home-slider{position:relative;background:#073f56;color:#ff
 
 /* Refined editorial treatment based on the supplied top-page reference. */
 body:has(.page-home) header{display:flex;align-items:center;gap:clamp(24px,4vw,74px);min-height:68px;padding:10px max(4%,calc((100% - 1510px)/2));background:#fff;border-bottom:1px solid #e5eef2}
+body:has(.page-home) main.page-home{overflow-x:clip}
 body:has(.page-home) header .topbar{display:flex;align-items:center;min-height:48px;flex:1;gap:22px}.page-home~footer{}
 body:has(.page-home) header .brand{font-family:Georgia,'Times New Roman',serif;font-size:20px;line-height:1.05;color:#0b3c69;white-space:nowrap}.page-home~footer .brand small,body:has(.page-home) header .brand small{display:block;color:#0b3c69;font-size:10px;letter-spacing:.18em;margin-bottom:4px}
 body:has(.page-home) header .topbar>.button{margin-left:auto;color:#0b3c69;border:0;padding:8px 0;background:transparent;font-weight:700}
@@ -53,6 +54,16 @@ body:has(.page-home) header .nav a:nth-child(n+3):nth-child(-n+10){display:none}
 
 /* Keep the photo as the actual background and give tablet-width search cards their own row. */
 .home-slide>img{z-index:0}.home-slide-shade{z-index:1}.home-slide-content{z-index:2}.home-slide-note,.home-slide-credit{z-index:3}.home-slider-controls{z-index:4}
+
+/* Keep the shared section padding outside the full-bleed slide area. */
+.home-slider{padding:0}
+/* Give the absolute image layer a definite containing height at every breakpoint. */
+.home-slide{height:clamp(590px,76svh,830px);min-height:0;background:transparent}
+.home-slide>img{display:block;position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:0}
+.home-slide-shade{position:absolute;inset:0;z-index:1;background:linear-gradient(90deg,rgba(1,18,29,.62),rgba(2,24,36,.31) 47%,rgba(2,24,36,.07) 76%,rgba(2,24,36,.16))}
+.home-slide-content{position:relative;z-index:2}
+@media(max-width:700px){.home-slide{height:555px;min-height:0}}
+@media(max-width:340px){.home-slide{height:520px;min-height:0}}
 @media (min-width:701px) and (max-width:1100px){
   body:has(.page-home) header{gap:14px;padding-inline:24px;overflow:hidden}
   body:has(.page-home) header .topbar{min-width:0;gap:12px}
@@ -65,12 +76,83 @@ body:has(.page-home) header .nav a:nth-child(n+3):nth-child(-n+10){display:none}
   .home-search .primary{padding-inline:16px}
 }
 
-/* Keep the shared section padding outside the full-bleed slide area. */
-.home-slider{padding:0}
-/* Give the absolute image layer a definite containing height at every breakpoint. */
-.home-slide{height:clamp(590px,76svh,830px);min-height:0;background:transparent}
-.home-slide>img{display:block;position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:0}
-.home-slide-shade{position:absolute;inset:0;z-index:1;background:linear-gradient(90deg,rgba(1,18,29,.62),rgba(2,24,36,.31) 47%,rgba(2,24,36,.07) 76%,rgba(2,24,36,.16))}
-.home-slide-content{position:relative;z-index:2}
-@media(max-width:700px){.home-slide{height:555px;min-height:0}}
-@media(max-width:340px){.home-slide{height:520px;min-height:0}}
+/* Top hero alignment: keep every control anchored to the photo, then let the
+   search card reflow independently at tablet widths. */
+.home-slide-content{width:min(1240px,86%);padding:0;transform:translateY(2%)}
+.home-slide h1{margin:12px 0;line-height:1.16}
+.home-slide p{margin:0 0 26px;line-height:1.6}
+.home-slide .button{min-height:58px;padding:14px 32px}
+.home-slide-note{top:15%;right:5vw;line-height:1.55;padding:0;background:transparent;box-shadow:none}
+.home-slide-note span{display:table;padding:6px 14px;background:rgba(255,255,255,.9);color:#0b3c69;box-shadow:0 2px 10px rgba(7,55,82,.12)}
+.home-slide-note span+span{margin-top:7px}
+.home-slider-controls{inset:0;bottom:auto;left:0;right:0;display:block;pointer-events:none}
+.home-slider-controls{top:0;right:0;bottom:0;left:0;height:100%}
+.home-slider-arrow{position:absolute!important;top:50%;transform:translateY(-50%);pointer-events:auto;width:68px;min-width:68px;height:68px;min-height:68px;border-radius:4px;font-size:42px}
+.home-slider-arrow.prev{left:0!important}
+.home-slider-arrow.next{right:0!important}
+.home-slider-dots{position:absolute;left:50%;bottom:30px;transform:translateX(-50%);gap:10px;pointer-events:auto}
+.home-slider-dots button{width:10px;min-width:10px;height:10px;min-height:10px}
+.home-slider-index{right:2.2vw;top:50%;bottom:auto;transform:translateY(-50%);gap:9px;line-height:1.2;pointer-events:auto}
+.home-slider-index span[aria-current=true]::after{height:30px;margin:7px auto 0}
+.home-search-section{width:min(94%,1480px);margin:-48px auto 0}
+.home-search{display:grid;grid-template-columns:270px minmax(0,1fr);align-items:center;gap:28px;padding:28px 38px 30px;border-radius:34px}
+.home-search-heading+.home-search-fields{margin:0}
+.home-search-fields{display:grid!important;grid-template-columns:minmax(0,1fr) 130px 130px 150px 170px;gap:14px;align-items:center}
+.home-search input,.home-search select,.home-search .primary{height:58px;min-height:58px}
+.home-search .primary{padding-inline:22px}
+
+@media (min-width:701px) and (max-width:1100px){
+  .home-slide-content{width:86%}
+  .home-search-section{width:90%;margin:-42px auto 0}
+  .home-search{grid-template-columns:200px repeat(4,minmax(0,1fr));gap:10px;padding:24px}
+  .home-search-heading{grid-column:1;grid-row:1;align-self:center}
+  .home-search-fields{display:contents!important}
+  .home-search-fields input{grid-column:2/-1;grid-row:1}
+  .home-search-fields select:nth-of-type(1){grid-column:1;grid-row:2}
+  .home-search-fields select:nth-of-type(2){grid-column:2;grid-row:2}
+  .home-search-fields select:nth-of-type(3){grid-column:3;grid-row:2}
+  .home-search-fields .primary{grid-column:4/-1;grid-row:2}
+  .home-search input,.home-search select,.home-search .primary{height:54px;min-height:54px}
+}
+
+@media (min-width:1101px) and (max-width:1350px){
+  body:has(.page-home) header{gap:20px;padding-inline:28px;overflow:hidden}
+  body:has(.page-home) header .topbar{min-width:0;gap:14px}
+  body:has(.page-home) header .nav{min-width:0;flex:1;gap:22px;overflow-x:auto;scrollbar-width:none}
+  body:has(.page-home) header .nav::-webkit-scrollbar{display:none}
+}
+
+@media (min-width:701px) and (max-width:960px){
+  .home-search{display:block}
+  .home-search-heading{margin-bottom:14px}
+  .home-search-fields{display:grid!important;grid-template-columns:1fr 1fr;gap:10px}
+  .home-search input,.home-search .primary{grid-column:1/-1}
+}
+
+@media (max-width:700px){
+  .home-slide-content{width:calc(100% - 40px);padding:0;transform:none}
+  .home-slide h1{line-height:1.2;margin:12px 0}
+  .home-slide p{line-height:1.6;margin-bottom:24px}
+  .home-slide .button{min-height:56px;padding:14px 28px}
+  .home-slide-note{top:16px;right:20px}
+  .home-slide-note span{padding:5px 9px}
+  .home-slider-controls{inset:0}
+  .home-slider-arrow{width:48px;min-width:48px;height:48px;min-height:48px;font-size:32px}
+  .home-slider-arrow.prev{left:0!important}
+  .home-slider-arrow.next{right:0!important}
+  .home-slider-dots{bottom:28px;gap:8px}
+  .home-slider-index{right:18px;top:50%;bottom:auto;transform:translateY(-50%)}
+  .home-search-section{width:90%;margin:-24px auto 0}
+  .home-search{display:block;padding:18px 14px 20px;border-radius:22px}
+  .home-search-heading{margin-bottom:14px}
+  .home-search-heading+.home-search-fields{margin:0}
+  .home-search-fields{grid-template-columns:1fr;gap:8px}
+  .home-search input,.home-search select,.home-search .primary{grid-column:auto;height:50px;min-height:50px}
+  .home-search .primary{width:100%}
+}
+
+@media (max-width:340px){
+  .home-search-section{margin-top:-22px}
+  .home-search{padding:15px 11px 17px}
+  .home-slide-note{display:none}
+}
