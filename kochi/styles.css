@@ -54,6 +54,7 @@ body:has(.page-home) header .nav a:nth-child(n+3):nth-child(-n+10){display:none}
 
 /* Keep the photo as the actual background and give tablet-width search cards their own row. */
 .home-slide>img{z-index:0}.home-slide-shade{z-index:1}.home-slide-content{z-index:2}.home-slide-note,.home-slide-credit{z-index:3}.home-slider-controls{z-index:4}
+.home-slide-picture{position:absolute;inset:0;z-index:0;display:block}.home-slide-picture>img{display:block;width:100%;height:100%;object-fit:cover}
 
 /* Keep the shared section padding outside the full-bleed slide area. */
 .home-slider{padding:0}
