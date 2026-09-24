@@ -73,6 +73,14 @@ body:has(.page-home) header .nav a:nth-child(n+3):nth-child(-n+10){display:none}
 
 /* Keep the shared section padding outside the full-bleed slide area. */
 .home-slider{padding:0}
+
+/* Keep the Karst course collage focused without changing the other three cards. */
+.home-course-media[href="/courses/karst-drive/"] .home-course-main{height:280px;object-position:50% 58%}
+.home-course-media[href="/courses/karst-drive/"] .home-course-catchcopy{top:20px;left:20px;max-width:57%;font-size:20px;line-height:1.4}
+.home-course-media[href="/courses/karst-drive/"] .home-course-thumbs img:nth-child(1){object-position:50% 45%}
+.home-course-media[href="/courses/karst-drive/"] .home-course-thumbs img:nth-child(2){object-position:50% 55%}
+.home-course-media[href="/courses/karst-drive/"] .home-course-thumbs img:nth-child(3){object-position:70% 50%}
+@media(max-width:700px){.home-course-media[href="/courses/karst-drive/"] .home-course-main{height:215px;object-position:50% 58%}.home-course-media[href="/courses/karst-drive/"] .home-course-catchcopy{top:15px;left:15px;max-width:60%;font-size:17px;line-height:1.35}}
 /* Give the absolute image layer a definite containing height at every breakpoint. */
 .home-slide{height:clamp(590px,76svh,830px);min-height:0;background:transparent}
 .home-slide>img{display:block;position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:0}
