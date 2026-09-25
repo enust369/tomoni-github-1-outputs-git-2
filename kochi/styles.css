@@ -81,6 +81,14 @@ body:has(.page-home) header .nav a:nth-child(n+3):nth-child(-n+10){display:none}
 .home-course-media[href="/courses/karst-drive/"] .home-course-thumbs img:nth-child(2){object-position:50% 55%}
 .home-course-media[href="/courses/karst-drive/"] .home-course-thumbs img:nth-child(3){object-position:70% 50%}
 @media(max-width:700px){.home-course-media[href="/courses/karst-drive/"]{grid-template-columns:1fr;grid-template-rows:auto auto}.home-course-media[href="/courses/karst-drive/"] .home-course-main{height:215px;object-position:50% 58%;border-radius:11px 11px 3px 3px}.home-course-media[href="/courses/karst-drive/"] .home-course-thumbs{grid-template-columns:repeat(3,minmax(0,1fr));grid-template-rows:72px;height:72px}.home-course-media[href="/courses/karst-drive/"] .home-course-thumbs img{height:72px;min-height:72px;border-radius:3px}.home-course-media[href="/courses/karst-drive/"] .home-course-catchcopy{top:15px;left:15px;max-width:60%;font-size:17px;line-height:1.35}}
+
+/* Use one collage geometry for every recommended course. */
+.home-course-media{grid-template-rows:250px}
+.home-course-main,.home-course-media[href="/courses/karst-drive/"] .home-course-main{height:250px}
+.home-course-thumbs{height:250px}
+@media(max-width:900px){.home-course-media{grid-template-rows:210px}.home-course-main,.home-course-media[href="/courses/karst-drive/"] .home-course-main,.home-course-thumbs{height:210px}}
+@media(max-width:700px){.home-course-media,.home-course-media[href="/courses/karst-drive/"]{grid-template-columns:1fr;grid-template-rows:195px 72px}.home-course-main,.home-course-media[href="/courses/karst-drive/"] .home-course-main{height:195px;border-radius:11px 11px 3px 3px}.home-course-thumbs,.home-course-media[href="/courses/karst-drive/"] .home-course-thumbs{grid-template-columns:repeat(3,minmax(0,1fr));grid-template-rows:72px;height:72px}.home-course-thumbs img,.home-course-media[href="/courses/karst-drive/"] .home-course-thumbs img{height:72px;min-height:72px;border-radius:3px}}
+@media(max-width:420px){.home-course-media,.home-course-media[href="/courses/karst-drive/"]{grid-template-rows:168px 72px}.home-course-main,.home-course-media[href="/courses/karst-drive/"] .home-course-main{height:168px}}
 /* Give the absolute image layer a definite containing height at every breakpoint. */
 .home-slide{height:clamp(590px,76svh,830px);min-height:0;background:transparent}
 .home-slide>img{display:block;position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:0}
