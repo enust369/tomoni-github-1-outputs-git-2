@@ -80,7 +80,7 @@ body:has(.page-home) header .nav a:nth-child(n+3):nth-child(-n+10){display:none}
 .home-course-media[href="/courses/karst-drive/"] .home-course-thumbs img:nth-child(1){object-position:50% 45%}
 .home-course-media[href="/courses/karst-drive/"] .home-course-thumbs img:nth-child(2){object-position:50% 55%}
 .home-course-media[href="/courses/karst-drive/"] .home-course-thumbs img:nth-child(3){object-position:70% 50%}
-@media(max-width:700px){.home-course-media[href="/courses/karst-drive/"] .home-course-main{height:215px;object-position:50% 58%}.home-course-media[href="/courses/karst-drive/"] .home-course-catchcopy{top:15px;left:15px;max-width:60%;font-size:17px;line-height:1.35}}
+@media(max-width:700px){.home-course-media[href="/courses/karst-drive/"]{grid-template-columns:1fr;grid-template-rows:auto auto}.home-course-media[href="/courses/karst-drive/"] .home-course-main{height:215px;object-position:50% 58%;border-radius:11px 11px 3px 3px}.home-course-media[href="/courses/karst-drive/"] .home-course-thumbs{grid-template-columns:repeat(3,minmax(0,1fr));grid-template-rows:72px;height:72px}.home-course-media[href="/courses/karst-drive/"] .home-course-thumbs img{height:72px;min-height:72px;border-radius:3px}.home-course-media[href="/courses/karst-drive/"] .home-course-catchcopy{top:15px;left:15px;max-width:60%;font-size:17px;line-height:1.35}}
 /* Give the absolute image layer a definite containing height at every breakpoint. */
 .home-slide{height:clamp(590px,76svh,830px);min-height:0;background:transparent}
 .home-slide>img{display:block;position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:0}
