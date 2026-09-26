@@ -390,6 +390,44 @@ body.search-modal-open{overflow:hidden}
 }
 @media (max-width:340px){.home-category-search{padding-inline:4%}.home-category-keyword input{font-size:14px}.home-category-keyword button{min-width:68px;font-size:14px}.home-category-card strong{font-size:14px}.home-category-icon{width:36px;height:36px;flex-basis:36px;font-size:24px}.home-category-subcard strong{font-size:12px}}
 
+/* Compact the category finder on phones without changing its visual system or behavior. */
+@media (max-width:390px){
+  .home-category-search{padding:24px 16px 28px}
+  .home-category-search-heading{margin-bottom:18px}
+  .home-category-search-heading .eyebrow{font-size:12.5px;letter-spacing:.14em}
+  .home-category-search-heading h2{margin:6px 0 8px;font-size:29px;line-height:1.25}
+  .home-category-search-heading p{margin-bottom:0;font-size:14px;line-height:1.6}
+  .home-category-keyword{height:60px;margin-bottom:20px;padding:4px 6px 4px 18px;border-radius:30px}
+  .home-category-keyword span{font-size:27px}
+  .home-category-keyword input{padding:10px 8px;font-size:16px}
+  .home-category-keyword button{width:102px;min-width:102px;height:52px;border-radius:26px;font-size:17px}
+  .home-category-main{gap:12px;margin-bottom:12px}
+  .home-category-card:nth-child(n){min-height:124px;padding:15px 14px;gap:8px}
+  .home-category-card:nth-child(5){min-height:112px}
+  .home-category-icon{width:52px;height:52px;flex-basis:52px;border-radius:16px;font-size:34px}
+  .home-category-card strong{font-size:19px}
+  .home-category-arrow{width:38px;height:38px;font-size:29px}
+  .home-category-sub{gap:10px}
+  .home-category-subcard{min-height:76px;padding:11px 12px;gap:8px}
+  .home-category-subicon{width:40px;height:40px;font-size:21px}
+  .home-category-subcard strong{font-size:16px}
+  .home-category-subcard>span:last-child{font-size:19px}
+}
+
+@media (max-width:340px){
+  .home-category-search{padding:24px 16px 28px}
+  .home-category-keyword{padding-left:14px}
+  .home-category-keyword button{width:96px;min-width:96px;font-size:16px}
+  .home-category-card:nth-child(n){display:grid;grid-template-columns:34px minmax(0,1fr) 30px;min-height:118px;padding:13px 8px;gap:4px}
+  .home-category-card:nth-child(5){min-height:108px}
+  .home-category-icon{width:34px;height:34px;flex-basis:34px;border-radius:11px;font-size:23px}
+  .home-category-card strong{font-size:14px;line-height:1.25;text-align:center;white-space:normal}
+  .home-category-arrow{width:30px;height:30px;font-size:23px}
+  .home-category-subcard{min-height:72px;padding:10px 9px;gap:6px}
+  .home-category-subicon{width:36px;height:36px;font-size:19px}
+  .home-category-subcard strong{font-size:13px;line-height:1.25;white-space:normal}
+}
+
 /* Keep the handwritten treatment limited to the first slide eyebrow. */
 body:has(.page-home) .home-slide:first-child .home-slide-content .eyebrow{
   font-family:"Snell Roundhand","Segoe Script","Bradley Hand","Apple Chancery","Brush Script MT",cursive;
