@@ -80,6 +80,19 @@ function bind(){
 }
 
 document.addEventListener('click',async e=>{
+ const openSearch=e.target.closest('[data-search-open]');
+ if(openSearch){
+   e.preventDefault();
+   const modal=document.querySelector('#home-search-modal');
+   if(modal){modal.hidden=false;document.body.classList.add('search-modal-open');modal.querySelector('input')?.focus()}
+   return;
+ }
+ const closeSearch=e.target.closest('[data-search-close]');
+ const modal=e.target.closest('#home-search-modal');
+ if(closeSearch||(modal&&e.target===modal)){
+   if(modal){modal.hidden=true;document.body.classList.remove('search-modal-open')}
+   return;
+ }
  const placeholder=e.target.closest('[data-placeholder]');if(placeholder)toast(placeholder.dataset.placeholder);
  const b=e.target.closest('[data-vote]');if(!b||!ready||b.disabled)return;
  const id=b.dataset.vote,s=spots.find(s=>s.id===id);if(!s)return;b.disabled=true;
@@ -88,6 +101,12 @@ document.addEventListener('click',async e=>{
    else{voted.has(id)?voted.delete(id):voted.add(id);localStorage.setItem('kochi-demo-votes',JSON.stringify([...voted]));s.recommend_count=voted.has(id)?1:0;toast('このブラウザの体験用投票です。公開票には加算されません。')}
    filterSpots();const current=document.querySelector('#current-rank');if(current)current.textContent=sortSpots(spots.filter(x=>x.category===s.category)).findIndex(x=>x.id===s.id)+1;syncButtons();
  }catch(error){toast(error.message);b.disabled=false}
+});
+
+document.addEventListener('keydown',e=>{
+ if(e.key!=='Escape')return;
+ const modal=document.querySelector('#home-search-modal');
+ if(modal&&!modal.hidden){modal.hidden=true;document.body.classList.remove('search-modal-open');document.querySelector('[data-search-open]')?.focus()}
 });
 
 async function start(){
