@@ -436,32 +436,32 @@ body.search-modal-open{overflow:hidden}
   .home-category-keyword span{font-size:24px}
   .home-category-keyword input{padding:8px 6px;font-size:15px}
   .home-category-keyword button{width:88px;min-width:88px;height:44px;border-radius:22px;font-size:16px}
-  .home-category-main{gap:9px;margin-bottom:9px}
-  .home-category-card:nth-child(n){min-height:78px;padding:8px 10px;gap:6px;border-radius:16px}
-  .home-category-card:nth-child(5){min-height:70px}
-  .home-category-icon{width:40px;height:40px;flex-basis:40px;border-radius:12px;font-size:27px}
+  .home-category-main{gap:8px;margin-bottom:8px}
+  .home-category-card:nth-child(n){min-height:62px;padding:6px 8px;gap:5px;border-radius:14px}
+  .home-category-card:nth-child(5){min-height:60px}
+  .home-category-icon{width:36px;height:36px;flex-basis:36px;border-radius:11px;font-size:24px}
   .home-category-card strong{font-size:16px}
-  .home-category-arrow{width:30px;height:30px;font-size:23px}
-  .home-category-sub{gap:8px}
-  .home-category-subcard{min-height:56px;padding:7px 9px;gap:6px;border-radius:14px}
-  .home-category-subicon{width:32px;height:32px;font-size:17px}
+  .home-category-arrow{width:29px;height:29px;font-size:22px}
+  .home-category-sub{gap:7px}
+  .home-category-subcard{min-height:46px;padding:4px 7px;gap:5px;border-radius:12px}
+  .home-category-subicon{width:28px;height:28px;font-size:16px}
   .home-category-subcard strong{font-size:14px}
-  .home-category-subcard>span:last-child{font-size:17px}
+  .home-category-subcard>span:last-child{font-size:15px}
 }
 
 @media (max-width:340px){
   .home-category-search{padding:10px 12px 14px}
   .home-category-keyword{height:48px;margin:8px auto 9px;padding-left:12px;border-radius:24px}
   .home-category-keyword button{width:84px;min-width:84px;height:42px;border-radius:21px;font-size:15px}
-  .home-category-card:nth-child(n){min-height:73px;padding:7px 8px;gap:4px}
-  .home-category-card:nth-child(5){min-height:65px}
-  .home-category-icon{width:36px;height:36px;flex-basis:36px;font-size:24px}
-  .home-category-card strong{font-size:15px}
-  .home-category-arrow{width:28px;height:28px;font-size:21px}
-  .home-category-subcard{min-height:52px;padding:6px 8px;gap:5px}
-  .home-category-subicon{width:29px;height:29px;font-size:16px}
-  .home-category-subcard strong{font-size:13px}
-  .home-category-subcard>span:last-child{font-size:16px}
+  .home-category-card:nth-child(n){min-height:56px;padding:6px 7px;gap:4px}
+  .home-category-card:nth-child(5){min-height:54px}
+  .home-category-icon{width:32px;height:32px;flex-basis:32px;font-size:22px}
+  .home-category-card strong{font-size:14px}
+  .home-category-arrow{width:27px;height:27px;font-size:20px}
+  .home-category-subcard{min-height:43px;padding:5px 7px;gap:4px}
+  .home-category-subicon{width:27px;height:27px;font-size:15px}
+  .home-category-subcard strong{font-size:12px}
+  .home-category-subcard>span:last-child{font-size:15px}
 }
 
 /* Keep the handwritten treatment limited to the first slide eyebrow. */
