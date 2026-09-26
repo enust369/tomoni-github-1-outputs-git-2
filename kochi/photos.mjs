@@ -167,5 +167,19 @@ export const photos={
     "height": 850,
     "position": "50% 54%",
     "checkedAt": "2026-09-23"
+  },
+  "makino-botanical-garden": {
+    "src": "/assets/photos/makino-botanical-garden.png",
+    "name": "高知県立牧野植物園",
+    "alt": "高知県立牧野植物園の温室を見上げる植物と青空",
+    "author": "提供画像",
+    "source": "ユーザー提供",
+    "title": "高知県立牧野植物園",
+    "license": "提供画像（サイト掲載用）",
+    "licenseUrl": "",
+    "width": 1536,
+    "height": 1024,
+    "position": "50% 50%",
+    "checkedAt": "2026-09-26"
   }
 };
