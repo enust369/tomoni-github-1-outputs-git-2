@@ -94,21 +94,28 @@ const seoSpot=bits[0]==='spots'
   :null;
 const seoCourse=bits[0]==='courses'
   ?courses.find(c=>c.slug===bits[1])
-  :null;                                                      
+  :null;     
+   const seoEvent=bits[0]==='events'
+  ?events.find(e=>e.slug===bits[1])
+  :null;                                                   
 const seoTitle=bits.length===0
   ?'高知観光ランキング｜観光スポット・絶景・アクティビティ・モデルコース'
   :seoSpot
     ?`${seoSpot.name}｜${areas[seoSpot.area]}の${categories[seoSpot.category]}｜高知観光ランキング`
     :seoCourse
       ?`${seoCourse.name}｜高知のモデルコース｜高知観光ランキング`
-      :`${title} | 高知観光ランキング`;
+      :seoEvent
+        ?`${seoEvent.name}｜高知のイベント情報｜高知観光ランキング`
+        :`${title} | 高知観光ランキング`;
 const seoDescription=bits.length===0
   ?'高知県の観光スポット、絶景、アクティビティ、グルメ、モデルコースをランキングやエリアから探せる観光ガイド。仁淀川、柏島、四国カルストなど、高知旅行で行きたい場所を見つけられます。'
   :seoSpot
     ?`${seoSpot.name}（${areas[seoSpot.area]}）の${categories[seoSpot.category]}情報。${seoSpot.catchphrase}見どころやアクセス、周辺のモデルコースを紹介します。`
     :seoCourse
       ?`${seoCourse.name}を紹介。${areas[seoCourse.area]}を巡る${seoCourse.duration}の高知観光モデルコースです。見どころや立ち寄りスポット、移動の流れを確認できます。`
-      :`${title}。エリアとテーマから見つける、高知の観光・グルメ・モデルコース。`;
+      :seoEvent
+        ?`${seoEvent.name}（${areas[seoEvent.area]}）のイベント情報。開催概要や日程、見どころを紹介します。高知旅行・おでかけの予定づくりにご活用ください。`
+        :`${title}。エリアとテーマから見つける、高知の観光・グルメ・モデルコース。`;
 const canonical=origin&&status===200?new URL(path,origin).href:'';const robots=indexing&&status===200&&isIndexablePath(path)?'index,follow':'noindex,nofollow';const nav=bits.length===0?[['/search/','スポットを探す'],['/courses/','モデルコース'],['/area/kochi-city/','エリア'],['/sightseeing/','特集'],['/events/','イベント'],['/about/','お役立ち情報']].map(([href,label])=>link(href,label)).join('')+'<span class="home-nav-divider" aria-hidden="true"></span>'+[searchLink('検索'),['/mypage/','お気に入り'],['/about/','メニュー']].map(item=>Array.isArray(item)?link(item[0],item[1]):item).join(''):[link('/courses/','モデルコース'),Object.entries(categories).filter(([k])=>k!=='cycling').map(([k,v])=>link('/'+k+'/',v)).join(''),link('/events/','イベント'),link('/search/','検索 ⌕')].join('');return {status,html:`<!doctype html><html lang="ja"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>${esc(seoTitle)}</title><meta name="description" content="${esc(seoDescription)}"><meta name="robots" content="${robots}">${canonical?`<link rel="canonical" href="${esc(canonical)}"><meta property="og:url" content="${esc(canonical)}">`:''}<meta property="og:title" content="${esc(seoTitle)}"><meta property="og:description" content="${esc(seoDescription)}"><meta property="og:site_name" content="高知観光ランキング"><meta property="og:type" content="website"><link rel="icon" href="/favicon.svg"><link rel="apple-touch-icon" sizes="180x180" href="/assets/icons/apple-touch-icon.png"><link rel="icon" type="image/png" sizes="192x192" href="/assets/icons/icon-192.png"><link rel="icon" type="image/png" sizes="512x512" href="/assets/icons/icon-512.png"><link rel="icon" type="image/png" href="/assets/icons/app-icon.png"><link rel="stylesheet" href="/styles.css"><script src="/config.js"></script><script type="module" src="/app.mjs"></script></head><body><a class="skip" href="#main">本文へスキップ</a><header><div class="topbar"><a class="brand${bits.length===0?' home-brand':''}" href="/">${bits.length===0?'<img class="home-brand-mark" src="/favicon.svg" alt="" aria-hidden="true"><span class="home-brand-copy">':''}<small>KOCHI TRAVEL GUIDE</small>高知観光ランキング${bits.length===0?'</span>':''}</a>${bits.length===0?'':link('/mypage/','♡ 保存した旅','button')}</div><nav class="nav" aria-label="メインナビ">${nav}</nav></header><main id="main" class="page-${esc(bits[0]||'home')}">${body}</main><footer><a class="brand" href="/">高知観光ランキング</a><p>次の休日は、高知へ。</p><div class="chips">${[['about','このサイトについて'],['suggest','掲載追加申請'],['correction','情報修正申請'],['contact','お問い合わせ'],['terms','利用規約'],['privacy','プライバシー'],['login','ログイン']].map(([k,v])=>link('/'+k+'/',v)).join('')}</div><small>© 高知観光ランキング</small></footer><div id="toast" class="status" role="status" hidden></div></body></html>`};}
 export function setLiveMode(){demoNotice='';}
 export {spotGrid,courseGrid,eventCard};
