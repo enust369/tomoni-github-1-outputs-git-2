@@ -61,5 +61,28 @@ const courseRows=[
 ['three-days','高知満喫2泊3日コース','north_niyodo','王道','2泊3日',['kochi-castle','nikobuchi','iokido']]];
 export const courses=courseRows.map(([slug,name,area,theme,duration,stops],i)=>({slug,name,area,theme,duration,stops,initial_rank:i+1,transport:'車＋徒歩',season:'季節・天候に応じて',audience:theme==='子連れ'?'家族':theme==='カップル'?'カップル':'友人・ひとり旅',photo:stops.map(slug=>photos[slug]).find(Boolean)||null,image:stops.map(slug=>photos[slug]?.src).find(Boolean)||''}));
 export const eventCategories=['祭り・花火','グルメ','マルシェ','自然・アウトドア','文化・展覧会','子ども向け','スポーツ','期間限定体験'];
-export const events=[{slug:'sample-riverside',name:'川辺のマルシェ（表示サンプル）',category:'マルシェ',area:'north_niyodo',start_date:'2030-09-01',end_date:'2030-09-01',is_demo:true,description:'日付・名称は画面確認用の架空データです。実際の開催情報ではありません。'}];
+export const events=[
+  {
+    slug:'yosakoi-2026',
+    name:'第73回よさこい祭り（2026）',
+    category:'祭り・花火',
+    area:'kochi_city',
+    start_date:'2026-08-09',
+    end_date:'2026-08-12',
+    is_demo:false,
+    description:'高知を代表する夏の祭り。8月10日・11日の本番を中心に、前夜祭・全国大会・後夜祭まで高知市中心部がよさこい一色に包まれます。',
+    venue:'高知市追手筋ほか15会場',
+    fee:'観覧無料（一部有料観覧席あり）'
+  },
+  {
+    slug:'sample-riverside',
+    name:'川辺のマルシェ（表示サンプル）',
+    category:'マルシェ',
+    area:'north_niyodo',
+    start_date:'2030-09-01',
+    end_date:'2030-09-01',
+    is_demo:true,
+    description:'日付・名称は画面確認用の架空データです。実際の開催情報ではありません。'
+  }
+];
 export const sortSpots=items=>[...items].sort((a,b)=>b.recommend_count-a.recommend_count||a.initial_rank-b.initial_rank||a.slug.localeCompare(b.slug));
