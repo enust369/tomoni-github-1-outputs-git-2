@@ -3064,8 +3064,6 @@
           ${profile.photoUrl ? `<img class="member-card-photo" src="${esc(profile.photoUrl)}" alt="${esc(profile.nickname)}さんのプロフィール写真">` : `<div class="member-card-photo member-card-photo-placeholder" aria-hidden="true">${esc(profile.nickname.slice(0, 1) || "と")}</div>`}
           <div><h3>${esc(profile.nickname)}さん</h3><p class="meta">${esc(formatAge(profile.age))}${profile.area ? ` / ${esc(profile.area)}` : ""}</p><div class="chips">${verificationBadgesMarkup(profile)}</div></div>
         </div>
-        ${memberValuesMarkup(profile, true)}
-        ${memberProfileChips(profile) ? `<div class="chips">${memberProfileChips(profile)}</div>` : ""}
         ${profile.bio ? `<p class="member-card-bio">${esc(profile.bio)}</p>` : ""}
         <div class="actions"><button class="btn small primary" data-action="open-member-profile" data-profile-key="${esc(profile.profileKey)}">プロフィールを見る</button><button class="btn small" data-action="toggle-member-favorite" data-profile-key="${esc(profile.profileKey)}">${profile.isFavorite ? "気になる済み" : "気になる"}</button></div>
       </article>`).join("");
