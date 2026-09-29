@@ -3038,12 +3038,13 @@
         profile.firstMeetingMood ? ["初対面の雰囲気", profile.firstMeetingMood] : null,
         profile.afterMeeting ? ["会った後", profile.afterMeeting] : null
       ].filter(Boolean);
-      const reassurance = profile.reassurancePoints?.length ? `<div class="member-value"><p class="member-value-label">初対面で安心してもらうために</p><ul class="profile-value-list">${profile.reassurancePoints.map((value) => `<li>${esc(value)}</li>`).join("")}</ul></div>` : "";
-      const talkTopics = profile.talkTopics?.length ? `<div class="member-value"><p class="member-value-label">話したいこと・相談したいこと</p><ul class="profile-value-list">${profile.talkTopics.map((value) => `<li>${esc(value)}</li>`).join("")}</ul></div>` : "";
-      const meetingValues = profile.meetingValues?.length ? `<div class="member-value"><p class="member-value-label">会う時に大切にしたいこと</p><ul class="profile-value-list">${profile.meetingValues.map((value) => `<li>${esc(value)}</li>`).join("")}</ul></div>` : "";
-      const currentInterest = profile.currentInterest ? `<div class="member-value"><p class="member-value-label">最近ハマっていること</p><p class="member-value-text">${esc(compact ? truncateProfileText(profile.currentInterest) : profile.currentInterest)}</p></div>` : "";
-      if (!values.length && !reassurance && !talkTopics && !meetingValues && !currentInterest) return "";
-      return `<div class="member-values">${values.map(([label, value]) => `<div class="member-value"><p class="member-value-label">${esc(label)}</p><p class="member-value-text">${esc(value)}</p></div>`).join("")}${currentInterest}${reassurance}${talkTopics}${meetingValues}</div>`;
+      const visibleValues = compact ? values.slice(0, 2) : values;
+      const reassurance = !compact && profile.reassurancePoints?.length ? `<div class="member-value"><p class="member-value-label">初対面で安心してもらうために</p><ul class="profile-value-list">${profile.reassurancePoints.map((value) => `<li>${esc(value)}</li>`).join("")}</ul></div>` : "";
+      const talkTopics = !compact && profile.talkTopics?.length ? `<div class="member-value"><p class="member-value-label">話したいこと・相談したいこと</p><ul class="profile-value-list">${profile.talkTopics.map((value) => `<li>${esc(value)}</li>`).join("")}</ul></div>` : "";
+      const meetingValues = !compact && profile.meetingValues?.length ? `<div class="member-value"><p class="member-value-label">会う時に大切にしたいこと</p><ul class="profile-value-list">${profile.meetingValues.map((value) => `<li>${esc(value)}</li>`).join("")}</ul></div>` : "";
+      const currentInterest = profile.currentInterest ? `<div class="member-value"><p class="member-value-label">最近ハマっていること</p><p class="member-value-text">${esc(compact ? truncateProfileText(profile.currentInterest, 36) : profile.currentInterest)}</p></div>` : "";
+      if (!visibleValues.length && !reassurance && !talkTopics && !meetingValues && !currentInterest) return "";
+      return `<div class="member-values">${visibleValues.map(([label, value]) => `<div class="member-value"><p class="member-value-label">${esc(label)}</p><p class="member-value-text">${esc(value)}</p></div>`).join("")}${currentInterest}${reassurance}${talkTopics}${meetingValues}</div>`;
     }
 
     function renderMemberProfiles() {
