@@ -1417,7 +1417,7 @@
           <article class="card home-safety-card">
             <h2>🛡 安心して利用できる仕組み</h2>
             <ul class="home-safety-list">
-              <li>同性同士のみ表示</li>
+              <li>公開情報の閲覧と、ログイン後の操作を分離</li>
               <li>通報・ブロック機能</li>
               <li>公共の場所で会うことを推奨</li>
               <li>安全ガイドを用意</li>
@@ -1631,13 +1631,13 @@
 
       <section id="members" class="protected-section">
         <article class="card access-gate"><span class="badge">ログインが必要です</span><h3 style="margin-top:12px">登録者を探すにはログインしてください。</h3><p class="meta" style="margin-top:8px">安心して利用できるよう、登録済みの方だけに表示しています。</p><div class="actions" style="justify-content:center"><button class="btn primary" data-action="open-auth">登録・ログイン</button></div></article>
-        <div class="section-head"><div><p class="eyebrow">登録者を探す</p><h2>一緒に過ごしてみたい人を見つける。</h2><p class="meta" style="margin-top:10px">登録した性別と同じ、ブロック関係のない方だけが表示されます。</p></div></div>
+        <div class="section-head"><div><p class="eyebrow">登録者を探す</p><h2>一緒に過ごしてみたい人を見つける。</h2><p class="meta" style="margin-top:10px">公開プロフィールを表示しています。参加や連絡などの操作にはログインが必要です。</p></div></div>
         <div class="profile-grid member-grid" id="memberGrid"><article class="card empty-state">ログインすると、登録者を確認できます。</article></div>
       </section>
 
       <section id="region" class="protected-section">
         <article class="card access-gate"><span class="badge">ログインが必要です</span><h3 style="margin-top:12px">地域から探すにはログインしてください。</h3><p class="meta" style="margin-top:8px">安心して利用できるよう、登録済みの方だけに表示しています。</p><div class="actions" style="justify-content:center"><button class="btn primary" data-action="open-auth">登録・ログイン</button></div></article>
-        <div class="section-head"><div><p class="eyebrow">地域から探す</p><h2>近くで、今日過ごせる人。</h2><p class="meta" style="margin-top:10px">登録した性別と同じ方だけが表示されます。</p></div></div>
+        <div class="section-head"><div><p class="eyebrow">地域から探す</p><h2>近くで、今日過ごせる人。</h2><p class="meta" style="margin-top:10px">公開中の募集を地域から探せます。参加や連絡などの操作にはログインが必要です。</p></div></div>
         <div class="card region-controls">
           <div class="field"><label for="searchPrefecture">都道府県</label><select id="searchPrefecture"></select></div>
           <div class="field"><label for="searchCity">市区町村</label><select id="searchCity"></select></div>
@@ -1846,7 +1846,7 @@
           <h2>TOMONIが大切にしていること。</h2>
           <p style="margin-top:12px">TOMONIは、恋愛目的ではなく、同性同士が安心して1対1の時間を過ごせることを大切にしています。</p>
           <div class="safety-page-grid">
-            <article><h3>同性同士の交流</h3><p class="meta">登録された性別をもとに、同じ性別の方の募集やプロフィールだけが表示される設計です。</p></article>
+            <article><h3>同性同士の交流</h3><p class="meta">参加申請、気になる、チャットは、登録された性別をもとに同性の相手にだけ利用できる設計です。</p></article>
             <article><h3>ブロック機能</h3><p class="meta">不安を感じた相手とは、無理に関わり続ける必要はありません。相手に通知されずに距離を置けます。</p></article>
             <article><h3>通報機能</h3><p class="meta">勧誘・営業、不適切な発言、強い違和感がある場合は、運営へ知らせることができます。</p></article>
             <article><h3>管理者による確認</h3><p class="meta">通報やお問い合わせは、必要に応じて管理者が確認し、安全な利用環境づくりに役立てます。</p></article>
@@ -2333,6 +2333,7 @@
     }
     function canShowListingToViewer(item) {
       if (!item || item.owner) return false;
+      if (!hasMemberAccess()) return true;
       return isSameGenderUser(item.gender);
     }
     function sameGenderRequiredMarkup() {
@@ -2556,7 +2557,7 @@
       if (tab.id === "home-recommended") {
         void loadHomeStats();
         renderHomeNewListings();
-        if (options.refreshHomeListings !== false && hasMemberAccess()) void loadSupabaseListings({ silent: true });
+        if (options.refreshHomeListings !== false) void loadSupabaseListings({ silent: true });
       }
       if (options.persist !== false) saveTabState(category, tab.id);
       if (options.scroll !== false) scrollSectionToTop(tab.sections[0]);
@@ -2710,14 +2711,6 @@
     function renderHomeNewListings() {
       const container = document.getElementById("homeNewListings");
       if (!container) return;
-      if (!appState.user) {
-        container.innerHTML = `<div class="empty-state"><p>新着募集を見るにはログインしてください。</p><div class="actions" style="justify-content:center"><button class="btn small primary" data-action="open-auth">登録・ログイン</button></div></div>`;
-        return;
-      }
-      if (!hasMemberAccess()) {
-        container.innerHTML = `<div class="empty-state"><p>プロフィールを作成すると新着募集を確認できます。</p><div class="actions" style="justify-content:center"><button class="btn small primary" data-action="edit-profile">プロフィールを作成する</button></div></div>`;
-        return;
-      }
       if (homeNewListingsStatus === "error") {
         container.innerHTML = `<div class="empty-state">新着募集を読み込めませんでした。</div>`;
         return;
@@ -2747,6 +2740,11 @@
     }
 
     async function loadHomeStats(options = {}) {
+      if (!appState.user) {
+        homeStats = { listed: null, members: null, loading: false };
+        renderHomeStats();
+        return;
+      }
       if (homeStatsRequest) {
         if (!options.force) return homeStatsRequest;
         await homeStatsRequest;
@@ -2960,8 +2958,12 @@
     }
 
     function rankListings() {
-      if (!hasViewerGender()) {
+      if (hasMemberAccess() && !hasViewerGender()) {
         latestRankedListings = [];
+        return latestRankedListings;
+      }
+      if (!hasMemberAccess()) {
+        latestRankedListings = listings.filter((item) => item.availableToday);
         return latestRankedListings;
       }
       const profile = buildComfortProfile();
@@ -2986,12 +2988,13 @@
 
     function normalizeDiscoverableProfile(row = {}) {
       const decoded = decodeProfileTags(row.public_tags || []);
+      const profileKey = String(row.profile_key || "");
       return {
-        profileKey: String(row.profile_key || ""),
+        profileKey,
         nickname: String(row.nickname || ""),
         age: Number.isInteger(Number(row.age)) ? Number(row.age) : null,
         area: String(row.area || ""),
-        photoUrl: String(row.photo_urls?.[0] || ""),
+        photoUrl: Number(row.photo_count) > 0 ? String(window.tomoniAuth?.publicProfilePhotoUrl?.(profileKey, 0) || "") : "",
         bio: String(row.bio || ""),
         occupation: decoded.extras.occupation || "",
         currentInterest: decoded.extras.currentInterest || "",
@@ -3046,11 +3049,7 @@
     function renderMemberProfiles() {
       const grid = document.getElementById("memberGrid");
       if (!grid) return;
-      if (!appState.user) {
-        grid.innerHTML = `<article class="card empty-state">ログインすると、登録者を確認できます。</article>`;
-        return;
-      }
-      if (!hasViewerGender()) {
+      if (hasMemberAccess() && !hasViewerGender()) {
         grid.innerHTML = sameGenderRequiredMarkup();
         return;
       }
@@ -3096,7 +3095,7 @@
         .filter((item) => (prefecture === "all" || item.prefecture === prefecture) && (city === "all" || item.city === city))
         .sort((a, b) => a.distance - b.distance);
       if (!profiles.length) {
-        grid.innerHTML = hasViewerGender() ? noListingsMarkup() : sameGenderRequiredMarkup();
+        grid.innerHTML = noListingsMarkup();
         bindJumpButtons(grid);
         return;
       }
@@ -3104,7 +3103,7 @@
         <article class="card">
           <div class="chips">
             <span class="badge">今日は会えます</span>
-            <span class="badge muted">${esc(item.gender)}同士</span>
+            ${hasMemberAccess() ? `<span class="badge muted">${esc(item.gender)}同士</span>` : ""}
             <span class="badge muted">${esc(item.area)}</span>
             <span class="badge muted">${esc(formatAge(item.age))}</span>
             <span class="badge muted">徒歩${item.distance}分</span>
@@ -3113,7 +3112,7 @@
           </div>
           <h3 style="margin-top:12px">${esc(item.person)}さん</h3>
           <p class="meta">${esc(activityDisplay(item))} / ${esc(item.talk)}</p>
-          <p style="margin-top:8px">今日のあなたと心地よい時間を過ごせそうです。</p>
+          <p style="margin-top:8px">募集内容を確認できます。</p>
           <div class="actions">
             <button class="btn small primary" data-action="open-detail" data-id="${item.id}">一緒に過ごしませんか？</button>
             ${favoriteButton(item)}
@@ -3129,7 +3128,7 @@
       const grid = document.getElementById("listingGrid");
       const visibleListings = rankListings().filter((item) => item.active);
       if (!visibleListings.length) {
-        grid.innerHTML = hasViewerGender() ? noListingsMarkup() : sameGenderRequiredMarkup();
+        grid.innerHTML = noListingsMarkup();
         bindJumpButtons(grid);
         return;
       }
@@ -3229,15 +3228,15 @@
         scheduledAt: row.scheduled_at,
         createdAt: row.created_at,
         capacity: row.capacity,
-        participantCount: row.participantCount || 0,
+        participantCount: row.participantCount ?? row.participant_count ?? 0,
         audience: row.audience,
         status: row.status || "open",
-        verified: Boolean(profile.is_verified),
-        emailConfirmed: Boolean(profile.email_confirmed),
-        ageInfoRegistered: Boolean(profile.birth_date_registered),
-        age: profile.age !== null && profile.age !== undefined && Number.isInteger(Number(profile.age)) ? Number(profile.age) : null,
-        profileArea: profile.area || "",
-        profilePhoto: profile.photo_urls?.[0] || "",
+        verified: Boolean(profile.is_verified ?? row.is_verified),
+        emailConfirmed: Boolean(profile.email_confirmed ?? row.email_confirmed),
+        ageInfoRegistered: Boolean(profile.birth_date_registered ?? row.birth_date_registered),
+        age: (profile.age ?? row.profile_age) !== null && (profile.age ?? row.profile_age) !== undefined && Number.isInteger(Number(profile.age ?? row.profile_age)) ? Number(profile.age ?? row.profile_age) : null,
+        profileArea: profile.area || row.profile_area || "",
+        profilePhoto: profile.photo_urls?.[0] || row.profile_photo_url || "",
         personalityTitle: profile.personality_title || "",
         personalityTags: profile.personality_tags || [],
         note: row.title || "",
@@ -3249,8 +3248,8 @@
         distance: 3,
         availableToday: todayOpen,
         active: true,
-        owner: row.owner_id === appState.user?.id,
-        ownerId: row.owner_id
+        owner: Boolean(row.owner_id && row.owner_id === appState.user?.id),
+        ownerId: row.owner_id || null
       };
     }
 
@@ -3313,8 +3312,9 @@
     }
 
     async function loadDiscoverableProfiles() {
-      if (!appState.user) { applyDiscoverableProfiles([]); return true; }
-      const result = await window.tomoniAuth?.listDiscoverableProfiles?.();
+      const result = hasMemberAccess()
+        ? await window.tomoniAuth?.listDiscoverableProfiles?.()
+        : await window.tomoniAuth?.listPublicDiscoverableProfiles?.();
       if (result?.error) {
         applyDiscoverableProfiles([]);
         toast("登録者一覧を読み込めませんでした。SQLの反映状況を確認してください。");
@@ -3336,9 +3336,36 @@
     }
 
     async function loadSupabaseListingsOnce(expectedUserId, options = {}) {
-      if (appState.user) {
-        homeNewListingsStatus = "loading";
-        renderHomeNewListings();
+      homeNewListingsStatus = "loading";
+      renderHomeNewListings();
+      if (!hasMemberAccess()) {
+        const [result, membersResult] = await Promise.all([
+          window.tomoniAuth?.listPublicListings?.(),
+          window.tomoniAuth?.listPublicDiscoverableProfiles?.()
+        ]);
+        if ((appState.user?.id || "") !== expectedUserId) return false;
+        if (result?.error) {
+          homeNewListingsStatus = "error";
+          renderHomeNewListings();
+          if (!options.silent) toast(userFacingErrorMessage(result.error, "公開募集を読み込めませんでした。しばらくしてからもう一度お試しください。"));
+          return false;
+        }
+        if (membersResult?.error && !options.silent) toast("登録者一覧を読み込めませんでした。SQLの反映状況を確認してください。");
+        applyDiscoverableProfiles(membersResult?.error ? [] : (membersResult?.data || []));
+        profilesByUserId = new Map();
+        matchRecords = [];
+        matchedUserIds = new Set();
+        participationStatuses = new Map();
+        participatingListingIds = new Set();
+        const remote = (result?.data || []).map((row) => listingFromRow(row));
+        listings.splice(0, listings.length);
+        listings.unshift(...remote);
+        appState.customListings = [];
+        homeNewListingsStatus = "ready";
+        saveState();
+        updateAccountUI();
+        renderListings(); renderRegionalProfiles(); renderMemberProfiles(); renderManaged(); renderParticipating(); renderHomeNewListings();
+        return true;
       }
       const blocksLoaded = await loadBlocks(options);
       if (!blocksLoaded) {
@@ -3635,7 +3662,7 @@
       };
       document.getElementById("profileVerified").textContent = verificationLabels(ownVerificationStatus, true).join("・");
       document.getElementById("verificationStatus").innerHTML = `<strong>確認状態</strong><div class="chips" style="margin-top:10px">${verificationBadgesMarkup(ownVerificationStatus, true)}</div><p class="meta" style="margin-top:10px">メール確認、年齢情報の入力、公的な本人確認はそれぞれ別の状態です。</p>`;
-      ["create", "members", "region", "managed", "participating"].forEach((sectionId) => setProtectedSectionLocked(sectionId, !profileComplete));
+      ["create", "managed", "participating"].forEach((sectionId) => setProtectedSectionLocked(sectionId, !profileComplete));
     }
 
     function hasMemberAccess() {
@@ -3775,6 +3802,7 @@
       resetUserScopedState(null, { preserveLocal: false, removeStorage: true });
       saveState();
       renderSignedOutState();
+      await loadSupabaseListings({ silent: true });
       await updateMetCount();
       if (!passwordRecoveryMode) closeModal();
       routeFromAuthState();
@@ -4498,7 +4526,7 @@
       const statusElement = document.getElementById("participationStatus");
       statusElement.textContent = item.owner ? "参加申請を確認できます。" : status === "pending" ? "参加申請を送りました。募集主の確認をお待ちください。" : approved ? "承認されました。チャットを利用できます。" : status === "declined" ? "今回は見送られました。" : full ? "この募集は満員です。" : "申請が承認されると、参加人数に反映されます。";
       statusElement.classList.toggle("caution", status === "declined" || (full && !approved));
-      document.getElementById("detailBadges").innerHTML = `${verificationBadgesMarkup({ emailConfirmed: item.emailConfirmed, ageInfoRegistered: item.ageInfoRegistered, isVerified: item.verified })}${isMatched(item) ? `<span class="badge">マッチ済み</span>` : ""}<span class="badge muted">${esc(formatAge(item.age))}</span>${item.prefecture ? `<span class="badge muted">${esc(item.prefecture)}</span>` : ""}${item.city ? `<span class="badge muted">${esc(item.city)}</span>` : ""}<span class="badge muted">${esc(item.place)}</span><span class="badge muted">${item.participantCount}/${item.capacity}人</span><span class="badge muted">同性のみ</span>`;
+      document.getElementById("detailBadges").innerHTML = `${verificationBadgesMarkup({ emailConfirmed: item.emailConfirmed, ageInfoRegistered: item.ageInfoRegistered, isVerified: item.verified })}${isMatched(item) ? `<span class="badge">マッチ済み</span>` : ""}<span class="badge muted">${esc(formatAge(item.age))}</span>${item.prefecture ? `<span class="badge muted">${esc(item.prefecture)}</span>` : ""}${item.city ? `<span class="badge muted">${esc(item.city)}</span>` : ""}<span class="badge muted">${esc(item.place)}</span><span class="badge muted">${item.participantCount}/${item.capacity}人</span>${hasMemberAccess() ? `<span class="badge muted">同性のみ</span>` : ""}`;
     }
 
     function updateDetailFavoriteUI(item) {
@@ -4523,7 +4551,9 @@
       const localItem = listings.find((listing) => listing.id === id);
       if (!localItem) { showParticipationMessage("この募集は表示できません。", true); jumpTo("listings"); return; }
       let item = localItem;
-      const detailResult = await window.tomoniAuth?.getListing?.(id);
+      const detailResult = hasMemberAccess()
+        ? await window.tomoniAuth?.getListing?.(id)
+        : await window.tomoniAuth?.getPublicListing?.(id);
       if (detailResult?.error || !detailResult?.data) { showParticipationMessage("この募集は表示できません。", true); jumpTo("listings"); return; }
       item = listingFromRow({ ...detailResult.data, participantCount: localItem.participantCount });
       const itemIndex = listings.findIndex((listing) => listing.id === id);
@@ -5035,6 +5065,7 @@
         } finally { saveButton.disabled = false; }
       }
       if (form.id === "contactForm") {
+        if (!appState.user) { openModal("ログイン", authMarkup("login")); toast("お問い合わせはログイン後に利用できます。"); return; }
         const status = document.getElementById("contactStatus");
         const button = form.querySelector('button[type="submit"]');
         const data = Object.fromEntries(new FormData(form));
@@ -5545,6 +5576,7 @@
       if (action === "accept-invite") { withLoading(() => { jumpTo("after"); toast("一緒に過ごす予定に追加しました。"); }); }
       if (action === "decline") toast("今回は見送りました。相手にはやさしく伝わります。");
       if (action === "report") {
+        if (!appState.user) { openModal("ログイン", authMarkup("login")); toast("通報はログイン後に利用できます。"); return; }
         const source = button.dataset.source || "profile";
         const listingId = ["detail", "listing", "region", "recommendation", "meeting-record"].includes(source) ? (button.dataset.listingId || button.dataset.id || "") : "";
         const matchId = source === "match-chat" || source === "chat" ? (button.dataset.matchId || button.dataset.id || "") : "";
@@ -5654,10 +5686,10 @@
     document.addEventListener("visibilitychange", () => {
       if (document.visibilityState !== "visible" || activeTabId !== "home-recommended") return;
       void loadHomeStats();
-      if (hasMemberAccess()) void loadSupabaseListings({ silent: true });
+      void loadSupabaseListings({ silent: true });
     });
     document.addEventListener("click", (event) => {
-      const protectedLink = event.target.closest('[data-jump="create"], [data-jump="members"], [data-jump="region"]');
+      const protectedLink = event.target.closest('[data-jump="create"]');
       if (!protectedLink || hasMemberAccess()) return;
       event.preventDefault(); event.stopImmediatePropagation();
       closeNavMenus();

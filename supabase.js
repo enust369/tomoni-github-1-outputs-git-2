@@ -71,6 +71,12 @@ window.tomoniAuth = {
   listListings: () => client
     ? client.from("listings").select("*").order("created_at", { ascending: false })
     : Promise.resolve(notConfigured()),
+  listPublicListings: () => client
+    ? client.rpc("list_public_listings")
+    : Promise.resolve(notConfigured()),
+  getPublicListing: (id) => client
+    ? client.rpc("get_public_listing", { target_listing_id: id }).maybeSingle()
+    : Promise.resolve(notConfigured()),
   getHomeStats: () => client
     ? client.rpc("get_home_stats")
     : Promise.resolve(notConfigured()),
@@ -80,6 +86,16 @@ window.tomoniAuth = {
   listDiscoverableProfiles: () => client
     ? client.rpc("list_discoverable_profiles")
     : Promise.resolve(notConfigured()),
+  listPublicDiscoverableProfiles: () => client
+    ? client.rpc("list_public_discoverable_profiles")
+    : Promise.resolve(notConfigured()),
+  publicProfilePhotoUrl: (profileKey, index = 0) => {
+    if (!client || !/^[a-f0-9]{32}$/.test(String(profileKey || "")) || !Number.isInteger(index) || index < 0 || index > 2) return "";
+    const url = new URL("/functions/v1/public-profile-photo", supabaseUrl);
+    url.searchParams.set("profile_key", profileKey);
+    url.searchParams.set("index", String(index));
+    return url.toString();
+  },
   setDiscoverableProfileFavorite: (profileKey, desired) => client
     ? client.rpc("set_discoverable_profile_favorite", { target_profile_key: profileKey, desired })
     : Promise.resolve(notConfigured()),

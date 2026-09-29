@@ -4,7 +4,7 @@ TOMONIは、ふたりの関係を穏やかに育てるためのコミュニケ�
 
 認証にはSupabase Authenticationを利用します。プロフィール、募集、参加情報などのサービスデータはSupabaseに保存され、ブラウザにはログイン中の利用者に紐づく画面状態だけを保存します。
 
-募集内容は `listings`、参加申請と承認状態は `listing_participants`、チャットは `listing_messages`、会った記録は `meeting_records`、プロフィールは `profiles`、通知は `notifications` テーブルに保存します。プロフィール写真は `profile-photos` Storageバケットへ保存します。承認済みの参加者だけが人数に含まれ、チャットと会った記録を利用できます。会った記録と通知は本人だけが閲覧できます。参加申請・審査・チャット・通知はSupabase Realtimeで即時反映されます。初回またはSQL更新時に、Supabase DashboardのSQL Editorで [`supabase-listings.sql`](./supabase-listings.sql) を実行してください。テーブル、プロフィール写真バケット、承認制の参加処理、通知トリガー、Realtime設定、インデックス、Row Level Securityのポリシーが作成されます。
+募集内容は `listings`、参加申請と承認状態は `listing_participants`、チャットは `listing_messages`、会った記録は `meeting_records`、プロフィールは `profiles`、通知は `notifications` テーブルに保存します。プロフィール写真は `profile-photos` Storageバケットへ保存します。承認済みの参加者だけが人数に含まれ、チャットと会った記録を利用できます。会った記録と通知は本人だけが閲覧できます。参加申請・審査・チャット・通知はSupabase Realtimeで即時反映されます。初回またはSQL更新時に、Supabase DashboardのSQL Editorで [`supabase-listings.sql`](./supabase-listings.sql) を実行してください。既存環境で公開閲覧を有効にする場合は、先に [`supabase/functions/public-profile-photo`](./supabase/functions/public-profile-photo) をEdge Functionとしてデプロイし、続けて [`supabase-enable-public-browse.sql`](./supabase-enable-public-browse.sql) を実行してください。公開閲覧は基礎テーブルの権限を開かず、公開専用RPCと画像専用Edge Functionだけで提供します。
 
 ## 必要な環境
 
