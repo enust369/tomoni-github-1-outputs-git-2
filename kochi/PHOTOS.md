@@ -151,3 +151,9 @@ CC BY 2.0/2.5は著作者・出典・ライセンス・変更を表示。写真�
 - 高知県立高知城歴史博物館: `kochi-castle-history-museum.png`
 - 高知県立坂本龍馬記念館: `sakamoto-ryoma-memorial-museum.png`
 - 潮江天満宮: `shioe-tenmangu.png`
+
+## 体験ページ用追加画像（2026-09-30）
+
+- 仁淀川シーカヤック: `sea-kayak.jpg`
+  - ユーザー提供の加工済み画像をサイト内アセットとして使用。
+  - 上空から見下ろす構図。外部ホットリンクなし。

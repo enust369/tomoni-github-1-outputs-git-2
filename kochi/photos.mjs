@@ -168,6 +168,14 @@ export const photos={
     "position": "50% 54%",
     "checkedAt": "2026-09-23"
   },
+  "kayak": {
+    "src": "/assets/photos/sea-kayak.jpg",
+    "name": "仁淀川シーカヤック",
+    "alt": "透明な水面を上空から見下ろしたシーカヤック体験",
+    "width": 1200,
+    "height": 800,
+    "position": "50% 50%"
+  },
   "sauna": {
     "src": "/assets/photos/course-niyodo-sauna.png",
     "name": "Niyodo Adventureのテントサウナ",
