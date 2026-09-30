@@ -243,14 +243,14 @@ export const photos={
   "ice": {
     "src": "/assets/photos/ice.png",
     "name": "高知アイス売店 仁淀川カフェ",
-    "alt": "高知のご当地アイスを上から撮影した盛り合わせ",
+    "alt": "仁淀川を望む高知アイス売店 仁淀川カフェの店内",
     "author": "提供画像を加工",
     "source": "",
     "license": "提供画像（サイト掲載用）",
     "licenseUrl": "",
-    "width": 1086,
-    "height": 1448,
-    "position": "50% 45%"
+    "width": 1672,
+    "height": 941,
+    "position": "50% 50%"
   },
   "chikurinji": {
     "src": "/assets/photos/chikurinji.png",
