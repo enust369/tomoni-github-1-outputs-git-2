@@ -143,3 +143,12 @@ CC BY 2.0/2.5は著作者・出典・ライセンス・変更を表示。写真�
 未設定には旧仁淀川写真を再利用せず、既存の `unset.svg` を使う。`photos.mjs` の台帳へ3件を追加したため、スポットカード、詳細、ランキング、コース立ち寄り先は同じ出典・alt・クレジットを参照する。コースのメイン写真は既存の先頭採用写真選択を維持する。
 
 [executed on device: ogasawaranoMac-mini-2.local (85b4e090-4795-40e2-a671-d5ffaff5a3f5)]
+
+## 歴史文化用追加画像（2026-09-30）
+
+以下4点は、ユーザー提供の加工済み画像を分割してサイト内アセットとして使用。外部ホットリンクなし。
+
+- 竹林寺: `chikurinji.png`
+- 高知県立高知城歴史博物館: `kochi-castle-history-museum.png`
+- 高知県立坂本龍馬記念館: `sakamoto-ryoma-memorial-museum.png`
+- 潮江天満宮: `shioe-tenmangu.png`
