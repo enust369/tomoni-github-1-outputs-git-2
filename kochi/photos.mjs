@@ -229,11 +229,15 @@ export const photos={
     "position": "50% 50%"
   },
   "tanaka": {
-    "src": "/assets/photos/course-ocean-seafood.png",
+    "src": "/assets/photos/tanaka.png",
     "name": "田中鮮魚店 漁師小屋",
-    "alt": "田中鮮魚店 漁師小屋の海鮮料理",
-    "width": 552,
-    "height": 220,
+    "alt": "田中鮮魚店 漁師小屋の店内で食事を楽しむ人々",
+    "author": "提供画像を加工",
+    "source": "",
+    "license": "提供画像（サイト掲載用）",
+    "licenseUrl": "",
+    "width": 1536,
+    "height": 1024,
     "position": "50% 50%"
   },
   "ice": {
