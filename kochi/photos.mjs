@@ -271,5 +271,3 @@ export const photos={
     "checkedAt": "2026-09-26"
   }
 };
-
-[executed on device: ogasawaranoMac-mini-2.local (85b4e090-4795-40e2-a671-d5ffaff5a3f5)]
