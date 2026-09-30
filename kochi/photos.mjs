@@ -184,6 +184,42 @@ export const photos={
     "height": 238,
     "position": "50% 50%"
   },
+  "yasube": {
+    "src": "/assets/photos/yasube.png",
+    "name": "屋台安兵衛",
+    "alt": "赤提灯が灯る夜の屋台安兵衛",
+    "author": "提供画像",
+    "source": "",
+    "license": "提供画像（サイト掲載用）",
+    "licenseUrl": "",
+    "width": 1448,
+    "height": 1086,
+    "position": "50% 52%"
+  },
+  "hashimoto": {
+    "src": "/assets/photos/hashimoto.png",
+    "name": "橋本食堂",
+    "alt": "橋本食堂の鍋焼きラーメン",
+    "author": "提供画像",
+    "source": "",
+    "license": "提供画像（サイト掲載用）",
+    "licenseUrl": "",
+    "width": 1448,
+    "height": 1086,
+    "position": "50% 50%"
+  },
+  "shirasu": {
+    "src": "/assets/photos/shirasu.png",
+    "name": "安芸しらす食堂 本店",
+    "alt": "青空の下に建つ安芸しらす食堂 本店",
+    "author": "提供画像",
+    "source": "",
+    "license": "提供画像（サイト掲載用）",
+    "licenseUrl": "",
+    "width": 1448,
+    "height": 1086,
+    "position": "50% 50%"
+  },
   "myojinmaru": {
     "src": "/assets/photos/course-katsuo-tataki.png",
     "name": "明神丸 ひろめ市場店",
