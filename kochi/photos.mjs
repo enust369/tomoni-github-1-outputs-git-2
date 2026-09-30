@@ -241,12 +241,16 @@ export const photos={
     "position": "50% 50%"
   },
   "ice": {
-    "src": "/assets/photos/course-niyodo-ice.png",
+    "src": "/assets/photos/ice.png",
     "name": "高知アイス売店 仁淀川カフェ",
-    "alt": "仁淀川を望むカフェのアイスクリーム",
-    "width": 492,
-    "height": 236,
-    "position": "50% 50%"
+    "alt": "高知のご当地アイスを上から撮影した盛り合わせ",
+    "author": "提供画像を加工",
+    "source": "",
+    "license": "提供画像（サイト掲載用）",
+    "licenseUrl": "",
+    "width": 1086,
+    "height": 1448,
+    "position": "50% 45%"
   },
   "chikurinji": {
     "src": "/assets/photos/chikurinji.png",
