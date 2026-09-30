@@ -22,7 +22,7 @@ R: https://visitkochijapan.com/image/rendering/article_image/1948/keep/640/640/d
 | spot | karst | 四国カルスト | R |
 | spot | yusuhara | 梼原 | R |
 | spot | ashizuri | 足摺岬 | R |
-| spot | myojinmaru | 明神丸 ひろめ市場店 | R |
+| spot | myojinmaru | 明神丸 本店 | R |
 | spot | yasube | 屋台安兵衛 | R |
 | spot | hashimoto | 橋本食堂 | R |
 | spot | tanaka | 田中鮮魚店 漁師小屋 | R |
@@ -165,5 +165,5 @@ CC BY 2.0/2.5は著作者・出典・ライセンス・変更を表示。写真�
 - 田中鮮魚店 漁師小屋: `tanaka.png`（ユーザー提供画像を加工。写っていた人物は架空の人物へ置換）
 - 安芸しらす食堂 本店: `shirasu.png`（ユーザー提供画像を加工）
 - 高知アイス売店 仁淀川カフェ: `ice.png`（ユーザー提供画像を加工。仁淀川を望む店内写真）
-- 明神丸 本店: `myojinmaru.png`（ユーザー提供画像を加工）。現在の掲載スポットは「明神丸 ひろめ市場店」のため、誤認防止のため未使用で保管。
+- 明神丸 本店: `myojinmaru.png`（ユーザー提供画像を加工）。掲載スポットを「明神丸 本店」へ変更し、専用写真として使用。
 - 6点とも外部ホットリンクなし。サイト内アセットとして保管・使用。

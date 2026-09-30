@@ -221,11 +221,15 @@ export const photos={
     "position": "50% 50%"
   },
   "myojinmaru": {
-    "src": "/assets/photos/course-katsuo-tataki.png",
-    "name": "明神丸 ひろめ市場店",
-    "alt": "藁焼き鰹塩たたき",
-    "width": 469,
-    "height": 340,
+    "src": "/assets/photos/myojinmaru.png",
+    "name": "明神丸 本店",
+    "alt": "夜に明かりが灯る明神丸 本店の外観",
+    "author": "提供画像を加工",
+    "source": "",
+    "license": "提供画像（サイト掲載用）",
+    "licenseUrl": "",
+    "width": 1448,
+    "height": 1086,
     "position": "50% 50%"
   },
   "tanaka": {
