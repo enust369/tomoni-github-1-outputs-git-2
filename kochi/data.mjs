@@ -94,5 +94,3 @@ export const events=[
   }
 ];
 export const sortSpots=items=>[...items].sort((a,b)=>b.recommend_count-a.recommend_count||a.initial_rank-b.initial_rank||a.slug.localeCompare(b.slug));
-
-[executed on device: ogasawaranoMac-mini-2.local (85b4e090-4795-40e2-a671-d5ffaff5a3f5)]
