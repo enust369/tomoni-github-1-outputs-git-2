@@ -261,6 +261,9 @@ window.tomoniAuth = {
   getOwnBirthDate: () => client
     ? client.from("profile_birth_dates").select("birth_date").maybeSingle()
     : Promise.resolve(notConfigured()),
+  getMyFriendGenderPreference: () => client
+    ? client.rpc("get_my_friend_gender_preference")
+    : Promise.resolve(notConfigured()),
   saveOwnBirthDate: (birthDate) => client
     ? client.rpc("save_my_birth_date", { p_birth_date: birthDate })
     : Promise.resolve(notConfigured()),
