@@ -168,6 +168,94 @@ export const photos={
     "position": "50% 54%",
     "checkedAt": "2026-09-23"
   },
+  "sauna": {
+    "src": "/assets/photos/course-niyodo-sauna.png",
+    "name": "Niyodo Adventureのテントサウナ",
+    "alt": "仁淀川沿いのテントサウナ",
+    "width": 492,
+    "height": 238,
+    "position": "50% 50%"
+  },
+  "myojinmaru": {
+    "src": "/assets/photos/course-katsuo-tataki.png",
+    "name": "明神丸 ひろめ市場店",
+    "alt": "藁焼き鰹塩たたき",
+    "width": 469,
+    "height": 340,
+    "position": "50% 50%"
+  },
+  "tanaka": {
+    "src": "/assets/photos/course-ocean-seafood.png",
+    "name": "田中鮮魚店 漁師小屋",
+    "alt": "田中鮮魚店 漁師小屋の海鮮料理",
+    "width": 552,
+    "height": 220,
+    "position": "50% 50%"
+  },
+  "ice": {
+    "src": "/assets/photos/course-niyodo-ice.png",
+    "name": "高知アイス売店 仁淀川カフェ",
+    "alt": "仁淀川を望むカフェのアイスクリーム",
+    "width": 492,
+    "height": 236,
+    "position": "50% 50%"
+  },
+  "chikurinji": {
+    "src": "/assets/photos/chikurinji.png",
+    "name": "竹林寺",
+    "alt": "紅葉に囲まれた竹林寺の五重塔と石段",
+    "author": "提供画像",
+    "source": "ユーザー提供画像（2×2分割）",
+    "title": "竹林寺",
+    "license": "提供画像（サイト掲載用）",
+    "licenseUrl": "",
+    "width": 768,
+    "height": 512,
+    "position": "50% 50%",
+    "checkedAt": "2026-09-26"
+  },
+  "kochi-castle-history-museum": {
+    "src": "/assets/photos/kochi-castle-history-museum.png",
+    "name": "高知県立高知城歴史博物館",
+    "alt": "青空の下に建つ高知県立高知城歴史博物館",
+    "author": "提供画像",
+    "source": "ユーザー提供画像（2×2分割）",
+    "title": "高知県立高知城歴史博物館",
+    "license": "提供画像（サイト掲載用）",
+    "licenseUrl": "",
+    "width": 768,
+    "height": 512,
+    "position": "50% 50%",
+    "checkedAt": "2026-09-26"
+  },
+  "sakamoto-ryoma-memorial-museum": {
+    "src": "/assets/photos/sakamoto-ryoma-memorial-museum.png",
+    "name": "高知県立坂本龍馬記念館",
+    "alt": "青空と海を望む高知県立坂本龍馬記念館",
+    "author": "提供画像",
+    "source": "ユーザー提供画像（2×2分割）",
+    "title": "高知県立坂本龍馬記念館",
+    "license": "提供画像（サイト掲載用）",
+    "licenseUrl": "",
+    "width": 768,
+    "height": 512,
+    "position": "50% 50%",
+    "checkedAt": "2026-09-26"
+  },
+  "shioe-tenmangu": {
+    "src": "/assets/photos/shioe-tenmangu.png",
+    "name": "潮江天満宮",
+    "alt": "緑に囲まれた潮江天満宮の参道と社殿",
+    "author": "提供画像",
+    "source": "ユーザー提供画像（2×2分割）",
+    "title": "潮江天満宮",
+    "license": "提供画像（サイト掲載用）",
+    "licenseUrl": "",
+    "width": 768,
+    "height": 512,
+    "position": "50% 50%",
+    "checkedAt": "2026-09-26"
+  },
   "makino-botanical-garden": {
     "src": "/assets/photos/makino-botanical-garden.png",
     "name": "高知県立牧野植物園",
@@ -183,3 +271,5 @@ export const photos={
     "checkedAt": "2026-09-26"
   }
 };
+
+[executed on device: ogasawaranoMac-mini-2.local (85b4e090-4795-40e2-a671-d5ffaff5a3f5)]

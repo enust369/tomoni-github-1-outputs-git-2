@@ -17,6 +17,10 @@ const rows=[
 ['yusuhara','梼原','sightseeing','west','梼原町','歴史','山あいの町を訪ねて。'],
 ['ashizuri','足摺岬','sightseeing','west','土佐清水市','絶景','海の向こうに思いを馳せて。'],
 ['makino-botanical-garden','高知県立牧野植物園','sightseeing','kochi_city','高知市','歴史,子連れ,定番','牧野富太郎博士の足跡と、四季の植物に出会う。'],
+['chikurinji','竹林寺','sightseeing','kochi_city','高知市','歴史,定番','五重塔と名勝庭園に、土佐の祈りを感じる。'],
+['kochi-castle-history-museum','高知県立高知城歴史博物館','sightseeing','kochi_city','高知市','歴史,雨の日,子連れ,定番','高知城を望み、土佐の歴史をひもとく。'],
+['sakamoto-ryoma-memorial-museum','高知県立坂本龍馬記念館','sightseeing','kochi_city','高知市','歴史,雨の日,定番','桂浜で、龍馬と幕末の時代に出会う。'],
+['shioe-tenmangu','潮江天満宮','sightseeing','kochi_city','高知市','歴史,定番','天神さまとともに歩んだ、城下町の祈り。'],
 ['myojinmaru','明神丸 ひろめ市場店','gourmet','kochi_city','高知市','ひろめ市場,カツオ,ランチ','高知らしい一皿から、旅が始まる。'],
 ['yasube','屋台安兵衛','gourmet','kochi_city','高知市','居酒屋','夜の高知に寄り道。'],
 ['hashimoto','橋本食堂','gourmet','west','須崎市','ラーメン,ランチ','あたたかな一杯を求めて。'],
@@ -31,6 +35,10 @@ const spotInfo={
   iokido:{address:'高知県安芸市伊尾木117',price_text:'無料',phone:'0887-34-8344（安芸観光情報センター）',official_url:'https://kochi-tabi.jp/search_spot.html?id=544',parking_text:'無料駐車場あり',access:'ごめん・なはり線伊尾木駅から徒歩約7分。南国ICから車で約45分。',last_verified_at:'2026-09-23'},
   'kochi-castle':{address:'高知県高知市丸ノ内1丁目2番1号',opening_hours:'9:00〜17:00（最終入館16:30）',closed_days:'12月26日〜1月1日',price_text:'18歳以上500円、18歳未満無料',phone:'088-824-5701（高知城管理事務所）',official_url:'https://kochipark.jp/kochijyo/',parking_text:'高知公園駐車場65台。7:30〜18:30、有料。',access:'高知駅から路面電車・バスで約15分。',last_verified_at:'2026-09-23'},
   'makino-botanical-garden':{address:'高知県高知市五台山4200-6',opening_hours:'9:00〜17:00（最終入園16:30）',closed_days:'年末年始（12月27日〜1月1日）およびメンテナンス休園日（公式サイトで要確認）',price_text:'一般850円、高校生以下無料（団体・企画展等は公式案内を確認）',phone:'088-882-2601',official_url:'https://www.makino.or.jp/',parking_text:'無料駐車場あり',access:'高知自動車道高知ICから五台山方面へ車で約20分。JR高知駅から周遊観光バス「MY遊バス」で約30分。',last_verified_at:'2026-09-26'},
+  chikurinji:{address:'高知県高知市五台山3577',opening_hours:'参拝 8:00〜17:00、名勝庭園・宝物館 8:30〜17:00（最終入館16:30）',closed_days:'無休（行事等により拝観できない場合あり）',price_text:'境内参拝無料。名勝庭園・宝物館共通 大人800円（中学生以下は大人料金の半額、未就学児無料）',phone:'088-882-3085',official_url:'http://www.chikurinji.com/',parking_text:'無料駐車場あり（普通車約100台）',access:'高知ICから車で約20分。JR高知駅からMY遊バス「竹林寺」下車、徒歩約2分。',last_verified_at:'2026-09-30'},
+  'kochi-castle-history-museum':{address:'高知県高知市追手筋2-7-5',opening_hours:'月〜土 9:00〜18:00、日曜 8:00〜18:00（展示室入室は閉館30分前まで）',closed_days:'12月27日〜1月1日',price_text:'企画展開催期間中 一般800円、その他の期間 一般500円。高校生以下無料',phone:'088-871-1600',official_url:'https://www.kochi-johaku.jp/',parking_text:'一般来館者用駐車場なし（障害者用2台）。周辺有料駐車場を利用。',access:'高知ICから車で約15分。とさでん交通「高知城前」下車、徒歩約2分。',last_verified_at:'2026-09-30'},
+  'sakamoto-ryoma-memorial-museum':{address:'高知県高知市浦戸城山830番地',opening_hours:'9:00〜17:00（最終入館16:30）',closed_days:'なし',price_text:'企画展開催時 一般900円、その他の期間 一般500円。高校生以下無料',phone:'088-841-0001',official_url:'https://www.ryoma-kinenkan.jp/',parking_text:'無料駐車場あり。普通車42台（うち障害者用2台）',access:'高知南ICから車で約15分。JR高知駅BTから「桂浜」行きバスで「龍馬記念館前」下車、徒歩約2分。',last_verified_at:'2026-09-30'},
+  'shioe-tenmangu':{address:'高知県高知市天神町19-20',opening_hours:'参拝自由（御朱印 9:00〜17:00、ご祈願受付 9:00〜11:30・13:00〜16:00）',closed_days:'なし（祭事等により受付時間変更の場合あり）',price_text:'参拝無料（ご祈願等は別途）',phone:'088-832-2896',official_url:'https://www.ushioe-tenmangu.jp/',parking_text:'専用駐車場なし。繁忙期以外は参道両脇に無料駐車可。',access:'高知ICから車で約15分。JR高知駅から車で約10分。とさでん交通「大橋通」から徒歩約15分。',last_verified_at:'2026-09-30'},
   kashiwajima:{address:'高知県幡多郡大月町柏島',closed_days:'島全体のため設定なし',price_text:'入域料なし',official_url:'https://www.town.otsuki.kochi.jp/life/dtl.php?hdnKey=1782',parking_text:'観光案内所駐車場は7〜9月のみ案内。171台、1日500円。年間常設情報としては未確認。',access:'大月町中心部から県道43号等を経由。',last_verified_at:'2026-09-23'},
   yasui:{address:'高知県吾川郡仁淀川町大屋',price_text:'無料',phone:'0889-35-1333（仁淀川町観光協会）',official_url:'https://kochi-tabi.jp/search_spot.html?id=693',parking_text:'無料駐車場約50台',access:'伊野ICから車で約65分。県道362号は狭い山道。',last_verified_at:'2026-09-23'},
   nakatsu:{address:'高知県吾川郡仁淀川町名野川',price_text:'無料',phone:'0889-35-1083（仁淀川町産業建設課）',official_url:'https://kochi-tabi.jp/search_spot.html?id=766',parking_text:'無料駐車場、普通車約30台',access:'伊野ICから車で約1時間。',last_verified_at:'2026-09-23'},
@@ -86,3 +94,5 @@ export const events=[
   }
 ];
 export const sortSpots=items=>[...items].sort((a,b)=>b.recommend_count-a.recommend_count||a.initial_rank-b.initial_rank||a.slug.localeCompare(b.slug));
+
+[executed on device: ogasawaranoMac-mini-2.local (85b4e090-4795-40e2-a671-d5ffaff5a3f5)]
