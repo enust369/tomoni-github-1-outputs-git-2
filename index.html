@@ -1917,7 +1917,7 @@
 
   <script defer src="./supabase-env.js"></script>
   <script defer src="./assets/vendor/client-sdk-2.110.1.js"></script>
-  <script defer src="./supabase.js?v=20260930-friend-preferences"></script>
+  <script defer src="./supabase.js?v=20260930-friend-preference-save"></script>
   <script>
     const categories = [
       {
@@ -5252,8 +5252,10 @@
           const friendGenderPreference = String(formData.get("friendGenderPreference") || "same_gender");
           const profile = { nickname: String(formData.get("nickname")).trim(), gender: String(formData.get("gender")), friendGenderPreference, age: calculateAge(birthDate), birthDate, area: formatProfileArea(formData.get("prefecture"), formData.get("city")), bio: String(formData.get("bio")).trim(), tags: [...(appState.profile.tags || [])], photoUrls, ...profileExtras };
           const storedTags = encodeProfileTags(profile.tags, profileExtras);
-          const result = await window.tomoniAuth.saveProfile({ user_id: userBeforeSave.id, nickname: profile.nickname, gender: profile.gender, friend_gender_preference: profile.friendGenderPreference, area: profile.area, bio: profile.bio, tags: storedTags, photo_urls: profile.photoUrls, ...personalitySupabasePayload(appState.profile), updated_at: new Date().toISOString() });
+          const result = await window.tomoniAuth.saveProfile({ user_id: userBeforeSave.id, nickname: profile.nickname, gender: profile.gender, area: profile.area, bio: profile.bio, tags: storedTags, photo_urls: profile.photoUrls, ...personalitySupabasePayload(appState.profile), updated_at: new Date().toISOString() });
           if (result?.error) throw result.error;
+          const preferenceResult = await window.tomoniAuth.saveMyFriendGenderPreference(profile.friendGenderPreference);
+          if (preferenceResult?.error) throw preferenceResult.error;
           const userAfterSave = await getLatestAuthenticatedUser(userBeforeSave.id);
           const birthResult = await window.tomoniAuth.saveOwnBirthDate(birthDate);
           if (birthResult?.error) throw birthResult.error;
