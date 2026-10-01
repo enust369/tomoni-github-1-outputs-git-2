@@ -84,7 +84,7 @@ const featureCards=[
   ['仁淀ブルーをめぐる旅','にこ淵、仁淀川、川辺のカフェへ。青を追いかける高知らしい1日。','/assets/photos/course-niyodo-sup.png','/courses/niyodo-classic/','NIYODO BLUE'],
   ['柏島の海で遊ぶ','透明な海、シュノーケリング、夕景。高知西部の海を満喫。','/assets/photos/course-ocean-snorkeling.png','/courses/ocean-trip/','KASHIWAJIMA'],
   ['歴史文化にふれる','高知城、竹林寺、龍馬。高知の歴史を歩いてたどる。','/assets/photos/kochi-castle-new.png','/sightseeing/','HISTORY'],
-  ['自然の中で体験する','SUP、ラフティング、バギー、キャンプ。体を動かして高知を遊ぶ。','/assets/photos/hero-rafting.png','/activity/','ACTIVITY'],
+  ['自然の中で体験する','シーカヤック、テントサウナ、洞窟探検。高知の自然を全身で楽しむ体験へ。','/assets/photos/sea-kayak.jpg','/activity/','ACTIVITY'],
   ['高知の味を楽しむ','カツオ、屋台、しらす、川辺のスイーツ。旅の目的になる高知グルメ。','/assets/photos/course-katsuo-tataki.png','/gourmet/','GOURMET'],
   ['季節のイベントを楽しむ','祭り、花、食、地域イベント。旅の日に重なる高知の今を探す。','/assets/photos/event-yosakoi.png','/events/','EVENT']
 ];
