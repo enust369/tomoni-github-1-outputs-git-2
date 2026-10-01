@@ -76,6 +76,9 @@ export const eventCategories=['祭り・花火','グルメ','マルシェ','自�
 export const events=[
   {
     slug:'kochi-castle-autumn-oct-2026',
+    image:'/assets/photos/kochi-castle.jpg',
+    image_alt:'紅葉の時期をイメージした高知城',
+    image_note:'会場イメージ',
     name:'高知城オータムフェスティバル（10月）',
     category:'文化・展覧会',
     area:'kochi_city',
@@ -91,6 +94,9 @@ export const events=[
   },
   {
     slug:'okawa-shanikusai-2026',
+    image:'/assets/photos/event-okawa.png',
+    image_alt:'炭火で肉を焼くイベントのイメージ',
+    image_note:'イメージ写真',
     name:'第43回 大川村謝肉祭',
     category:'グルメ',
     area:'north_niyodo',
@@ -106,6 +112,9 @@ export const events=[
   },
   {
     slug:'kochi-castle-autumn-nov-2026',
+    image:'/assets/photos/kochi-castle.jpg',
+    image_alt:'秋の高知城',
+    image_note:'会場イメージ',
     name:'高知城オータムフェスティバル（11月）',
     category:'文化・展覧会',
     area:'kochi_city',
@@ -121,6 +130,9 @@ export const events=[
   },
   {
     slug:'yosakoi-2026',
+    image:'/assets/photos/event-yosakoi.png',
+    image_alt:'よさこい祭りで踊る人々のイメージ',
+    image_note:'イメージ写真',
     name:'第73回よさこい祭り（2026）',
     category:'祭り・花火',
     area:'kochi_city',
@@ -134,6 +146,9 @@ export const events=[
   },
   {
     slug:'tshirt-art-2026',
+    image:'/assets/photos/event-tshirt-art.png',
+    image_alt:'砂浜に並ぶTシャツ作品のイメージ',
+    image_note:'イメージ写真',
     name:'第38回 Tシャツアート展',
     category:'文化・展覧会',
     area:'west',
@@ -149,6 +164,9 @@ export const events=[
   },
   {
     slug:'niyodogawa-koinobori-2026',
+    image:'/assets/photos/course-niyodo-sup.png',
+    image_alt:'仁淀川の清流',
+    image_note:'仁淀川イメージ',
     name:'第30回 仁淀川 紙のこいのぼり',
     category:'自然・アウトドア',
     area:'north_niyodo',
@@ -163,6 +181,9 @@ export const events=[
   },
   {
     slug:'kochi-castle-hanakairou-2026',
+    image:'/assets/photos/event-hanakairou.png',
+    image_alt:'夜の高知城と花のライトアップのイメージ',
+    image_note:'イメージ写真',
     name:'高知城 花回廊2026',
     category:'文化・展覧会',
     area:'kochi_city',
@@ -178,6 +199,9 @@ export const events=[
   },
   {
     slug:'tosa-okyaku-2026',
+    image:'/assets/photos/event-okyaku.png',
+    image_alt:'高知の宴会文化を楽しむ人々のイメージ',
+    image_note:'イメージ写真',
     name:'土佐の「おきゃく」2026',
     category:'グルメ',
     area:'kochi_city',
