@@ -641,3 +641,10 @@ body:has(.page-home) .home-slide:first-child .home-slide-content .eyebrow{max-wi
 @media(max-width:700px){.guide-grid,.guide-steps{grid-template-columns:1fr}.guide-card{min-height:0;padding:20px}.guide-note{display:block;padding:22px}.guide-note .button{margin-top:14px}}
 
 @media(max-width:700px){.guide-card{min-height:230px}}
+
+.save-trip{border-color:#9bc6cf;background:#fff;color:#0b647d;font-weight:700}
+.save-trip[aria-pressed=true]{border-color:#0b728d;background:#0b728d;color:#fff}
+.saved-trips-page .notice{margin-top:34px}
+.saved-trips-page section{padding-top:34px}
+.saved-trips-page .empty{padding:34px 20px}
+@media(max-width:700px){.save-trip{width:100%}.saved-trips-page .notice{margin-top:22px}.saved-trips-page section{padding-top:28px}}

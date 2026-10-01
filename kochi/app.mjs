@@ -2,14 +2,16 @@ import {spots,courses,events,areas,categories,sortSpots} from './data.mjs';
 import {render,spotGrid,courseGrid,eventCard} from './render.mjs';
 
 const live=!['localhost','127.0.0.1'].includes(location.hostname);
-let voted=new Set(),ready=false,anonymousId='';
+let voted=new Set(),ready=false,anonymousId='',savedSpots=new Set(),savedCourses=new Set();
 
 const toast=message=>{const el=document.querySelector('#toast');if(!el)return;el.textContent=message;el.hidden=false;clearTimeout(toast.timer);toast.timer=setTimeout(()=>el.hidden=true,5000)};
 function readLocal(key,fallback){try{return JSON.parse(localStorage.getItem(key))??fallback}catch{return fallback}}
 function getIdentity(){let id=localStorage.getItem('kochi-anonymous-id');if(!id){id=crypto.randomUUID();localStorage.setItem('kochi-anonymous-id',id)}return id}
 async function api(path,body,method){const r=await fetch(path,{method:method||(body?'POST':'GET'),headers:{'Content-Type':'application/json'},body:body?JSON.stringify(body):undefined});let data;try{data=await r.json()}catch{data=null}if(!r.ok)throw new Error(r.status===429?'操作が続いています。1分ほど待ってください。':'保存できませんでした。通信状態をご確認ください。');return data}
 
-function syncButtons(){document.querySelectorAll('[data-vote]').forEach(b=>{const s=spots.find(s=>s.id===b.dataset.vote);b.disabled=!ready;b.setAttribute('aria-pressed',String(voted.has(b.dataset.vote)));b.innerHTML=`${voted.has(b.dataset.vote)?'♥':'♡'} おすすめ <span>${s?.recommend_count||0}</span>`})}
+function syncButtons(){document.querySelectorAll('[data-vote]').forEach(b=>{const s=spots.find(s=>s.id===b.dataset.vote);b.disabled=!ready;b.setAttribute('aria-pressed',String(voted.has(b.dataset.vote)));b.innerHTML=`${voted.has(b.dataset.vote)?'♥':'♡'} おすすめ <span>${s?.recommend_count||0}</span>`});document.querySelectorAll('[data-save-spot]').forEach(b=>{const saved=savedSpots.has(b.dataset.saveSpot);b.setAttribute('aria-pressed',String(saved));b.textContent=saved?'♥ 保存済み':'♡ 行ってみたい'});document.querySelectorAll('[data-save-course]').forEach(b=>{const saved=savedCourses.has(b.dataset.saveCourse);b.setAttribute('aria-pressed',String(saved));b.textContent=saved?'♥ 保存済み':'♡ コースを保存'})}
+function renderSavedTrips(){const spotRoot=document.querySelector('#saved-spots'),courseRoot=document.querySelector('#saved-courses');if(spotRoot){const items=spots.filter(s=>savedSpots.has(s.slug));spotRoot.innerHTML=items.length?spotGrid(items):'<div class="empty">まだ保存したスポットはありません。スポット詳細の「行ってみたい」から追加できます。</div>'}if(courseRoot){const items=courses.filter(c=>savedCourses.has(c.slug));courseRoot.innerHTML=items.length?courseGrid(items):'<div class="empty">まだ保存したモデルコースはありません。コース詳細の「コースを保存」から追加できます。</div>'}syncButtons()}
+function saveLocalTrips(){localStorage.setItem('kochi-saved-spots',JSON.stringify([...savedSpots]));localStorage.setItem('kochi-saved-courses',JSON.stringify([...savedCourses]))}
 function filterSpots(){const f=document.querySelector('#spot-filter');if(!f)return;const data=new FormData(f),root=document.querySelector('[data-ranking]');if(!root)return;const cat=root.dataset.ranking;const historyOnly=root.dataset.historyOnly==='true';const historySlugs=new Set(['kochi-castle','chikurinji','kochi-castle-history-museum','sakamoto-ryoma-memorial-museum','makino-botanical-garden','shioe-tenmangu']);const items=sortSpots(spots.filter(s=>s.category===cat&&(!historyOnly||historySlugs.has(s.slug))&&(!data.get('area')||s.area===data.get('area'))&&(!data.get('theme')||s.tags?.includes(data.get('theme')))));document.querySelector('#rank-results').innerHTML=spotGrid(items.slice(0,5),true);document.querySelector('#more-results').innerHTML=spotGrid(items.slice(5));syncButtons()}
 function preserveQuery(form){const q=new URLSearchParams(location.search);for(const [k,v]of q){const field=form.elements.namedItem(k);if(field)field.value=v}}
 function setQuery(form){const q=new URLSearchParams(new FormData(form));[...q].forEach(([k,v])=>{if(!v)q.delete(k)});history.replaceState(null,'',location.pathname+(q.size?'?'+q:''))}
@@ -61,6 +63,7 @@ function initCarousels(){
  }
 }
 function bind(){
+ savedSpots=new Set(readLocal('kochi-saved-spots',[]));savedCourses=new Set(readLocal('kochi-saved-courses',[]));renderSavedTrips();
  ['spot','course','event'].forEach(type=>{const f=document.querySelector(`#${type}-filter`);if(!f)return;preserveQuery(f);const fn={spot:filterSpots,course:filterCourses,event:filterEvents}[type];f.addEventListener('submit',e=>{e.preventDefault();setQuery(f);fn()});fn()});
  document.querySelector('#show-demo')?.addEventListener('change',filterEvents);
  const search=document.querySelector('#search-form');
@@ -93,6 +96,8 @@ document.addEventListener('click',async e=>{
    if(modal){modal.hidden=true;document.body.classList.remove('search-modal-open')}
    return;
  }
+ const saveSpot=e.target.closest('[data-save-spot]');if(saveSpot){const slug=saveSpot.dataset.saveSpot;savedSpots.has(slug)?savedSpots.delete(slug):savedSpots.add(slug);saveLocalTrips();syncButtons();renderSavedTrips();toast(savedSpots.has(slug)?'行ってみたいスポットに保存しました。':'保存を解除しました。');return}
+ const saveCourse=e.target.closest('[data-save-course]');if(saveCourse){const slug=saveCourse.dataset.saveCourse;savedCourses.has(slug)?savedCourses.delete(slug):savedCourses.add(slug);saveLocalTrips();syncButtons();renderSavedTrips();toast(savedCourses.has(slug)?'モデルコースを保存しました。':'保存を解除しました。');return}
  const placeholder=e.target.closest('[data-placeholder]');if(placeholder)toast(placeholder.dataset.placeholder);
  const b=e.target.closest('[data-vote]');if(!b||!ready||b.disabled)return;
  const id=b.dataset.vote,s=spots.find(s=>s.id===id);if(!s)return;b.disabled=true;
