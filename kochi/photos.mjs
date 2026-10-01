@@ -172,6 +172,10 @@ export const photos={
     "src": "/assets/photos/sea-kayak.jpg",
     "name": "仁淀川シーカヤック",
     "alt": "透明な水面を上空から見下ろしたシーカヤック体験",
+    "author": "提供画像を加工",
+    "source": "",
+    "license": "提供画像（サイト掲載用）",
+    "licenseUrl": "",
     "width": 1200,
     "height": 800,
     "position": "50% 50%"
