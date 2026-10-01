@@ -587,3 +587,23 @@ body:has(.page-home) .home-slide:first-child .home-slide-content .eyebrow{max-wi
 @media(max-width:700px){.features-grid{grid-template-columns:1fr;gap:16px}.feature-card-media img{height:190px}.feature-card-body p{min-height:0}.features-cta{display:block;padding:22px}.features-cta .button{margin-top:14px}}
 
 @media(max-width:700px){.feature-card-body{min-height:160px}}
+
+.area-guide-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:24px}
+.area-guide-card{overflow:hidden;border:1px solid var(--line);border-radius:12px;background:#fff;box-shadow:0 4px 14px rgba(20,70,90,.06)}
+.area-guide-media{position:relative;overflow:hidden}
+.area-guide-media img{display:block;width:100%;height:260px;object-fit:cover;transition:transform .25s ease}
+.area-guide-media>span{position:absolute;left:16px;bottom:14px;padding:6px 10px;border-radius:16px;background:rgba(4,45,60,.78);color:#fff;font-size:10px;letter-spacing:.12em}
+.area-guide-body{padding:20px}
+.area-guide-body h3{margin:0 0 8px;font-size:22px}
+.area-guide-body p{min-height:3.8em;margin:0 0 14px;color:var(--muted)}
+.area-guide-tags{display:flex;flex-wrap:wrap;gap:7px;margin:12px 0 16px}
+.area-guide-tags span{padding:6px 9px;border-radius:16px;background:#eef8fb;color:#276173;font-size:11px}
+.area-guide-body b{color:var(--blue);font-size:13px}
+.area-guide-card a:hover .area-guide-media img{transform:scale(1.025)}
+.area-intro{display:flex;align-items:end;justify-content:space-between;gap:30px;padding-bottom:12px;border-bottom:1px solid var(--line)}
+.area-intro>div:first-child{max-width:720px}
+.area-intro p{margin-bottom:0;color:var(--muted)}
+.area-switch-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+.area-switch-grid a{padding:18px;border:1px solid #c9e5ed;border-radius:9px;background:#f8fcfd;font-weight:700}
+.area-switch-grid a:hover{border-color:var(--blue);color:var(--blue)}
+@media(max-width:700px){.area-guide-grid{grid-template-columns:1fr;gap:16px}.area-guide-media img{height:200px}.area-guide-body p{min-height:0}.area-intro{display:block}.area-switch-grid{grid-template-columns:1fr}.area-switch-grid a{padding:14px}}
