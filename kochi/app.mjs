@@ -64,6 +64,7 @@ function initCarousels(){
 }
 function bind(){
  savedSpots=new Set(readLocal('kochi-saved-spots',[]));savedCourses=new Set(readLocal('kochi-saved-courses',[]));renderSavedTrips();
+ const homeKeywordForm=document.querySelector('[data-home-keyword-form]');if(homeKeywordForm)homeKeywordForm.addEventListener('submit',e=>{e.preventDefault();homeKeywordForm.querySelector('[data-search-open]')?.click()});
  ['spot','course','event'].forEach(type=>{const f=document.querySelector(`#${type}-filter`);if(!f)return;preserveQuery(f);const fn={spot:filterSpots,course:filterCourses,event:filterEvents}[type];f.addEventListener('submit',e=>{e.preventDefault();setQuery(f);fn()});fn()});
  document.querySelector('#show-demo')?.addEventListener('change',filterEvents);
  const search=document.querySelector('#search-form');
@@ -87,7 +88,7 @@ document.addEventListener('click',async e=>{
  if(openSearch){
    e.preventDefault();
    const modal=document.querySelector('#home-search-modal');
-   if(modal){modal.hidden=false;document.body.classList.add('search-modal-open');modal.querySelector('input')?.focus()}
+   if(modal){const source=openSearch.closest('[data-home-keyword-form]')?.querySelector('input[name="q"]');const target=modal.querySelector('#home-search-input');if(source&&target)target.value=source.value.trim();modal.hidden=false;document.body.classList.add('search-modal-open');target?.focus()}
    return;
  }
  const closeSearch=e.target.closest('[data-search-close]');
