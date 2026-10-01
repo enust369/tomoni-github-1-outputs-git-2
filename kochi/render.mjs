@@ -38,7 +38,9 @@ const activityPageActivities=[
   ['パラグライダー','空から高知を一望','/assets/photos/hero-paragliding.png','/activity/'],
   ['バギー','大地を駆けるオフロード体験','/assets/photos/hero-buggy.png','/activity/'],
   ['フォレストアドベンチャー','森の冒険で遊ぶ','/assets/photos/hero-forest-adventure.png','/activity/'],
-  ['テントサウナ','自然の中でととのう','/assets/photos/course-niyodo-sauna.png','/activity/']
+  ['テントサウナ','自然の中でととのう','/assets/photos/course-niyodo-sauna.png','/activity/'],
+  ['龍河洞 冒険コース','暗闇を進む本格洞窟探検','/assets/photos/ryugado.jpg','/spots/ryugado-adventure/'],
+  ['猿田洞ケイビング','自然の洞窟を這って登る冒険','/assets/photos/unset.svg','/spots/sarudado-caving/']
 ];
 const homeScenes=[['高知城','歴史と城下町の景観','/assets/photos/kochi-castle.jpg','/spots/kochi-castle/'],['にこ淵','神秘的な青の絶景','/assets/photos/nikobuchi.jpg','/spots/nikobuchi/'],['柏島','エメラルドブルーの海','/assets/photos/kashiwajima.jpg','/spots/kashiwajima/'],['伊尾木洞','太古の自然が残る洞窟','/assets/photos/iokido.jpg','/spots/iokido/'],['四国カルスト','天空のパノラマ','/assets/photos/karst.jpg','/spots/karst/'],['桂浜','土佐の海と龍馬の像','/assets/photos/kashiwajima.jpg','/sightseeing/'],['足摺岬','太平洋の絶景','/assets/photos/ashizuri.jpg','/spots/ashizuri/'],['モネの庭','四季の花と水の庭園','/assets/photos/monet.jpg','/spots/monet/']];
 function homeActivityGrid(items=homeActivities){return `<div class="home-activity-grid">${items.map(([name,sub,src,href])=>`<a class="home-activity-card" href="${href}"><img src="${src}" alt="${name}" loading="lazy"><span class="home-activity-icon" aria-hidden="true">✦</span><strong>${name}</strong><small>${sub}</small></a>`).join('')}</div>`;}

@@ -2,7 +2,7 @@ import {photos} from './photos.mjs';
 export const areas={kochi_city:'高知市内',east:'東部',west:'西部',north_niyodo:'北部・仁淀川'};
 export const categories={sightseeing:'観光',gourmet:'グルメ',cycling:'サイクリング',camp:'キャンプ',onsen:'温泉',michinoeki:'道の駅',stay:'宿泊',fishing:'釣り',surfing:'サーフィン',activity:'アクティビティ'};
 export const themes=['王道','グルメ','子連れ','カップル','絶景','ドライブ','アクティブ','雨の日'];
-export const filters={sightseeing:['絶景','歴史','子連れ','雨の日','デート','定番','穴場'],gourmet:['ひろめ市場','カツオ','郷土料理','居酒屋','ラーメン','ランチ','スイーツ','朝ごはん','おみやげ'],activity:['川あそび','海あそび','釣り・漁業体験','空・山','動物・自然観察','文化・ものづくり体験']};
+export const filters={sightseeing:['絶景','歴史','子連れ','雨の日','デート','定番','穴場'],gourmet:['ひろめ市場','カツオ','郷土料理','居酒屋','ラーメン','ランチ','スイーツ','朝ごはん','おみやげ'],activity:['川あそび','海あそび','釣り・漁業体験','空・山','洞窟体験','動物・自然観察','文化・ものづくり体験']};
 const rows=[
 ['ryugado','龍河洞','sightseeing','east','香美市','雨の日,子連れ,定番','地底に広がる、もうひとつの高知。'],
 ['nikobuchi','にこ淵','sightseeing','north_niyodo','いの町','絶景,定番','心をほどく、仁淀ブルー。'],
@@ -28,7 +28,9 @@ const rows=[
 ['shirasu','安芸しらす食堂 本店','gourmet','east','安芸市','ランチ','東部の旅に、おいしいひと休み。'],
 ['ice','高知アイス売店 仁淀川カフェ','gourmet','north_niyodo','いの町','スイーツ','川を眺める、カフェ時間。'],
 ['kayak','仁淀川シーカヤック','activity','north_niyodo','確認中','川あそび','水面から出会う、仁淀川。'],
-['sauna','Niyodo Adventureのテントサウナ','activity','north_niyodo','仁淀川町','川あそび','自然を感じる、特別な時間。']];
+['sauna','Niyodo Adventureのテントサウナ','activity','north_niyodo','仁淀川町','川あそび','自然を感じる、特別な時間。'],
+['ryugado-adventure','龍河洞 冒険コース','activity','east','香美市','洞窟体験','真っ暗な洞窟を、ガイドと進む本格冒険。'],
+['sarudado-caving','猿田洞ケイビング','activity','north_niyodo','日高村','洞窟体験','這って、登って、自然のままの洞窟へ。']];
 const spotInfo={
   ryugado:{address:'高知県香美市土佐山田町逆川1424',phone:'0887-53-2144',official_url:'https://ryugadou.or.jp/',parking_text:'駐車場約700台',access:'高知自動車道南国ICから車。土佐山田駅からバス。',last_verified_at:'2026-09-23'},
   nikobuchi:{address:'高知県吾川郡いの町清水上分',official_url:'https://nikobuchi.inofan.jp/site/access.html',parking_text:'指定駐車場あり。満車時は臨時駐車場等の案内を確認。',access:'伊野ICから車で約60分。JR伊野駅からバス利用後、徒歩約20〜30分。',last_verified_at:'2026-09-23'},
@@ -52,7 +54,9 @@ const spotInfo={
   tanaka:{address:'高知県高岡郡中土佐町久礼6382',opening_hours:'漁師小屋 10:00〜14:30（L.O.14:30）／鮮魚店 9:00〜17:00',closed_days:'毎週水曜日・1月1日（臨時休業の場合あり）',phone:'0889-52-2729',official_url:'https://www.tanakatuo.com/',access:'JR土佐久礼駅から徒歩約5分。久礼大正町市場内。',last_verified_at:'2026-10-01',description:'漁師小屋の営業時間・定休日は田中鮮魚店の公式情報で確認済みです。魚の入荷や天候により臨時休業となる場合があります。'},
   shirasu:{address:'高知県安芸市西浜3411-46',opening_hours:'11:00〜15:30（L.O.）',closed_days:'木曜日・第1火曜日・年末年始',phone:'0887-34-8810',official_url:'https://akisuisan.com/restaurant/',parking_text:'駐車場あり',access:'南国ICから車で約40分。',last_verified_at:'2026-10-01',description:'店舗情報は安芸水産の公式サイトで確認済みです。臨時休業や営業時間変更は来店前に公式情報をご確認ください。'},
   ice:{address:'高知県吾川郡いの町柳瀬上分807-1',opening_hours:'平日11:00〜17:00（L.O.16:30）、土日祝・GW・お盆10:30〜17:00（L.O.16:30）',closed_days:'第2・第4月曜日（7・8月除く）・年末年始。月曜が祝日の場合は翌火曜。',phone:'090-3787-8511',official_url:'https://www.kochi-ice.com/stores/',parking_text:'無料駐車場あり',access:'伊野ICから車で約30分。',last_verified_at:'2026-10-01',description:'営業時間・定休日は高知アイス公式サイトで確認済みです。天候不良などによる臨時休業は公式SNS等をご確認ください。'},
-  sauna:{address:'高知県吾川郡仁淀川町高瀬3869',opening_hours:'予約受付 8:00〜17:00',closed_days:'毎日開催（天候・河川状況等により中止の場合あり）',price_text:'1グループ10,000円（公式予約ページ）',phone:'080-5026-3288',official_url:'https://www.niyodoadventure.com/ja/river-sauna-tent',parking_text:'未確認',access:'伊野ICから車で約45分。高知市から車で約1時間30分。',last_verified_at:'2026-10-01',description:'所在地・連絡先・料金はNiyodo Adventure公式情報で確認済みです。所要時間は公式紹介ページと予約ページで表記が異なるため、予約時に最新内容をご確認ください。'}
+  sauna:{address:'高知県吾川郡仁淀川町高瀬3869',opening_hours:'予約受付 8:00〜17:00',closed_days:'毎日開催（天候・河川状況等により中止の場合あり）',price_text:'1グループ10,000円（公式予約ページ）',phone:'080-5026-3288',official_url:'https://www.niyodoadventure.com/ja/river-sauna-tent',parking_text:'未確認',access:'伊野ICから車で約45分。高知市から車で約1時間30分。',last_verified_at:'2026-10-01',description:'所在地・連絡先・料金はNiyodo Adventure公式情報で確認済みです。所要時間は公式紹介ページと予約ページで表記が異なるため、予約時に最新内容をご確認ください。'},
+  'ryugado-adventure':{address:'高知県香美市土佐山田町逆川1424',opening_hours:'午前 9:00・9:30・10:00開始／午後 13:00・13:30・14:00開始（11〜1月は10:00・14:00の催行なし）',closed_days:'無休（人数制限あり・事前予約制）',price_text:'観光コース料金＋2,000円。つなぎ・長靴レンタル1,000円',phone:'0887-53-2144',official_url:'https://ryugadou.or.jp/attraction/adventure-course/',parking_text:'龍河洞の駐車場を利用',access:'高知自動車道南国ICから車。土佐山田駅からバス。',last_verified_at:'2026-10-01',description:'龍河洞の観光コース途中から約200mの未整備区間へ入り、専属ガイドとヘッドライトを頼りに狭い岩の間を這ったり、体をひねって進む約90分の冒険コースです。事前予約が必要です。'},
+  'sarudado-caving':{address:'高知県高岡郡日高村沖名1619（猿田洞）',opening_hours:'予約受付 9:00〜17:00',closed_days:'年末年始（ガイド確保できれば通年催行）',price_text:'4,000円／人（税込）。1名実施は6,000円（税込）',phone:'050-3204-1996（日高村観光協会）',official_url:'https://www.hidakamura.info/activity',parking_text:'無料駐車場あり',access:'受付は村の案内所ひだか（日高村本郷1478-9）。伊野ICから車で約15分。',last_verified_at:'2026-10-01',description:'日高村の猿田洞で、ガイドと一緒に自然のままの洞内を這ったり登ったりするケイビング体験です。参加条件や予約状況は日高村観光協会の最新案内をご確認ください。'}
 };
 const rank={};
 export const spots=rows.map(([slug,name,category,area,municipality,tags,catchphrase],i)=>({id:`00000000-0000-4000-8000-${String(i+1).padStart(12,'0')}`,slug,name,category,area,municipality,tags:tags.split(','),catchphrase,initial_rank:rank[category]=(rank[category]||0)+1,recommend_count:0,is_published:true,is_demo:true,photo:photos[slug]||null,main_image_url:photos[slug]?.src||'',description:'初期掲載候補です。営業時間・料金などは、公式情報の確認後に掲載します。',created_at:`2026-09-${String(i+1).padStart(2,'0')}T00:00:00Z`,...(spotInfo[slug]||{})}));
