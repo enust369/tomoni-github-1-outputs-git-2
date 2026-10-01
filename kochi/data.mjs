@@ -28,7 +28,7 @@ const rows=[
 ['shirasu','安芸しらす食堂 本店','gourmet','east','安芸市','ランチ','東部の旅に、おいしいひと休み。'],
 ['ice','高知アイス売店 仁淀川カフェ','gourmet','north_niyodo','いの町','スイーツ','川を眺める、カフェ時間。'],
 ['kayak','仁淀川シーカヤック','activity','north_niyodo','確認中','川あそび','水面から出会う、仁淀川。'],
-['sauna','Niyodo Adventureのテントサウナ','activity','north_niyodo','確認中','川あそび','自然を感じる、特別な時間。']];
+['sauna','Niyodo Adventureのテントサウナ','activity','north_niyodo','仁淀川町','川あそび','自然を感じる、特別な時間。']];
 const spotInfo={
   ryugado:{address:'高知県香美市土佐山田町逆川1424',phone:'0887-53-2144',official_url:'https://ryugadou.or.jp/',parking_text:'駐車場約700台',access:'高知自動車道南国ICから車。土佐山田駅からバス。',last_verified_at:'2026-09-23'},
   nikobuchi:{address:'高知県吾川郡いの町清水上分',official_url:'https://nikobuchi.inofan.jp/site/access.html',parking_text:'指定駐車場あり。満車時は臨時駐車場等の案内を確認。',access:'伊野ICから車で約60分。JR伊野駅からバス利用後、徒歩約20〜30分。',last_verified_at:'2026-09-23'},
