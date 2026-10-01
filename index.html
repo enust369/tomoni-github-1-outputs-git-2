@@ -460,6 +460,83 @@
       align-items: start;
     }
 
+    .home-hero-slider {
+      position: relative;
+      overflow: hidden;
+      border: 1px solid var(--line);
+      border-radius: 28px;
+      background: var(--soft);
+      box-shadow: var(--shadow);
+    }
+
+    .home-hero-track {
+      display: flex;
+      transition: transform .65s var(--ease);
+      will-change: transform;
+    }
+
+    .home-hero-slide {
+      position: relative;
+      flex: 0 0 100%;
+      margin: 0;
+      aspect-ratio: 16 / 9;
+      background: var(--soft);
+    }
+
+    .home-hero-slide img {
+      display: block;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .home-hero-nav {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 12px;
+      pointer-events: none;
+    }
+
+    .home-hero-arrow {
+      width: 42px;
+      height: 42px;
+      display: grid;
+      place-items: center;
+      border: 1px solid rgba(255,255,255,.78);
+      border-radius: 50%;
+      background: rgba(255,255,255,.88);
+      color: var(--leaf-deep);
+      box-shadow: 0 8px 24px rgba(35,54,74,.14);
+      pointer-events: auto;
+    }
+
+    .home-hero-dots {
+      position: absolute;
+      left: 50%;
+      bottom: 14px;
+      display: flex;
+      gap: 8px;
+      transform: translateX(-50%);
+      padding: 7px 10px;
+      border-radius: 999px;
+      background: rgba(255,255,255,.78);
+      backdrop-filter: blur(8px);
+    }
+
+    .home-hero-dot {
+      width: 9px;
+      height: 9px;
+      padding: 0;
+      border: 0;
+      border-radius: 50%;
+      background: rgba(35,54,74,.28);
+    }
+
+    .home-hero-dot[aria-current="true"] { background: var(--leaf); }
+
     .home-dashboard-inner {
       display: grid;
       width: min(920px, 100%);
@@ -1257,6 +1334,10 @@
 
       .home-dashboard { min-height: auto; padding-top: 28px; }
       .home-dashboard-inner { gap: 22px; }
+      .home-hero-slider { border-radius: 20px; }
+      .home-hero-arrow { width: 36px; height: 36px; }
+      .home-hero-dots { bottom: 10px; gap: 7px; padding: 6px 9px; }
+      .home-hero-dot { width: 8px; height: 8px; }
       .home-safety-card { padding: 20px; }
       .home-safety-list { grid-template-columns: 1fr; }
       .home-stats-card { padding: 18px; }
@@ -1380,6 +1461,20 @@
     <main>
       <section class="hero home-dashboard" id="home">
         <div class="home-dashboard-inner">
+          <div class="home-hero-slider" id="homeHeroSlider" aria-label="TOMONIの楽しみ方">
+            <div class="home-hero-track" id="homeHeroTrack">
+              <figure class="home-hero-slide"><img src="/assets/images/hero/tomoni-walk.png" alt="散歩やおでかけを一緒に楽しむTOMONIのイメージ"></figure>
+              <figure class="home-hero-slide"><img src="/assets/images/hero/tomoni-cafe.png" alt="カフェやごはんを気軽に楽しむTOMONIのイメージ"></figure>
+              <figure class="home-hero-slide"><img src="/assets/images/hero/tomoni-sports.png" alt="スポーツを一緒に楽しむTOMONIのイメージ"></figure>
+              <figure class="home-hero-slide"><img src="/assets/images/hero/tomoni-shopping.png" alt="買い物や街歩きを一緒に楽しむTOMONIのイメージ"></figure>
+            </div>
+            <div class="home-hero-nav" aria-hidden="false">
+              <button class="home-hero-arrow" type="button" data-hero-prev aria-label="前の画像">‹</button>
+              <button class="home-hero-arrow" type="button" data-hero-next aria-label="次の画像">›</button>
+            </div>
+            <div class="home-hero-dots" id="homeHeroDots" aria-label="スライドを選択"></div>
+          </div>
+
           <article class="card home-invitation-card" aria-labelledby="homeInvitationHeading">
             <div>
               <p class="eyebrow">今日の過ごし方を見つける</p>
@@ -5717,6 +5812,61 @@
       if (!appState.user) { openModal("ログイン", authMarkup("login")); toast("この機能はログイン後に利用できます。"); }
       else { showProfileEditor(true); toast("最初にプロフィールを作成してください。"); }
     }, true);
+
+    const homeHeroSlider = document.getElementById("homeHeroSlider");
+    const homeHeroTrack = document.getElementById("homeHeroTrack");
+    const homeHeroDots = document.getElementById("homeHeroDots");
+    if (homeHeroSlider && homeHeroTrack && homeHeroDots) {
+      const slides = [...homeHeroTrack.querySelectorAll(".home-hero-slide")];
+      let heroIndex = 0;
+      let heroTimer = 0;
+      let touchStartX = null;
+      const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+      const showHeroSlide = (nextIndex, restart = true) => {
+        heroIndex = (nextIndex + slides.length) % slides.length;
+        homeHeroTrack.style.transform = `translateX(-${heroIndex * 100}%)`;
+        [...homeHeroDots.children].forEach((dot, index) => {
+          dot.setAttribute("aria-current", index === heroIndex ? "true" : "false");
+        });
+        if (restart && !reduceMotion) {
+          clearInterval(heroTimer);
+          heroTimer = window.setInterval(() => showHeroSlide(heroIndex + 1, false), 4800);
+        }
+      };
+
+      slides.forEach((_, index) => {
+        const dot = document.createElement("button");
+        dot.type = "button";
+        dot.className = "home-hero-dot";
+        dot.setAttribute("aria-label", `${index + 1}枚目を表示`);
+        dot.addEventListener("click", () => showHeroSlide(index));
+        homeHeroDots.appendChild(dot);
+      });
+
+      homeHeroSlider.querySelector("[data-hero-prev]")?.addEventListener("click", () => showHeroSlide(heroIndex - 1));
+      homeHeroSlider.querySelector("[data-hero-next]")?.addEventListener("click", () => showHeroSlide(heroIndex + 1));
+      homeHeroSlider.addEventListener("mouseenter", () => clearInterval(heroTimer));
+      homeHeroSlider.addEventListener("mouseleave", () => {
+        if (!reduceMotion) {
+          clearInterval(heroTimer);
+          heroTimer = window.setInterval(() => showHeroSlide(heroIndex + 1, false), 4800);
+        }
+      });
+      homeHeroSlider.addEventListener("touchstart", (event) => {
+        touchStartX = event.touches[0]?.clientX ?? null;
+      }, { passive: true });
+      homeHeroSlider.addEventListener("touchend", (event) => {
+        if (touchStartX === null) return;
+        const endX = event.changedTouches[0]?.clientX ?? touchStartX;
+        const deltaX = endX - touchStartX;
+        touchStartX = null;
+        if (Math.abs(deltaX) < 45) return;
+        showHeroSlide(heroIndex + (deltaX < 0 ? 1 : -1));
+      }, { passive: true });
+
+      showHeroSlide(0);
+    }
 
     const observer = new IntersectionObserver((entries) => {
       entries.forEach((entry) => {
