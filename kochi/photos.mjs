@@ -286,18 +286,18 @@ export const photos={
     "position": "50% 50%"
   },
   "chikurinji": {
-    "src": "/assets/photos/chikurinji.png",
+    "src": "/assets/photos/chikurinji-pagoda.png",
     "name": "竹林寺",
-    "alt": "紅葉に囲まれた竹林寺の五重塔と石段",
-    "author": "提供画像",
-    "source": "ユーザー提供画像（2×2分割）",
+    "alt": "新緑に囲まれた竹林寺の五重塔と石段",
+    "author": "提供画像を加工",
+    "source": "ユーザー提供画像を加工",
     "title": "竹林寺",
     "license": "提供画像（サイト掲載用）",
     "licenseUrl": "",
-    "width": 768,
-    "height": 512,
-    "position": "50% 50%",
-    "checkedAt": "2026-09-26"
+    "width": 1024,
+    "height": 1536,
+    "position": "50% 42%",
+    "checkedAt": "2026-10-01"
   },
   "kochi-castle-history-museum": {
     "src": "/assets/photos/kochi-castle-history-museum.png",
