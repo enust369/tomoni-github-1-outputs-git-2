@@ -1,5 +1,16 @@
 // Individual photo licenses and provenance: PHOTOS.md. No API or database data.
 export const photos={
+  "sarudado-caving": {
+    "src": "/assets/photos/sarudado-caving.jpg",
+    "name": "猿田洞ケイビング",
+    "alt": "猿田洞の洞窟入口",
+    "author": "提供画像を加工",
+    "license": "提供画像（サイト掲載用）",
+    "width": 1774,
+    "height": 887,
+    "position": "50% 50%",
+    "checkedAt": "2026-10-01"
+  },
   "ryugado-adventure": {
     "src": "/assets/photos/ryugado.jpg",
     "name": "龍河洞 冒険コース",
