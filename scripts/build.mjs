@@ -9,17 +9,17 @@ await mkdir(outputDir, { recursive: true });
 
 const sourceIndex = await readFile(resolve(projectRoot, "index.html"), "utf8");
 const seoMeta = `
-  <meta name="description" content="TOMONIは、地域で同性同士が気軽につながり、一緒に過ごせる時間を見つけるためのサービスです。">
+  <meta name="description" content="TOMONIは、地域で気軽に友達とつながり、一緒に過ごせる時間を見つけるためのサービスです。会いたい相手は同性のみ・異性のみ・どちらもから選べます。">
   <link rel="canonical" href="https://tomoni-app.com/">
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="TOMONI">
-  <meta property="og:title" content="TOMONI｜同性同士で気軽に会える時間をつくるサービス">
-  <meta property="og:description" content="地域で同性同士が気軽につながり、一緒に過ごせる時間を見つけるためのサービスです。">
+  <meta property="og:title" content="TOMONI｜近くで気軽に会える友達作りサービス">
+  <meta property="og:description" content="地域で気軽に友達とつながり、一緒に過ごせる時間を見つけるためのサービスです。">
   <meta property="og:url" content="https://tomoni-app.com/">
   <meta property="og:image" content="https://tomoni-app.com/assets/brand/app-icon-1024x1024.png">
   <meta name="twitter:card" content="summary">
-  <meta name="twitter:title" content="TOMONI｜同性同士で気軽に会える時間をつくるサービス">
-  <meta name="twitter:description" content="地域で同性同士が気軽につながり、一緒に過ごせる時間を見つけるためのサービスです。">
+  <meta name="twitter:title" content="TOMONI｜近くで気軽に会える友達作りサービス">
+  <meta name="twitter:description" content="地域で気軽に友達とつながり、一緒に過ごせる時間を見つけるためのサービスです。">
   <meta name="twitter:image" content="https://tomoni-app.com/assets/brand/app-icon-1024x1024.png">
 `;
 const builtIndex = sourceIndex.includes('rel="canonical"')
