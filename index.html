@@ -1384,7 +1384,7 @@
             </div>
             <p>30分のおしゃべりや散歩、<br>カフェなど気軽な募集が見つかります。</p>
             <div class="home-purpose-note">
-              <p>TOMONIは<strong>恋愛目的ではなく</strong>、気軽に話せる友達・趣味仲間・ご飯友達などを見つけるサービスです。</p>
+              <p>TOMONIは<strong>恋愛目的ではなく</strong>、気軽に話せる友達・趣味仲間・ご飯友達などを見つけるサービスです。会いたい相手は同性のみ・異性のみ・どちらもから選べます。</p>
               <p>初めて会う時は、駅・カフェ・商業施設など、人の多い公共の場所をおすすめしています。</p>
             </div>
             <div class="home-invitation-actions">
@@ -1833,7 +1833,7 @@
         <article class="card utility-page">
           <p class="eyebrow">安全ガイド</p>
           <h2>安心して利用するために。</h2>
-          <p style="margin-top:12px">TOMONIは、無理をせず、安心できる距離感で人と過ごすための場所です。少し慎重なくらいで大丈夫です。</p>
+          <p style="margin-top:12px">TOMONIは、同性・異性を問わず、友達として安心できる距離感で人と過ごすための場所です。恋愛・婚活・ナンパ目的では利用できません。</p>
           <div class="safety-page-grid">
             <article><h3>初めて会うとき</h3><p class="meta">昼間のカフェ、公園、公共施設など、人のいる場所をおすすめします。個人宅や密室で会うことは避けましょう。</p></article>
             <article><h3>個人情報について</h3><p class="meta">住所、勤務先、連絡先、SNSなどは慎重に伝えてください。急いで共有しなくても大丈夫です。</p></article>
@@ -3589,7 +3589,7 @@
 
     function openSafetyOnboarding() {
       safetyGateActive = true;
-      openModal("TOMONIを始める前に", `<p>安心して同じ時間を過ごすために、最初に三つだけ確認してください。</p><div class="onboarding-points"><label class="check-row"><input type="checkbox" data-safety-confirm><span><strong>18歳以上です</strong><br><span class="meta">TOMONIは18歳未満の方は利用できません。</span></span></label><label class="check-row"><input type="checkbox" data-safety-confirm><span><strong>利用規約に同意します</strong><br><span class="meta">相手の意思と距離感を尊重します。</span></span></label><label class="check-row"><input type="checkbox" data-safety-confirm><span><strong>公共の場所で会います</strong><br><span class="meta">初回は昼間のカフェ、公園、公共施設などを選びます。</span></span></label></div><button class="btn primary" type="button" data-action="confirm-safety-start" disabled>TOMONIを始める</button><p class="meta" style="margin-top:14px">安全ガイド・利用規約・プライバシーポリシーは、いつでもフッターから確認できます。</p>`);
+      openModal("TOMONIを始める前に", `<p>安心して同じ時間を過ごすために、最初に三つだけ確認してください。</p><div class="onboarding-points"><label class="check-row"><input type="checkbox" data-safety-confirm><span><strong>18歳以上です</strong><br><span class="meta">TOMONIは18歳未満の方は利用できません。</span></span></label><label class="check-row"><input type="checkbox" data-safety-confirm><span><strong>利用規約に同意します</strong><br><span class="meta">友達作りの目的で利用し、相手の意思と距離感を尊重します。</span></span></label><label class="check-row"><input type="checkbox" data-safety-confirm><span><strong>公共の場所で会います</strong><br><span class="meta">初回は昼間のカフェ、公園、公共施設などを選びます。</span></span></label></div><button class="btn primary" type="button" data-action="confirm-safety-start" disabled>TOMONIを始める</button><p class="meta" style="margin-top:14px">安全ガイド・利用規約・プライバシーポリシーは、いつでもフッターから確認できます。</p>`);
       modalBackdrop.querySelector('[data-action="close-modal"]').hidden = true;
     }
 
