@@ -58,7 +58,7 @@ R: https://visitkochijapan.com/image/rendering/article_image/1948/keep/640/640/d
 | 龍河洞 | R | `ryugado.jpg`（龍河洞の鍾乳石「奥の千本」） | [京浜にけ / Wikimedia Commons](https://commons.wikimedia.org/wiki/File:Kami_Kochi_Ryugado_Inside_4.JPG) | [CC BY-SA 3.0](https://creativecommons.org/licenses/by-sa/3.0)・表示／縮小・トリミング明記・写真の派生物は同一ライセンス |
 | にこ淵 | R | `nikobuchi.jpg`（にこ淵の青い滝つぼと滝） | [かるちる / Wikimedia Commons](https://commons.wikimedia.org/wiki/File:Niko_Buchi_deep_water_No.1.jpg) | [CC0](https://creativecommons.org/publicdomain/zero/1.0/deed.en)・表示／縮小・トリミング明記 |
 | 伊尾木洞 | R | `iokido.jpg`（伊尾木洞のシダに覆われた岩壁） | [Saigen Jiro / Wikimedia Commons](https://commons.wikimedia.org/wiki/File:Iokido_Cave-2.jpg) | [CC0](https://creativecommons.org/publicdomain/zero/1.0/deed.en)・表示／縮小・トリミング明記 |
-| 高知城 | R | `kochi-castle.jpg`（高知城の天守と石垣） | [663highland / Wikimedia Commons](https://commons.wikimedia.org/wiki/File:Kochi_Castle04s3872.jpg) | [CC BY 2.5](https://creativecommons.org/licenses/by/2.5)・表示／縮小・トリミング明記 |
+| 高知城 | R | `kochi-castle-new.png`（青空の下にそびえる高知城の天守と石垣） | ユーザー提供画像を加工 | 提供画像（サイト掲載用） |
 | 柏島 | R | `kashiwajima.jpg`（柏島の集落と青い海を見渡す全景） | [Saigen Jiro / Wikimedia Commons](https://commons.wikimedia.org/wiki/File:Kashiwajima_(Otsuki),_zenkei-1.jpg) | [CC0](https://creativecommons.org/publicdomain/zero/1.0/deed.en)・表示／縮小・トリミング明記 |
 | 中津渓谷 | R | `nakatsu.jpg`（中津渓谷の清流と岩場） | [Koda6029 / Wikimedia Commons](https://commons.wikimedia.org/wiki/File:%E4%B8%AD%E6%B4%A5%E6%B8%93%E8%B0%B7%EF%BC%92.jpg) | [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0)・表示／縮小・トリミング明記・写真の派生物は同一ライセンス |
 | 北川村「モネの庭」マルモッタン | R | `monet.jpg`（北川村「モネの庭」マルモッタンの水の庭） | [Earthboud1960 / Wikimedia Commons](https://commons.wikimedia.org/wiki/File:Monet-Marumottan-mizu02.jpg) | [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0)・表示／縮小・トリミング明記・写真の派生物は同一ライセンス |
@@ -178,3 +178,9 @@ CC BY 2.0/2.5は著作者・出典・ライセンス・変更を表示。写真�
 - 高知城オータムフェスティバル: 既存の `kochi-castle.jpg` を会場イメージとして使用。
 - 仁淀川 紙のこいのぼり: 既存の `course-niyodo-sup.png` を仁淀川イメージとして使用。
 - イベント画像は実際の2026年開催記録写真と誤認されないよう、カード上に「イメージ写真」「会場イメージ」「仁淀川イメージ」を表示する。
+
+## 高知城写真差し替え（2026-10-01）
+
+- 高知城: `kochi-castle-new.png`（ユーザー提供画像を軽く加工。明るさ・コントラスト・色味・解像感を自然な範囲で調整）
+- 高知城のランキング、観光一覧、詳細、歴史文化ページ、関連コース、イベント会場イメージなど、既存の高知城画像参照を新画像へ統一。
+- 外部ホットリンクなし。サイト内アセットとして使用。

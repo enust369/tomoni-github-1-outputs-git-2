@@ -68,18 +68,18 @@ export const photos={
     "checkedAt": "2026-09-21"
   },
   "kochi-castle": {
-    "src": "/assets/photos/kochi-castle.jpg",
+    "src": "/assets/photos/kochi-castle-new.png",
     "name": "高知城",
-    "alt": "高知城の天守と石垣",
-    "author": "663highland",
-    "source": "https://commons.wikimedia.org/wiki/File:Kochi_Castle04s3872.jpg",
-    "title": "Kochi Castle04s3872.jpg",
-    "license": "CC BY 2.5",
-    "licenseUrl": "https://creativecommons.org/licenses/by/2.5",
-    "width": 1280,
-    "height": 857,
-    "position": "50% 38%",
-    "checkedAt": "2026-09-21"
+    "alt": "青空の下にそびえる高知城の天守と石垣",
+    "author": "提供画像を加工",
+    "source": "ユーザー提供画像を加工",
+    "title": "高知城",
+    "license": "提供画像（サイト掲載用）",
+    "licenseUrl": "",
+    "width": 1537,
+    "height": 1023,
+    "position": "50% 46%",
+    "checkedAt": "2026-10-01"
   },
   "kashiwajima": {
     "src": "/assets/photos/kashiwajima.jpg",

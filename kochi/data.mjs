@@ -76,7 +76,7 @@ export const eventCategories=['祭り・花火','グルメ','マルシェ','自�
 export const events=[
   {
     slug:'kochi-castle-autumn-oct-2026',
-    image:'/assets/photos/kochi-castle.jpg',
+    image:'/assets/photos/kochi-castle-new.png',
     image_alt:'紅葉の時期をイメージした高知城',
     image_note:'会場イメージ',
     name:'高知城オータムフェスティバル（10月）',
@@ -112,7 +112,7 @@ export const events=[
   },
   {
     slug:'kochi-castle-autumn-nov-2026',
-    image:'/assets/photos/kochi-castle.jpg',
+    image:'/assets/photos/kochi-castle-new.png',
     image_alt:'秋の高知城',
     image_note:'会場イメージ',
     name:'高知城オータムフェスティバル（11月）',
