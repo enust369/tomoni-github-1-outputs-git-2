@@ -674,6 +674,3 @@ body:has(.page-home) .home-slide:first-child .home-slide-content .eyebrow{max-wi
 .spot-info-actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:18px}
 .spot-info-actions .button{border-radius:8px}
 @media(max-width:700px){.spot-description{margin:20px 0 26px}.spot-info-head{margin-top:28px}.spot-facts{grid-template-columns:1fr;gap:9px}.spot-fact,.spot-fact.wide{grid-column:auto;padding:14px 15px}.spot-fact-label{font-size:10px}.spot-fact-value{font-size:13px}.spot-info-actions{display:grid;grid-template-columns:1fr}.spot-info-actions .button{text-align:center;width:100%}}
-
-/* Chikurinji: keep the full vertical pagoda visible in landscape cards. */
-.chikurinji-card-image{object-fit:contain!important;object-position:center center!important;background:#eef3ea}
