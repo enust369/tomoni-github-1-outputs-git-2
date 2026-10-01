@@ -214,16 +214,6 @@ export const events=[
     fee:'各イベントにより異なる',
     phone:'088-823-0989',
     official_url:'https://tosa-okyaku.com/'
-  },
-  {
-    slug:'sample-riverside',
-    name:'川辺のマルシェ（表示サンプル）',
-    category:'マルシェ',
-    area:'north_niyodo',
-    start_date:'2030-09-01',
-    end_date:'2030-09-01',
-    is_demo:true,
-    description:'日付・名称は画面確認用の架空データです。実際の開催情報ではありません。'
   }
 ];
 export const sortSpots=items=>[...items].sort((a,b)=>b.recommend_count-a.recommend_count||a.initial_rank-b.initial_rank||a.slug.localeCompare(b.slug));
