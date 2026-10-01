@@ -138,18 +138,17 @@ export const photos={
     "checkedAt": "2026-09-21"
   },
   "karst": {
-    "src": "/assets/photos/karst.jpg",
+    "src": "/assets/photos/shikoku-karst.png",
     "name": "四国カルスト",
-    "alt": "四国カルストの草原と石灰岩",
-    "author": "Raita Futo from Tokyo, Japan",
-    "source": "https://commons.wikimedia.org/wiki/File:Shikoku_Karst_(52004285742).jpg",
-    "title": "Shikoku Karst (52004285742).jpg",
-    "license": "CC BY 2.0",
-    "licenseUrl": "https://creativecommons.org/licenses/by/2.0",
-    "width": 1280,
-    "height": 853,
+    "alt": "風車と石灰岩が広がる四国カルストの高原風景",
+    "author": "ユーザー提供画像を加工",
+    "source": "",
+    "license": "提供画像（サイト掲載用）",
+    "licenseUrl": "",
+    "width": 1536,
+    "height": 1024,
     "position": "50% 50%",
-    "checkedAt": "2026-09-21"
+    "checkedAt": "2026-10-02"
   },
   "yasui": {
     "src": "/assets/photos/yasui.jpg",
@@ -206,12 +205,17 @@ export const photos={
     "position": "50% 50%"
   },
   "sauna": {
-    "src": "/assets/photos/course-niyodo-sauna.png",
+    "src": "/assets/photos/tent-sauna-niyodo.png",
     "name": "Niyodo Adventureのテントサウナ",
-    "alt": "仁淀川沿いのテントサウナ",
-    "width": 492,
-    "height": 238,
-    "position": "50% 50%"
+    "alt": "清流沿いに設置された白いテントサウナ",
+    "author": "ユーザー指定の生成・加工画像",
+    "source": "",
+    "license": "サイト掲載用画像",
+    "licenseUrl": "",
+    "width": 1536,
+    "height": 1024,
+    "position": "50% 50%",
+    "checkedAt": "2026-10-02"
   },
   "yasube": {
     "src": "/assets/photos/yasube.png",
