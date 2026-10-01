@@ -660,3 +660,17 @@ body:has(.page-home) .home-slide:first-child .home-slide-content .eyebrow{max-wi
 .spot-check p{margin:7px 0 6px;color:var(--muted)}
 .spot-check small{color:#55727c}
 @media(max-width:700px){.spot-highlights{grid-template-columns:1fr;gap:14px}.spot-highlight-copy{padding:18px}.spot-highlight-copy>p{font-size:15px}.spot-highlight-meta>div{padding:13px 14px}.spot-check{padding:16px}}
+
+.spot-description{max-width:900px;margin:24px 0 30px}
+.spot-info-head{margin:34px 0 16px}
+.spot-info-head h2{margin-bottom:0}
+.spot-facts{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.spot-fact{min-width:0;padding:17px 18px;border:1px solid var(--line);border-radius:10px;background:#fff}
+.spot-fact.wide{grid-column:1/-1}
+.spot-fact-label{display:block;margin-bottom:7px;color:var(--muted);font-size:11px;font-weight:700;letter-spacing:.04em}
+.spot-fact-value{font-size:14px;line-height:1.7;overflow-wrap:anywhere}
+.spot-fact-link{color:var(--blue);font-weight:700;text-decoration:underline;text-underline-offset:4px}
+.spot-fact-missing{color:var(--muted)}
+.spot-info-actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:18px}
+.spot-info-actions .button{border-radius:8px}
+@media(max-width:700px){.spot-description{margin:20px 0 26px}.spot-info-head{margin-top:28px}.spot-facts{grid-template-columns:1fr;gap:9px}.spot-fact,.spot-fact.wide{grid-column:auto;padding:14px 15px}.spot-fact-label{font-size:10px}.spot-fact-value{font-size:13px}.spot-info-actions{display:grid;grid-template-columns:1fr}.spot-info-actions .button{text-align:center;width:100%}}
