@@ -284,3 +284,8 @@ CC BY 2.0/2.5は著作者・出典・ライセンス・変更を表示。写真�
 - こんにゃく作り体験（燈ので家）：既存の `field-kochi.jpg` を山あいの農家体験イメージとして使用。Indiana jo / Wikimedia Commons / CC BY-SA 4.0。燈ので家の実写ではない。
 - 田舎こんにゃく体験（せいらんの里）：既存の `field-kochi.jpg` を山里体験イメージとして使用。Indiana jo / Wikimedia Commons / CC BY-SA 4.0。せいらんの里の実写ではない。
 - 紙漉き体験（土佐和紙工芸村「くらうど」）：既存の `ino-papermaking.jpg` を紙漉きイメージとして再利用。Library of Congress / Public Domain。現代の施設実写ではない。
+
+### アクティビティ追加 第9弾（2026-10-02）
+
+- 柏島 体験ダイビング（AQUAS）：既存の `kashiwajima.jpg` を柏島エリアの実景として再利用。Saigen Jiro / Wikimedia Commons / CC0。AQUASの体験中実写ではない。
+- 竜串 体験ダイビング（竜串ダイビングセンター）：既存の `tatsukushi-fishing.jpg` を竜串海岸の実景として再利用。Reggaeman / Wikimedia Commons / CC BY-SA 3.0。ダイビング中の実写ではない。

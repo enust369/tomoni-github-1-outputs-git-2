@@ -337,6 +337,19 @@ export const photos={
     "position": "50% 50%",
     "checkedAt": "2026-10-02"
   },
+  "tatsukushi-diving": {
+    "src": "/assets/photos/tatsukushi-fishing.jpg",
+    "name": "竜串 体験ダイビング（竜串ダイビングセンター）",
+    "alt": "土佐清水市の竜串海岸",
+    "author": "Reggaeman",
+    "source": "https://commons.wikimedia.org/wiki/File:Tatsukushi_05.JPG",
+    "license": "CC BY-SA 3.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0/",
+    "width": 1280,
+    "height": 850,
+    "position": "50% 50%",
+    "checkedAt": "2026-10-02"
+  },
   "tatsukushi-fishing": {
     "src": "/assets/photos/tatsukushi-fishing.jpg",
     "name": "竜串 船釣り体験（西本渡船）",
@@ -442,6 +455,19 @@ export const photos={
     "height": 1023,
     "position": "50% 46%",
     "checkedAt": "2026-10-01"
+  },
+  "kashiwajima-diving-aquas": {
+    "src": "/assets/photos/kashiwajima.jpg",
+    "name": "柏島 体験ダイビング（AQUAS）",
+    "alt": "柏島の集落と青い海を見渡す全景",
+    "author": "Saigen Jiro",
+    "source": "https://commons.wikimedia.org/wiki/File:Kashiwajima_(Otsuki),_zenkei-1.jpg",
+    "license": "CC0",
+    "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/deed.en",
+    "width": 1280,
+    "height": 851,
+    "position": "50% 50%",
+    "checkedAt": "2026-10-02"
   },
   "kashiwajima": {
     "src": "/assets/photos/kashiwajima.jpg",
