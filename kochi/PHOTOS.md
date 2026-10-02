@@ -543,3 +543,8 @@ CC BY 2.0/2.5は著作者・出典・ライセンス・変更を表示。写真�
 - `takemasa-sodabushi`：共通カツオ画像から、鰹節の節そのものの実物写真へ差し替え。Sakurai Midori / Wikimedia Commons / CC BY-SA 3.0。たけまさ商店の実写ではないため宗田節体験の内容イメージとして扱う。
 - `shimanto-fish-auction-lunch`：海鮮料理の共通画像から、日本の魚市場での競り写真へ差し替え。PennyLane24 / Wikimedia Commons / CC BY-SA 4.0。四万十公設卸売市場の実写ではなく、模擬競りの内容イメージとして扱う。
 - `tosayama-haiku`：汎用里山画像から、実際の体験会場オーベルジュ土佐山の実景へ差し替え。jkyZjdjNjN / Wikimedia Commons / CC BY 3.0。
+
+### 写真差し替え実施 第21弾（2026-10-03）
+
+- `otsuki-squid-fishing`：鵜来島の海釣り共通画像から、日本のイカ釣り漁船 `otsuki-squid-fishing.jpg` へ差し替え。Adam Kahtava / Wikimedia Commons / CC BY 2.0。大月町の実船ではないため、イカ釣り体験のイメージとして扱う。
+- `yasea-sup-kayak`：生見海岸のサーフィン共通画像から、シーカヤック体験 `yasea-sup-kayak.jpg` へ差し替え。Roger Braunstein / Wikimedia Commons / CC BY 2.0。ヤ・シィパークの実写ではないため、体験内容のイメージとして扱う。

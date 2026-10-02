@@ -473,18 +473,26 @@ export const photos={
     "width": 1600, "height": 1067, "position": "50% 50%", "checkedAt": "2026-10-03"
   },
   "otsuki-squid-fishing": {
-    "src": "/assets/photos/uguru-fishing.jpg",
+    "src": "/assets/photos/otsuki-squid-fishing.jpg",
     "name": "大月満喫ツアー イカ釣り体験",
-    "alt": "高知西部の海釣りをイメージした写真",
-    "author": "既存サイト画像", "source": "", "license": "既存サイト資産", "licenseUrl": "",
-    "width": 1280, "height": 853, "position": "50% 50%", "checkedAt": "2026-10-02"
+    "alt": "日本のイカ釣り漁船の実景イメージ",
+    "author": "Adam Kahtava",
+    "source": "https://commons.wikimedia.org/wiki/File:A_squid_fishing_boat_in_Suzu,_Ishikawa_pref_Japan_-_Mar_11,_2006.jpg",
+    "title": "A squid fishing boat in Suzu, Ishikawa pref Japan - Mar 11, 2006.jpg",
+    "license": "CC BY 2.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by/2.0/",
+    "width": 1600, "height": 1200, "position": "50% 50%", "checkedAt": "2026-10-03"
   },
   "yasea-sup-kayak": {
-    "src": "/assets/photos/ikumi-surf.jpg",
+    "src": "/assets/photos/yasea-sup-kayak.jpg",
     "name": "ヤ・シィパーク SUP＆カヤック体験",
-    "alt": "高知東部の海をイメージした写真",
-    "author": "既存サイト画像", "source": "", "license": "既存サイト資産", "licenseUrl": "",
-    "width": 1280, "height": 853, "position": "50% 50%", "checkedAt": "2026-10-02"
+    "alt": "海岸でシーカヤックを楽しむ体験のイメージ",
+    "author": "Roger Braunstein",
+    "source": "https://commons.wikimedia.org/wiki/File:Sea_kayaking_Zamami_Okinawa.jpg",
+    "title": "Sea kayaking Zamami Okinawa.jpg",
+    "license": "CC BY 2.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by/2.0/",
+    "width": 1600, "height": 1067, "position": "50% 50%", "checkedAt": "2026-10-03"
   },
   "shimizu-katsuo-show": {
     "src": "/assets/photos/shimizu-katsuo-kochi.jpg",
