@@ -456,6 +456,53 @@ export const photos={
     "position": "50% 46%",
     "checkedAt": "2026-10-01"
   },
+  "kochi-market-fruit-basket": {
+    "src": "/assets/photos/field-kochi.jpg",
+    "name": "高知市卸売市場 果物のセリ見学＋マイフルーツバスケット作り",
+    "alt": "高知の農産物と地域の暮らしをイメージした風景",
+    "author": "Indiana jo",
+    "source": "https://commons.wikimedia.org/wiki/File:Kiiji,_Haratani_village_02.jpg",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "width": 1280, "height": 960, "position": "50% 50%", "checkedAt": "2026-10-02"
+  },
+  "shimanto-sada-cycling": {
+    "src": "/assets/photos/shimanto-canoe.jpg",
+    "name": "佐田沈下橋 ガイドサイクリング",
+    "alt": "四万十川の自然を感じる風景",
+    "author": "Cherrysherbet",
+    "source": "https://commons.wikimedia.org/wiki/File:Nishitosa_Shimanto_river.jpg",
+    "license": "CC BY-SA 3.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0/",
+    "width": 604, "height": 453, "position": "50% 50%", "checkedAt": "2026-10-02"
+  },
+  "akano-shishimai": {
+    "src": "/assets/photos/yosakoi-naruko.jpg",
+    "name": "赤野獅子舞 伝統芸能体験（大元神社）",
+    "alt": "高知の伝統芸能をイメージした鳴子",
+    "author": "Mycomp",
+    "source": "https://commons.wikimedia.org/wiki/File:Naruko_(bird_rattles).JPG",
+    "license": "CC BY-SA 3.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0/",
+    "width": 960, "height": 1280, "position": "50% 50%", "checkedAt": "2026-10-02"
+  },
+  "shimanto-fish-auction-lunch": {
+    "src": "/assets/photos/course-ocean-seafood.png",
+    "name": "四万十 公設卸売市場 模擬競り＋おさかなランチ",
+    "alt": "高知の海鮮料理をイメージした写真",
+    "author": "既存サイト画像", "source": "", "license": "既存サイト資産", "licenseUrl": "",
+    "width": 1456, "height": 1020, "position": "50% 50%", "checkedAt": "2026-10-02"
+  },
+  "shimanto-yakatabune-cafe": {
+    "src": "/assets/photos/shimanto-canoe.jpg",
+    "name": "四万十川屋形船 水上カフェ",
+    "alt": "四万十川の自然を感じる風景",
+    "author": "Cherrysherbet",
+    "source": "https://commons.wikimedia.org/wiki/File:Nishitosa_Shimanto_river.jpg",
+    "license": "CC BY-SA 3.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0/",
+    "width": 604, "height": 453, "position": "50% 50%", "checkedAt": "2026-10-02"
+  },
   "shimanto-observatory": {
     "src": "/assets/photos/course-classic-camping.png",
     "name": "星空の街で天体観望会（四万十天文台）",
