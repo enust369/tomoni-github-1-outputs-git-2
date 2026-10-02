@@ -530,3 +530,9 @@ CC BY 2.0/2.5は著作者・出典・ライセンス・変更を表示。写真�
 - `tatsukushi-minokoshi-tour`：竜串海岸の共通写真から、竜串・見残し周辺の奇岩海岸実景 `tatsukushi-minokoshi-tour.jpg` へ差し替え。Reggaeman / Wikimedia Commons / CC BY-SA 3.0。
 - `shimanto-fisher-firefly`：四万十川の昼間風景から、川面の上を舞うホタルの夜景 `shimanto-fisher-firefly.jpg` へ差し替え。Kyu3a / Wikimedia Commons / CC BY-SA 4.0。四万十川の実写ではないため、ホタル遊覧のイメージとして扱う。
 - `withriver-shimanto`：四万十川の汎用風景から、川でSUPを楽しむ `withriver-shimanto.jpg` へ差し替え。Stekirr / Wikimedia Commons / CC BY-SA 4.0。四万十川・withRIVERの実写ではなく、SUP体験のイメージとして扱う。
+
+### 写真差し替え実施 第19弾（2026-10-03）
+
+- `tosappo-ryoma-walk`：坂本龍馬記念館の共通画像から、桂浜の坂本龍馬像 `tosappo-ryoma-walk.jpg` へ差し替え。Chehikone / Wikimedia Commons / CC0。
+- `hanpeita-harimaya-guide`：坂本龍馬記念館の共通画像から、実際のはりまや橋 `hanpeita-harimaya-guide.jpg` へ差し替え。Nobunaga24 / Wikimedia Commons / Public Domain。
+- `katsurahama-guide`：坂本龍馬記念館の共通画像から、実際の桂浜 `katsurahama-guide.jpg` へ差し替え。京浜にけ / Wikimedia Commons / CC BY-SA 3.0。

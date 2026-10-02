@@ -107,17 +107,18 @@ export const photos={
     "checkedAt": "2026-10-02"
   },
   "tosappo-ryoma-walk": {
-    "src": "/assets/photos/sakamoto-ryoma-memorial-museum.png",
+    "src": "/assets/photos/tosappo-ryoma-walk.jpg",
     "name": "龍馬の生まれたまち歩き〜土佐っ歩〜",
-    "alt": "坂本龍馬ゆかりの高知を歩くイメージ",
-    "author": "既存サイト画像",
-    "source": "",
-    "license": "既存サイト資産",
-    "licenseUrl": "",
-    "width": 768,
-    "height": 512,
-    "position": "50% 50%",
-    "checkedAt": "2026-10-02"
+    "alt": "桂浜に立つ坂本龍馬像の実景",
+    "author": "Chehikone",
+    "source": "https://commons.wikimedia.org/wiki/File:Statue_of_Ryoma_Sakamoto.jpg",
+    "title": "Statue of Ryoma Sakamoto.jpg",
+    "license": "CC0",
+    "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/",
+    "width": 1290,
+    "height": 1600,
+    "position": "50% 45%",
+    "checkedAt": "2026-10-03"
   },
   "yoshinogawa-rafting": {
     "src": "/assets/photos/hero-rafting.png",
@@ -710,11 +711,15 @@ export const photos={
     "width": 1600, "height": 1066, "position": "50% 50%", "checkedAt": "2026-10-03"
   },
   "hanpeita-harimaya-guide": {
-    "src": "/assets/photos/sakamoto-ryoma-memorial-museum.png",
+    "src": "/assets/photos/hanpeita-harimaya-guide.jpg",
     "name": "半平太・はりまや橋コース",
-    "alt": "幕末の土佐をイメージした坂本龍馬記念館",
-    "author": "既存サイト画像", "source": "", "license": "既存サイト資産", "licenseUrl": "",
-    "width": 1456, "height": 1020, "position": "50% 50%", "checkedAt": "2026-10-02"
+    "alt": "高知市のはりまや橋の実景",
+    "author": "Nobunaga24",
+    "source": "https://commons.wikimedia.org/wiki/File:Harimayabashi.JPG",
+    "title": "Harimayabashi.JPG",
+    "license": "Public Domain",
+    "licenseUrl": "https://creativecommons.org/publicdomain/mark/1.0/",
+    "width": 1600, "height": 1200, "position": "50% 50%", "checkedAt": "2026-10-03"
   },
   "yoshino-headwaters-track-walk": {
     "src": "/assets/photos/yoshino-headwaters-track-walk.jpg",
@@ -1000,14 +1005,15 @@ export const photos={
     "width": 1600, "height": 900, "position": "50% 50%", "checkedAt": "2026-10-03"
   },
   "katsurahama-guide": {
-    "src": "/assets/photos/sakamoto-ryoma-memorial-museum.png",
+    "src": "/assets/photos/katsurahama-guide.jpg",
     "name": "桂浜散策ガイド",
-    "alt": "桂浜エリアの坂本龍馬記念館",
-    "author": "既存サイト画像",
-    "source": "",
-    "license": "既存サイト資産",
-    "licenseUrl": "",
-    "width": 1456, "height": 816, "position": "50% 50%", "checkedAt": "2026-10-02"
+    "alt": "高知市・桂浜の海岸実景",
+    "author": "京浜にけ",
+    "source": "https://commons.wikimedia.org/wiki/File:Kochi_Katsurahama_Daytime_1.JPG",
+    "title": "Kochi Katsurahama Daytime 1.JPG",
+    "license": "CC BY-SA 3.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0/",
+    "width": 1600, "height": 1200, "position": "50% 50%", "checkedAt": "2026-10-03"
   },
   "makino-guide-walk": {
     "src": "/assets/photos/makino-botanical-garden.png",
