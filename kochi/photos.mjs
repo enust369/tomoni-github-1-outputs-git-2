@@ -40,6 +40,20 @@ export const photos={
     "position": "50% 50%",
     "checkedAt": "2026-10-02"
   },
+  "kaminokae-fishery": {
+    "src": "/assets/photos/kaminokae-fishery.jpg",
+    "name": "上ノ加江漁業体験",
+    "alt": "漁師が海へカニかごを下ろす漁業体験のイメージ",
+    "author": "Long (lTiga) Nguyen / Unsplash",
+    "source": "https://unsplash.com/photos/fisherman-lowering-a-crab-trap-into-the-ocean-8c_h_1tFWFc",
+    "title": "Fisherman lowering a crab trap into the ocean",
+    "license": "Unsplash License",
+    "licenseUrl": "https://unsplash.com/license",
+    "width": 1280,
+    "height": 853,
+    "position": "50% 50%",
+    "checkedAt": "2026-10-02"
+  },
   "ogata-whale": {
     "src": "/assets/photos/irino-surf.jpg",
     "name": "大方ホエールウォッチング",
