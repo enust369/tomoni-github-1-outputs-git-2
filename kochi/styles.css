@@ -735,3 +735,15 @@ body:has(.page-home) .home-slide:first-child .home-slide-content .eyebrow{max-wi
     margin-top:6px;
   }
 }
+
+/* Mobile: keep the snorkelers clearly visible in the Ocean Trip main photo. */
+@media(max-width:700px){
+  .home-course-media[href="/courses/ocean-trip/"] .home-course-main{
+    object-position:50% 18%;
+  }
+}
+@media(max-width:420px){
+  .home-course-media[href="/courses/ocean-trip/"] .home-course-main{
+    object-position:50% 14%;
+  }
+}
