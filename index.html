@@ -4056,7 +4056,7 @@
     }
 
     function emailVerificationMarkup(email) {
-      return `<div class="thanks" style="padding:8px 0"><span class="badge">メール認証</span><h3 style="margin-top:16px">確認メールを送信しました。</h3><p class="meta" style="margin-top:10px">${esc(email)} に届いたメールを開き、認証を完了してください。</p><div class="actions" style="justify-content:center"><button class="btn" type="button" data-action="resend-verification-email">確認メールを再送する</button><button class="btn primary" type="button" data-action="show-login">認証後にログインする</button></div><p class="meta" id="verificationResendStatus" role="status" aria-live="polite" style="margin-top:12px"></p></div>`;
+      return `<div class="thanks" style="padding:8px 0"><span class="badge">メール認証</span><h3 style="margin-top:16px">確認メールを送信しました。</h3><p class="meta" style="margin-top:10px">${esc(email)} に届いたメールを開き、認証を完了してください。</p><div class="notice" style="margin-top:16px;text-align:left"><strong>次の流れ</strong><p class="meta" style="margin-top:6px">メール認証 → TOMONIに戻ってログイン → 基本プロフィール（約1分）を作成すると利用開始できます。</p></div><p class="meta" style="margin-top:12px">メールが見つからない場合は、迷惑メール・プロモーションフォルダも確認してください。</p><div class="actions" style="justify-content:center"><button class="btn" type="button" data-action="resend-verification-email">確認メールを再送する</button><button class="btn primary" type="button" data-action="show-login">認証後にログインする</button></div><p class="meta" id="verificationResendStatus" role="status" aria-live="polite" style="margin-top:12px"></p></div>`;
     }
 
     function openEmailVerificationNotice(email) {
