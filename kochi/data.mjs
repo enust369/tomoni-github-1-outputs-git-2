@@ -2,7 +2,7 @@ import {photos} from './photos.mjs';
 export const areas={kochi_city:'高知市内',east:'東部',west:'西部',north_niyodo:'北部・仁淀川'};
 export const categories={sightseeing:'観光',gourmet:'グルメ',cycling:'サイクリング',camp:'キャンプ',onsen:'温泉',michinoeki:'道の駅',stay:'宿泊',fishing:'釣り',surfing:'サーフィン',activity:'アクティビティ'};
 export const themes=['王道','グルメ','子連れ','カップル','絶景','ドライブ','アクティブ','雨の日'];
-export const filters={sightseeing:['絶景','歴史','子連れ','雨の日','デート','定番','穴場'],gourmet:['ひろめ市場','カツオ','郷土料理','居酒屋','ラーメン','ランチ','スイーツ','朝ごはん','おみやげ'],activity:['川あそび','海あそび','釣り・漁業体験','空・山','洞窟体験','動物・自然観察','文化・ものづくり体験']};
+export const filters={sightseeing:['絶景','歴史','子連れ','雨の日','デート','定番','穴場'],gourmet:['ひろめ市場','カツオ','郷土料理','居酒屋','ラーメン','ランチ','スイーツ','朝ごはん','おみやげ'],fishing:['海釣り','川釣り','手ぶら','初心者','予約制'],surfing:['サーフィン','初心者','スクール','通年'],activity:['川あそび','海あそび','釣り・漁業体験','空・山','洞窟体験','動物・自然観察','文化・ものづくり体験']};
 const rows=[
 ['ryugado','龍河洞','sightseeing','east','香美市','雨の日,子連れ,定番','地底に広がる、もうひとつの高知。'],
 ['nikobuchi','にこ淵','sightseeing','north_niyodo','いの町','絶景,定番','心をほどく、仁淀ブルー。'],
@@ -30,7 +30,14 @@ const rows=[
 ['kayak','仁淀川シーカヤック','activity','north_niyodo','確認中','川あそび','水面から出会う、仁淀川。'],
 ['sauna','Niyodo Adventureのテントサウナ','activity','north_niyodo','仁淀川町','川あそび','自然を感じる、特別な時間。'],
 ['ryugado-adventure','龍河洞 冒険コース','activity','east','香美市','洞窟体験','真っ暗な洞窟を、ガイドと進む本格冒険。'],
-['sarudado-caving','猿田洞ケイビング','activity','north_niyodo','日高村','洞窟体験','這って、登って、自然のままの洞窟へ。']];
+['sarudado-caving','猿田洞ケイビング','activity','north_niyodo','日高村','洞窟体験','這って、登って、自然のままの洞窟へ。'],
+['ikumi-surf','生見サーフィンビーチ','surfing','east','東洋町','サーフィン,通年','一年を通して波と出会う、東洋町のサーフスポット。'],
+['irino-surf','入野海岸','surfing','west','黒潮町','サーフィン,初心者','約4kmの砂浜で、海と波を楽しむ。'],
+['oki-surf','大岐海岸','surfing','west','土佐清水市','サーフィン,初心者','白い砂浜と緑に囲まれた、海辺のサーフポイント。'],
+['susaki-fishing','須崎・富士ヶ浜 海釣り体験','fishing','west','須崎市','海釣り,手ぶら,初心者','海のまち須崎で、気軽に海釣りへ。'],
+['uguru-fishing','鵜来島 釣り体験（うぐるBOX）','fishing','west','宿毛市','海釣り,予約制','透明な海に囲まれた離島で、釣りを楽しむ。'],
+['tatsukushi-fishing','竜串 船釣り体験（西本渡船）','fishing','west','土佐清水市','海釣り,手ぶら,予約制','竜串の海を船でめぐりながら、釣りを楽しむ。'],
+['niyodo-fishing','仁淀川の釣り','fishing','north_niyodo','仁淀川流域','川釣り','清流・仁淀川で、川と向き合う釣り時間。']];
 const spotInfo={
   ryugado:{address:'高知県香美市土佐山田町逆川1424',phone:'0887-53-2144',official_url:'https://ryugadou.or.jp/',parking_text:'駐車場約700台',access:'高知自動車道南国ICから車。土佐山田駅からバス。',last_verified_at:'2026-09-23'},
   nikobuchi:{address:'高知県吾川郡いの町清水上分',official_url:'https://nikobuchi.inofan.jp/site/access.html',parking_text:'指定駐車場あり。満車時は臨時駐車場等の案内を確認。',access:'伊野ICから車で約60分。JR伊野駅からバス利用後、徒歩約20〜30分。',last_verified_at:'2026-09-23'},
@@ -56,7 +63,14 @@ const spotInfo={
   ice:{address:'高知県吾川郡いの町柳瀬上分807-1',opening_hours:'平日11:00〜17:00（L.O.16:30）、土日祝・GW・お盆10:30〜17:00（L.O.16:30）',closed_days:'第2・第4月曜日（7・8月除く）・年末年始。月曜が祝日の場合は翌火曜。',phone:'090-3787-8511',official_url:'https://www.kochi-ice.com/stores/',parking_text:'無料駐車場あり',access:'伊野ICから車で約30分。',last_verified_at:'2026-10-01',description:'営業時間・定休日は高知アイス公式サイトで確認済みです。天候不良などによる臨時休業は公式SNS等をご確認ください。'},
   sauna:{address:'高知県吾川郡仁淀川町高瀬3869',opening_hours:'予約受付 8:00〜17:00',closed_days:'毎日開催（天候・河川状況等により中止の場合あり）',price_text:'1グループ10,000円（公式予約ページ）',phone:'080-5026-3288',official_url:'https://www.niyodoadventure.com/ja/river-sauna-tent',parking_text:'未確認',access:'伊野ICから車で約45分。高知市から車で約1時間30分。',last_verified_at:'2026-10-01',description:'所在地・連絡先・料金はNiyodo Adventure公式情報で確認済みです。所要時間は公式紹介ページと予約ページで表記が異なるため、予約時に最新内容をご確認ください。'},
   'ryugado-adventure':{address:'高知県香美市土佐山田町逆川1424',opening_hours:'午前 9:00・9:30・10:00開始／午後 13:00・13:30・14:00開始（11〜1月は10:00・14:00の催行なし）',closed_days:'無休（人数制限あり・事前予約制）',price_text:'観光コース料金＋2,000円。つなぎ・長靴レンタル1,000円',phone:'0887-53-2144',official_url:'https://ryugadou.or.jp/attraction/adventure-course/',parking_text:'龍河洞の駐車場を利用',access:'高知自動車道南国ICから車。土佐山田駅からバス。',last_verified_at:'2026-10-01',description:'龍河洞の観光コース途中から約200mの未整備区間へ入り、専属ガイドとヘッドライトを頼りに狭い岩の間を這ったり、体をひねって進む約90分の冒険コースです。事前予約が必要です。'},
-  'sarudado-caving':{address:'高知県高岡郡日高村沖名1619（猿田洞）',opening_hours:'予約受付 9:00〜17:00',closed_days:'年末年始（ガイド確保できれば通年催行）',price_text:'4,000円／人（税込）。1名実施は6,000円（税込）',phone:'050-3204-1996（日高村観光協会）',official_url:'https://www.hidakamura.info/activity',parking_text:'無料駐車場あり',access:'受付は村の案内所ひだか（日高村本郷1478-9）。伊野ICから車で約15分。',last_verified_at:'2026-10-01',description:'日高村の猿田洞で、ガイドと一緒に自然のままの洞内を這ったり登ったりするケイビング体験です。参加条件や予約状況は日高村観光協会の最新案内をご確認ください。'}
+  'sarudado-caving':{address:'高知県高岡郡日高村沖名1619（猿田洞）',opening_hours:'予約受付 9:00〜17:00',closed_days:'年末年始（ガイド確保できれば通年催行）',price_text:'4,000円／人（税込）。1名実施は6,000円（税込）',phone:'050-3204-1996（日高村観光協会）',official_url:'https://www.hidakamura.info/activity',parking_text:'無料駐車場あり',access:'受付は村の案内所ひだか（日高村本郷1478-9）。伊野ICから車で約15分。',last_verified_at:'2026-10-01',description:'日高村の猿田洞で、ガイドと一緒に自然のままの洞内を這ったり登ったりするケイビング体験です。参加条件や予約状況は日高村観光協会の最新案内をご確認ください。'},
+  'ikumi-surf':{address:'高知県安芸郡東洋町大字生見',opening_hours:'通年',phone:'0887-29-3395（東洋町産業建設課）',official_url:'https://kochi-tabi.jp/search_spot.html?id=1249',parking_text:'有料駐車場あり。普通車140台（2か所計）',access:'南国ICから車で約2時間。芸西西ICから車で約1時間30分。',last_verified_at:'2026-10-02',description:'全長約1kmの海岸で、通年サーフィンを楽しめるスポットとして高知県観光情報で案内されています。シャワー（有料）・トイレがあります。'},
+  'irino-surf':{address:'高知県幡多郡黒潮町入野',phone:'0880-43-2113（黒潮町産業推進室観光係）',official_url:'https://kochi-tabi.jp/search_spot.html?ID=740&pcflg=PC',access:'四万十町中央ICから車で約45分。土佐入野駅から徒歩約10分。',last_verified_at:'2026-10-02',description:'約4kmの白い砂浜が続く入野海岸。海水浴やサーフィンを楽しめ、初心者向けのサーフィン体験も案内されています。'},
+  'oki-surf':{address:'高知県土佐清水市大岐',opening_hours:'24時間',price_text:'無料',phone:'0880-82-1212（土佐清水市 観光商工課）',official_url:'https://kochi-tabi.jp/search_spot_sightseeing.html?id=715',parking_text:'無料駐車場あり',access:'四万十町中央ICから車で約1時間30分。',last_verified_at:'2026-10-02',description:'白い砂浜と緑の林が約1.6km続く海岸。高知県観光情報でもサーフポイントとして案内されています。'},
+  'susaki-fishing':{address:'高知県須崎市富士ヶ浜周辺',opening_hours:'体験受付の目安 8:30〜17:15',closed_days:'年末年始',official_url:'https://kochi-tabi.jp/search_activity_plan.html?easy_reserve=1&plan_id=53696&plan_ota=aj',parking_text:'富士ヶ浜近くに駐車スペースあり',access:'須崎市観光協会事務所から富士ヶ浜まで車で約3分、徒歩約10分。',last_verified_at:'2026-10-02',description:'須崎市観光協会で釣具一式を借り、富士ヶ浜周辺で海釣りを楽しめる体験です。詳細・料金・予約条件は最新の販売ページをご確認ください。'},
+  'uguru-fishing':{address:'高知県宿毛市沖の島町鵜来島58',opening_hours:'予約受付 7:50〜21:00',closed_days:'不定休',phone:'080-4410-2441',official_url:'https://kochi-tabi.jp/search_spot.html?id=13597',access:'片島港から宿毛市営定期船で約50分〜1時間35分。',last_verified_at:'2026-10-02',description:'宿毛沖の離島・鵜来島で楽しむ釣り体験。透明度の高い海と手つかずの自然の中で過ごせます。予約条件は公式案内をご確認ください。'},
+  'tatsukushi-fishing':{address:'高知県土佐清水市竜串21',opening_hours:'予約受付 8:00〜17:00',closed_days:'不定休',phone:'090-1176-5819',official_url:'https://kochi-tabi.jp/search_spot_activity.html?id=8286',access:'四万十町中央ICから車で約1時間40分。',last_verified_at:'2026-10-02',description:'竜串の海で楽しむ手ぶらの船釣り体験。実施内容や予約条件は最新の公式案内をご確認ください。'},
+  'niyodo-fishing':{address:'仁淀川町〜越知町〜佐川町〜日高村〜いの町〜土佐市',phone:'0889-20-9511（仁淀ブルー観光協議会）',official_url:'https://kochi-tabi.jp/search_spot.html?ID=12167',access:'流域各地でアクセスが異なります。釣行場所・遊漁規則・解禁情報は現地の最新案内をご確認ください。',last_verified_at:'2026-10-02',description:'仁淀川では昔から釣りを含む水辺利用が親しまれています。釣種・場所・時期によって遊漁規則等が異なるため、釣行前に最新情報をご確認ください。'}
 };
 const rank={};
 export const spots=rows.map(([slug,name,category,area,municipality,tags,catchphrase],i)=>({id:`00000000-0000-4000-8000-${String(i+1).padStart(12,'0')}`,slug,name,category,area,municipality,tags:tags.split(','),catchphrase,initial_rank:rank[category]=(rank[category]||0)+1,recommend_count:0,is_published:true,is_demo:false,photo:photos[slug]||null,main_image_url:photos[slug]?.src||'',description:'',created_at:`2026-09-${String(i+1).padStart(2,'0')}T00:00:00Z`,...(spotInfo[slug]||{})}));

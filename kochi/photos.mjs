@@ -1,5 +1,70 @@
 // Individual photo licenses and provenance: PHOTOS.md. No API or database data.
 export const photos={
+  "ikumi-surf": {
+    "src": "/assets/photos/ikumi-surf.jpg",
+    "name": "生見サーフィンビーチ",
+    "alt": "東洋町の生見海岸",
+    "author": "Araiyasushige",
+    "source": "https://commons.wikimedia.org/wiki/File:Ikumi_coast_20240514_1.jpg",
+    "license": "CC0",
+    "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/",
+    "width": 1280,
+    "height": 834,
+    "position": "50% 50%",
+    "checkedAt": "2026-10-02"
+  },
+  "irino-surf": {
+    "src": "/assets/photos/irino-surf.jpg",
+    "name": "入野海岸",
+    "alt": "黒潮町の入野海岸",
+    "author": "Ubuhouse",
+    "source": "https://commons.wikimedia.org/wiki/File:入野海岸.jpg",
+    "license": "CC BY-SA 3.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0/",
+    "width": 960,
+    "height": 720,
+    "position": "50% 50%",
+    "checkedAt": "2026-10-02"
+  },
+  "uguru-fishing": {
+    "src": "/assets/photos/uguru-fishing.jpg",
+    "name": "鵜来島 釣り体験（うぐるBOX）",
+    "alt": "宿毛沖に浮かぶ鵜来島の全景",
+    "author": "ブルーノ・プラス",
+    "source": "https://commons.wikimedia.org/wiki/File:Ugurushima_Island_01.jpg",
+    "license": "CC BY 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by/4.0/",
+    "width": 1280,
+    "height": 960,
+    "position": "50% 50%",
+    "checkedAt": "2026-10-02"
+  },
+  "tatsukushi-fishing": {
+    "src": "/assets/photos/tatsukushi-fishing.jpg",
+    "name": "竜串 船釣り体験（西本渡船）",
+    "alt": "土佐清水市の竜串海岸",
+    "author": "Reggaeman",
+    "source": "https://commons.wikimedia.org/wiki/File:Tatsukushi_05.JPG",
+    "license": "CC BY-SA 3.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0/",
+    "width": 1280,
+    "height": 850,
+    "position": "50% 50%",
+    "checkedAt": "2026-10-02"
+  },
+  "niyodo-fishing": {
+    "src": "/assets/photos/niyodo-fishing.jpg",
+    "name": "仁淀川の釣り",
+    "alt": "越知町を流れる仁淀川と中仁淀橋",
+    "author": "谷本 一郎",
+    "source": "https://commons.wikimedia.org/wiki/File:中仁淀橋―沈下橋.jpg",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "width": 1280,
+    "height": 960,
+    "position": "50% 50%",
+    "checkedAt": "2026-10-02"
+  },
   "sarudado-caving": {
     "src": "/assets/photos/sarudado-caving.jpg",
     "name": "猿田洞ケイビング",
