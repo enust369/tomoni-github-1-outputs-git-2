@@ -289,3 +289,10 @@ CC BY 2.0/2.5は著作者・出典・ライセンス・変更を表示。写真�
 
 - 柏島 体験ダイビング（AQUAS）：既存の `kashiwajima.jpg` を柏島エリアの実景として再利用。Saigen Jiro / Wikimedia Commons / CC0。AQUASの体験中実写ではない。
 - 竜串 体験ダイビング（竜串ダイビングセンター）：既存の `tatsukushi-fishing.jpg` を竜串海岸の実景として再利用。Reggaeman / Wikimedia Commons / CC BY-SA 3.0。ダイビング中の実写ではない。
+
+### 体験ページ追加 第10弾（2026-10-02）
+
+- 牧野公園ガイド：既存の `field-kochi.jpg` を里山イメージとして使用。Indiana jo / Wikimedia Commons / CC BY-SA 4.0。佐川町・牧野公園の実写ではない。
+- 牧野博士の聖地を歩く（南山麓コース）：既存の `field-kochi.jpg` を里山ウォーキングのイメージとして使用。実際のコース写真ではない。
+- 桂浜散策ガイド：既存サイト資産 `sakamoto-ryoma-memorial-museum.png` を桂浜エリアのイメージとして使用。ガイド中の実写ではない。
+- まきのガイドウォーク：既存サイト資産 `makino-botanical-garden.png` を牧野植物園のイメージとして使用。

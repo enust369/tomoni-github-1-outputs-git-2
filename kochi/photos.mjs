@@ -456,6 +456,46 @@ export const photos={
     "position": "50% 46%",
     "checkedAt": "2026-10-01"
   },
+  "sakawa-makino-park-guide": {
+    "src": "/assets/photos/field-kochi.jpg",
+    "name": "牧野公園ガイド",
+    "alt": "高知の山里と緑の風景のイメージ",
+    "author": "Indiana jo",
+    "source": "https://commons.wikimedia.org/wiki/File:Kiiji,_Haratani_village_02.jpg",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "width": 1280, "height": 960, "position": "50% 50%", "checkedAt": "2026-10-02"
+  },
+  "sakawa-makino-sacred-walk": {
+    "src": "/assets/photos/field-kochi.jpg",
+    "name": "牧野博士の聖地を歩く（南山麓コース）",
+    "alt": "高知の里山ウォーキングのイメージ",
+    "author": "Indiana jo",
+    "source": "https://commons.wikimedia.org/wiki/File:Kiiji,_Haratani_village_02.jpg",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "width": 1280, "height": 960, "position": "50% 50%", "checkedAt": "2026-10-02"
+  },
+  "katsurahama-guide": {
+    "src": "/assets/photos/sakamoto-ryoma-memorial-museum.png",
+    "name": "桂浜散策ガイド",
+    "alt": "桂浜エリアの坂本龍馬記念館",
+    "author": "既存サイト画像",
+    "source": "",
+    "license": "既存サイト資産",
+    "licenseUrl": "",
+    "width": 1456, "height": 816, "position": "50% 50%", "checkedAt": "2026-10-02"
+  },
+  "makino-guide-walk": {
+    "src": "/assets/photos/makino-botanical-garden.png",
+    "name": "まきのガイドウォーク",
+    "alt": "高知県立牧野植物園の園内",
+    "author": "既存サイト画像",
+    "source": "",
+    "license": "既存サイト資産",
+    "licenseUrl": "",
+    "width": 1456, "height": 816, "position": "50% 50%", "checkedAt": "2026-10-02"
+  },
   "kashiwajima-diving-aquas": {
     "src": "/assets/photos/kashiwajima.jpg",
     "name": "柏島 体験ダイビング（AQUAS）",
