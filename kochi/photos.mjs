@@ -92,6 +92,34 @@ export const photos={
     "position": "50% 50%",
     "checkedAt": "2026-10-02"
   },
+  "ino-papermaking": {
+    "src": "/assets/photos/ino-papermaking.jpg",
+    "name": "紙漉き体験（いの町紙の博物館）",
+    "alt": "江戸時代の紙漉きを描いた版画イメージ",
+    "author": "Japanese fine prints, pre-1915 / Library of Congress",
+    "source": "https://commons.wikimedia.org/wiki/File:Kamisuki_LCCN2009615107.jpg",
+    "title": "Kamisuki LCCN2009615107.jpg",
+    "license": "Public Domain",
+    "licenseUrl": "https://creativecommons.org/publicdomain/mark/1.0/",
+    "width": 1280,
+    "height": 1057,
+    "position": "50% 50%",
+    "checkedAt": "2026-10-02"
+  },
+  "yosakoi-naruko": {
+    "src": "/assets/photos/yosakoi-naruko.jpg",
+    "name": "鳴子づくり体験（高知よさこい情報交流館）",
+    "alt": "よさこい踊りで使われる鳴子",
+    "author": "Mycomp",
+    "source": "https://commons.wikimedia.org/wiki/File:Naruko_(bird_rattles).JPG",
+    "title": "Naruko (bird rattles).JPG",
+    "license": "CC BY-SA 3.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0/",
+    "width": 960,
+    "height": 1280,
+    "position": "50% 50%",
+    "checkedAt": "2026-10-02"
+  },
   "noichi-zoo": {
     "src": "/assets/photos/noichi-zoo.jpg",
     "name": "高知県立のいち動物公園",

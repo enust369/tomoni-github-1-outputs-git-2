@@ -233,4 +233,5 @@ CC BY 2.0/2.5は著作者・出典・ライセンス・変更を表示。写真�
 - NIYODO バギー体験：既存サイト資産 `hero-buggy.png` を使用。
 - 吾川スカイパーク パラグライダー：既存サイト資産 `hero-paragliding.png` を使用。
 - カツオの藁焼きタタキづくり体験：既存サイト資産 `course-katsuo-tataki.png` を使用。
-- 紙漉き体験、鳴子づくり体験：現時点では権利確認済みの専用写真を追加せず、共通プレースホルダーを使用。
+- 紙漉き体験：`ino-papermaking.jpg`。Library of Congress由来の1772年の紙漉き版画 / Public Domain。現代のいの町紙の博物館の実写ではないため、紙漉きイメージとして扱う。
+- 鳴子づくり体験：`yosakoi-naruko.jpg`。Mycomp / Wikimedia Commons / CC BY-SA 3.0。よさこいで使われる鳴子そのものの写真。
