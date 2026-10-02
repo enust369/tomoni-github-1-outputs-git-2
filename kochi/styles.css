@@ -75,7 +75,7 @@ body:has(.page-home) header .nav a:nth-child(n+3):nth-child(-n+10){display:none}
 .home-slider{padding:0}
 
 /* Keep the Karst course collage focused without changing the other three cards. */
-.home-course-media[href="/courses/karst-drive/"] .home-course-main{height:280px;object-position:50% 58%}
+.home-course-media[href="/courses/karst-drive/"]{grid-template-columns:1fr}.home-course-media[href="/courses/karst-drive/"] .home-course-main{height:280px;object-position:50% 50%;border-radius:12px}.home-course-media[href="/courses/karst-drive/"] .home-course-thumbs{display:none}
 .home-course-media[href="/courses/karst-drive/"] .home-course-catchcopy{top:20px;left:20px;max-width:57%;font-size:20px;line-height:1.4}
 .home-course-media[href="/courses/karst-drive/"] .home-course-thumbs img:nth-child(1){object-position:50% 45%}
 .home-course-media[href="/courses/karst-drive/"] .home-course-thumbs img:nth-child(2){object-position:50% 55%}
@@ -674,3 +674,11 @@ body:has(.page-home) .home-slide:first-child .home-slide-content .eyebrow{max-wi
 .spot-info-actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:18px}
 .spot-info-actions .button{border-radius:8px}
 @media(max-width:700px){.spot-description{margin:20px 0 26px}.spot-info-head{margin-top:28px}.spot-facts{grid-template-columns:1fr;gap:9px}.spot-fact,.spot-fact.wide{grid-column:auto;padding:14px 15px}.spot-fact-label{font-size:10px}.spot-fact-value{font-size:13px}.spot-info-actions{display:grid;grid-template-columns:1fr}.spot-info-actions .button{text-align:center;width:100%}}
+
+/* Karst card uses a self-contained 4-panel collage, so no extra thumbnail column. */
+.home-course-media[href="/courses/karst-drive/"]{grid-template-columns:1fr;grid-template-rows:250px}
+.home-course-media[href="/courses/karst-drive/"] .home-course-main{width:100%;height:250px;border-radius:12px;object-position:50% 50%}
+.home-course-media[href="/courses/karst-drive/"] .home-course-thumbs{display:none}
+@media(max-width:900px){.home-course-media[href="/courses/karst-drive/"]{grid-template-rows:210px}.home-course-media[href="/courses/karst-drive/"] .home-course-main{height:210px}}
+@media(max-width:700px){.home-course-media[href="/courses/karst-drive/"]{grid-template-columns:1fr;grid-template-rows:195px}.home-course-media[href="/courses/karst-drive/"] .home-course-main{height:195px;border-radius:11px}.home-course-media[href="/courses/karst-drive/"] .home-course-thumbs{display:none}}
+@media(max-width:420px){.home-course-media[href="/courses/karst-drive/"]{grid-template-rows:168px}.home-course-media[href="/courses/karst-drive/"] .home-course-main{height:168px}}
