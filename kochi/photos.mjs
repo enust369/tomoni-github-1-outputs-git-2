@@ -458,11 +458,15 @@ export const photos={
     "checkedAt": "2026-10-01"
   },
   "tosa-mokumen-factory": {
-    "src": "/assets/photos/hero-forest-adventure.png",
+    "src": "/assets/photos/tosa-mokumen-material.jpg",
     "name": "日本唯一のもくめん工場見学＋クラフト体験",
-    "alt": "高知県産木材とものづくりをイメージした写真",
-    "author": "既存サイト画像", "source": "", "license": "既存サイト資産", "licenseUrl": "",
-    "width": 1456, "height": 1020, "position": "50% 50%", "checkedAt": "2026-10-02"
+    "alt": "緩衝材として使われる木毛（wood wool）のイメージ",
+    "author": "Meanwell Packaging",
+    "source": "https://commons.wikimedia.org/wiki/File:Packaging_a_wine_bottle_with_wood_wool.jpg",
+    "title": "Packaging a wine bottle with wood wool.jpg",
+    "license": "CC BY 2.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by/2.0/",
+    "width": 1600, "height": 1067, "position": "50% 50%", "checkedAt": "2026-10-03"
   },
   "otsuki-squid-fishing": {
     "src": "/assets/photos/uguru-fishing.jpg",
@@ -496,11 +500,15 @@ export const photos={
     "width": 1280, "height": 960, "position": "50% 50%", "checkedAt": "2026-10-02"
   },
   "ikegawa-afternoon-tea": {
-    "src": "/assets/photos/course-niyodo-sup.png",
+    "src": "/assets/photos/ikegawa-area.jpg",
     "name": "仁淀ブルー絶景アフタヌーンティー",
-    "alt": "仁淀川の水辺をイメージした写真",
-    "author": "既存サイト画像", "source": "", "license": "既存サイト資産", "licenseUrl": "",
-    "width": 1456, "height": 1020, "position": "50% 50%", "checkedAt": "2026-10-02"
+    "alt": "仁淀川町・池川地区の町並みと山あいの風景",
+    "author": "Sanjo",
+    "source": "https://commons.wikimedia.org/wiki/File:Ikegawa_Center_Kochi_2023_01.jpg",
+    "title": "Ikegawa Center Kochi 2023 01.jpg",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "width": 1600, "height": 900, "position": "50% 50%", "checkedAt": "2026-10-03"
   },
   "motoyama-vegan-farm": {
     "src": "/assets/photos/field-kochi.jpg",
@@ -520,11 +528,15 @@ export const photos={
     "width": 1456, "height": 1020, "position": "50% 50%", "checkedAt": "2026-10-02"
   },
   "niyodo-water-seitai": {
-    "src": "/assets/photos/course-niyodo-sup.png",
+    "src": "/assets/photos/niyodo-water-seitai-river.jpg",
     "name": "仁淀ブルーを眺めながら水上整体",
-    "alt": "仁淀川の水辺をイメージした写真",
-    "author": "既存サイト画像", "source": "", "license": "既存サイト資産", "licenseUrl": "",
-    "width": 1456, "height": 1020, "position": "50% 50%", "checkedAt": "2026-10-02"
+    "alt": "いの町を流れる仁淀川の実景",
+    "author": "Kuruman",
+    "source": "https://commons.wikimedia.org/wiki/File:Niyodo_River_in_Ino_town,_Kochi_pref_Japan(26470559340).jpg",
+    "title": "Niyodo River in Ino town, Kochi pref Japan(26470559340).jpg",
+    "license": "CC BY 2.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by/2.0/",
+    "width": 1600, "height": 1200, "position": "50% 50%", "checkedAt": "2026-10-03"
   },
   "iwayagawa-irimochi-hike": {
     "src": "/assets/photos/hero-forest-adventure.png",
@@ -720,14 +732,15 @@ export const photos={
     "width": 1280, "height": 960, "position": "50% 50%", "checkedAt": "2026-10-02"
   },
   "kaiyodo-nankoku-workshop": {
-    "src": "/assets/photos/field-kochi.jpg",
+    "src": "/assets/photos/kaiyodo-figure-display.jpg",
     "name": "ものづくり体験（海洋堂Space Factoryなんこく）",
-    "alt": "高知の地域体験をイメージした風景",
-    "author": "Indiana jo",
-    "source": "https://commons.wikimedia.org/wiki/File:Kiiji,_Haratani_village_02.jpg",
-    "license": "CC BY-SA 4.0",
-    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
-    "width": 1280, "height": 960, "position": "50% 50%", "checkedAt": "2026-10-02"
+    "alt": "海洋堂のフィギュア展示イメージ",
+    "author": "LittleT889",
+    "source": "https://commons.wikimedia.org/wiki/File:Kaiyodo_Figure_Museum_Miraiza_Osaka_Castle.jpg",
+    "title": "Kaiyodo Figure Museum Miraiza Osaka Castle.jpg",
+    "license": "CC BY 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by/4.0/",
+    "width": 1600, "height": 1200, "position": "50% 50%", "checkedAt": "2026-10-03"
   },
   "obuchi-kokedama": {
     "src": "/assets/photos/field-kochi.jpg",

@@ -424,3 +424,10 @@ CC BY 2.0/2.5は著作者・出典・ライセンス・変更を表示。写真�
 - `ino-papermaking`：歴史版画から、いの町紙の博物館の実際の外観 `ino-paper-museum.jpg` へ差し替え。At by At / Wikimedia Commons / CC BY-SA 3.0。
 - `ogata-whale`：入野海岸のみの写真から、ニタリクジラの実写 `ogata-whale-brydes.jpg` へ差し替え。Chainfoto / Wikimedia Commons / CC BY 4.0。撮影地はタイ湾のため、高知現地写真ではなく「ニタリクジラのイメージ」として扱う。
 - `bentenza-backstage-experience`：再利用条件を確認できる弁天座実写が見つからなかったため今回は未変更。権利確認できる写真が見つかるまで既存イメージを維持する。
+
+### 写真差し替え実施 第2弾（2026-10-03）
+
+- `niyodo-water-seitai`：汎用SUP画像から、いの町の仁淀川実景 `niyodo-water-seitai-river.jpg` へ差し替え。Kuruman / Wikimedia Commons / CC BY 2.0。
+- `ikegawa-afternoon-tea`：汎用仁淀川画像から、仁淀川町・池川地区の実景 `ikegawa-area.jpg` へ差し替え。Sanjo / Wikimedia Commons / CC BY-SA 4.0。アフタヌーンティーそのものの実写ではない。
+- `tosa-mokumen-factory`：森林アクティビティ画像から、木毛（wood wool）の実物 `tosa-mokumen-material.jpg` へ差し替え。Meanwell Packaging / Wikimedia Commons / CC BY 2.0。戸田商行の工場実写ではない。
+- `kaiyodo-nankoku-workshop`：里山画像から、海洋堂のフィギュア展示 `kaiyodo-figure-display.jpg` へ差し替え。LittleT889 / Wikimedia Commons / CC BY 4.0。大阪の海洋堂施設で撮影された写真のため、Space Factoryなんこくの実写ではなく海洋堂フィギュア展示イメージとして扱う。
