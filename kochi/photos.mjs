@@ -765,14 +765,15 @@ export const photos={
     "width": 1600, "height": 1200, "position": "50% 50%", "checkedAt": "2026-10-03"
   },
   "obuchi-kokedama": {
-    "src": "/assets/photos/field-kochi.jpg",
+    "src": "/assets/photos/obuchi-kokedama.jpg",
     "name": "苔玉づくり体験（おおぶち自然村）",
-    "alt": "高知の里山と緑の風景",
-    "author": "Indiana jo",
-    "source": "https://commons.wikimedia.org/wiki/File:Kiiji,_Haratani_village_02.jpg",
-    "license": "CC BY-SA 4.0",
-    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
-    "width": 1280, "height": 960, "position": "50% 50%", "checkedAt": "2026-10-02"
+    "alt": "苔と植物を球状に仕立てた苔玉のイメージ",
+    "author": "TRIAN FITRIYANI",
+    "source": "https://commons.wikimedia.org/wiki/File:KOKEDAMA.jpg",
+    "title": "KOKEDAMA.jpg",
+    "license": "CC BY 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by/4.0/",
+    "width": 1204, "height": 1600, "position": "50% 50%", "checkedAt": "2026-10-03"
   },
   "tosa-shio-no-michi-walk": {
     "src": "/assets/photos/field-kochi.jpg",
@@ -1042,17 +1043,18 @@ export const photos={
     "checkedAt": "2026-09-21"
   },
   "kuroshio-soba": {
-    "src": "/assets/photos/field-kochi.jpg",
+    "src": "/assets/photos/kuroshio-soba-making.jpg",
     "name": "そば打ち体験（であいの里 蜷川）",
-    "alt": "山里で楽しむ食体験のイメージ",
-    "author": "Indiana jo",
-    "source": "https://commons.wikimedia.org/wiki/File:Kiiji,_Haratani_village_02.jpg",
-    "license": "CC BY-SA 4.0",
-    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
-    "width": 1280,
-    "height": 960,
+    "alt": "そば生地を包丁で細く切るそば打ち工程のイメージ",
+    "author": "Chris 73",
+    "source": "https://commons.wikimedia.org/wiki/File:Preparing_Soba_06_cutting.jpg",
+    "title": "Preparing Soba 06 cutting.jpg",
+    "license": "CC BY-SA 3.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0/",
+    "width": 1600,
+    "height": 1200,
     "position": "50% 50%",
-    "checkedAt": "2026-10-02"
+    "checkedAt": "2026-10-03"
   },
   "hinodeya-konnyaku": {
     "src": "/assets/photos/field-kochi.jpg",
@@ -1120,17 +1122,18 @@ export const photos={
     "checkedAt": "2026-10-02"
   },
   "tosacho-woodwork": {
-    "src": "/assets/photos/field-kochi.jpg",
+    "src": "/assets/photos/tosacho-woodwork.jpg",
     "name": "土佐町 木組み・鍋敷きづくり体験",
-    "alt": "山あいの里山風景のイメージ",
-    "author": "Indiana jo",
-    "source": "https://commons.wikimedia.org/wiki/File:Kiiji,_Haratani_village_02.jpg",
-    "license": "CC BY-SA 4.0",
-    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
-    "width": 1280,
-    "height": 960,
+    "alt": "日本の指物に使われる木組みの接合部のイメージ",
+    "author": "Andy Li",
+    "source": "https://commons.wikimedia.org/wiki/File:Sashimono_joinery_-_The_Craft_of_Carpentry,_Japan_House_London_2025-05-12.jpg",
+    "title": "Sashimono joinery - The Craft of Carpentry, Japan House London 2025-05-12.jpg",
+    "license": "CC0",
+    "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/",
+    "width": 1600,
+    "height": 1204,
     "position": "50% 50%",
-    "checkedAt": "2026-10-02"
+    "checkedAt": "2026-10-03"
   },
   "shimanto-traditional-fishing": {
     "src": "/assets/photos/shimanto-canoe.jpg",

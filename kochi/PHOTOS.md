@@ -474,3 +474,9 @@ CC BY 2.0/2.5は著作者・出典・ライセンス・変更を表示。写真�
 
 - `sakawa-makino-park-guide`：汎用里山画像から、実際の佐川町・牧野公園 `sakawa-makino-park.jpg` へ差し替え。アラツク / Wikimedia Commons / CC BY-SA 4.0。
 - `sakawa-makino-sacred-walk`：汎用里山画像から、実際の佐川町・牧野公園 `sakawa-makino-park.jpg` へ差し替え。アラツク / Wikimedia Commons / CC BY-SA 4.0。南山麓コース全行程の実写ではないが、主要テーマ・開催地域が一致。
+
+### 写真差し替え実施 第10弾（2026-10-03）
+
+- `kuroshio-soba`：汎用里山画像から、そば打ちの実際の工程（そば生地を切る様子）`kuroshio-soba-making.jpg` へ差し替え。Chris 73 / Wikimedia Commons / CC BY-SA 3.0。黒潮町・であいの里蜷川の実写ではなく、そば打ち工程のイメージとして扱う。
+- `obuchi-kokedama`：汎用里山画像から、苔玉の実物 `obuchi-kokedama.jpg` へ差し替え。TRIAN FITRIYANI / Wikimedia Commons / CC BY 4.0。おおぶち自然村の実写ではなく、体験内容を示す苔玉イメージとして扱う。
+- `tosacho-woodwork`：汎用里山画像から、日本の指物の木組み接合 `tosacho-woodwork.jpg` へ差し替え。Andy Li / Wikimedia Commons / CC0。土佐町の実写ではなく、木組み・木工体験の内容イメージとして扱う。
