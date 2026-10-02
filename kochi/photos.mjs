@@ -26,18 +26,17 @@ export const photos={
     "checkedAt": "2026-10-01"
   },
   "ryugado": {
-    "src": "/assets/photos/ryugado.jpg",
+    "src": "/assets/photos/ryugado-caving.png",
     "name": "龍河洞",
-    "alt": "龍河洞の鍾乳石「奥の千本」",
-    "author": "京浜にけ",
-    "source": "https://commons.wikimedia.org/wiki/File:Kami_Kochi_Ryugado_Inside_4.JPG",
-    "title": "Kami Kochi Ryugado Inside 4.JPG",
-    "license": "CC BY-SA 3.0",
-    "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0",
-    "width": 1280,
-    "height": 853,
-    "position": "45% 50%",
-    "checkedAt": "2026-09-21"
+    "alt": "ライトアップされた龍河洞の洞内でヘルメット姿の2人が立つ様子",
+    "author": "ユーザー提供画像",
+    "source": "",
+    "license": "提供画像（サイト掲載用）",
+    "licenseUrl": "",
+    "width": 1672,
+    "height": 941,
+    "position": "50% 50%",
+    "checkedAt": "2026-10-02"
   },
   "nikobuchi": {
     "src": "/assets/photos/nikobuchi.jpg",
