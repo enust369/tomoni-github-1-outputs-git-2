@@ -510,3 +510,10 @@ CC BY 2.0/2.5は著作者・出典・ライセンス・変更を表示。写真�
 
 - `yoshino-headwaters-track-walk`：汎用森林画像から、森林鉄道の廃線跡が分かる `yoshino-headwaters-track-walk.jpg` へ差し替え。ブルーノ・プラス / Wikimedia Commons / CC BY-SA 4.0。吉野川源流域の実写ではないが、「森林軌道跡を歩く」体験内容との一致度を優先。
 - `shimanto-yairocho-walk`：汎用森林画像から、ヤイロチョウ（Pitta nympha）の実物 `shimanto-yairocho-walk.jpg` へ差し替え。Jason Thompson / Wikimedia Commons / CC BY 2.0。四万十町で撮影された個体ではないが、観察対象の鳥そのものが分かる写真として使用。
+
+### 写真差し替え実施 第16弾（2026-10-03）
+
+- `muroto-rockpool`：既存の室戸岬写真とは別カットの実際の室戸岬岩礁海岸 `muroto-rockpool.jpg` へ差し替え。Nobunaga24 / Wikimedia Commons / Public Domain。磯遊びの舞台となる海岸地形が伝わる写真として使用。
+- `muroto-cycle-tour`：室戸岬の静止風景から、海岸沿いサイクリングロード `muroto-cycle-tour.jpg` へ差し替え。水だらけのプール / Wikimedia Commons / CC0。撮影地は福岡県で室戸の実写ではないため、サイクリング体験のイメージとして明記。
+- `asemikawa-ebike`：汎用森林画像から、開催地と同じ本山町の山里実景 `motoyama-vegan-area.jpg` へ差し替え。As6022014 / Wikimedia Commons / Public Domain。汗見川そのものの実写ではないが、地域一致を優先。
+- `iwayagawa-irimochi-hike`：汎用森林画像から、同じ仁淀川町にある中津渓谷 `nakatsu.jpg` へ差し替え。Koda6029 / Wikimedia Commons / CC BY-SA 4.0。岩屋川渓谷そのものではないため、仁淀川町の渓谷イメージとして扱う。

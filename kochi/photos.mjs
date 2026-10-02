@@ -527,11 +527,15 @@ export const photos={
     "width": 1600, "height": 1200, "position": "50% 50%", "checkedAt": "2026-10-03"
   },
   "asemikawa-ebike": {
-    "src": "/assets/photos/hero-forest-adventure.png",
+    "src": "/assets/photos/motoyama-vegan-area.jpg",
     "name": "汗見川 清流E-bikeサイクリング",
-    "alt": "高知の山あいを巡るサイクリングのイメージ",
-    "author": "既存サイト画像", "source": "", "license": "既存サイト資産", "licenseUrl": "",
-    "width": 1456, "height": 1020, "position": "50% 50%", "checkedAt": "2026-10-02"
+    "alt": "汗見川エリアのある高知県本山町の山里風景",
+    "author": "As6022014",
+    "source": "https://commons.wikimedia.org/wiki/File:Mt.Shiragayama-Motoyama.jpg",
+    "title": "Mt.Shiragayama-Motoyama.jpg",
+    "license": "Public Domain",
+    "licenseUrl": "https://creativecommons.org/publicdomain/mark/1.0/",
+    "width": 1600, "height": 1200, "position": "50% 50%", "checkedAt": "2026-10-03"
   },
   "niyodo-water-seitai": {
     "src": "/assets/photos/niyodo-water-seitai-river.jpg",
@@ -545,11 +549,15 @@ export const photos={
     "width": 1600, "height": 1200, "position": "50% 50%", "checkedAt": "2026-10-03"
   },
   "iwayagawa-irimochi-hike": {
-    "src": "/assets/photos/hero-forest-adventure.png",
+    "src": "/assets/photos/nakatsu.jpg",
     "name": "岩屋川渓谷ハイキング＋郷土茶菓いりもち",
-    "alt": "高知の渓谷ハイキングをイメージした写真",
-    "author": "既存サイト画像", "source": "", "license": "既存サイト資産", "licenseUrl": "",
-    "width": 1456, "height": 1020, "position": "50% 50%", "checkedAt": "2026-10-02"
+    "alt": "仁淀川町の渓谷地形をイメージした中津渓谷の清流と岩場",
+    "author": "Koda6029",
+    "source": "https://commons.wikimedia.org/wiki/File:%E4%B8%AD%E6%B4%A5%E6%B8%93%E8%B0%B7%EF%BC%92.jpg",
+    "title": "中津渓谷２.jpg",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+    "width": 1280, "height": 853, "position": "50% 50%", "checkedAt": "2026-10-03"
   },
   "shimanto-fisher-firefly": {
     "src": "/assets/photos/shimanto-canoe.jpg",
@@ -1236,32 +1244,32 @@ export const photos={
     "checkedAt": "2026-10-03"
   },
   "muroto-rockpool": {
-    "src": "/assets/photos/muroto.jpg",
+    "src": "/assets/photos/muroto-rockpool.jpg",
     "name": "室戸世界ジオパーク 磯遊び体験",
-    "alt": "室戸岬の岩礁と海",
-    "author": "Rsa",
-    "source": "https://commons.wikimedia.org/wiki/File:Cape-Muroto-20100526.jpg",
-    "title": "Cape-Muroto-20100526.jpg",
-    "license": "CC BY-SA 3.0",
-    "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0/",
-    "width": 1280,
-    "height": 960,
+    "alt": "室戸岬の岩礁海岸の実景",
+    "author": "Nobunaga24",
+    "source": "https://commons.wikimedia.org/wiki/File:Muroto_Cape.JPG",
+    "title": "Muroto Cape.JPG",
+    "license": "Public Domain",
+    "licenseUrl": "https://creativecommons.org/publicdomain/mark/1.0/",
+    "width": 1600,
+    "height": 1200,
     "position": "50% 50%",
-    "checkedAt": "2026-10-02"
+    "checkedAt": "2026-10-03"
   },
   "muroto-cycle-tour": {
-    "src": "/assets/photos/muroto.jpg",
+    "src": "/assets/photos/muroto-cycle-tour.jpg",
     "name": "室戸世界ジオパーク サイクリングツアー",
-    "alt": "室戸岬の海岸沿いをめぐるイメージ",
-    "author": "Rsa",
-    "source": "https://commons.wikimedia.org/wiki/File:Cape-Muroto-20100526.jpg",
-    "title": "Cape-Muroto-20100526.jpg",
-    "license": "CC BY-SA 3.0",
-    "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0/",
-    "width": 1280,
-    "height": 960,
+    "alt": "海岸沿いのサイクリングロードのイメージ",
+    "author": "水だらけのプール",
+    "source": "https://commons.wikimedia.org/wiki/File:Sanri_Matsubara_Coast_and_Cycling_Road.jpg",
+    "title": "Sanri Matsubara Coast and Cycling Road.jpg",
+    "license": "CC0",
+    "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/",
+    "width": 1600,
+    "height": 897,
     "position": "50% 50%",
-    "checkedAt": "2026-10-02"
+    "checkedAt": "2026-10-03"
   },
   "muroto": {
     "src": "/assets/photos/muroto.jpg",
