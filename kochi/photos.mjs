@@ -945,24 +945,26 @@ export const photos={
     "width": 960, "height": 1280, "position": "50% 50%", "checkedAt": "2026-10-02"
   },
   "sakawa-makino-park-guide": {
-    "src": "/assets/photos/field-kochi.jpg",
+    "src": "/assets/photos/sakawa-makino-park.jpg",
     "name": "牧野公園ガイド",
-    "alt": "高知の山里と緑の風景のイメージ",
-    "author": "Indiana jo",
-    "source": "https://commons.wikimedia.org/wiki/File:Kiiji,_Haratani_village_02.jpg",
+    "alt": "高知県佐川町・牧野公園の桜と町並みの実景",
+    "author": "アラツク",
+    "source": "https://commons.wikimedia.org/wiki/File:Makino_park_Sakura.JPG",
+    "title": "Makino park Sakura.JPG",
     "license": "CC BY-SA 4.0",
     "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
-    "width": 1280, "height": 960, "position": "50% 50%", "checkedAt": "2026-10-02"
+    "width": 1600, "height": 900, "position": "50% 50%", "checkedAt": "2026-10-03"
   },
   "sakawa-makino-sacred-walk": {
-    "src": "/assets/photos/field-kochi.jpg",
+    "src": "/assets/photos/sakawa-makino-park.jpg",
     "name": "牧野博士の聖地を歩く（南山麓コース）",
-    "alt": "高知の里山ウォーキングのイメージ",
-    "author": "Indiana jo",
-    "source": "https://commons.wikimedia.org/wiki/File:Kiiji,_Haratani_village_02.jpg",
+    "alt": "高知県佐川町・牧野公園の桜と町並みの実景",
+    "author": "アラツク",
+    "source": "https://commons.wikimedia.org/wiki/File:Makino_park_Sakura.JPG",
+    "title": "Makino park Sakura.JPG",
     "license": "CC BY-SA 4.0",
     "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
-    "width": 1280, "height": 960, "position": "50% 50%", "checkedAt": "2026-10-02"
+    "width": 1600, "height": 900, "position": "50% 50%", "checkedAt": "2026-10-03"
   },
   "katsurahama-guide": {
     "src": "/assets/photos/sakamoto-ryoma-memorial-museum.png",

@@ -469,3 +469,8 @@ CC BY 2.0/2.5は著作者・出典・ライセンス・変更を表示。写真�
 
 - `umaji-yuzu-forest-ebike`：汎用里山画像から、実際の馬路村・馬路森林鉄道 馬路温泉前駅 `umaji-forest-railway.jpg` へ差し替え。221.20 / Wikimedia Commons / Public Domain。E-bike走行中の実写ではないが、ツアー主要テーマの森林鉄道と開催地域が一致。
 - `kiriyama-roasting-teacan`、`tosayama-haiku`、`obuchi-kokedama` は、今回は内容・開催地・権利条件を同時に満たす写真が不足しているため未変更。
+
+### 写真差し替え実施 第9弾（2026-10-03）
+
+- `sakawa-makino-park-guide`：汎用里山画像から、実際の佐川町・牧野公園 `sakawa-makino-park.jpg` へ差し替え。アラツク / Wikimedia Commons / CC BY-SA 4.0。
+- `sakawa-makino-sacred-walk`：汎用里山画像から、実際の佐川町・牧野公園 `sakawa-makino-park.jpg` へ差し替え。アラツク / Wikimedia Commons / CC BY-SA 4.0。南山麓コース全行程の実写ではないが、主要テーマ・開催地域が一致。
