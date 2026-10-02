@@ -296,3 +296,9 @@ CC BY 2.0/2.5は著作者・出典・ライセンス・変更を表示。写真�
 - 牧野博士の聖地を歩く（南山麓コース）：既存の `field-kochi.jpg` を里山ウォーキングのイメージとして使用。実際のコース写真ではない。
 - 桂浜散策ガイド：既存サイト資産 `sakamoto-ryoma-memorial-museum.png` を桂浜エリアのイメージとして使用。ガイド中の実写ではない。
 - まきのガイドウォーク：既存サイト資産 `makino-botanical-garden.png` を牧野植物園のイメージとして使用。
+
+### 体験ページ追加 第11弾（2026-10-02）
+
+- 草木染め体験（四万十かわらっこ）：既存の `shimanto-canoe.jpg` を四万十川流域の自然イメージとして使用。Cherrysherbet / Wikimedia Commons / CC BY-SA 3.0。草木染め中の実写ではない。
+- 農家民宿くろうさぎ 田舎暮らし体験：既存の `field-kochi.jpg` を山里・農村のイメージとして使用。Indiana jo / Wikimedia Commons / CC BY-SA 4.0。三原村・宿の実写ではない。
+- わら馬作り体験（すさきまちかどギャラリー）：既存の `yosakoi-naruko.jpg` を高知の伝統文化・手仕事イメージとして使用。Mycomp / Wikimedia Commons / CC BY-SA 3.0。わら馬の実写ではない。

@@ -456,6 +456,36 @@ export const photos={
     "position": "50% 46%",
     "checkedAt": "2026-10-01"
   },
+  "shimanto-botanical-dye": {
+    "src": "/assets/photos/shimanto-canoe.jpg",
+    "name": "草木染め体験（四万十かわらっこ）",
+    "alt": "四万十川の自然を感じる風景",
+    "author": "Cherrysherbet",
+    "source": "https://commons.wikimedia.org/wiki/File:Nishitosa_Shimanto_river.jpg",
+    "license": "CC BY-SA 3.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0/",
+    "width": 604, "height": 453, "position": "50% 50%", "checkedAt": "2026-10-02"
+  },
+  "mihara-rural-stay": {
+    "src": "/assets/photos/field-kochi.jpg",
+    "name": "農家民宿くろうさぎ 田舎暮らし体験",
+    "alt": "高知の山里と農村風景のイメージ",
+    "author": "Indiana jo",
+    "source": "https://commons.wikimedia.org/wiki/File:Kiiji,_Haratani_village_02.jpg",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "width": 1280, "height": 960, "position": "50% 50%", "checkedAt": "2026-10-02"
+  },
+  "susaki-warauma": {
+    "src": "/assets/photos/yosakoi-naruko.jpg",
+    "name": "わら馬作り体験（すさきまちかどギャラリー）",
+    "alt": "高知の伝統文化・手仕事のイメージ",
+    "author": "Mycomp",
+    "source": "https://commons.wikimedia.org/wiki/File:Naruko_(bird_rattles).JPG",
+    "license": "CC BY-SA 3.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0/",
+    "width": 960, "height": 1280, "position": "50% 50%", "checkedAt": "2026-10-02"
+  },
   "sakawa-makino-park-guide": {
     "src": "/assets/photos/field-kochi.jpg",
     "name": "牧野公園ガイド",
