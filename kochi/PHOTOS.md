@@ -562,3 +562,8 @@ CC BY 2.0/2.5は著作者・出典・ライセンス・変更を表示。写真�
 ### 写真差し替え実施 第24弾（2026-10-03）
 
 - `uranouchi-akame-fishing`：仁淀川の汎用釣り画像から、対象魚そのもののアカメ（Lates japonicus）実物 `uranouchi-akame-fishing.jpg` へ差し替え。Σ64 / Wikimedia Commons / CC BY 4.0。浦ノ内湾で撮影された個体ではないが、体験の主対象が明確に伝わる写真として使用。
+
+### 写真差し替え実施 第25弾（2026-10-03）
+
+- `otsuki-glassboat-yubari`：柏島全景の共通画像から、柏島の別カット実景 `otsuki-glassboat-yubari.jpg` へ差し替え。Reggaeman / Wikimedia Commons / CC BY-SA 3.0。グラスボートの実船ではないが、体験地の透明な海が分かる写真として使用。
+- `kashiwajima-diving-aquas`：柏島全景の共通画像から、柏島の別カット実景 `kashiwajima-diving-aquas.jpg` へ差し替え。Reggaeman / Wikimedia Commons / CC BY-SA 3.0。ダイビングそのものは写っていないが、体験地の海を優先。

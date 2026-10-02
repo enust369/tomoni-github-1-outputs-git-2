@@ -932,14 +932,15 @@ export const photos={
     "width": 1600, "height": 1062, "position": "50% 50%", "checkedAt": "2026-10-03"
   },
   "otsuki-glassboat-yubari": {
-    "src": "/assets/photos/kashiwajima.jpg",
+    "src": "/assets/photos/otsuki-glassboat-yubari.jpg",
     "name": "グラスボートゆうばり",
-    "alt": "柏島の集落と青い海を見渡す全景",
-    "author": "Saigen Jiro",
-    "source": "https://commons.wikimedia.org/wiki/File:Kashiwajima_(Otsuki),_zenkei-1.jpg",
-    "license": "CC0",
-    "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/deed.en",
-    "width": 1280, "height": 851, "position": "50% 50%", "checkedAt": "2026-10-02"
+    "alt": "柏島の海岸と透明度の高い海の実景",
+    "author": "Reggaeman",
+    "source": "https://commons.wikimedia.org/wiki/File:Kashiwajima_02.jpg",
+    "title": "Kashiwajima 02.jpg",
+    "license": "CC BY-SA 3.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0/",
+    "width": 1600, "height": 1057, "position": "50% 50%", "checkedAt": "2026-10-03"
   },
   "tosa-kokubunji-culture": {
     "src": "/assets/photos/chikurinji.png",
@@ -1061,17 +1062,18 @@ export const photos={
     "width": 1456, "height": 816, "position": "50% 50%", "checkedAt": "2026-10-02"
   },
   "kashiwajima-diving-aquas": {
-    "src": "/assets/photos/kashiwajima.jpg",
+    "src": "/assets/photos/kashiwajima-diving-aquas.jpg",
     "name": "柏島 体験ダイビング（AQUAS）",
-    "alt": "柏島の集落と青い海を見渡す全景",
-    "author": "Saigen Jiro",
-    "source": "https://commons.wikimedia.org/wiki/File:Kashiwajima_(Otsuki),_zenkei-1.jpg",
-    "license": "CC0",
-    "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/deed.en",
-    "width": 1280,
-    "height": 851,
+    "alt": "柏島の海岸と青い海の実景",
+    "author": "Reggaeman",
+    "source": "https://commons.wikimedia.org/wiki/File:Kashiwajima_01.jpg",
+    "title": "Kashiwajima 01.jpg",
+    "license": "CC BY-SA 3.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0/",
+    "width": 1600,
+    "height": 1062,
     "position": "50% 50%",
-    "checkedAt": "2026-10-02"
+    "checkedAt": "2026-10-03"
   },
   "kashiwajima": {
     "src": "/assets/photos/kashiwajima.jpg",
