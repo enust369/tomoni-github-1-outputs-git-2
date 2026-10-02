@@ -1160,17 +1160,18 @@ export const photos={
     "checkedAt": "2026-10-03"
   },
   "qraud-papermaking": {
-    "src": "/assets/photos/ino-papermaking.jpg",
+    "src": "/assets/photos/qraud-papermaking.jpg",
     "name": "紙漉き体験（土佐和紙工芸村「くらうど」）",
-    "alt": "紙漉きの工程を描いた歴史資料",
-    "author": "Library of Congress",
-    "source": "https://www.loc.gov/pictures/item/2008660729/",
+    "alt": "土佐和紙工芸村くらうどの施設実景",
+    "author": "As6022014",
+    "source": "https://commons.wikimedia.org/wiki/File:Roadside_Station_Tosa_washi_kogeimura.jpg",
+    "title": "Roadside Station Tosa washi kogeimura.jpg",
     "license": "Public Domain",
-    "licenseUrl": "",
-    "width": 1280,
-    "height": 1056,
+    "licenseUrl": "https://creativecommons.org/publicdomain/mark/1.0/",
+    "width": 1600,
+    "height": 1200,
     "position": "50% 50%",
-    "checkedAt": "2026-10-02"
+    "checkedAt": "2026-10-03"
   },
   "soltive-salt": {
     "src": "/assets/photos/irino-surf.jpg",

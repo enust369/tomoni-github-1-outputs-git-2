@@ -567,3 +567,7 @@ CC BY 2.0/2.5は著作者・出典・ライセンス・変更を表示。写真�
 
 - `otsuki-glassboat-yubari`：柏島全景の共通画像から、柏島の別カット実景 `otsuki-glassboat-yubari.jpg` へ差し替え。Reggaeman / Wikimedia Commons / CC BY-SA 3.0。グラスボートの実船ではないが、体験地の透明な海が分かる写真として使用。
 - `kashiwajima-diving-aquas`：柏島全景の共通画像から、柏島の別カット実景 `kashiwajima-diving-aquas.jpg` へ差し替え。Reggaeman / Wikimedia Commons / CC BY-SA 3.0。ダイビングそのものは写っていないが、体験地の海を優先。
+
+### 写真差し替え実施 第26弾（2026-10-03）
+
+- `qraud-papermaking`：歴史資料の紙漉き画像から、実際の土佐和紙工芸村「くらうど」施設実景 `qraud-papermaking.jpg` へ差し替え。As6022014 / Wikimedia Commons / Public Domain。体験場所そのものが分かる写真として使用。
