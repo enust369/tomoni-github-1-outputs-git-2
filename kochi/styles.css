@@ -747,3 +747,15 @@ body:has(.page-home) .home-slide:first-child .home-slide-content .eyebrow{max-wi
     object-position:50% 14%;
   }
 }
+
+/* Mobile: keep the paraglider clearly visible in the Sky & Niyodo Blue main photo. */
+@media(max-width:700px){
+  .home-course-media[href="/courses/niyodo-classic/"] .home-course-main{
+    object-position:50% 12%;
+  }
+}
+@media(max-width:420px){
+  .home-course-media[href="/courses/niyodo-classic/"] .home-course-main{
+    object-position:50% 8%;
+  }
+}
