@@ -309,3 +309,10 @@ CC BY 2.0/2.5は著作者・出典・ライセンス・変更を表示。写真�
 - 足摺秘境ガイド：既存の `ashizuri.jpg` を足摺岬の実景として使用。遊覧船・巨石群ガイド中の実写ではない。
 - 三原村 スローサイクリング（今ちゃん出発）：既存の `field-kochi.jpg` を田園・山里イメージとして使用。Indiana jo / Wikimedia Commons / CC BY-SA 4.0。三原村の実写ではない。
 - 足摺半島ぐるっと一周 E-bikeガイドツアー：既存の `ashizuri.jpg` を足摺半島の実景として使用。サイクリング中の実写ではない。
+
+### 体験・アクティビティ追加 第13弾（2026-10-02）
+
+- 四万十天文台 天体観望会：既存の `course-classic-camping.png` を夜のアウトドアイメージとして使用。天文台の実写ではない。
+- 竜串観光汽船 グラスボート：既存の `tatsukushi-fishing.jpg` を竜串海岸の実景として再利用。Reggaeman / Wikimedia Commons / CC BY-SA 3.0。グラスボート実写ではない。
+- 見残し奇岩パークツアー＋グラスボート：同じく `tatsukushi-fishing.jpg` を竜串海岸の実景として使用。
+- グラスボートゆうばり：既存の `kashiwajima.jpg` を柏島エリアの実景として再利用。Saigen Jiro / Wikimedia Commons / CC0。グラスボート実写ではない。

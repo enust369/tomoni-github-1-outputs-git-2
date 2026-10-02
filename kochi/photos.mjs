@@ -456,6 +456,46 @@ export const photos={
     "position": "50% 46%",
     "checkedAt": "2026-10-01"
   },
+  "shimanto-observatory": {
+    "src": "/assets/photos/course-classic-camping.png",
+    "name": "星空の街で天体観望会（四万十天文台）",
+    "alt": "高知の夜のアウトドアをイメージした風景",
+    "author": "既存サイト画像",
+    "source": "",
+    "license": "既存サイト資産",
+    "licenseUrl": "",
+    "width": 1456, "height": 1020, "position": "50% 50%", "checkedAt": "2026-10-02"
+  },
+  "tatsukushi-glassboat": {
+    "src": "/assets/photos/tatsukushi-fishing.jpg",
+    "name": "竜串観光汽船 グラスボート",
+    "alt": "土佐清水市の竜串海岸",
+    "author": "Reggaeman",
+    "source": "https://commons.wikimedia.org/wiki/File:Tatsukushi_05.JPG",
+    "license": "CC BY-SA 3.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0/",
+    "width": 1280, "height": 850, "position": "50% 50%", "checkedAt": "2026-10-02"
+  },
+  "tatsukushi-minokoshi-tour": {
+    "src": "/assets/photos/tatsukushi-fishing.jpg",
+    "name": "見残し奇岩パークツアー＋グラスボート",
+    "alt": "土佐清水市の竜串海岸",
+    "author": "Reggaeman",
+    "source": "https://commons.wikimedia.org/wiki/File:Tatsukushi_05.JPG",
+    "license": "CC BY-SA 3.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0/",
+    "width": 1280, "height": 850, "position": "50% 50%", "checkedAt": "2026-10-02"
+  },
+  "otsuki-glassboat-yubari": {
+    "src": "/assets/photos/kashiwajima.jpg",
+    "name": "グラスボートゆうばり",
+    "alt": "柏島の集落と青い海を見渡す全景",
+    "author": "Saigen Jiro",
+    "source": "https://commons.wikimedia.org/wiki/File:Kashiwajima_(Otsuki),_zenkei-1.jpg",
+    "license": "CC0",
+    "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/deed.en",
+    "width": 1280, "height": 851, "position": "50% 50%", "checkedAt": "2026-10-02"
+  },
   "tosa-kokubunji-culture": {
     "src": "/assets/photos/chikurinji.png",
     "name": "土佐国分寺 日本文化・瞑想体験",
