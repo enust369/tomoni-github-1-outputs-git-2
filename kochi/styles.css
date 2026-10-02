@@ -682,3 +682,14 @@ body:has(.page-home) .home-slide:first-child .home-slide-content .eyebrow{max-wi
 @media(max-width:900px){.home-course-media[href="/courses/karst-drive/"]{grid-template-rows:210px}.home-course-media[href="/courses/karst-drive/"] .home-course-main{height:210px}}
 @media(max-width:700px){.home-course-media[href="/courses/karst-drive/"]{grid-template-columns:1fr;grid-template-rows:195px}.home-course-media[href="/courses/karst-drive/"] .home-course-main{height:195px;border-radius:11px}.home-course-media[href="/courses/karst-drive/"] .home-course-thumbs{display:none}}
 @media(max-width:420px){.home-course-media[href="/courses/karst-drive/"]{grid-template-rows:168px}.home-course-media[href="/courses/karst-drive/"] .home-course-main{height:168px}}
+
+/* Karst recommended-course card: large photo on top, three thumbnails below. */
+.home-course-media[href="/courses/karst-drive/"]{grid-template-columns:1fr;grid-template-rows:180px 64px;gap:5px}
+.home-course-media[href="/courses/karst-drive/"] .home-course-main{width:100%;height:180px;border-radius:12px 12px 4px 4px;object-position:50% 50%}
+.home-course-media[href="/courses/karst-drive/"] .home-course-thumbs{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));grid-template-rows:64px;height:64px;gap:5px}
+.home-course-media[href="/courses/karst-drive/"] .home-course-thumbs img{width:100%;height:64px;min-height:64px;border-radius:4px;object-fit:cover}
+.home-course-media[href="/courses/karst-drive/"] .home-course-thumbs img:first-child{border-radius:4px 4px 4px 12px}
+.home-course-media[href="/courses/karst-drive/"] .home-course-thumbs img:last-child{border-radius:4px 4px 12px 4px}
+@media(max-width:900px){.home-course-media[href="/courses/karst-drive/"]{grid-template-rows:150px 55px}.home-course-media[href="/courses/karst-drive/"] .home-course-main{height:150px}.home-course-media[href="/courses/karst-drive/"] .home-course-thumbs{grid-template-rows:55px;height:55px}.home-course-media[href="/courses/karst-drive/"] .home-course-thumbs img{height:55px;min-height:55px}}
+@media(max-width:700px){.home-course-media[href="/courses/karst-drive/"]{grid-template-columns:1fr;grid-template-rows:145px 58px}.home-course-media[href="/courses/karst-drive/"] .home-course-main{height:145px;border-radius:11px 11px 3px 3px}.home-course-media[href="/courses/karst-drive/"] .home-course-thumbs{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));grid-template-rows:58px;height:58px}.home-course-media[href="/courses/karst-drive/"] .home-course-thumbs img{height:58px;min-height:58px}}
+@media(max-width:420px){.home-course-media[href="/courses/karst-drive/"]{grid-template-rows:132px 54px}.home-course-media[href="/courses/karst-drive/"] .home-course-main{height:132px}.home-course-media[href="/courses/karst-drive/"] .home-course-thumbs{grid-template-rows:54px;height:54px}.home-course-media[href="/courses/karst-drive/"] .home-course-thumbs img{height:54px;min-height:54px}}
