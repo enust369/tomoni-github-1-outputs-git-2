@@ -216,7 +216,7 @@ export const photos={
     "checkedAt": "2026-09-21"
   },
   "karst": {
-    "src": "/assets/photos/shikoku-karst-v2.png",
+    "src": "/assets/photos/shikoku-karst-web.jpg",
     "name": "四国カルスト",
     "alt": "風車と石灰岩が広がる四国カルストの高原風景",
     "author": "ユーザー提供画像を加工",
