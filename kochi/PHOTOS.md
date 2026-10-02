@@ -250,3 +250,11 @@ CC BY 2.0/2.5は著作者・出典・ライセンス・変更を表示。写真�
 - 鵜来島シュノーケル：既存の `uguru-fishing.jpg` を鵜来島の海イメージとして再利用。ブルーノ・プラス / Wikimedia Commons / CC BY 4.0。
 - 刃物鍛造体験：`sakoda-knife.jpg`。Tim Lively / Wikimedia Commons / CC BY-SA 3.0。迫田打刃物の実写ではなく鍛造刃物イメージとして扱う。
 - 内原野陶芸・ガラス体験：`uchiharano-pottery.jpg`。Eman abdelkader12 / Wikimedia Commons / CC BY-SA 4.0。内原野陶芸館の実写ではなく陶芸体験イメージとして扱う。
+
+### 体験ページ追加 第4弾（2026-10-02）
+
+- TOSACO TAP STAND・醸造所：施設公式写真は転載条件未確認のため専用写真未設定。
+- 井上ワイナリー のいち醸造所：施設公式写真は転載条件未確認のため専用写真未設定。
+- 高木酒造 酒蔵見学：施設公式写真は転載条件未確認のため専用写真未設定。
+- こうち旅広場 レンタサイクル：既存サイト資産 `course-classic-bridge.png` を高知市街サイクリングのイメージとして使用。
+- 龍馬の生まれたまち歩き〜土佐っ歩〜：既存サイト資産 `sakamoto-ryoma-memorial-museum.png` を龍馬ゆかりの高知を歩くイメージとして使用。

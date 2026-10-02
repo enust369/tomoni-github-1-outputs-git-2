@@ -92,6 +92,32 @@ export const photos={
     "position": "50% 50%",
     "checkedAt": "2026-10-02"
   },
+  "tosa-terrace-cycle": {
+    "src": "/assets/photos/course-classic-bridge.png",
+    "name": "こうち旅広場 レンタサイクル",
+    "alt": "高知市街を自転車でめぐるイメージ",
+    "author": "既存サイト画像",
+    "source": "",
+    "license": "既存サイト資産",
+    "licenseUrl": "",
+    "width": 511,
+    "height": 342,
+    "position": "50% 50%",
+    "checkedAt": "2026-10-02"
+  },
+  "tosappo-ryoma-walk": {
+    "src": "/assets/photos/sakamoto-ryoma-memorial-museum.png",
+    "name": "龍馬の生まれたまち歩き〜土佐っ歩〜",
+    "alt": "坂本龍馬ゆかりの高知を歩くイメージ",
+    "author": "既存サイト画像",
+    "source": "",
+    "license": "既存サイト資産",
+    "licenseUrl": "",
+    "width": 768,
+    "height": 512,
+    "position": "50% 50%",
+    "checkedAt": "2026-10-02"
+  },
   "yoshinogawa-rafting": {
     "src": "/assets/photos/hero-rafting.png",
     "name": "吉野川ラフティング体験（You Me Rafting）",
