@@ -558,3 +558,7 @@ CC BY 2.0/2.5は著作者・出典・ライセンス・変更を表示。写真�
 
 - `uguru-snorkel`：釣り体験と共用していた鵜来島写真から、別カットの鵜来島海岸実景 `uguru-snorkel.jpg` へ差し替え。ブルーノ・プラス / Wikimedia Commons / CC BY 4.0。シュノーケルの舞台となる海の透明感が分かる写真として使用。
 - `kuroshio-earthing-stay`：入野海岸の共通画像から、別カットの実際の入野海岸 `kuroshio-earthing-stay.jpg` へ差し替え。Dokudami / Wikimedia Commons / CC BY-SA 4.0。体験地と一致。
+
+### 写真差し替え実施 第24弾（2026-10-03）
+
+- `uranouchi-akame-fishing`：仁淀川の汎用釣り画像から、対象魚そのもののアカメ（Lates japonicus）実物 `uranouchi-akame-fishing.jpg` へ差し替え。Σ64 / Wikimedia Commons / CC BY 4.0。浦ノ内湾で撮影された個体ではないが、体験の主対象が明確に伝わる写真として使用。

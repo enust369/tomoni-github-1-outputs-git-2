@@ -667,11 +667,15 @@ export const photos={
     "width": 1600, "height": 1200, "position": "50% 50%", "checkedAt": "2026-10-03"
   },
   "uranouchi-akame-fishing": {
-    "src": "/assets/photos/niyodo-fishing.jpg",
+    "src": "/assets/photos/uranouchi-akame-fishing.jpg",
     "name": "浦ノ内湾 アカメ釣り体験",
-    "alt": "高知の釣り体験をイメージした写真",
-    "author": "既存サイト画像", "source": "", "license": "既存サイト資産", "licenseUrl": "",
-    "width": 1280, "height": 853, "position": "50% 50%", "checkedAt": "2026-10-02"
+    "alt": "日本三大怪魚の一つアカメ（Lates japonicus）の実物写真",
+    "author": "Σ64",
+    "source": "https://commons.wikimedia.org/wiki/File:Lates_japonicus_01.jpg",
+    "title": "Lates japonicus 01.jpg",
+    "license": "CC BY 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by/4.0/",
+    "width": 1600, "height": 1066, "position": "50% 50%", "checkedAt": "2026-10-03"
   },
   "gomen-nahari-fruit-train": {
     "src": "/assets/photos/gomen-nahari-train.jpg",
