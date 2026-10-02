@@ -701,3 +701,11 @@ body:has(.page-home) .home-slide:first-child .home-slide-content .eyebrow{max-wi
 @media(max-width:900px){.home-course-media[href="/courses/niyodo-classic/"]{grid-template-rows:210px}.home-course-media[href="/courses/niyodo-classic/"] .home-course-main{height:210px}}
 @media(max-width:700px){.home-course-media[href="/courses/niyodo-classic/"]{grid-template-columns:1fr;grid-template-rows:195px}.home-course-media[href="/courses/niyodo-classic/"] .home-course-main{height:195px;border-radius:11px}.home-course-media[href="/courses/niyodo-classic/"] .home-course-thumbs{display:none}}
 @media(max-width:420px){.home-course-media[href="/courses/niyodo-classic/"]{grid-template-rows:168px}.home-course-media[href="/courses/niyodo-classic/"] .home-course-main{height:168px}}
+
+/* Ocean trip uses one self-contained collage image. */
+.home-course-media[href="/courses/ocean-trip/"]{grid-template-columns:1fr;grid-template-rows:250px}
+.home-course-media[href="/courses/ocean-trip/"] .home-course-main{width:100%;height:250px;border-radius:12px;object-position:50% 50%}
+.home-course-media[href="/courses/ocean-trip/"] .home-course-thumbs{display:none}
+@media(max-width:900px){.home-course-media[href="/courses/ocean-trip/"]{grid-template-rows:210px}.home-course-media[href="/courses/ocean-trip/"] .home-course-main{height:210px}}
+@media(max-width:700px){.home-course-media[href="/courses/ocean-trip/"]{grid-template-columns:1fr;grid-template-rows:195px}.home-course-media[href="/courses/ocean-trip/"] .home-course-main{height:195px;border-radius:11px}.home-course-media[href="/courses/ocean-trip/"] .home-course-thumbs{display:none}}
+@media(max-width:420px){.home-course-media[href="/courses/ocean-trip/"]{grid-template-rows:168px}.home-course-media[href="/courses/ocean-trip/"] .home-course-main{height:168px}}
