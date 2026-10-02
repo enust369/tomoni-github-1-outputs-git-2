@@ -445,3 +445,9 @@ CC BY 2.0/2.5は著作者・出典・ライセンス・変更を表示。写真�
 - `sakawa-black-tea-tasting`：汎用里山画像から、佐川町の虚空蔵山周辺と田園風景 `sakawa-black-tea-area.jpg` へ差し替え。Navian / Wikimedia Commons / Public Domain。紅茶農園・テイスティングそのものの実写ではないが、実際の佐川町の風景。
 - `motoyama-vegan-farm`：汎用里山画像から、本山町の白髪山と棚田が写る `motoyama-vegan-area.jpg` へ差し替え。As6022014 / Wikimedia Commons / Public Domain。農園・料理そのものの実写ではないが、実際の本山町の山里風景。
 - `asemikawa-ebike` と `iwayagawa-irimochi-hike` は、場所一致と再利用条件を両方確認できる適切な写真がまだ不足しているため今回は未変更。
+
+### 写真差し替え実施 第5弾（2026-10-03）
+
+- `mihara-slow-cycling`：汎用里山画像から、実際の三原村・星ヶ丘公園 `mihara-hoshigaoka.jpg` へ差し替え。Lumi iori / Wikimedia Commons / CC BY-SA 4.0。サイクリング中の実写ではないが、開催地域の実景。
+- `mihara-rural-stay`：汎用里山画像から、実際の三原村・星ヶ丘公園 `mihara-hoshigaoka.jpg` へ差し替え。Lumi iori / Wikimedia Commons / CC BY-SA 4.0。農家民宿そのものの実写ではないが、開催地域の実景。
+- `asemikawa-ebike`、`iwayagawa-irimochi-hike`、`shimanto-yairocho-walk`、`yoshino-headwaters-track-walk` は、現地写真は確認できたものの転載・再利用条件まで確定できないものが中心だったため今回は未変更。

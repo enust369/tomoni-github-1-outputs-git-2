@@ -885,14 +885,15 @@ export const photos={
     "width": 1280, "height": 853, "position": "50% 50%", "checkedAt": "2026-10-02"
   },
   "mihara-slow-cycling": {
-    "src": "/assets/photos/field-kochi.jpg",
+    "src": "/assets/photos/mihara-hoshigaoka.jpg",
     "name": "三原村 スローサイクリング（今ちゃん出発）",
-    "alt": "高知の田園と山里の風景イメージ",
-    "author": "Indiana jo",
-    "source": "https://commons.wikimedia.org/wiki/File:Kiiji,_Haratani_village_02.jpg",
+    "alt": "高知県三原村・星ヶ丘公園の池と緑の実景",
+    "author": "Lumi iori",
+    "source": "https://commons.wikimedia.org/wiki/File:%E9%AB%98%E7%9F%A5%E7%9C%8C%E4%B8%89%E5%8E%9F%E6%9D%91_%E6%98%9F%E3%83%B6%E4%B8%98%E5%85%AC%E5%9C%92.jpg",
+    "title": "高知県三原村 星ヶ丘公園.jpg",
     "license": "CC BY-SA 4.0",
     "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
-    "width": 1280, "height": 960, "position": "50% 50%", "checkedAt": "2026-10-02"
+    "width": 1600, "height": 1066, "position": "50% 50%", "checkedAt": "2026-10-03"
   },
   "ashizuri-ebike": {
     "src": "/assets/photos/ashizuri.jpg",
@@ -915,14 +916,15 @@ export const photos={
     "width": 604, "height": 453, "position": "50% 50%", "checkedAt": "2026-10-02"
   },
   "mihara-rural-stay": {
-    "src": "/assets/photos/field-kochi.jpg",
+    "src": "/assets/photos/mihara-hoshigaoka.jpg",
     "name": "農家民宿くろうさぎ 田舎暮らし体験",
-    "alt": "高知の山里と農村風景のイメージ",
-    "author": "Indiana jo",
-    "source": "https://commons.wikimedia.org/wiki/File:Kiiji,_Haratani_village_02.jpg",
+    "alt": "高知県三原村・星ヶ丘公園の池と緑の実景",
+    "author": "Lumi iori",
+    "source": "https://commons.wikimedia.org/wiki/File:%E9%AB%98%E7%9F%A5%E7%9C%8C%E4%B8%89%E5%8E%9F%E6%9D%91_%E6%98%9F%E3%83%B6%E4%B8%98%E5%85%AC%E5%9C%92.jpg",
+    "title": "高知県三原村 星ヶ丘公園.jpg",
     "license": "CC BY-SA 4.0",
     "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
-    "width": 1280, "height": 960, "position": "50% 50%", "checkedAt": "2026-10-02"
+    "width": 1600, "height": 1066, "position": "50% 50%", "checkedAt": "2026-10-03"
   },
   "susaki-warauma": {
     "src": "/assets/photos/yosakoi-naruko.jpg",
