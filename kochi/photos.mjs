@@ -485,6 +485,58 @@ export const photos={
     "position": "50% 50%",
     "checkedAt": "2026-09-21"
   },
+  "soltive-salt": {
+    "src": "/assets/photos/irino-surf.jpg",
+    "name": "天日塩づくり体験（ソルティーブ）",
+    "alt": "黒潮町・入野海岸の海のイメージ",
+    "author": "Ubuhouse",
+    "source": "https://commons.wikimedia.org/wiki/File:Irino_beach_Kuroshio_Kochi.jpg",
+    "license": "CC BY-SA 3.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0/",
+    "width": 960,
+    "height": 720,
+    "position": "50% 50%",
+    "checkedAt": "2026-10-02"
+  },
+  "tano-solar-salt": {
+    "src": "/assets/photos/muroto.jpg",
+    "name": "完全天日塩づくり体験（田野町）",
+    "alt": "高知県東部の海岸風景のイメージ",
+    "author": "Rsa",
+    "source": "https://commons.wikimedia.org/wiki/File:Cape-Muroto-20100526.jpg",
+    "license": "CC BY-SA 3.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0/",
+    "width": 1280,
+    "height": 960,
+    "position": "50% 50%",
+    "checkedAt": "2026-10-02"
+  },
+  "tosacho-woodwork": {
+    "src": "/assets/photos/field-kochi.jpg",
+    "name": "土佐町 木組み・鍋敷きづくり体験",
+    "alt": "山あいの里山風景のイメージ",
+    "author": "Indiana jo",
+    "source": "https://commons.wikimedia.org/wiki/File:Kiiji,_Haratani_village_02.jpg",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "width": 1280,
+    "height": 960,
+    "position": "50% 50%",
+    "checkedAt": "2026-10-02"
+  },
+  "shimanto-traditional-fishing": {
+    "src": "/assets/photos/shimanto-canoe.jpg",
+    "name": "四万十川 伝統漁法体験",
+    "alt": "四万十市西土佐を流れる四万十川",
+    "author": "Cherrysherbet",
+    "source": "https://commons.wikimedia.org/wiki/File:Nishitosa_Shimanto_river.jpg",
+    "license": "CC BY-SA 3.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0/",
+    "width": 604,
+    "height": 453,
+    "position": "50% 50%",
+    "checkedAt": "2026-10-02"
+  },
   "withriver-shimanto": {
     "src": "/assets/photos/shimanto-canoe.jpg",
     "name": "四万十川 SUP・カヌー ガイドツアー（withRIVER）",

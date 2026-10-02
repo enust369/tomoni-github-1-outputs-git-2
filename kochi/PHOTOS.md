@@ -270,3 +270,10 @@ CC BY 2.0/2.5は著作者・出典・ライセンス・変更を表示。写真�
 - 四万十川 SUP・カヌー（withRIVER）：既存の `shimanto-canoe.jpg` を四万十川エリアの実景として再利用。Cherrysherbet / Wikimedia Commons / CC BY-SA 3.0。
 - アウトドア！ガルバンゾ：既存サイト資産 `hero-rafting.png` を吉野川リバーアクティビティのイメージとして使用。
 - 津野茶 茶畑見学・お茶体験：既存の `field-kochi.jpg` を山間の里山イメージとして使用。Indiana jo / Wikimedia Commons / CC BY-SA 4.0。津野町の実写ではないためイメージとして扱う。
+
+### 体験ページ追加 第7弾（2026-10-02）
+
+- 天日塩づくり体験（ソルティーブ）：既存の `irino-surf.jpg` を黒潮町の海イメージとして使用。Ubuhouse / Wikimedia Commons / CC BY-SA 3.0。施設実写ではない。
+- 完全天日塩づくり体験（田野町）：既存の `muroto.jpg` を高知県東部の海岸イメージとして使用。Rsa / Wikimedia Commons / CC BY-SA 3.0。施設実写ではない。
+- 土佐町 木組み・鍋敷きづくり体験：既存の `field-kochi.jpg` を山間の里山イメージとして使用。Indiana jo / Wikimedia Commons / CC BY-SA 4.0。土佐町の実写ではない。
+- 四万十川 伝統漁法体験：既存の `shimanto-canoe.jpg` を四万十川の実景として再利用。Cherrysherbet / Wikimedia Commons / CC BY-SA 3.0。
