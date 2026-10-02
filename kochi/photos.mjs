@@ -456,6 +456,37 @@ export const photos={
     "position": "50% 46%",
     "checkedAt": "2026-10-01"
   },
+  "uranouchi-akame-fishing": {
+    "src": "/assets/photos/niyodo-fishing.jpg",
+    "name": "浦ノ内湾 アカメ釣り体験",
+    "alt": "高知の釣り体験をイメージした写真",
+    "author": "既存サイト画像", "source": "", "license": "既存サイト資産", "licenseUrl": "",
+    "width": 1280, "height": 853, "position": "50% 50%", "checkedAt": "2026-10-02"
+  },
+  "gomen-nahari-fruit-train": {
+    "src": "/assets/photos/field-kochi.jpg",
+    "name": "ごめん・なはり線 絶景フルーツ列車",
+    "alt": "高知東部の風景をイメージした写真",
+    "author": "Indiana jo",
+    "source": "https://commons.wikimedia.org/wiki/File:Kiiji,_Haratani_village_02.jpg",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "width": 1280, "height": 960, "position": "50% 50%", "checkedAt": "2026-10-02"
+  },
+  "kure-fisher-town-fullcourse": {
+    "src": "/assets/photos/course-katsuo-tataki.png",
+    "name": "中土佐町久礼 漁師町フルコース",
+    "alt": "高知のカツオ文化をイメージした写真",
+    "author": "既存サイト画像", "source": "", "license": "既存サイト資産", "licenseUrl": "",
+    "width": 1456, "height": 1020, "position": "50% 50%", "checkedAt": "2026-10-02"
+  },
+  "bentenza-backstage-experience": {
+    "src": "/assets/photos/event-yosakoi.png",
+    "name": "弁天座 芝居小屋バックヤード見学＆体験ツアー",
+    "alt": "高知の舞台文化をイメージした写真",
+    "author": "既存サイト画像", "source": "", "license": "既存サイト資産", "licenseUrl": "",
+    "width": 1456, "height": 1020, "position": "50% 50%", "checkedAt": "2026-10-02"
+  },
   "aki-shirasu-fisher-tour": {
     "src": "/assets/photos/shirasu.png",
     "name": "五感で感じる しらす漁師ツアー",
