@@ -940,14 +940,15 @@ export const photos={
     "width": 1456, "height": 816, "position": "50% 50%", "checkedAt": "2026-10-02"
   },
   "ashizuri-secret-guide": {
-    "src": "/assets/photos/ashizuri.jpg",
+    "src": "/assets/photos/ashizuri-secret-guide.jpg",
     "name": "足摺秘境ガイド",
-    "alt": "足摺岬の海岸と太平洋",
-    "author": "既存ライセンス記録済み画像",
-    "source": "",
-    "license": "既存サイト資産",
-    "licenseUrl": "",
-    "width": 1280, "height": 853, "position": "50% 50%", "checkedAt": "2026-10-02"
+    "alt": "足摺岬の断崖と太平洋を望む実景",
+    "author": "z tanuki",
+    "source": "https://commons.wikimedia.org/wiki/File:Cape_Ashizuri_-_%E8%B6%B3%E6%91%BA%E5%B2%AC_-_panoramio_(7).jpg",
+    "title": "Cape Ashizuri - 足摺岬 - panoramio (7).jpg",
+    "license": "CC BY 3.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by/3.0/",
+    "width": 1066, "height": 1600, "position": "50% 50%", "checkedAt": "2026-10-03"
   },
   "mihara-slow-cycling": {
     "src": "/assets/photos/mihara-hoshigaoka.jpg",
@@ -961,14 +962,15 @@ export const photos={
     "width": 1600, "height": 1066, "position": "50% 50%", "checkedAt": "2026-10-03"
   },
   "ashizuri-ebike": {
-    "src": "/assets/photos/ashizuri.jpg",
+    "src": "/assets/photos/ashizuri-ebike.jpg",
     "name": "足摺半島ぐるっと一周 E-bikeガイドツアー",
-    "alt": "足摺岬の海岸と太平洋",
-    "author": "既存ライセンス記録済み画像",
-    "source": "",
-    "license": "既存サイト資産",
-    "licenseUrl": "",
-    "width": 1280, "height": 853, "position": "50% 50%", "checkedAt": "2026-10-02"
+    "alt": "E-bikeツアーの舞台となる足摺岬周辺の海岸実景",
+    "author": "z tanuki",
+    "source": "https://commons.wikimedia.org/wiki/File:Cape_Ashizuri_-_%E8%B6%B3%E6%91%BA%E5%B2%AC_-_panoramio_(10).jpg",
+    "title": "Cape Ashizuri - 足摺岬 - panoramio (10).jpg",
+    "license": "CC BY 3.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by/3.0/",
+    "width": 1066, "height": 1600, "position": "50% 50%", "checkedAt": "2026-10-03"
   },
   "shimanto-botanical-dye": {
     "src": "/assets/photos/shimanto-botanical-dye.jpg",

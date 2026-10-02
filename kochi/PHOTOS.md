@@ -548,3 +548,8 @@ CC BY 2.0/2.5は著作者・出典・ライセンス・変更を表示。写真�
 
 - `otsuki-squid-fishing`：鵜来島の海釣り共通画像から、日本のイカ釣り漁船 `otsuki-squid-fishing.jpg` へ差し替え。Adam Kahtava / Wikimedia Commons / CC BY 2.0。大月町の実船ではないため、イカ釣り体験のイメージとして扱う。
 - `yasea-sup-kayak`：生見海岸のサーフィン共通画像から、シーカヤック体験 `yasea-sup-kayak.jpg` へ差し替え。Roger Braunstein / Wikimedia Commons / CC BY 2.0。ヤ・シィパークの実写ではないため、体験内容のイメージとして扱う。
+
+### 写真差し替え実施 第22弾（2026-10-03）
+
+- `ashizuri-secret-guide`：足摺岬の共通画像から、別カットの足摺岬断崖実景 `ashizuri-secret-guide.jpg` へ差し替え。z tanuki / Wikimedia Commons / CC BY 3.0。秘境ガイドの舞台となる断崖景観が分かる写真として使用。
+- `ashizuri-ebike`：足摺岬の共通画像から、別カットの足摺岬周辺海岸 `ashizuri-ebike.jpg` へ差し替え。z tanuki / Wikimedia Commons / CC BY 3.0。E-bikeそのものは写っていないが、ツアー開催地の実景を優先。
