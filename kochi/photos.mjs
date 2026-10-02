@@ -456,6 +456,40 @@ export const photos={
     "position": "50% 46%",
     "checkedAt": "2026-10-01"
   },
+  "sakawa-black-tea-tasting": {
+    "src": "/assets/photos/field-kochi.jpg",
+    "name": "紅茶農家で国産紅茶6品種テイスティング＋スイーツ",
+    "alt": "佐川町の茶畑をイメージした里山風景",
+    "author": "Indiana jo",
+    "source": "https://commons.wikimedia.org/wiki/File:Kiiji,_Haratani_village_02.jpg",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "width": 1280, "height": 960, "position": "50% 50%", "checkedAt": "2026-10-02"
+  },
+  "ikegawa-afternoon-tea": {
+    "src": "/assets/photos/course-niyodo-sup.png",
+    "name": "仁淀ブルー絶景アフタヌーンティー",
+    "alt": "仁淀川の水辺をイメージした写真",
+    "author": "既存サイト画像", "source": "", "license": "既存サイト資産", "licenseUrl": "",
+    "width": 1456, "height": 1020, "position": "50% 50%", "checkedAt": "2026-10-02"
+  },
+  "motoyama-vegan-farm": {
+    "src": "/assets/photos/field-kochi.jpg",
+    "name": "Farm-to-table ビーガン和食＆農園体験",
+    "alt": "本山町の農園・里山をイメージした風景",
+    "author": "Indiana jo",
+    "source": "https://commons.wikimedia.org/wiki/File:Kiiji,_Haratani_village_02.jpg",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "width": 1280, "height": 960, "position": "50% 50%", "checkedAt": "2026-10-02"
+  },
+  "asemikawa-ebike": {
+    "src": "/assets/photos/hero-forest-adventure.png",
+    "name": "汗見川 清流E-bikeサイクリング",
+    "alt": "高知の山あいを巡るサイクリングのイメージ",
+    "author": "既存サイト画像", "source": "", "license": "既存サイト資産", "licenseUrl": "",
+    "width": 1456, "height": 1020, "position": "50% 50%", "checkedAt": "2026-10-02"
+  },
   "niyodo-water-seitai": {
     "src": "/assets/photos/course-niyodo-sup.png",
     "name": "仁淀ブルーを眺めながら水上整体",
