@@ -464,3 +464,8 @@ CC BY 2.0/2.5は著作者・出典・ライセンス・変更を表示。写真�
 - `ino-cosplay-photo-tour`：汎用里山画像から、実際のいの町・JR伊野駅 `ino-photo-tour.jpg` へ差し替え。Rsa / Wikimedia Commons / CC BY-SA 3.0。コスプレ撮影そのものの実写ではないが、集合地・開催地域の実景。
 - `monobe-izanagi-stay`：汎用里山画像から、実際の香美市物部町大栃 `monobe-stay-area.jpg` へ差し替え。r18 INO (PACHIMO) / Wikimedia Commons / CC BY 3.0。まきの宿そのものの実写ではないが、開催地域の実景。
 - `kiriyama-roasting-teacan` と `tosayama-haiku` は、今回は開催地・内容・権利条件を同時に満たす十分な写真が見つからず未変更。
+
+### 写真差し替え実施 第8弾（2026-10-03）
+
+- `umaji-yuzu-forest-ebike`：汎用里山画像から、実際の馬路村・馬路森林鉄道 馬路温泉前駅 `umaji-forest-railway.jpg` へ差し替え。221.20 / Wikimedia Commons / Public Domain。E-bike走行中の実写ではないが、ツアー主要テーマの森林鉄道と開催地域が一致。
+- `kiriyama-roasting-teacan`、`tosayama-haiku`、`obuchi-kokedama` は、今回は内容・開催地・権利条件を同時に満たす写真が不足しているため未変更。

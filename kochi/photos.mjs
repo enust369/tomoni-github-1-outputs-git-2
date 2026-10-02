@@ -743,14 +743,15 @@ export const photos={
     "width": 1280, "height": 1056, "position": "50% 50%", "checkedAt": "2026-10-02"
   },
   "umaji-yuzu-forest-ebike": {
-    "src": "/assets/photos/field-kochi.jpg",
+    "src": "/assets/photos/umaji-forest-railway.jpg",
     "name": "魚梁瀬森林鉄道跡とゆずロード E-bikeツアー",
-    "alt": "高知の山里を走るサイクリングのイメージ",
-    "author": "Indiana jo",
-    "source": "https://commons.wikimedia.org/wiki/File:Kiiji,_Haratani_village_02.jpg",
-    "license": "CC BY-SA 4.0",
-    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
-    "width": 1280, "height": 960, "position": "50% 50%", "checkedAt": "2026-10-02"
+    "alt": "高知県馬路村の馬路森林鉄道・馬路温泉前駅の実景",
+    "author": "221.20",
+    "source": "https://commons.wikimedia.org/wiki/File:Umaji_rail02.JPG",
+    "title": "Umaji rail02.JPG",
+    "license": "Public Domain",
+    "licenseUrl": "https://creativecommons.org/publicdomain/mark/1.0/",
+    "width": 1600, "height": 1200, "position": "50% 50%", "checkedAt": "2026-10-03"
   },
   "kaiyodo-nankoku-workshop": {
     "src": "/assets/photos/kaiyodo-figure-display.jpg",
