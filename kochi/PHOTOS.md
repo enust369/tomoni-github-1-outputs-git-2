@@ -439,3 +439,9 @@ CC BY 2.0/2.5は著作者・出典・ライセンス・変更を表示。写真�
 - `shimizu-katsuo-show`：汎用カツオ画像から、高知市で撮影されたカツオのたたき実写 `shimizu-katsuo-kochi.jpg` へ差し替え。ノボホショコロトソ / Wikimedia Commons / CC BY 4.0。土佐清水の市場・解体ショーそのものの実写ではない。
 - `yodo-line-cycle-rafting`：ラフティングのみの画像から、四万十川沿いを走る予土線の実景 `yodo-line-shimanto.jpg` へ差し替え。Takuma-sa / Wikimedia Commons / CC BY-SA 3.0。自転車・ラフティング部分は写っていないが、ツアーの主要要素である予土線と四万十川を実景で示す。
 - `bentenza-backstage-experience`：権利確認できる弁天座実写を確認できなかったため今回も未変更。
+
+### 写真差し替え実施 第4弾（2026-10-03）
+
+- `sakawa-black-tea-tasting`：汎用里山画像から、佐川町の虚空蔵山周辺と田園風景 `sakawa-black-tea-area.jpg` へ差し替え。Navian / Wikimedia Commons / Public Domain。紅茶農園・テイスティングそのものの実写ではないが、実際の佐川町の風景。
+- `motoyama-vegan-farm`：汎用里山画像から、本山町の白髪山と棚田が写る `motoyama-vegan-area.jpg` へ差し替え。As6022014 / Wikimedia Commons / Public Domain。農園・料理そのものの実写ではないが、実際の本山町の山里風景。
+- `asemikawa-ebike` と `iwayagawa-irimochi-hike` は、場所一致と再利用条件を両方確認できる適切な写真がまだ不足しているため今回は未変更。

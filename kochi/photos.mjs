@@ -494,14 +494,15 @@ export const photos={
     "width": 1600, "height": 1200, "position": "50% 50%", "checkedAt": "2026-10-03"
   },
   "sakawa-black-tea-tasting": {
-    "src": "/assets/photos/field-kochi.jpg",
+    "src": "/assets/photos/sakawa-black-tea-area.jpg",
     "name": "紅茶農家で国産紅茶6品種テイスティング＋スイーツ",
-    "alt": "佐川町の茶畑をイメージした里山風景",
-    "author": "Indiana jo",
-    "source": "https://commons.wikimedia.org/wiki/File:Kiiji,_Haratani_village_02.jpg",
-    "license": "CC BY-SA 4.0",
-    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
-    "width": 1280, "height": 960, "position": "50% 50%", "checkedAt": "2026-10-02"
+    "alt": "佐川町の虚空蔵山周辺と田園風景",
+    "author": "Navian",
+    "source": "https://commons.wikimedia.org/wiki/File:Kokuzousan_kochi.jpg",
+    "title": "Kokuzousan kochi.jpg",
+    "license": "Public Domain",
+    "licenseUrl": "https://creativecommons.org/publicdomain/mark/1.0/",
+    "width": 1600, "height": 1200, "position": "50% 50%", "checkedAt": "2026-10-03"
   },
   "ikegawa-afternoon-tea": {
     "src": "/assets/photos/ikegawa-area.jpg",
@@ -515,14 +516,15 @@ export const photos={
     "width": 1600, "height": 900, "position": "50% 50%", "checkedAt": "2026-10-03"
   },
   "motoyama-vegan-farm": {
-    "src": "/assets/photos/field-kochi.jpg",
+    "src": "/assets/photos/motoyama-vegan-area.jpg",
     "name": "Farm-to-table ビーガン和食＆農園体験",
-    "alt": "本山町の農園・里山をイメージした風景",
-    "author": "Indiana jo",
-    "source": "https://commons.wikimedia.org/wiki/File:Kiiji,_Haratani_village_02.jpg",
-    "license": "CC BY-SA 4.0",
-    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
-    "width": 1280, "height": 960, "position": "50% 50%", "checkedAt": "2026-10-02"
+    "alt": "高知県本山町の白髪山と棚田のある山里風景",
+    "author": "As6022014",
+    "source": "https://commons.wikimedia.org/wiki/File:Mt.Shiragayama-Motoyama.jpg",
+    "title": "Mt.Shiragayama-Motoyama.jpg",
+    "license": "Public Domain",
+    "licenseUrl": "https://creativecommons.org/publicdomain/mark/1.0/",
+    "width": 1600, "height": 1200, "position": "50% 50%", "checkedAt": "2026-10-03"
   },
   "asemikawa-ebike": {
     "src": "/assets/photos/hero-forest-adventure.png",
