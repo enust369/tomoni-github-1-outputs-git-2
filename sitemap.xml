@@ -2,29 +2,38 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://tomoni-app.com/</loc>
-  </url>
-  <url>
-    <loc>https://tomoni-app.com/40s-friends/</loc>
-  </url>
-  <url>
-    <loc>https://tomoni-app.com/50s-friends/</loc>
-  </url>
-  <url>
-    <loc>https://tomoni-app.com/hobby-friends/</loc>
-  </url>
-  <url>
-    <loc>https://tomoni-app.com/meal-friends/</loc>
+    <lastmod>2026-10-02</lastmod>
   </url>
   <url>
     <loc>https://tomoni-app.com/30s-friends/</loc>
+    <lastmod>2026-10-02</lastmod>
+  </url>
+  <url>
+    <loc>https://tomoni-app.com/40s-friends/</loc>
+    <lastmod>2026-10-02</lastmod>
+  </url>
+  <url>
+    <loc>https://tomoni-app.com/50s-friends/</loc>
+    <lastmod>2026-10-02</lastmod>
   </url>
   <url>
     <loc>https://tomoni-app.com/60s-friends/</loc>
+    <lastmod>2026-10-02</lastmod>
+  </url>
+  <url>
+    <loc>https://tomoni-app.com/hobby-friends/</loc>
+    <lastmod>2026-10-02</lastmod>
+  </url>
+  <url>
+    <loc>https://tomoni-app.com/meal-friends/</loc>
+    <lastmod>2026-10-02</lastmod>
   </url>
   <url>
     <loc>https://tomoni-app.com/same-gender-friends/</loc>
+    <lastmod>2026-10-02</lastmod>
   </url>
   <url>
     <loc>https://tomoni-app.com/nearby-friends/</loc>
+    <lastmod>2026-10-02</lastmod>
   </url>
 </urlset>
