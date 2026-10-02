@@ -456,6 +456,27 @@ export const photos={
     "position": "50% 46%",
     "checkedAt": "2026-10-01"
   },
+  "niyodo-water-seitai": {
+    "src": "/assets/photos/course-niyodo-sup.png",
+    "name": "仁淀ブルーを眺めながら水上整体",
+    "alt": "仁淀川の水辺をイメージした写真",
+    "author": "既存サイト画像", "source": "", "license": "既存サイト資産", "licenseUrl": "",
+    "width": 1456, "height": 1020, "position": "50% 50%", "checkedAt": "2026-10-02"
+  },
+  "iwayagawa-irimochi-hike": {
+    "src": "/assets/photos/hero-forest-adventure.png",
+    "name": "岩屋川渓谷ハイキング＋郷土茶菓いりもち",
+    "alt": "高知の渓谷ハイキングをイメージした写真",
+    "author": "既存サイト画像", "source": "", "license": "既存サイト資産", "licenseUrl": "",
+    "width": 1456, "height": 1020, "position": "50% 50%", "checkedAt": "2026-10-02"
+  },
+  "shimanto-fisher-firefly": {
+    "src": "/assets/photos/shimanto-canoe.jpg",
+    "name": "四万十川 漁師体験＋幻想ホタル遊覧ツアー",
+    "alt": "四万十川の水辺をイメージした写真",
+    "author": "既存サイト画像", "source": "", "license": "既存サイト資産", "licenseUrl": "",
+    "width": 1280, "height": 853, "position": "50% 50%", "checkedAt": "2026-10-02"
+  },
   "ioki-morning-market-tour": {
     "src": "/assets/photos/iokido.jpg",
     "name": "朝の伊尾木洞探検＋ぢばさん市場ツアー",
