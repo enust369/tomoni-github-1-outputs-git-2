@@ -517,3 +517,10 @@ CC BY 2.0/2.5は著作者・出典・ライセンス・変更を表示。写真�
 - `muroto-cycle-tour`：室戸岬の静止風景から、海岸沿いサイクリングロード `muroto-cycle-tour.jpg` へ差し替え。水だらけのプール / Wikimedia Commons / CC0。撮影地は福岡県で室戸の実写ではないため、サイクリング体験のイメージとして明記。
 - `asemikawa-ebike`：汎用森林画像から、開催地と同じ本山町の山里実景 `motoyama-vegan-area.jpg` へ差し替え。As6022014 / Wikimedia Commons / Public Domain。汗見川そのものの実写ではないが、地域一致を優先。
 - `iwayagawa-irimochi-hike`：汎用森林画像から、同じ仁淀川町にある中津渓谷 `nakatsu.jpg` へ差し替え。Koda6029 / Wikimedia Commons / CC BY-SA 4.0。岩屋川渓谷そのものではないため、仁淀川町の渓谷イメージとして扱う。
+
+### 写真差し替え実施 第17弾（2026-10-03）
+
+- `katsuo-waraya`：既存の共通カツオ画像から、高知名物カツオの藁焼きタタキ実物 `katsuo-waraya.jpg` へ差し替え。Maarten Heerlien / Wikimedia Commons / CC BY 2.0。黒潮一番館の実写ではないが、藁焼きタタキの完成イメージとして使用。
+- `tosa-tataki-dojo`：既存の共通カツオ画像から、高知市で撮影されたカツオのたたき `tosa-tataki-dojo.jpg` へ差し替え。ノボホショコロトソ / Wikimedia Commons / CC BY 4.0。土佐タタキ道場の実写ではないが、地域と料理内容が一致。
+- `tatsukushi-diving`：竜串海岸の汎用写真から、竜串海中公園の水中実景 `tatsukushi-diving.jpg` へ差し替え。Tso331 / Wikimedia Commons / CC BY-SA 3.0。体験ダイビングで見る海中環境そのものに近い写真として使用。
+- `tatsukushi-glassboat`：竜串海岸の汎用写真から、土佐清水市のグラスボート乗り場実景 `tatsukushi-glassboat.jpg` へ差し替え。jkyZjdjNjN / Wikimedia Commons / CC BY 3.0。

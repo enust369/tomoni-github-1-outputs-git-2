@@ -80,17 +80,18 @@ export const photos={
     "checkedAt": "2026-10-02"
   },
   "katsuo-waraya": {
-    "src": "/assets/photos/course-katsuo-tataki.png",
+    "src": "/assets/photos/katsuo-waraya.jpg",
     "name": "カツオの藁焼きタタキづくり体験（黒潮一番館）",
-    "alt": "カツオの藁焼きタタキのイメージ",
-    "author": "既存サイト画像",
-    "source": "",
-    "license": "既存サイト資産",
-    "licenseUrl": "",
-    "width": 469,
-    "height": 340,
+    "alt": "高知名物カツオの藁焼きタタキの実物写真",
+    "author": "Maarten Heerlien",
+    "source": "https://commons.wikimedia.org/wiki/File:Bonito_tataki_at_Hirome_Market_(6453600279).jpg",
+    "title": "Bonito tataki at Hirome Market (6453600279).jpg",
+    "license": "CC BY 2.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by/2.0",
+    "width": 1600,
+    "height": 1071,
     "position": "50% 50%",
-    "checkedAt": "2026-10-02"
+    "checkedAt": "2026-10-03"
   },
   "tosa-terrace-cycle": {
     "src": "/assets/photos/course-classic-bridge.png",
@@ -187,17 +188,18 @@ export const photos={
     "checkedAt": "2026-10-02"
   },
   "tosa-tataki-dojo": {
-    "src": "/assets/photos/course-katsuo-tataki.png",
+    "src": "/assets/photos/tosa-tataki-dojo.jpg",
     "name": "土佐タタキ道場",
-    "alt": "カツオの藁焼きタタキ体験のイメージ",
-    "author": "既存サイト画像",
-    "source": "",
-    "license": "既存サイト資産",
-    "licenseUrl": "",
-    "width": 469,
-    "height": 340,
+    "alt": "高知市で提供されたカツオのたたきの実物写真",
+    "author": "ノボホショコロトソ",
+    "source": "https://commons.wikimedia.org/wiki/File:Katsuo_no_tataki_at_Kochi_City.jpg",
+    "title": "Katsuo no tataki at Kochi City.jpg",
+    "license": "CC BY 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by/4.0",
+    "width": 1600,
+    "height": 1200,
     "position": "50% 50%",
-    "checkedAt": "2026-10-02"
+    "checkedAt": "2026-10-03"
   },
   "field-kochi": {
     "src": "/assets/photos/field-kochi.jpg",
@@ -339,17 +341,18 @@ export const photos={
     "checkedAt": "2026-10-02"
   },
   "tatsukushi-diving": {
-    "src": "/assets/photos/tatsukushi-fishing.jpg",
+    "src": "/assets/photos/tatsukushi-diving.jpg",
     "name": "竜串 体験ダイビング（竜串ダイビングセンター）",
-    "alt": "土佐清水市の竜串海岸",
-    "author": "Reggaeman",
-    "source": "https://commons.wikimedia.org/wiki/File:Tatsukushi_05.JPG",
+    "alt": "竜串海中公園の水中景観の実景",
+    "author": "Tso331",
+    "source": "https://commons.wikimedia.org/wiki/File:Tatsukushi-kaichu-koen-naibu3.jpg",
+    "title": "Tatsukushi-kaichu-koen-naibu3.jpg",
     "license": "CC BY-SA 3.0",
     "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0/",
-    "width": 1280,
-    "height": 850,
+    "width": 1600,
+    "height": 1200,
     "position": "50% 50%",
-    "checkedAt": "2026-10-02"
+    "checkedAt": "2026-10-03"
   },
   "tatsukushi-fishing": {
     "src": "/assets/photos/tatsukushi-fishing.jpg",
@@ -865,14 +868,15 @@ export const photos={
     "width": 1456, "height": 1020, "position": "50% 50%", "checkedAt": "2026-10-02"
   },
   "tatsukushi-glassboat": {
-    "src": "/assets/photos/tatsukushi-fishing.jpg",
+    "src": "/assets/photos/tatsukushi-glassboat.jpg",
     "name": "竜串観光汽船 グラスボート",
-    "alt": "土佐清水市の竜串海岸",
-    "author": "Reggaeman",
-    "source": "https://commons.wikimedia.org/wiki/File:Tatsukushi_05.JPG",
-    "license": "CC BY-SA 3.0",
-    "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0/",
-    "width": 1280, "height": 850, "position": "50% 50%", "checkedAt": "2026-10-02"
+    "alt": "土佐清水市にあるグラスボート乗り場の実景",
+    "author": "jkyZjdjNjN",
+    "source": "https://commons.wikimedia.org/wiki/File:%E3%82%B0%E3%83%A9%E3%82%B9%E3%83%9C%E3%83%BC%E3%83%88%E4%B9%97%E3%82%8A%E5%A0%B4_-_panoramio.jpg",
+    "title": "グラスボート乗り場 - panoramio.jpg",
+    "license": "CC BY 3.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by/3.0",
+    "width": 1024, "height": 768, "position": "50% 50%", "checkedAt": "2026-10-03"
   },
   "tatsukushi-minokoshi-tour": {
     "src": "/assets/photos/tatsukushi-fishing.jpg",
