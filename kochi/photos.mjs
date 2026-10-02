@@ -672,14 +672,15 @@ export const photos={
     "width": 1456, "height": 1020, "position": "50% 50%", "checkedAt": "2026-10-02"
   },
   "ino-cosplay-photo-tour": {
-    "src": "/assets/photos/field-kochi.jpg",
+    "src": "/assets/photos/ino-photo-tour.jpg",
     "name": "コスプレで巡る レトロな街 いの町 フォトツアー",
-    "alt": "いの町周辺の地域風景をイメージした写真",
-    "author": "Indiana jo",
-    "source": "https://commons.wikimedia.org/wiki/File:Kiiji,_Haratani_village_02.jpg",
-    "license": "CC BY-SA 4.0",
-    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
-    "width": 1280, "height": 960, "position": "50% 50%", "checkedAt": "2026-10-02"
+    "alt": "高知県いの町のJR伊野駅の実景",
+    "author": "Rsa",
+    "source": "https://commons.wikimedia.org/wiki/File:Ino-Station-20100527.jpg",
+    "title": "Ino-Station-20100527.jpg",
+    "license": "CC BY-SA 3.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0/",
+    "width": 1600, "height": 1200, "position": "50% 50%", "checkedAt": "2026-10-03"
   },
   "kochi-kimono-ozashiki": {
     "src": "/assets/photos/kochi-ozashiki-asobi.jpg",
@@ -707,14 +708,15 @@ export const photos={
     "width": 1456, "height": 1020, "position": "50% 50%", "checkedAt": "2026-10-02"
   },
   "monobe-izanagi-stay": {
-    "src": "/assets/photos/field-kochi.jpg",
+    "src": "/assets/photos/monobe-stay-area.jpg",
     "name": "まきの宿 いざなぎ流・古民家宿泊体験",
-    "alt": "高知の山里と暮らしをイメージした風景",
-    "author": "Indiana jo",
-    "source": "https://commons.wikimedia.org/wiki/File:Kiiji,_Haratani_village_02.jpg",
-    "license": "CC BY-SA 4.0",
-    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
-    "width": 1280, "height": 960, "position": "50% 50%", "checkedAt": "2026-10-02"
+    "alt": "高知県香美市物部町大栃の実景",
+    "author": "r18 INO (PACHIMO)",
+    "source": "https://commons.wikimedia.org/wiki/File:Monobecho_Odochi,_Kami,_Kochi_Prefecture_781-4401,_Japan_-_panoramio_(5).jpg",
+    "title": "Monobecho Odochi, Kami, Kochi Prefecture 781-4401, Japan - panoramio (5).jpg",
+    "license": "CC BY 3.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by/3.0/",
+    "width": 1600, "height": 902, "position": "50% 50%", "checkedAt": "2026-10-03"
   },
   "shimanto-yairocho-walk": {
     "src": "/assets/photos/hero-forest-adventure.png",

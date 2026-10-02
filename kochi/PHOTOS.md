@@ -458,3 +458,9 @@ CC BY 2.0/2.5は著作者・出典・ライセンス・変更を表示。写真�
 - `tsuno-tea-field`：汎用里山画像から、実際の津野町・四万十川源流部 `tsuno-source-river.jpg` へ差し替え。Asset utilitist / Wikimedia Commons / CC0。茶畑そのものの実写ではないが、開催地域の実景。
 - `yusuhara-china-paint`：既存の梼原イメージ画像から、実際の梼原町梼原の町並み `yusuhara-town.jpg` へ差し替え。osami / Wikimedia Commons / Public Domain。絵付け体験そのものの実写ではない。
 - `kiriyama-roasting-teacan` と `tosayama-haiku` は、開催地・内容・権利条件を同時に満たす写真が不足しているため今回は未変更。
+
+### 写真差し替え実施 第7弾（2026-10-03）
+
+- `ino-cosplay-photo-tour`：汎用里山画像から、実際のいの町・JR伊野駅 `ino-photo-tour.jpg` へ差し替え。Rsa / Wikimedia Commons / CC BY-SA 3.0。コスプレ撮影そのものの実写ではないが、集合地・開催地域の実景。
+- `monobe-izanagi-stay`：汎用里山画像から、実際の香美市物部町大栃 `monobe-stay-area.jpg` へ差し替え。r18 INO (PACHIMO) / Wikimedia Commons / CC BY 3.0。まきの宿そのものの実写ではないが、開催地域の実景。
+- `kiriyama-roasting-teacan` と `tosayama-haiku` は、今回は開催地・内容・権利条件を同時に満たす十分な写真が見つからず未変更。
