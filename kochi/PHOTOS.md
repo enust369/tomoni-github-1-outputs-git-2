@@ -302,3 +302,10 @@ CC BY 2.0/2.5は著作者・出典・ライセンス・変更を表示。写真�
 - 草木染め体験（四万十かわらっこ）：既存の `shimanto-canoe.jpg` を四万十川流域の自然イメージとして使用。Cherrysherbet / Wikimedia Commons / CC BY-SA 3.0。草木染め中の実写ではない。
 - 農家民宿くろうさぎ 田舎暮らし体験：既存の `field-kochi.jpg` を山里・農村のイメージとして使用。Indiana jo / Wikimedia Commons / CC BY-SA 4.0。三原村・宿の実写ではない。
 - わら馬作り体験（すさきまちかどギャラリー）：既存の `yosakoi-naruko.jpg` を高知の伝統文化・手仕事イメージとして使用。Mycomp / Wikimedia Commons / CC BY-SA 3.0。わら馬の実写ではない。
+
+### 体験・アクティビティ追加 第12弾（2026-10-02）
+
+- 土佐国分寺 日本文化・瞑想体験：既存の `chikurinji.png` を寺院文化のイメージとして使用。土佐国分寺の実写ではない。
+- 足摺秘境ガイド：既存の `ashizuri.jpg` を足摺岬の実景として使用。遊覧船・巨石群ガイド中の実写ではない。
+- 三原村 スローサイクリング（今ちゃん出発）：既存の `field-kochi.jpg` を田園・山里イメージとして使用。Indiana jo / Wikimedia Commons / CC BY-SA 4.0。三原村の実写ではない。
+- 足摺半島ぐるっと一周 E-bikeガイドツアー：既存の `ashizuri.jpg` を足摺半島の実景として使用。サイクリング中の実写ではない。

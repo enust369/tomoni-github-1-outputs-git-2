@@ -456,6 +456,46 @@ export const photos={
     "position": "50% 46%",
     "checkedAt": "2026-10-01"
   },
+  "tosa-kokubunji-culture": {
+    "src": "/assets/photos/chikurinji.png",
+    "name": "土佐国分寺 日本文化・瞑想体験",
+    "alt": "高知の寺院文化をイメージした竹林寺",
+    "author": "既存サイト画像",
+    "source": "",
+    "license": "既存サイト資産",
+    "licenseUrl": "",
+    "width": 1456, "height": 816, "position": "50% 50%", "checkedAt": "2026-10-02"
+  },
+  "ashizuri-secret-guide": {
+    "src": "/assets/photos/ashizuri.jpg",
+    "name": "足摺秘境ガイド",
+    "alt": "足摺岬の海岸と太平洋",
+    "author": "既存ライセンス記録済み画像",
+    "source": "",
+    "license": "既存サイト資産",
+    "licenseUrl": "",
+    "width": 1280, "height": 853, "position": "50% 50%", "checkedAt": "2026-10-02"
+  },
+  "mihara-slow-cycling": {
+    "src": "/assets/photos/field-kochi.jpg",
+    "name": "三原村 スローサイクリング（今ちゃん出発）",
+    "alt": "高知の田園と山里の風景イメージ",
+    "author": "Indiana jo",
+    "source": "https://commons.wikimedia.org/wiki/File:Kiiji,_Haratani_village_02.jpg",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "width": 1280, "height": 960, "position": "50% 50%", "checkedAt": "2026-10-02"
+  },
+  "ashizuri-ebike": {
+    "src": "/assets/photos/ashizuri.jpg",
+    "name": "足摺半島ぐるっと一周 E-bikeガイドツアー",
+    "alt": "足摺岬の海岸と太平洋",
+    "author": "既存ライセンス記録済み画像",
+    "source": "",
+    "license": "既存サイト資産",
+    "licenseUrl": "",
+    "width": 1280, "height": 853, "position": "50% 50%", "checkedAt": "2026-10-02"
+  },
   "shimanto-botanical-dye": {
     "src": "/assets/photos/shimanto-canoe.jpg",
     "name": "草木染め体験（四万十かわらっこ）",
