@@ -37,7 +37,9 @@ const rows=[
 ['susaki-fishing','須崎・富士ヶ浜 海釣り体験','fishing','west','須崎市','海釣り,手ぶら,初心者','海のまち須崎で、気軽に海釣りへ。'],
 ['uguru-fishing','鵜来島 釣り体験（うぐるBOX）','fishing','west','宿毛市','海釣り,予約制','透明な海に囲まれた離島で、釣りを楽しむ。'],
 ['tatsukushi-fishing','竜串 船釣り体験（西本渡船）','fishing','west','土佐清水市','海釣り,手ぶら,予約制','竜串の海を船でめぐりながら、釣りを楽しむ。'],
-['niyodo-fishing','仁淀川の釣り','fishing','north_niyodo','仁淀川流域','川釣り','清流・仁淀川で、川と向き合う釣り時間。']];
+['niyodo-fishing','仁淀川の釣り','fishing','north_niyodo','仁淀川流域','川釣り','清流・仁淀川で、川と向き合う釣り時間。'],
+['kaminokae-fishery','上ノ加江漁業体験','activity','west','中土佐町','釣り・漁業体験,海あそび','漁師と一緒に、海の仕事を体験。'],
+['ogata-whale','大方ホエールウォッチング','activity','west','黒潮町','海あそび,動物・自然観察','漁船で、クジラとイルカを探す海へ。']];
 const spotInfo={
   ryugado:{address:'高知県香美市土佐山田町逆川1424',phone:'0887-53-2144',official_url:'https://ryugadou.or.jp/',parking_text:'駐車場約700台',access:'高知自動車道南国ICから車。土佐山田駅からバス。',last_verified_at:'2026-09-23'},
   nikobuchi:{address:'高知県吾川郡いの町清水上分',official_url:'https://nikobuchi.inofan.jp/site/access.html',parking_text:'指定駐車場あり。満車時は臨時駐車場等の案内を確認。',access:'伊野ICから車で約60分。JR伊野駅からバス利用後、徒歩約20〜30分。',last_verified_at:'2026-09-23'},
@@ -70,7 +72,9 @@ const spotInfo={
   'susaki-fishing':{address:'高知県須崎市富士ヶ浜周辺',opening_hours:'体験受付の目安 8:30〜17:15',closed_days:'年末年始',official_url:'https://kochi-tabi.jp/search_activity_plan.html?easy_reserve=1&plan_id=53696&plan_ota=aj',parking_text:'富士ヶ浜近くに駐車スペースあり',access:'須崎市観光協会事務所から富士ヶ浜まで車で約3分、徒歩約10分。',last_verified_at:'2026-10-02',description:'須崎市観光協会で釣具一式を借り、富士ヶ浜周辺で海釣りを楽しめる体験です。詳細・料金・予約条件は最新の販売ページをご確認ください。'},
   'uguru-fishing':{address:'高知県宿毛市沖の島町鵜来島58',opening_hours:'予約受付 7:50〜21:00',closed_days:'不定休',phone:'080-4410-2441',official_url:'https://kochi-tabi.jp/search_spot.html?id=13597',access:'片島港から宿毛市営定期船で約50分〜1時間35分。',last_verified_at:'2026-10-02',description:'宿毛沖の離島・鵜来島で楽しむ釣り体験。透明度の高い海と手つかずの自然の中で過ごせます。予約条件は公式案内をご確認ください。'},
   'tatsukushi-fishing':{address:'高知県土佐清水市竜串21',opening_hours:'予約受付 8:00〜17:00',closed_days:'不定休',phone:'090-1176-5819',official_url:'https://kochi-tabi.jp/search_spot_activity.html?id=8286',access:'四万十町中央ICから車で約1時間40分。',last_verified_at:'2026-10-02',description:'竜串の海で楽しむ手ぶらの船釣り体験。実施内容や予約条件は最新の公式案内をご確認ください。'},
-  'niyodo-fishing':{address:'仁淀川町〜越知町〜佐川町〜日高村〜いの町〜土佐市',phone:'0889-20-9511（仁淀ブルー観光協議会）',official_url:'https://kochi-tabi.jp/search_spot.html?ID=12167',access:'流域各地でアクセスが異なります。釣行場所・遊漁規則・解禁情報は現地の最新案内をご確認ください。',last_verified_at:'2026-10-02',description:'仁淀川では昔から釣りを含む水辺利用が親しまれています。釣種・場所・時期によって遊漁規則等が異なるため、釣行前に最新情報をご確認ください。'}
+  'niyodo-fishing':{address:'仁淀川町〜越知町〜佐川町〜日高村〜いの町〜土佐市',phone:'0889-20-9511（仁淀ブルー観光協議会）',official_url:'https://kochi-tabi.jp/search_spot.html?ID=12167',access:'流域各地でアクセスが異なります。釣行場所・遊漁規則・解禁情報は現地の最新案内をご確認ください。',last_verified_at:'2026-10-02',description:'仁淀川では昔から釣りを含む水辺利用が親しまれています。釣種・場所・時期によって遊漁規則等が異なるため、釣行前に最新情報をご確認ください。'},
+  'kaminokae-fishery':{address:'高知県高岡郡中土佐町上ノ加江2574',opening_hours:'予約営業（受付は平日のみ。観光案内では予約受付9:30〜16:30）',closed_days:'体験は予約制。最新の実施日を要確認',price_text:'料金は申込時に要確認',phone:'0889-54-0111（高知県漁協 上ノ加江支所）',official_url:'https://www.town.nakatosa.lg.jp/life/detail.php?hdnKey=166',parking_text:'施設へ事前確認',access:'高知自動車道・中土佐ICから車で約10分。',last_verified_at:'2026-10-02',description:'季節に応じて、かご漁・網漁・釣りなどを現役漁師と一緒に体験できます。内容や料金は時期・プランで変わるため、予約時に高知県漁協上ノ加江支所へご確認ください。'},
+  'ogata-whale':{address:'高知県幡多郡黒潮町入野227-ロ',opening_hours:'2026年は通常9:00出航。3連休以上は8:00・13:00の2便（集合は各便30分前）',closed_days:'2026年5月2日〜10月31日の期間中無休（荒天時欠航）',price_text:'大人8,000円／小学生4,000円／幼児2,000円（税込）',phone:'0880-43-1058',official_url:'https://nitarikujira.com/',parking_text:'駐車場あり',access:'高知自動車道・四万十町中央ICから車で約50分。土佐くろしお鉄道 入野駅から徒歩約30分。',last_verified_at:'2026-10-02',description:'黒潮町の現役漁師が操る漁船で土佐湾へ出航し、カツオクジラやイルカなどを探す約4時間のウォッチング体験です。野生動物のため必ず出会えるとは限らず、天候により欠航する場合があります。'}
 };
 const rank={};
 export const spots=rows.map(([slug,name,category,area,municipality,tags,catchphrase],i)=>({id:`00000000-0000-4000-8000-${String(i+1).padStart(12,'0')}`,slug,name,category,area,municipality,tags:tags.split(','),catchphrase,initial_rank:rank[category]=(rank[category]||0)+1,recommend_count:0,is_published:true,is_demo:false,photo:photos[slug]||null,main_image_url:photos[slug]?.src||'',description:'',created_at:`2026-09-${String(i+1).padStart(2,'0')}T00:00:00Z`,...(spotInfo[slug]||{})}));

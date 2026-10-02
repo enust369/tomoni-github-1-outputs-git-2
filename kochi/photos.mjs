@@ -40,6 +40,19 @@ export const photos={
     "position": "50% 50%",
     "checkedAt": "2026-10-02"
   },
+  "ogata-whale": {
+    "src": "/assets/photos/irino-surf.jpg",
+    "name": "大方ホエールウォッチング",
+    "alt": "黒潮町・入野海岸の海辺",
+    "author": "Ubuhouse",
+    "source": "https://commons.wikimedia.org/wiki/File:入野海岸.jpg",
+    "license": "CC BY-SA 3.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0/",
+    "width": 960,
+    "height": 720,
+    "position": "50% 50%",
+    "checkedAt": "2026-10-02"
+  },
   "uguru-fishing": {
     "src": "/assets/photos/uguru-fishing.jpg",
     "name": "鵜来島 釣り体験（うぐるBOX）",
