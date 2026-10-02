@@ -777,14 +777,15 @@ export const photos={
     "width": 1204, "height": 1600, "position": "50% 50%", "checkedAt": "2026-10-03"
   },
   "tosa-shio-no-michi-walk": {
-    "src": "/assets/photos/field-kochi.jpg",
+    "src": "/assets/photos/tosa-shio-no-michi.jpg",
     "name": "土佐塩の道ウォーク（FIELD KOCHI）",
-    "alt": "高知の山里を歩く体験のイメージ",
-    "author": "Indiana jo",
-    "source": "https://commons.wikimedia.org/wiki/File:Kiiji,_Haratani_village_02.jpg",
-    "license": "CC BY-SA 4.0",
-    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
-    "width": 1280, "height": 960, "position": "50% 50%", "checkedAt": "2026-10-02"
+    "alt": "香美市物部町にある土佐塩の道の登り口実景",
+    "author": "r18 INO (PACHIMO)",
+    "source": "https://commons.wikimedia.org/wiki/File:%E5%A1%A9%E3%81%AE%E9%81%93_%E7%99%BB%E3%82%8A%E5%8F%A3_-_panoramio.jpg",
+    "title": "塩の道 登り口 - panoramio.jpg",
+    "license": "CC BY 3.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by/3.0/",
+    "width": 1600, "height": 1066, "position": "50% 50%", "checkedAt": "2026-10-03"
   },
   "kochi-market-fruit-basket": {
     "src": "/assets/photos/kochi-market-auction.jpg",
@@ -808,14 +809,15 @@ export const photos={
     "width": 604, "height": 453, "position": "50% 50%", "checkedAt": "2026-10-02"
   },
   "akano-shishimai": {
-    "src": "/assets/photos/yosakoi-naruko.jpg",
+    "src": "/assets/photos/akano-shishimai.jpg",
     "name": "赤野獅子舞 伝統芸能体験（大元神社）",
-    "alt": "高知の伝統芸能をイメージした鳴子",
-    "author": "Mycomp",
-    "source": "https://commons.wikimedia.org/wiki/File:Naruko_(bird_rattles).JPG",
-    "license": "CC BY-SA 3.0",
-    "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0/",
-    "width": 960, "height": 1280, "position": "50% 50%", "checkedAt": "2026-10-02"
+    "alt": "日本の獅子舞の実演イメージ",
+    "author": "Takumi pandagraph",
+    "source": "https://commons.wikimedia.org/wiki/File:Imakuma_shishimai.jpg",
+    "title": "Imakuma shishimai.jpg",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "width": 1066, "height": 1600, "position": "50% 45%", "checkedAt": "2026-10-03"
   },
   "shimanto-fish-auction-lunch": {
     "src": "/assets/photos/course-ocean-seafood.png",
@@ -937,14 +939,15 @@ export const photos={
     "width": 1600, "height": 1066, "position": "50% 50%", "checkedAt": "2026-10-03"
   },
   "susaki-warauma": {
-    "src": "/assets/photos/yosakoi-naruko.jpg",
+    "src": "/assets/photos/susaki-warauma.jpg",
     "name": "わら馬作り体験（すさきまちかどギャラリー）",
-    "alt": "高知の伝統文化・手仕事のイメージ",
-    "author": "Mycomp",
-    "source": "https://commons.wikimedia.org/wiki/File:Naruko_(bird_rattles).JPG",
+    "alt": "藁で作られた日本のわら馬のイメージ",
+    "author": "Yanajin33",
+    "source": "https://commons.wikimedia.org/wiki/File:National_Museum_of_Ethnology,_Osaka_-_Straw_horses_%22Hassaku-uma%22_-_Ashiya-ch%C3%B4,_Fukuoka_pref._-_Made_in_1978.jpg",
+    "title": "National Museum of Ethnology, Osaka - Straw horses Hassaku-uma - Made in 1978.jpg",
     "license": "CC BY-SA 3.0",
     "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0/",
-    "width": 960, "height": 1280, "position": "50% 50%", "checkedAt": "2026-10-02"
+    "width": 1600, "height": 1200, "position": "50% 50%", "checkedAt": "2026-10-03"
   },
   "sakawa-makino-park-guide": {
     "src": "/assets/photos/sakawa-makino-park.jpg",

@@ -487,3 +487,10 @@ CC BY 2.0/2.5は著作者・出典・ライセンス・変更を表示。写真�
 - `seiran-konnyaku`：汎用里山画像から、刺身こんにゃく実物 `seiran-konnyaku.jpg` へ差し替え。Ocdp / Wikimedia Commons / CC0。せいらんの里の実写ではなく、体験後に味わう刺身こんにゃくのイメージとして扱う。
 - `kiriyama-roasting-teacan`：汎用里山画像から、焙煎済みほうじ茶の茶葉 `kiriyama-hojicha.jpg` へ差し替え。Green / Wikimedia Commons / Public Domain。霧山茶園や焙煎作業そのものの実写ではなく、体験内容を示すほうじ茶イメージとして扱う。
 - `tosayama-haiku` と `tosa-shio-no-michi-walk` は、開催地・体験内容・再利用条件を同時に満たす写真がまだ不足しているため今回は未変更。
+
+### 写真差し替え実施 第12弾（2026-10-03）
+
+- `tosa-shio-no-michi-walk`：汎用里山画像から、香美市物部町の「塩の道 登り口」実景 `tosa-shio-no-michi.jpg` へ差し替え。r18 INO (PACHIMO) / Wikimedia Commons / CC BY 3.0。開催地・体験テーマとも一致。
+- `akano-shishimai`：よさこい鳴子画像から、日本の獅子舞実演 `akano-shishimai.jpg` へ差し替え。Takumi pandagraph / Wikimedia Commons / CC BY-SA 4.0。赤野・大元神社の実写ではないが、体験内容と一致する獅子舞イメージとして扱う。
+- `susaki-warauma`：よさこい鳴子画像から、藁で作られた日本のわら馬 `susaki-warauma.jpg` へ差し替え。Yanajin33 / Wikimedia Commons / CC BY-SA 3.0。須崎の実作例ではないが、制作物そのものが分かるイメージとして扱う。
+- `tosayama-haiku` は土佐山の現地画像候補を再確認したが、俳句・里山散策・会席の内容まで自然に伝えられる再利用可写真が不足しているため今回は未変更。
