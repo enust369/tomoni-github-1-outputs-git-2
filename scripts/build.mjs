@@ -41,6 +41,10 @@ await cp(resolve(projectRoot, "40s-no-friends"), resolve(outputDir, "40s-no-frie
 await cp(resolve(projectRoot, "50s-fewer-friends"), resolve(outputDir, "50s-fewer-friends"), { recursive: true });
 await cp(resolve(projectRoot, "adult-friend-making"), resolve(outputDir, "adult-friend-making"), { recursive: true });
 await cp(resolve(projectRoot, "want-someone-to-talk-to"), resolve(outputDir, "want-someone-to-talk-to"), { recursive: true });
+await cp(resolve(projectRoot, "60s-no-friends"), resolve(outputDir, "60s-no-friends"), { recursive: true });
+await cp(resolve(projectRoot, "want-same-gender-friends"), resolve(outputDir, "want-same-gender-friends"), { recursive: true });
+await cp(resolve(projectRoot, "want-nearby-friends"), resolve(outputDir, "want-nearby-friends"), { recursive: true });
+await cp(resolve(projectRoot, "lonely-want-someone-to-talk-to"), resolve(outputDir, "lonely-want-someone-to-talk-to"), { recursive: true });
 await cp(resolve(projectRoot, "site.webmanifest"), resolve(outputDir, "site.webmanifest"));
 try {
   await cp(resolve(projectRoot, "_headers"), resolve(outputDir, "_headers"));
