@@ -43,6 +43,7 @@ try {
 } catch {}
 await cp(resolve(projectRoot, "sitemap.xml"), resolve(outputDir, "sitemap.xml"));
 await cp(resolve(projectRoot, "robots.txt"), resolve(outputDir, "robots.txt"));
+await cp(resolve(projectRoot, "google797ab69bed9ee4dd.html"), resolve(outputDir, "google797ab69bed9ee4dd.html"));
 
 let fileEnv = {};
 try {
