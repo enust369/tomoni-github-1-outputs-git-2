@@ -33,6 +33,10 @@ await cp(resolve(projectRoot, "40s-friends"), resolve(outputDir, "40s-friends"),
 await cp(resolve(projectRoot, "50s-friends"), resolve(outputDir, "50s-friends"), { recursive: true });
 await cp(resolve(projectRoot, "hobby-friends"), resolve(outputDir, "hobby-friends"), { recursive: true });
 await cp(resolve(projectRoot, "meal-friends"), resolve(outputDir, "meal-friends"), { recursive: true });
+await cp(resolve(projectRoot, "30s-friends"), resolve(outputDir, "30s-friends"), { recursive: true });
+await cp(resolve(projectRoot, "60s-friends"), resolve(outputDir, "60s-friends"), { recursive: true });
+await cp(resolve(projectRoot, "same-gender-friends"), resolve(outputDir, "same-gender-friends"), { recursive: true });
+await cp(resolve(projectRoot, "nearby-friends"), resolve(outputDir, "nearby-friends"), { recursive: true });
 await cp(resolve(projectRoot, "site.webmanifest"), resolve(outputDir, "site.webmanifest"));
 try {
   await cp(resolve(projectRoot, "_headers"), resolve(outputDir, "_headers"));
