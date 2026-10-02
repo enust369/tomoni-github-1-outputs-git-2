@@ -62,7 +62,7 @@ const rank={};
 export const spots=rows.map(([slug,name,category,area,municipality,tags,catchphrase],i)=>({id:`00000000-0000-4000-8000-${String(i+1).padStart(12,'0')}`,slug,name,category,area,municipality,tags:tags.split(','),catchphrase,initial_rank:rank[category]=(rank[category]||0)+1,recommend_count:0,is_published:true,is_demo:false,photo:photos[slug]||null,main_image_url:photos[slug]?.src||'',description:'',created_at:`2026-09-${String(i+1).padStart(2,'0')}T00:00:00Z`,...(spotInfo[slug]||{})}));
 const courseRows=[
 ['kochi-classic','高知市内 王道1日コース','kochi_city','王道','1日',['kochi-castle','myojinmaru','yasube']],
-['niyodo-classic','仁淀ブルー 王道1日コース','north_niyodo','絶景','1日',['nikobuchi','yasui','ice','nakatsu']],
+['niyodo-classic','空と仁淀ブルーキャンプ1日コース','north_niyodo','アクティブ','1日',['nikobuchi','yasui','ice','nakatsu']],
 ['niyodo-active','仁淀川 アクティブ満喫1日コース','north_niyodo','アクティブ','1日',['kayak','sauna','ice','nakatsu']],
 ['east-drive','東部絶景＆しらすグルメ1日コース','east','グルメ','1日',['shirasu','iokido','monet','muroto']],
 ['ocean-trip','柏島・足摺 海の1泊2日コース','west','カップル','1泊2日',['kashiwajima','ashizuri']],
@@ -71,7 +71,10 @@ const courseRows=[
 ['kami-konan','龍河洞・香美香南 1日コース','east','雨の日','1日',['ryugado']],
 ['family','高知 子連れ1日コース','kochi_city','子連れ','1日',['kochi-castle','myojinmaru']],
 ['three-days','高知満喫2泊3日コース','north_niyodo','王道','2泊3日',['kochi-castle','nikobuchi','iokido']]];
-export const courses=courseRows.map(([slug,name,area,theme,duration,stops],i)=>({slug,name,area,theme,duration,stops,initial_rank:i+1,transport:'車＋徒歩',season:'季節・天候に応じて',audience:theme==='子連れ'?'家族':theme==='カップル'?'カップル':'友人・ひとり旅',photo:stops.map(slug=>photos[slug]).find(Boolean)||null,image:stops.map(slug=>photos[slug]?.src).find(Boolean)||''}));
+const coursePhotoOverrides={
+  'niyodo-classic':{src:'/assets/photos/course-niyodo-sky-camp.png',name:'空と仁淀ブルーキャンプ1日コース',alt:'パラグライダー、仁淀ブルー、キャンプを組み合わせたモデルコースのコラージュ',author:'ユーザー提供画像',source:'',license:'提供画像（サイト掲載用）',licenseUrl:'',width:1456,height:1020,position:'50% 50%',checkedAt:'2026-10-02'}
+};
+export const courses=courseRows.map(([slug,name,area,theme,duration,stops],i)=>{const photo=coursePhotoOverrides[slug]||stops.map(slug=>photos[slug]).find(Boolean)||null;return {slug,name,area,theme,duration,stops,initial_rank:i+1,transport:'車＋徒歩',season:'季節・天候に応じて',audience:theme==='子連れ'?'家族':theme==='カップル'?'カップル':'友人・ひとり旅',photo,image:photo?.src||''};});
 export const eventCategories=['祭り・花火','グルメ','マルシェ','自然・アウトドア','文化・展覧会','子ども向け','スポーツ','期間限定体験'];
 export const events=[
   {
