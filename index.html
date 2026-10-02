@@ -576,6 +576,12 @@
       margin-top: 2px;
     }
     .home-invitation-actions .btn { min-height: 52px; }
+    .home-primary-cta {
+      min-height: 56px !important;
+      font-weight: 800;
+      letter-spacing: .01em;
+      box-shadow: 0 12px 28px rgba(52, 127, 168, .24) !important;
+    }
 
     .home-safety-card {
       padding: 22px 24px;
@@ -1491,15 +1497,15 @@
           <article class="card home-invitation-card" aria-labelledby="homeInvitationHeading">
             <div>
               <p class="eyebrow">TOMONIでつながる</p>
-              <h1 id="homeInvitationHeading">気軽に、一緒に楽しめる仲間を見つけよう</h1>
+              <h1 id="homeInvitationHeading">やりたいことを、だれかと一緒に。</h1>
             </div>
-            <p>散歩・カフェ・スポーツ・買い物など、<br>やりたいことから募集を探せます。</p>
+            <p>散歩・カフェ・スポーツ・買い物。<br>気になる過ごし方から仲間を探せます。</p>
             <div class="home-purpose-note">
-              <p>TOMONIは<strong>恋愛目的ではなく</strong>、気軽に話せる友達・趣味仲間・ご飯友達などを見つけるサービスです。会いたい相手は同性のみ・異性のみ・どちらもから選べます。</p>
-              <p>初めて会う時は、駅・カフェ・商業施設など、人の多い公共の場所をおすすめしています。</p>
+              <p>TOMONIは<strong>恋愛目的ではなく</strong>、一緒に楽しめる友達や趣味仲間を見つけるサービスです。</p>
+              <p>初めて会う時は、人の多い公共の場所をおすすめしています。</p>
             </div>
             <div class="home-invitation-actions">
-              <button class="btn primary" type="button" data-action="home-view-listings">募集を見る</button>
+              <button class="btn primary home-primary-cta" type="button" data-action="home-view-listings">募集中の予定を見る</button>
               <button class="btn" type="button" data-action="home-create-listing">募集を作る</button>
             </div>
           </article>
@@ -5844,7 +5850,7 @@
         });
         if (restart && !reduceMotion) {
           clearInterval(heroTimer);
-          heroTimer = window.setInterval(() => showHeroSlide(heroIndex + 1, false), 4800);
+          heroTimer = window.setInterval(() => showHeroSlide(heroIndex + 1, false), 6000);
         }
       };
 
@@ -5863,7 +5869,7 @@
       homeHeroSlider.addEventListener("mouseleave", () => {
         if (!reduceMotion) {
           clearInterval(heroTimer);
-          heroTimer = window.setInterval(() => showHeroSlide(heroIndex + 1, false), 4800);
+          heroTimer = window.setInterval(() => showHeroSlide(heroIndex + 1, false), 6000);
         }
       });
       homeHeroSlider.addEventListener("touchstart", (event) => {
