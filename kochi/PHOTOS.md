@@ -242,3 +242,11 @@ CC BY 2.0/2.5は著作者・出典・ライセンス・変更を表示。写真�
 - FIELD KOCHI：`field-kochi.jpg`。Indiana jo / Wikimedia Commons / CC BY-SA 4.0。和歌山県の里山写真のため、FIELD KOCHI現地写真ではなく里山体験イメージとして扱う。
 - 龍河洞キャンドルづくり：`ryugado-candle.jpg`。Wellcome Library, London / Wikimedia Commons / CC BY 4.0。現代の38 phyto lab.の実写ではなくキャンドルづくりイメージとして扱う。
 - 四万十川カヌー体験：`shimanto-canoe.jpg`。Cherrysherbet / Wikimedia Commons / CC BY-SA 3.0。四万十市西土佐で撮影された四万十川の実景。
+
+### 体験ページ追加 第3弾（2026-10-02）
+
+- 吉野川ラフティング：既存サイト資産 `hero-rafting.png` を使用。
+- 高知ホースライディングクラブ：`kochi-horse-riding.jpg`。MIKI Yoshihito / Wikimedia Commons / CC BY 2.0。高知ホースライディングクラブの実写ではないため乗馬体験イメージとして扱う。
+- 鵜来島シュノーケル：既存の `uguru-fishing.jpg` を鵜来島の海イメージとして再利用。ブルーノ・プラス / Wikimedia Commons / CC BY 4.0。
+- 刃物鍛造体験：`sakoda-knife.jpg`。Tim Lively / Wikimedia Commons / CC BY-SA 3.0。迫田打刃物の実写ではなく鍛造刃物イメージとして扱う。
+- 内原野陶芸・ガラス体験：`uchiharano-pottery.jpg`。Eman abdelkader12 / Wikimedia Commons / CC BY-SA 4.0。内原野陶芸館の実写ではなく陶芸体験イメージとして扱う。

@@ -2,7 +2,7 @@ import {photos} from './photos.mjs';
 export const areas={kochi_city:'高知市内',east:'東部',west:'西部',north_niyodo:'北部・仁淀川'};
 export const categories={sightseeing:'観光',gourmet:'グルメ',cycling:'サイクリング',camp:'キャンプ',onsen:'温泉',michinoeki:'道の駅',stay:'宿泊',fishing:'釣り',surfing:'サーフィン',activity:'アクティビティ'};
 export const themes=['王道','グルメ','子連れ','カップル','絶景','ドライブ','アクティブ','雨の日'];
-export const filters={sightseeing:['絶景','歴史','子連れ','雨の日','デート','定番','穴場'],gourmet:['ひろめ市場','カツオ','郷土料理','居酒屋','ラーメン','ランチ','スイーツ','朝ごはん','おみやげ'],fishing:['海釣り','川釣り','手ぶら','初心者','予約制'],surfing:['サーフィン','初心者','スクール','通年'],activity:['川あそび','海あそび','釣り・漁業体験','空・山','洞窟体験','動物・自然観察','文化・ものづくり体験','食の体験']};
+export const filters={sightseeing:['絶景','歴史','子連れ','雨の日','デート','定番','穴場'],gourmet:['ひろめ市場','カツオ','郷土料理','居酒屋','ラーメン','ランチ','スイーツ','朝ごはん','おみやげ'],fishing:['海釣り','川釣り','手ぶら','初心者','予約制'],surfing:['サーフィン','初心者','スクール','通年'],activity:['川あそび','海あそび','釣り・漁業体験','空・山','洞窟体験','動物・自然観察','文化・ものづくり体験','食の体験','乗り物']};
 const rows=[
 ['ryugado','龍河洞','sightseeing','east','香美市','雨の日,子連れ,定番','地底に広がる、もうひとつの高知。'],
 ['nikobuchi','にこ淵','sightseeing','north_niyodo','いの町','絶景,定番','心をほどく、仁淀ブルー。'],
@@ -51,7 +51,12 @@ const rows=[
 ['tosa-tataki-dojo','土佐タタキ道場','activity','kochi_city','高知市','食の体験,子連れ','自分で藁焼きして、熱々のカツオを味わう。'],
 ['field-kochi','FIELD KOCHI 里山体験・土佐塩の道ウォーキング','activity','east','香美市','文化・ものづくり体験,食の体験,空・山','里山の暮らしと、歴史の道を体感する。'],
 ['ryugado-candle','龍河洞キャンドルづくり（38 phyto lab.）','activity','east','香美市','文化・ものづくり体験,雨の日','旅の思い出を、オリジナルキャンドルに。'],
-['shimanto-canoe','四万十川カヌー体験（しまんとベース）','activity','west','四万十市','川あそび,子連れ','清流・四万十川で、のんびりカヌー体験。']];
+['shimanto-canoe','四万十川カヌー体験（しまんとベース）','activity','west','四万十市','川あそび,子連れ','清流・四万十川で、のんびりカヌー体験。'],
+['yoshinogawa-rafting','吉野川ラフティング体験（You Me Rafting）','activity','north_niyodo','大豊町','川あそび,子連れ','四国・吉野川の流れを、ラフティングで体感。'],
+['kochi-horse-riding','高知ホースライディングクラブ 乗馬体験','activity','kochi_city','高知市','動物・自然観察,乗り物,子連れ','はじめてでも、馬とゆっくり仲良くなる時間。'],
+['uguru-snorkel','鵜来島 シュノーケル体験（うぐるBOX）','activity','west','宿毛市','海あそび,動物・自然観察','透明な海で、鵜来島の水中世界をのぞく。'],
+['sakoda-knife','刃物鍛造体験（迫田打刃物）','activity','west','須崎市','文化・ものづくり体験','職人と一緒に、一本の包丁を鍛え上げる。'],
+['uchiharano-craft','陶芸・ガラス体験（内原野陶芸館）','activity','east','安芸市','文化・ものづくり体験,雨の日,子連れ','土とガラスから、自分だけの作品をつくる。']];
 const spotInfo={
   ryugado:{address:'高知県香美市土佐山田町逆川1424',phone:'0887-53-2144',official_url:'https://ryugadou.or.jp/',parking_text:'駐車場約700台',access:'高知自動車道南国ICから車。土佐山田駅からバス。',last_verified_at:'2026-09-23'},
   nikobuchi:{address:'高知県吾川郡いの町清水上分',official_url:'https://nikobuchi.inofan.jp/site/access.html',parking_text:'指定駐車場あり。満車時は臨時駐車場等の案内を確認。',access:'伊野ICから車で約60分。JR伊野駅からバス利用後、徒歩約20〜30分。',last_verified_at:'2026-09-23'},
@@ -98,7 +103,12 @@ const spotInfo={
   'tosa-tataki-dojo':{address:'高知県高知市仁井田201-2',opening_hours:'10:30〜15:00（カツオがなくなり次第終了）',closed_days:'無休',price_text:'体験付き藁焼きタタキ定食1,800円／体験付き藁焼きタタキ単品1,500円',phone:'088-847-3255',official_url:'https://kochi-tabi.jp/search_spot.html?ID=7777&pcflg=SP',parking_text:'無料駐車場あり（普通車100台）',access:'高知ICから車で約20分。高知南ICから車で約10分。',last_verified_at:'2026-10-02',description:'自分でカツオを藁焼きし、焼きたてを味わえる高知らしい食体験です。カツオの入荷状況により早めに終了する場合があります。'},
   'field-kochi':{address:'高知県香美市物部町',opening_hours:'9:00〜17:00',closed_days:'不定休',price_text:'体験内容により異なる（要予約）',phone:'090-7622-1112',official_url:'https://kochi-tabi.jp/search_spot_activity.html?id=16497',parking_text:'体験場所により異なる',access:'香美市物部町内。集合場所は各プログラムの予約時に確認。',last_verified_at:'2026-10-02',description:'田舎寿司づくり、茶摘み、柚子狩りなどの里山体験と、歴史ある「土佐塩の道」を歩くガイドウォーキングを提供しています。電話または公式案内から事前予約が必要です。'},
   'ryugado-candle':{address:'高知県香美市土佐山田町逆川1395-1 2F',opening_hours:'12:00〜18:00',closed_days:'木曜日。火・水曜日は予約制ワークショップのみ営業',price_text:'キャンドル体験料金は予約サイトで確認',official_url:'https://ryugadou.or.jp/shops_restaurants/67/',parking_text:'龍河洞の駐車場を利用',access:'龍河洞入口の商店街内「38 phyto lab.」2F。',last_verified_at:'2026-10-02',description:'龍河洞観光とあわせて楽しめるキャンドルづくり体験。イニシャルキャンドルなど、旅のお土産になるオリジナル作品を作れます。'},
-  'shimanto-canoe':{address:'高知県四万十市西土佐津野川20-1',opening_hours:'8:30〜17:00',closed_days:'12月〜2月は冬季休業（案内により不定休表記あり）',price_text:'コース・時期により異なるため予約時に確認',phone:'0880-49-0113',official_url:'https://kochi-tabi.jp/search_ryoma_pass.html?id=15625',parking_text:'施設へ確認',access:'四万十町中央ICから車で約1時間10分。',last_verified_at:'2026-10-02',description:'四万十川で楽しむ半日・短時間のカヌー体験。川下りではなく一定範囲で練習・川遊びを楽しめるため、家族連れにも参加しやすいプログラムです。'}
+  'shimanto-canoe':{address:'高知県四万十市西土佐津野川20-1',opening_hours:'8:30〜17:00',closed_days:'12月〜2月は冬季休業（案内により不定休表記あり）',price_text:'コース・時期により異なるため予約時に確認',phone:'0880-49-0113',official_url:'https://kochi-tabi.jp/search_ryoma_pass.html?id=15625',parking_text:'施設へ確認',access:'四万十町中央ICから車で約1時間10分。',last_verified_at:'2026-10-02',description:'四万十川で楽しむ半日・短時間のカヌー体験。川下りではなく一定範囲で練習・川遊びを楽しめるため、家族連れにも参加しやすいプログラムです。'},
+  'yoshinogawa-rafting':{address:'高知県長岡郡大豊町永渕6-1',opening_hours:'8:00〜17:00（夏季8:00〜20:00）',closed_days:'12月〜3月は冬季休業',price_text:'体験料金は予約プランにより異なる',official_url:'https://kochi-tabi.jp/search_ryoma_pass.html?id=15399',parking_text:'施設へ確認',access:'高知自動車道・大豊ICから車で約20分。',last_verified_at:'2026-10-02',description:'吉野川の流れを楽しむラフティング体験。初心者向けから本格的なコースまであり、時期や水量により内容が変わるため予約時に最新情報をご確認ください。'},
+  'kochi-horse-riding':{address:'高知県高知市朝倉己1152番地99',opening_hours:'受付10:00〜17:00',closed_days:'火曜日（火曜が祝日の場合は月曜日）',price_text:'体験料金・参加条件は販売サイトで確認',official_url:'https://kochi-tabi.jp/search_activity_plan.html?plan_id=8141&plan_ota=aj',parking_text:'施設へ確認',access:'高知市朝倉エリア。詳細は予約時に確認。',last_verified_at:'2026-10-02',description:'馬に触れたことがない初心者でも、スタッフがマンツーマンで接し方や乗り方を案内する乗馬体験です。'},
+  'uguru-snorkel':{address:'高知県宿毛市沖の島町鵜来島58',opening_hours:'予約受付7:50〜21:00',closed_days:'不定休',price_text:'体験・レンタル料金は予約時に確認',phone:'080-4410-2441',official_url:'https://kochi-tabi.jp/search_spot.html?id=13597',parking_text:'島内施設の案内を確認',access:'片島港から宿毛市営定期船で約50分〜1時間35分。',last_verified_at:'2026-10-02',description:'鵜来島の透明度の高い海で楽しむシュノーケル体験。海況や季節により実施条件が変わるため、事前予約時に最新情報をご確認ください。'},
+  'sakoda-knife':{address:'高知県須崎市神田781',opening_hours:'予約受付9:00〜17:00',closed_days:'不定休（龍馬パスポート案内では日・祝休み）',price_text:'体験料金は公式案内・予約時に確認',phone:'0889-43-1907',official_url:'https://kochi-tabi.jp/search_spot.html?id=8277',parking_text:'施設へ確認',access:'高知自動車道・須崎東ICから車で約5分。',last_verified_at:'2026-10-02',description:'職人の指導のもと、鍛造から砥ぎ仕上げまでに触れ、完成した5寸万能包丁を持ち帰れる土佐打刃物の体験です。'},
+  'uchiharano-craft':{address:'高知県安芸市川北乙1607-1',opening_hours:'予約受付9:00〜17:00（体験受付15:00まで）',closed_days:'陶芸：水曜日（祝日の場合は開館）／ガラス：水・木曜日／年末年始12月29日〜1月4日',price_text:'陶芸体験3,000円〜／バーナーワーク3,000円〜／サンドブラスト1,500円〜',phone:'0887-32-0308',official_url:'https://lb2.kochi-tabi.jp/search_spot.html?id=860',parking_text:'無料駐車場あり',access:'南国ICから車で約1時間、芸西西ICから約25分。',last_verified_at:'2026-10-02',description:'手びねりや絵付けなどの陶芸体験に加え、ガラス工房ではバーナーワークやサンドブラストを体験できます。'}
 };
 const rank={};
 export const spots=rows.map(([slug,name,category,area,municipality,tags,catchphrase],i)=>({id:`00000000-0000-4000-8000-${String(i+1).padStart(12,'0')}`,slug,name,category,area,municipality,tags:tags.split(','),catchphrase,initial_rank:rank[category]=(rank[category]||0)+1,recommend_count:0,is_published:true,is_demo:false,photo:photos[slug]||null,main_image_url:photos[slug]?.src||'',description:'',created_at:`2026-09-${String(i+1).padStart(2,'0')}T00:00:00Z`,...(spotInfo[slug]||{})}));
