@@ -483,11 +483,15 @@ export const photos={
     "width": 1280, "height": 853, "position": "50% 50%", "checkedAt": "2026-10-02"
   },
   "shimizu-katsuo-show": {
-    "src": "/assets/photos/course-katsuo-tataki.png",
+    "src": "/assets/photos/shimizu-katsuo-kochi.jpg",
     "name": "市場直送カツオ 解体ショー＋藁焼き3種食べ比べ",
-    "alt": "高知のカツオ藁焼きをイメージした写真",
-    "author": "既存サイト画像", "source": "", "license": "既存サイト資産", "licenseUrl": "",
-    "width": 1456, "height": 1020, "position": "50% 50%", "checkedAt": "2026-10-02"
+    "alt": "高知市で撮影されたカツオのたたき",
+    "author": "ノボホショコロトソ",
+    "source": "https://commons.wikimedia.org/wiki/File:Katsuo_no_tataki_at_Kochi_City.jpg",
+    "title": "Katsuo no tataki at Kochi City.jpg",
+    "license": "CC BY 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by/4.0/",
+    "width": 1600, "height": 1200, "position": "50% 50%", "checkedAt": "2026-10-03"
   },
   "sakawa-black-tea-tasting": {
     "src": "/assets/photos/field-kochi.jpg",
@@ -560,11 +564,15 @@ export const photos={
     "width": 1280, "height": 960, "position": "50% 50%", "checkedAt": "2026-10-02"
   },
   "yodo-line-cycle-rafting": {
-    "src": "/assets/photos/hero-rafting.png",
+    "src": "/assets/photos/yodo-line-shimanto.jpg",
     "name": "予土線＋自転車＋ラフティングで巡る四万十川",
-    "alt": "四万十川のラフティングをイメージした写真",
-    "author": "既存サイト画像", "source": "", "license": "既存サイト資産", "licenseUrl": "",
-    "width": 1456, "height": 1020, "position": "50% 50%", "checkedAt": "2026-10-02"
+    "alt": "四万十川沿いを走る予土線の実景",
+    "author": "Takuma-sa",
+    "source": "https://commons.wikimedia.org/wiki/File:Yodo_Line_and_Shimanto_river.JPG",
+    "title": "Yodo Line and Shimanto river.JPG",
+    "license": "CC BY-SA 3.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0/",
+    "width": 1600, "height": 1200, "position": "50% 50%", "checkedAt": "2026-10-03"
   },
   "shimizu-saba-town-tour": {
     "src": "/assets/photos/course-ocean-seafood.png",
@@ -667,11 +675,15 @@ export const photos={
     "width": 1280, "height": 960, "position": "50% 50%", "checkedAt": "2026-10-02"
   },
   "kochi-kimono-ozashiki": {
-    "src": "/assets/photos/event-yosakoi.png",
+    "src": "/assets/photos/kochi-ozashiki-asobi.jpg",
     "name": "着物で楽しむ 料亭濱長お座敷遊び体験",
-    "alt": "高知の伝統文化をイメージした写真",
-    "author": "既存サイト画像", "source": "", "license": "既存サイト資産", "licenseUrl": "",
-    "width": 1456, "height": 1020, "position": "50% 50%", "checkedAt": "2026-10-02"
+    "alt": "お茶屋で舞妓と金毘羅船々を楽しむお座敷遊びのイメージ",
+    "author": "Japanexperterna.se",
+    "source": "https://commons.wikimedia.org/wiki/File:Konpira_fune_fune.jpg",
+    "title": "Konpira fune fune.jpg",
+    "license": "CC BY-SA 3.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0/",
+    "width": 1600, "height": 1066, "position": "50% 50%", "checkedAt": "2026-10-03"
   },
   "hanpeita-harimaya-guide": {
     "src": "/assets/photos/sakamoto-ryoma-memorial-museum.png",
@@ -763,14 +775,15 @@ export const photos={
     "width": 1280, "height": 960, "position": "50% 50%", "checkedAt": "2026-10-02"
   },
   "kochi-market-fruit-basket": {
-    "src": "/assets/photos/field-kochi.jpg",
+    "src": "/assets/photos/kochi-market-auction.jpg",
     "name": "高知市卸売市場 果物のセリ見学＋マイフルーツバスケット作り",
-    "alt": "高知の農産物と地域の暮らしをイメージした風景",
-    "author": "Indiana jo",
-    "source": "https://commons.wikimedia.org/wiki/File:Kiiji,_Haratani_village_02.jpg",
+    "alt": "日本の中央卸売市場で行われる青果のセリのイメージ",
+    "author": "慈姑鑑真",
+    "source": "https://commons.wikimedia.org/wiki/File:%E3%82%BB%E3%83%AA%E3%81%AE%E6%A7%98%E5%AD%90.jpg",
+    "title": "セリの様子.jpg",
     "license": "CC BY-SA 4.0",
     "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
-    "width": 1280, "height": 960, "position": "50% 50%", "checkedAt": "2026-10-02"
+    "width": 1600, "height": 900, "position": "50% 50%", "checkedAt": "2026-10-03"
   },
   "shimanto-sada-cycling": {
     "src": "/assets/photos/shimanto-canoe.jpg",

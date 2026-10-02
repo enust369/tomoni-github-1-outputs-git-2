@@ -431,3 +431,11 @@ CC BY 2.0/2.5は著作者・出典・ライセンス・変更を表示。写真�
 - `ikegawa-afternoon-tea`：汎用仁淀川画像から、仁淀川町・池川地区の実景 `ikegawa-area.jpg` へ差し替え。Sanjo / Wikimedia Commons / CC BY-SA 4.0。アフタヌーンティーそのものの実写ではない。
 - `tosa-mokumen-factory`：森林アクティビティ画像から、木毛（wood wool）の実物 `tosa-mokumen-material.jpg` へ差し替え。Meanwell Packaging / Wikimedia Commons / CC BY 2.0。戸田商行の工場実写ではない。
 - `kaiyodo-nankoku-workshop`：里山画像から、海洋堂のフィギュア展示 `kaiyodo-figure-display.jpg` へ差し替え。LittleT889 / Wikimedia Commons / CC BY 4.0。大阪の海洋堂施設で撮影された写真のため、Space Factoryなんこくの実写ではなく海洋堂フィギュア展示イメージとして扱う。
+
+### 写真差し替え実施 第3弾（2026-10-03）
+
+- `kochi-market-fruit-basket`：里山画像から、日本の中央卸売市場で行われる実際の青果セリ `kochi-market-auction.jpg` へ差し替え。慈姑鑑真 / Wikimedia Commons / CC BY-SA 4.0。撮影地は福岡市中央卸売市場のため、高知市卸売市場の実写ではなく「青果セリのイメージ」として扱う。
+- `kochi-kimono-ozashiki`：よさこい系画像から、実際のお座敷遊び「金毘羅船々」 `kochi-ozashiki-asobi.jpg` へ差し替え。Japanexperterna.se / Wikimedia Commons / CC BY-SA 3.0。撮影地は京都のため、料亭濱長の実写ではなくお座敷遊びイメージとして扱う。
+- `shimizu-katsuo-show`：汎用カツオ画像から、高知市で撮影されたカツオのたたき実写 `shimizu-katsuo-kochi.jpg` へ差し替え。ノボホショコロトソ / Wikimedia Commons / CC BY 4.0。土佐清水の市場・解体ショーそのものの実写ではない。
+- `yodo-line-cycle-rafting`：ラフティングのみの画像から、四万十川沿いを走る予土線の実景 `yodo-line-shimanto.jpg` へ差し替え。Takuma-sa / Wikimedia Commons / CC BY-SA 3.0。自転車・ラフティング部分は写っていないが、ツアーの主要要素である予土線と四万十川を実景で示す。
+- `bentenza-backstage-experience`：権利確認できる弁天座実写を確認できなかったため今回も未変更。
