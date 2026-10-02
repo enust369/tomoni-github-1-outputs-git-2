@@ -456,6 +456,36 @@ export const photos={
     "position": "50% 46%",
     "checkedAt": "2026-10-01"
   },
+  "kaiyodo-nankoku-workshop": {
+    "src": "/assets/photos/field-kochi.jpg",
+    "name": "ものづくり体験（海洋堂Space Factoryなんこく）",
+    "alt": "高知の地域体験をイメージした風景",
+    "author": "Indiana jo",
+    "source": "https://commons.wikimedia.org/wiki/File:Kiiji,_Haratani_village_02.jpg",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "width": 1280, "height": 960, "position": "50% 50%", "checkedAt": "2026-10-02"
+  },
+  "obuchi-kokedama": {
+    "src": "/assets/photos/field-kochi.jpg",
+    "name": "苔玉づくり体験（おおぶち自然村）",
+    "alt": "高知の里山と緑の風景",
+    "author": "Indiana jo",
+    "source": "https://commons.wikimedia.org/wiki/File:Kiiji,_Haratani_village_02.jpg",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "width": 1280, "height": 960, "position": "50% 50%", "checkedAt": "2026-10-02"
+  },
+  "tosa-shio-no-michi-walk": {
+    "src": "/assets/photos/field-kochi.jpg",
+    "name": "土佐塩の道ウォーク（FIELD KOCHI）",
+    "alt": "高知の山里を歩く体験のイメージ",
+    "author": "Indiana jo",
+    "source": "https://commons.wikimedia.org/wiki/File:Kiiji,_Haratani_village_02.jpg",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "width": 1280, "height": 960, "position": "50% 50%", "checkedAt": "2026-10-02"
+  },
   "kochi-market-fruit-basket": {
     "src": "/assets/photos/field-kochi.jpg",
     "name": "高知市卸売市場 果物のセリ見学＋マイフルーツバスケット作り",
