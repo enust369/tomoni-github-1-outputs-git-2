@@ -591,14 +591,15 @@ export const photos={
     "width": 1280, "height": 853, "position": "50% 50%", "checkedAt": "2026-10-02"
   },
   "tsuno-tea-fullcourse": {
-    "src": "/assets/photos/field-kochi.jpg",
+    "src": "/assets/photos/tsuno-source-river.jpg",
     "name": "津野町 茶畑ウォーキング＋茶摘み＋田舎ごはん",
-    "alt": "津野町の茶畑体験をイメージした山あいの風景",
-    "author": "Indiana jo",
-    "source": "https://commons.wikimedia.org/wiki/File:Kiiji,_Haratani_village_02.jpg",
-    "license": "CC BY-SA 4.0",
-    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
-    "width": 1280, "height": 960, "position": "50% 50%", "checkedAt": "2026-10-02"
+    "alt": "高知県津野町・四万十川源流部の実景",
+    "author": "Asset utilitist",
+    "source": "https://commons.wikimedia.org/wiki/File:%E5%9B%9B%E4%B8%87%E5%8D%81%E5%B7%9D%E6%BA%90%E6%B5%81%E9%83%A8.jpg",
+    "title": "四万十川源流部.jpg",
+    "license": "CC0",
+    "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/",
+    "width": 1600, "height": 1200, "position": "50% 50%", "checkedAt": "2026-10-03"
   },
   "kiriyama-roasting-teacan": {
     "src": "/assets/photos/field-kochi.jpg",
@@ -611,11 +612,15 @@ export const photos={
     "width": 1280, "height": 960, "position": "50% 50%", "checkedAt": "2026-10-02"
   },
   "yusuhara-china-paint": {
-    "src": "/assets/photos/yusuhara.jpg",
+    "src": "/assets/photos/yusuhara-town.jpg",
     "name": "梼原 本格絵付け体験",
-    "alt": "梼原町の町並みをイメージした写真",
-    "author": "既存サイト画像", "source": "", "license": "既存サイト資産", "licenseUrl": "",
-    "width": 1280, "height": 960, "position": "50% 50%", "checkedAt": "2026-10-02"
+    "alt": "高知県梼原町梼原の町並み実景",
+    "author": "osami",
+    "source": "https://commons.wikimedia.org/wiki/File:1yusuharaza.jpg",
+    "title": "1yusuharaza.jpg",
+    "license": "Public Domain",
+    "licenseUrl": "https://creativecommons.org/publicdomain/mark/1.0/",
+    "width": 1600, "height": 1200, "position": "50% 50%", "checkedAt": "2026-10-03"
   },
   "tosayama-haiku": {
     "src": "/assets/photos/field-kochi.jpg",
@@ -1163,18 +1168,18 @@ export const photos={
     "checkedAt": "2026-10-02"
   },
   "tsuno-tea-field": {
-    "src": "/assets/photos/field-kochi.jpg",
+    "src": "/assets/photos/tsuno-source-river.jpg",
     "name": "津野茶 茶畑見学・お茶体験",
-    "alt": "山あいの里山風景のイメージ",
-    "author": "Indiana jo",
-    "source": "https://commons.wikimedia.org/wiki/File:Kiiji,_Haratani_village_02.jpg",
-    "title": "Kiiji, Haratani village 02.jpg",
-    "license": "CC BY-SA 4.0",
-    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
-    "width": 1280,
-    "height": 960,
+    "alt": "高知県津野町・四万十川源流部の実景",
+    "author": "Asset utilitist",
+    "source": "https://commons.wikimedia.org/wiki/File:%E5%9B%9B%E4%B8%87%E5%8D%81%E5%B7%9D%E6%BA%90%E6%B5%81%E9%83%A8.jpg",
+    "title": "四万十川源流部.jpg",
+    "license": "CC0",
+    "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/",
+    "width": 1600,
+    "height": 1200,
     "position": "50% 50%",
-    "checkedAt": "2026-10-02"
+    "checkedAt": "2026-10-03"
   },
   "muroto-aqua-farm": {
     "src": "/assets/photos/muroto.jpg",

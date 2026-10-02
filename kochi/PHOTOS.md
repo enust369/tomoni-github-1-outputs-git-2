@@ -451,3 +451,10 @@ CC BY 2.0/2.5は著作者・出典・ライセンス・変更を表示。写真�
 - `mihara-slow-cycling`：汎用里山画像から、実際の三原村・星ヶ丘公園 `mihara-hoshigaoka.jpg` へ差し替え。Lumi iori / Wikimedia Commons / CC BY-SA 4.0。サイクリング中の実写ではないが、開催地域の実景。
 - `mihara-rural-stay`：汎用里山画像から、実際の三原村・星ヶ丘公園 `mihara-hoshigaoka.jpg` へ差し替え。Lumi iori / Wikimedia Commons / CC BY-SA 4.0。農家民宿そのものの実写ではないが、開催地域の実景。
 - `asemikawa-ebike`、`iwayagawa-irimochi-hike`、`shimanto-yairocho-walk`、`yoshino-headwaters-track-walk` は、現地写真は確認できたものの転載・再利用条件まで確定できないものが中心だったため今回は未変更。
+
+### 写真差し替え実施 第6弾（2026-10-03）
+
+- `tsuno-tea-fullcourse`：汎用里山画像から、実際の津野町・四万十川源流部 `tsuno-source-river.jpg` へ差し替え。Asset utilitist / Wikimedia Commons / CC0。茶摘みそのものの実写ではないが、開催地域の実景。
+- `tsuno-tea-field`：汎用里山画像から、実際の津野町・四万十川源流部 `tsuno-source-river.jpg` へ差し替え。Asset utilitist / Wikimedia Commons / CC0。茶畑そのものの実写ではないが、開催地域の実景。
+- `yusuhara-china-paint`：既存の梼原イメージ画像から、実際の梼原町梼原の町並み `yusuhara-town.jpg` へ差し替え。osami / Wikimedia Commons / Public Domain。絵付け体験そのものの実写ではない。
+- `kiriyama-roasting-teacan` と `tosayama-haiku` は、開催地・内容・権利条件を同時に満たす写真が不足しているため今回は未変更。
