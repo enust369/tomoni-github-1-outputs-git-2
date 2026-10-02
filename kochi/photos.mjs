@@ -456,6 +456,33 @@ export const photos={
     "position": "50% 46%",
     "checkedAt": "2026-10-01"
   },
+  "takemasa-sodabushi": {
+    "src": "/assets/photos/course-katsuo-tataki.png",
+    "name": "伝統の節納屋見学＆宗田節体験（たけまさ商店）",
+    "alt": "高知のかつお文化をイメージした写真",
+    "author": "既存サイト画像", "source": "", "license": "既存サイト資産", "licenseUrl": "",
+    "width": 1456, "height": 1020, "position": "50% 50%", "checkedAt": "2026-10-02"
+  },
+  "niyodogawa-seicho-paper": {
+    "src": "/assets/photos/ino-papermaking.jpg",
+    "name": "土佐清張紙 工房見学＋クラフト体験",
+    "alt": "土佐和紙づくりをイメージした歴史資料",
+    "author": "Library of Congress",
+    "source": "https://www.loc.gov/",
+    "license": "Public Domain",
+    "licenseUrl": "https://www.loc.gov/free-to-use/",
+    "width": 1280, "height": 1056, "position": "50% 50%", "checkedAt": "2026-10-02"
+  },
+  "umaji-yuzu-forest-ebike": {
+    "src": "/assets/photos/field-kochi.jpg",
+    "name": "魚梁瀬森林鉄道跡とゆずロード E-bikeツアー",
+    "alt": "高知の山里を走るサイクリングのイメージ",
+    "author": "Indiana jo",
+    "source": "https://commons.wikimedia.org/wiki/File:Kiiji,_Haratani_village_02.jpg",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "width": 1280, "height": 960, "position": "50% 50%", "checkedAt": "2026-10-02"
+  },
   "kaiyodo-nankoku-workshop": {
     "src": "/assets/photos/field-kochi.jpg",
     "name": "ものづくり体験（海洋堂Space Factoryなんこく）",
