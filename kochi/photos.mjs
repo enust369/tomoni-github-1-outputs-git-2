@@ -485,6 +485,47 @@ export const photos={
     "position": "50% 50%",
     "checkedAt": "2026-09-21"
   },
+  "withriver-shimanto": {
+    "src": "/assets/photos/shimanto-canoe.jpg",
+    "name": "四万十川 SUP・カヌー ガイドツアー（withRIVER）",
+    "alt": "四万十市西土佐を流れる四万十川",
+    "author": "Cherrysherbet",
+    "source": "https://commons.wikimedia.org/wiki/File:Nishitosa_Shimanto_river.jpg",
+    "title": "Nishitosa Shimanto river.jpg",
+    "license": "CC BY-SA 3.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0/",
+    "width": 604,
+    "height": 453,
+    "position": "50% 50%",
+    "checkedAt": "2026-10-02"
+  },
+  "garbanzo-yoshino": {
+    "src": "/assets/photos/hero-rafting.png",
+    "name": "アウトドア！ガルバンゾ 吉野川リバーアクティビティ",
+    "alt": "吉野川のリバーアクティビティのイメージ",
+    "author": "既存サイト画像",
+    "source": "",
+    "license": "既存サイト資産",
+    "licenseUrl": "",
+    "width": 1448,
+    "height": 1086,
+    "position": "50% 50%",
+    "checkedAt": "2026-10-02"
+  },
+  "tsuno-tea-field": {
+    "src": "/assets/photos/field-kochi.jpg",
+    "name": "津野茶 茶畑見学・お茶体験",
+    "alt": "山あいの里山風景のイメージ",
+    "author": "Indiana jo",
+    "source": "https://commons.wikimedia.org/wiki/File:Kiiji,_Haratani_village_02.jpg",
+    "title": "Kiiji, Haratani village 02.jpg",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "width": 1280,
+    "height": 960,
+    "position": "50% 50%",
+    "checkedAt": "2026-10-02"
+  },
   "muroto-aqua-farm": {
     "src": "/assets/photos/muroto.jpg",
     "name": "室戸海洋深層水アクア・ファーム",
