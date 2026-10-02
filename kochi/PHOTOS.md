@@ -417,3 +417,10 @@ CC BY 2.0/2.5は著作者・出典・ライセンス・変更を表示。写真�
 
 #### 優先度C：現地実景を使っており、体験中の写真ではないが誤解が少ない
 - 柏島ダイビング、竜串グラスボート、足摺E-bike、伊尾木洞朝ツアーなど。地域の実景が一致しているため、A/B完了後に対応する。
+
+### 写真差し替え実施（2026-10-03）
+
+- `gomen-nahari-fruit-train`：`field-kochi.jpg` から、ごめん・なはり線を走る土佐くろしお鉄道9640形の実写 `gomen-nahari-train.jpg` へ差し替え。MaedaAkihiko / Wikimedia Commons / CC0。
+- `ino-papermaking`：歴史版画から、いの町紙の博物館の実際の外観 `ino-paper-museum.jpg` へ差し替え。At by At / Wikimedia Commons / CC BY-SA 3.0。
+- `ogata-whale`：入野海岸のみの写真から、ニタリクジラの実写 `ogata-whale-brydes.jpg` へ差し替え。Chainfoto / Wikimedia Commons / CC BY 4.0。撮影地はタイ湾のため、高知現地写真ではなく「ニタリクジラのイメージ」として扱う。
+- `bentenza-backstage-experience`：再利用条件を確認できる弁天座実写が見つからなかったため今回は未変更。権利確認できる写真が見つかるまで既存イメージを維持する。

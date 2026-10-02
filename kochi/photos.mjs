@@ -242,18 +242,18 @@ export const photos={
     "checkedAt": "2026-10-02"
   },
   "ino-papermaking": {
-    "src": "/assets/photos/ino-papermaking.jpg",
+    "src": "/assets/photos/ino-paper-museum.jpg",
     "name": "紙漉き体験（いの町紙の博物館）",
-    "alt": "江戸時代の紙漉きを描いた版画イメージ",
-    "author": "Japanese fine prints, pre-1915 / Library of Congress",
-    "source": "https://commons.wikimedia.org/wiki/File:Kamisuki_LCCN2009615107.jpg",
-    "title": "Kamisuki LCCN2009615107.jpg",
-    "license": "Public Domain",
-    "licenseUrl": "https://creativecommons.org/publicdomain/mark/1.0/",
-    "width": 1280,
-    "height": 1057,
+    "alt": "高知県いの町紙の博物館の外観",
+    "author": "At by At",
+    "source": "https://commons.wikimedia.org/wiki/File:Ino_Japanese_Paper_Museum_201303.JPG",
+    "title": "Ino Japanese Paper Museum 201303.JPG",
+    "license": "CC BY-SA 3.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0/",
+    "width": 1600,
+    "height": 1200,
     "position": "50% 50%",
-    "checkedAt": "2026-10-02"
+    "checkedAt": "2026-10-03"
   },
   "yosakoi-naruko": {
     "src": "/assets/photos/yosakoi-naruko.jpg",
@@ -312,17 +312,18 @@ export const photos={
     "checkedAt": "2026-10-02"
   },
   "ogata-whale": {
-    "src": "/assets/photos/irino-surf.jpg",
+    "src": "/assets/photos/ogata-whale-brydes.jpg",
     "name": "大方ホエールウォッチング",
-    "alt": "黒潮町・入野海岸の海辺",
-    "author": "Ubuhouse",
-    "source": "https://commons.wikimedia.org/wiki/File:入野海岸.jpg",
-    "license": "CC BY-SA 3.0",
-    "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0/",
-    "width": 960,
-    "height": 720,
+    "alt": "海面近くを泳ぐニタリクジラのイメージ",
+    "author": "Chainfoto",
+    "source": "https://commons.wikimedia.org/wiki/File:Bryde%27s_whale_1.jpg",
+    "title": "Bryde's whale 1.jpg",
+    "license": "CC BY 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by/4.0/",
+    "width": 1600,
+    "height": 1066,
     "position": "50% 50%",
-    "checkedAt": "2026-10-02"
+    "checkedAt": "2026-10-03"
   },
   "uguru-fishing": {
     "src": "/assets/photos/uguru-fishing.jpg",
@@ -612,14 +613,15 @@ export const photos={
     "width": 1280, "height": 853, "position": "50% 50%", "checkedAt": "2026-10-02"
   },
   "gomen-nahari-fruit-train": {
-    "src": "/assets/photos/field-kochi.jpg",
+    "src": "/assets/photos/gomen-nahari-train.jpg",
     "name": "ごめん・なはり線 絶景フルーツ列車",
-    "alt": "高知東部の風景をイメージした写真",
-    "author": "Indiana jo",
-    "source": "https://commons.wikimedia.org/wiki/File:Kiiji,_Haratani_village_02.jpg",
-    "license": "CC BY-SA 4.0",
-    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
-    "width": 1280, "height": 960, "position": "50% 50%", "checkedAt": "2026-10-02"
+    "alt": "ごめん・なはり線を走る土佐くろしお鉄道9640形気動車",
+    "author": "MaedaAkihiko",
+    "source": "https://commons.wikimedia.org/wiki/File:Tosa-Kuroshio-Railway_Series9640-10.jpg",
+    "title": "Tosa-Kuroshio-Railway Series9640-10.jpg",
+    "license": "CC0",
+    "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/",
+    "width": 1600, "height": 1066, "position": "50% 50%", "checkedAt": "2026-10-03"
   },
   "kure-fisher-town-fullcourse": {
     "src": "/assets/photos/course-katsuo-tataki.png",
