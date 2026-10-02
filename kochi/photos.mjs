@@ -456,6 +456,30 @@ export const photos={
     "position": "50% 46%",
     "checkedAt": "2026-10-01"
   },
+  "yoshino-headwaters-track-walk": {
+    "src": "/assets/photos/hero-forest-adventure.png",
+    "name": "吉野川源流森林軌道ウォーク",
+    "alt": "高知の森林を歩く体験のイメージ",
+    "author": "既存サイト画像", "source": "", "license": "既存サイト資産", "licenseUrl": "",
+    "width": 1456, "height": 1020, "position": "50% 50%", "checkedAt": "2026-10-02"
+  },
+  "monobe-izanagi-stay": {
+    "src": "/assets/photos/field-kochi.jpg",
+    "name": "まきの宿 いざなぎ流・古民家宿泊体験",
+    "alt": "高知の山里と暮らしをイメージした風景",
+    "author": "Indiana jo",
+    "source": "https://commons.wikimedia.org/wiki/File:Kiiji,_Haratani_village_02.jpg",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "width": 1280, "height": 960, "position": "50% 50%", "checkedAt": "2026-10-02"
+  },
+  "shimanto-yairocho-walk": {
+    "src": "/assets/photos/hero-forest-adventure.png",
+    "name": "四万十ヤイロチョウの森と森林鉄道遺構ウォーク",
+    "alt": "高知の深い森を歩く自然観察のイメージ",
+    "author": "既存サイト画像", "source": "", "license": "既存サイト資産", "licenseUrl": "",
+    "width": 1456, "height": 1020, "position": "50% 50%", "checkedAt": "2026-10-02"
+  },
   "takemasa-sodabushi": {
     "src": "/assets/photos/course-katsuo-tataki.png",
     "name": "伝統の節納屋見学＆宗田節体験（たけまさ商店）",
