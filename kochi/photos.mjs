@@ -485,6 +485,58 @@ export const photos={
     "position": "50% 50%",
     "checkedAt": "2026-09-21"
   },
+  "kuroshio-soba": {
+    "src": "/assets/photos/field-kochi.jpg",
+    "name": "そば打ち体験（であいの里 蜷川）",
+    "alt": "山里で楽しむ食体験のイメージ",
+    "author": "Indiana jo",
+    "source": "https://commons.wikimedia.org/wiki/File:Kiiji,_Haratani_village_02.jpg",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "width": 1280,
+    "height": 960,
+    "position": "50% 50%",
+    "checkedAt": "2026-10-02"
+  },
+  "hinodeya-konnyaku": {
+    "src": "/assets/photos/field-kochi.jpg",
+    "name": "こんにゃく作り体験（燈ので家）",
+    "alt": "山あいの農家体験のイメージ",
+    "author": "Indiana jo",
+    "source": "https://commons.wikimedia.org/wiki/File:Kiiji,_Haratani_village_02.jpg",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "width": 1280,
+    "height": 960,
+    "position": "50% 50%",
+    "checkedAt": "2026-10-02"
+  },
+  "seiran-konnyaku": {
+    "src": "/assets/photos/field-kochi.jpg",
+    "name": "田舎こんにゃく体験（せいらんの里）",
+    "alt": "津野町の山里体験のイメージ",
+    "author": "Indiana jo",
+    "source": "https://commons.wikimedia.org/wiki/File:Kiiji,_Haratani_village_02.jpg",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "width": 1280,
+    "height": 960,
+    "position": "50% 50%",
+    "checkedAt": "2026-10-02"
+  },
+  "qraud-papermaking": {
+    "src": "/assets/photos/ino-papermaking.jpg",
+    "name": "紙漉き体験（土佐和紙工芸村「くらうど」）",
+    "alt": "紙漉きの工程を描いた歴史資料",
+    "author": "Library of Congress",
+    "source": "https://www.loc.gov/pictures/item/2008660729/",
+    "license": "Public Domain",
+    "licenseUrl": "",
+    "width": 1280,
+    "height": 1056,
+    "position": "50% 50%",
+    "checkedAt": "2026-10-02"
+  },
   "soltive-salt": {
     "src": "/assets/photos/irino-surf.jpg",
     "name": "天日塩づくり体験（ソルティーブ）",

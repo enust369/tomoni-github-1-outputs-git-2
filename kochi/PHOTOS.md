@@ -277,3 +277,10 @@ CC BY 2.0/2.5は著作者・出典・ライセンス・変更を表示。写真�
 - 完全天日塩づくり体験（田野町）：既存の `muroto.jpg` を高知県東部の海岸イメージとして使用。Rsa / Wikimedia Commons / CC BY-SA 3.0。施設実写ではない。
 - 土佐町 木組み・鍋敷きづくり体験：既存の `field-kochi.jpg` を山間の里山イメージとして使用。Indiana jo / Wikimedia Commons / CC BY-SA 4.0。土佐町の実写ではない。
 - 四万十川 伝統漁法体験：既存の `shimanto-canoe.jpg` を四万十川の実景として再利用。Cherrysherbet / Wikimedia Commons / CC BY-SA 3.0。
+
+### 体験ページ追加 第8弾（2026-10-02）
+
+- そば打ち体験（であいの里 蜷川）：既存の `field-kochi.jpg` を山里の食体験イメージとして使用。Indiana jo / Wikimedia Commons / CC BY-SA 4.0。黒潮町蜷川の実写ではない。
+- こんにゃく作り体験（燈ので家）：既存の `field-kochi.jpg` を山あいの農家体験イメージとして使用。Indiana jo / Wikimedia Commons / CC BY-SA 4.0。燈ので家の実写ではない。
+- 田舎こんにゃく体験（せいらんの里）：既存の `field-kochi.jpg` を山里体験イメージとして使用。Indiana jo / Wikimedia Commons / CC BY-SA 4.0。せいらんの里の実写ではない。
+- 紙漉き体験（土佐和紙工芸村「くらうど」）：既存の `ino-papermaking.jpg` を紙漉きイメージとして再利用。Library of Congress / Public Domain。現代の施設実写ではない。

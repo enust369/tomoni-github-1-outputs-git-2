@@ -1,8 +1,8 @@
 import {photos} from './photos.mjs';
 export const areas={kochi_city:'高知市内',east:'東部',west:'西部',north_niyodo:'北部・仁淀川'};
-export const categories={sightseeing:'観光',gourmet:'グルメ',cycling:'サイクリング',camp:'キャンプ',onsen:'温泉',michinoeki:'道の駅',stay:'宿泊',fishing:'釣り',surfing:'サーフィン',activity:'アクティビティ'};
+export const categories={sightseeing:'観光',gourmet:'グルメ',cycling:'サイクリング',camp:'キャンプ',onsen:'温泉',michinoeki:'道の駅',stay:'宿泊',fishing:'釣り',surfing:'サーフィン',activity:'アクティビティ',experience:'体験'};
 export const themes=['王道','グルメ','子連れ','カップル','絶景','ドライブ','アクティブ','雨の日'];
-export const filters={sightseeing:['絶景','歴史','子連れ','雨の日','デート','定番','穴場'],gourmet:['ひろめ市場','カツオ','郷土料理','居酒屋','ラーメン','ランチ','スイーツ','朝ごはん','おみやげ'],fishing:['海釣り','川釣り','手ぶら','初心者','予約制'],surfing:['サーフィン','初心者','スクール','通年'],activity:['川あそび','海あそび','釣り・漁業体験','空・山','洞窟体験','動物・自然観察','文化・ものづくり体験','食の体験','乗り物','施設見学','ガイドツアー','レンタサイクル']};
+export const filters={sightseeing:['絶景','歴史','子連れ','雨の日','デート','定番','穴場'],gourmet:['ひろめ市場','カツオ','郷土料理','居酒屋','ラーメン','ランチ','スイーツ','朝ごはん','おみやげ'],fishing:['海釣り','川釣り','手ぶら','初心者','予約制'],surfing:['サーフィン','初心者','スクール','通年'],activity:['川あそび','海あそび','空・山','動物・自然観察','乗り物','レンタサイクル'],experience:['文化・ものづくり体験','食の体験','施設見学','ガイドツアー','釣り・漁業体験','雨の日','子連れ']};
 const rows=[
 ['ryugado','龍河洞','sightseeing','east','香美市','雨の日,子連れ,定番','地底に広がる、もうひとつの高知。'],
 ['nikobuchi','にこ淵','sightseeing','north_niyodo','いの町','絶景,定番','心をほどく、仁淀ブルー。'],
@@ -38,40 +38,44 @@ const rows=[
 ['uguru-fishing','鵜来島 釣り体験（うぐるBOX）','fishing','west','宿毛市','海釣り,予約制','透明な海に囲まれた離島で、釣りを楽しむ。'],
 ['tatsukushi-fishing','竜串 船釣り体験（西本渡船）','fishing','west','土佐清水市','海釣り,手ぶら,予約制','竜串の海を船でめぐりながら、釣りを楽しむ。'],
 ['niyodo-fishing','仁淀川の釣り','fishing','north_niyodo','仁淀川流域','川釣り','清流・仁淀川で、川と向き合う釣り時間。'],
-['kaminokae-fishery','上ノ加江漁業体験','activity','west','中土佐町','釣り・漁業体験,海あそび','漁師と一緒に、海の仕事を体験。'],
+['kaminokae-fishery','上ノ加江漁業体験','experience','west','中土佐町','釣り・漁業体験,海あそび','漁師と一緒に、海の仕事を体験。'],
 ['ogata-whale','大方ホエールウォッチング','activity','west','黒潮町','海あそび,動物・自然観察','漁船で、クジラとイルカを探す海へ。'],
 ['noichi-zoo','高知県立のいち動物公園','activity','east','香南市','動物・自然観察,子連れ','自然の中で、いきいきと暮らす動物たちに会いに。'],
 ['muroto-dolphin','室戸ドルフィンセンター','activity','east','室戸市','動物・自然観察,海あそび,子連れ','イルカとふれあう、室戸の特別な時間。'],
 ['forest-adventure-kochi','フォレストアドベンチャー・高知','activity','west','津野町','空・山,子連れ','森の中で、全身を使って冒険しよう。'],
 ['niyodo-buggy','NIYODO バギー体験（NOZUアドベンチャー）','activity','north_niyodo','日高村','空・山,乗り物','仁淀川の自然を、バギーで駆け抜ける。'],
 ['agawa-paragliding','吾川スカイパーク パラグライダー','activity','north_niyodo','仁淀川町','空・山','仁淀ブルーを見下ろす、空中散歩へ。'],
-['ino-papermaking','紙漉き体験（いの町紙の博物館）','activity','north_niyodo','いの町','文化・ものづくり体験,子連れ','土佐和紙を、自分の手ですく。'],
-['yosakoi-naruko','鳴子づくり体験（高知よさこい情報交流館）','activity','kochi_city','高知市','文化・ものづくり体験,雨の日','よさこいの鳴子を、自分で仕上げる。'],
-['katsuo-waraya','カツオの藁焼きタタキづくり体験（黒潮一番館）','activity','west','黒潮町','食の体験,文化・ものづくり体験','自分で焼く、豪快なカツオの藁焼き。'],
-['tosa-tataki-dojo','土佐タタキ道場','activity','kochi_city','高知市','食の体験,子連れ','自分で藁焼きして、熱々のカツオを味わう。'],
-['field-kochi','FIELD KOCHI 里山体験・土佐塩の道ウォーキング','activity','east','香美市','文化・ものづくり体験,食の体験,空・山','里山の暮らしと、歴史の道を体感する。'],
-['ryugado-candle','龍河洞キャンドルづくり（38 phyto lab.）','activity','east','香美市','文化・ものづくり体験,雨の日','旅の思い出を、オリジナルキャンドルに。'],
+['ino-papermaking','紙漉き体験（いの町紙の博物館）','experience','north_niyodo','いの町','文化・ものづくり体験,子連れ','土佐和紙を、自分の手ですく。'],
+['yosakoi-naruko','鳴子づくり体験（高知よさこい情報交流館）','experience','kochi_city','高知市','文化・ものづくり体験,雨の日','よさこいの鳴子を、自分で仕上げる。'],
+['katsuo-waraya','カツオの藁焼きタタキづくり体験（黒潮一番館）','experience','west','黒潮町','食の体験,文化・ものづくり体験','自分で焼く、豪快なカツオの藁焼き。'],
+['tosa-tataki-dojo','土佐タタキ道場','experience','kochi_city','高知市','食の体験,子連れ','自分で藁焼きして、熱々のカツオを味わう。'],
+['field-kochi','FIELD KOCHI 里山体験・土佐塩の道ウォーキング','experience','east','香美市','文化・ものづくり体験,食の体験,空・山','里山の暮らしと、歴史の道を体感する。'],
+['ryugado-candle','龍河洞キャンドルづくり（38 phyto lab.）','experience','east','香美市','文化・ものづくり体験,雨の日','旅の思い出を、オリジナルキャンドルに。'],
 ['shimanto-canoe','四万十川カヌー体験（しまんとベース）','activity','west','四万十市','川あそび,子連れ','清流・四万十川で、のんびりカヌー体験。'],
 ['yoshinogawa-rafting','吉野川ラフティング体験（You Me Rafting）','activity','north_niyodo','大豊町','川あそび,子連れ','四国・吉野川の流れを、ラフティングで体感。'],
 ['kochi-horse-riding','高知ホースライディングクラブ 乗馬体験','activity','kochi_city','高知市','動物・自然観察,乗り物,子連れ','はじめてでも、馬とゆっくり仲良くなる時間。'],
 ['uguru-snorkel','鵜来島 シュノーケル体験（うぐるBOX）','activity','west','宿毛市','海あそび,動物・自然観察','透明な海で、鵜来島の水中世界をのぞく。'],
-['sakoda-knife','刃物鍛造体験（迫田打刃物）','activity','west','須崎市','文化・ものづくり体験','職人と一緒に、一本の包丁を鍛え上げる。'],
-['uchiharano-craft','陶芸・ガラス体験（内原野陶芸館）','activity','east','安芸市','文化・ものづくり体験,雨の日,子連れ','土とガラスから、自分だけの作品をつくる。'],
-['tosaco-brewery','TOSACO TAP STAND・醸造所','activity','east','香美市','施設見学,食の体験','高知素材のクラフトビールが生まれる場所へ。'],
-['takagi-sake','高木酒造 酒蔵見学','activity','east','香南市','施設見学,食の体験','赤岡で140年以上続く、土佐酒の蔵を訪ねる。'],
+['sakoda-knife','刃物鍛造体験（迫田打刃物）','experience','west','須崎市','文化・ものづくり体験','職人と一緒に、一本の包丁を鍛え上げる。'],
+['uchiharano-craft','陶芸・ガラス体験（内原野陶芸館）','experience','east','安芸市','文化・ものづくり体験,雨の日,子連れ','土とガラスから、自分だけの作品をつくる。'],
+['tosaco-brewery','TOSACO TAP STAND・醸造所','experience','east','香美市','施設見学,食の体験','高知素材のクラフトビールが生まれる場所へ。'],
+['takagi-sake','高木酒造 酒蔵見学','experience','east','香南市','施設見学,食の体験','赤岡で140年以上続く、土佐酒の蔵を訪ねる。'],
 ['tosa-terrace-cycle','こうち旅広場 レンタサイクル','activity','kochi_city','高知市','レンタサイクル,乗り物','高知駅から、自転車でまちへ出よう。'],
-['tosappo-ryoma-walk','龍馬の生まれたまち歩き〜土佐っ歩〜','activity','kochi_city','高知市','ガイドツアー,文化・ものづくり体験','ガイドと歩く、龍馬ゆかりの城下町。'],
-['muroto-aqua-farm','室戸海洋深層水アクア・ファーム','activity','east','室戸市','施設見学,雨の日','海洋深層水のしくみを、無料で見学。'],
-['muroto-geo-guide','室戸世界ジオパーク ガイドツアー','activity','east','室戸市','ガイドツアー,空・山','大地の物語を、ガイドと歩いて知る。'],
+['tosappo-ryoma-walk','龍馬の生まれたまち歩き〜土佐っ歩〜','experience','kochi_city','高知市','ガイドツアー,文化・ものづくり体験','ガイドと歩く、龍馬ゆかりの城下町。'],
+['muroto-aqua-farm','室戸海洋深層水アクア・ファーム','experience','east','室戸市','施設見学,雨の日','海洋深層水のしくみを、無料で見学。'],
+['muroto-geo-guide','室戸世界ジオパーク ガイドツアー','experience','east','室戸市','ガイドツアー,空・山','大地の物語を、ガイドと歩いて知る。'],
 ['muroto-rockpool','室戸世界ジオパーク 磯遊び体験','activity','east','室戸市','海あそび,動物・自然観察,子連れ','室戸の磯で、生きものと地形を観察。'],
 ['muroto-cycle-tour','室戸世界ジオパーク サイクリングツアー','activity','east','室戸市','レンタサイクル,乗り物,ガイドツアー','海と大地を感じながら、室戸を自転車でめぐる。'],
 ['withriver-shimanto','四万十川 SUP・カヌー ガイドツアー（withRIVER）','activity','west','四万十市','川あそび,ガイドツアー,子連れ','四万十川を、SUPとカヌーでゆったり楽しむ。'],
 ['garbanzo-yoshino','アウトドア！ガルバンゾ 吉野川リバーアクティビティ','activity','north_niyodo','大豊町','川あそび,子連れ','SUP・カヤック・パックラフトまで、吉野川を遊び尽くす。'],
-['tsuno-tea-field','津野茶 茶畑見学・お茶体験','activity','west','津野町','食の体験,ガイドツアー,文化・ものづくり体験','茶畑を歩き、利き茶とブレンドティーを楽しむ。'],
-['soltive-salt','天日塩づくり体験（ソルティーブ）','activity','west','黒潮町','食の体験,文化・ものづくり体験','海水から塩になるまでを、自分の手で体験。'],
-['tano-solar-salt','完全天日塩づくり体験（田野町）','activity','east','田野町','食の体験,文化・ものづくり体験,子連れ','太陽と風だけでつくる塩を、見て・作って・持ち帰る。'],
-['tosacho-woodwork','土佐町 木組み・鍋敷きづくり体験','activity','north_niyodo','土佐町','文化・ものづくり体験,食の体験','釘を使わず、地元の木で鍋敷きをつくる。'],
-['shimanto-traditional-fishing','四万十川 伝統漁法体験','activity','west','四万十市','釣り・漁業体験,ガイドツアー','川漁師と、柴漬け漁・投網・櫓漕ぎを体験。']];
+['tsuno-tea-field','津野茶 茶畑見学・お茶体験','experience','west','津野町','食の体験,ガイドツアー,文化・ものづくり体験','茶畑を歩き、利き茶とブレンドティーを楽しむ。'],
+['soltive-salt','天日塩づくり体験（ソルティーブ）','experience','west','黒潮町','食の体験,文化・ものづくり体験','海水から塩になるまでを、自分の手で体験。'],
+['tano-solar-salt','完全天日塩づくり体験（田野町）','experience','east','田野町','食の体験,文化・ものづくり体験,子連れ','太陽と風だけでつくる塩を、見て・作って・持ち帰る。'],
+['tosacho-woodwork','土佐町 木組み・鍋敷きづくり体験','experience','north_niyodo','土佐町','文化・ものづくり体験,食の体験','釘を使わず、地元の木で鍋敷きをつくる。'],
+['shimanto-traditional-fishing','四万十川 伝統漁法体験','experience','west','四万十市','釣り・漁業体験,ガイドツアー','川漁師と、柴漬け漁・投網・櫓漕ぎを体験。'],
+['kuroshio-soba','そば打ち体験（であいの里 蜷川）','experience','west','黒潮町','食の体験,文化・ものづくり体験','地元のそば粉で打って、できたてを味わう。'],
+['hinodeya-konnyaku','こんにゃく作り体験（燈ので家）','experience','north_niyodo','大豊町','食の体験,文化・ものづくり体験','山里の農家民宿で、手づくりこんにゃく。'],
+['seiran-konnyaku','田舎こんにゃく体験（せいらんの里）','experience','west','津野町','食の体験,子連れ','地元のこんにゃく芋から、できたてを味わう。'],
+['qraud-papermaking','紙漉き体験（土佐和紙工芸村「くらうど」）','experience','north_niyodo','いの町','文化・ものづくり体験,子連れ,雨の日','はがきや色紙を、自分の手で漉いてつくる。']];
 const spotInfo={
   ryugado:{address:'高知県香美市土佐山田町逆川1424',phone:'0887-53-2144',official_url:'https://ryugadou.or.jp/',parking_text:'駐車場約700台',access:'高知自動車道南国ICから車。土佐山田駅からバス。',last_verified_at:'2026-09-23'},
   nikobuchi:{address:'高知県吾川郡いの町清水上分',official_url:'https://nikobuchi.inofan.jp/site/access.html',parking_text:'指定駐車場あり。満車時は臨時駐車場等の案内を確認。',access:'伊野ICから車で約60分。JR伊野駅からバス利用後、徒歩約20〜30分。',last_verified_at:'2026-09-23'},
@@ -138,7 +142,11 @@ const spotInfo={
   'soltive-salt':{address:'高知県幡多郡黒潮町灘333',opening_hours:'予約受付9:00〜17:00',closed_days:'不定休',price_text:'体験料金は予約時に確認',phone:'0880-55-3226',official_url:'https://kochi-tabi.jp/search_spot.html?id=8058',parking_text:'施設へ確認',access:'高知自動車道・四万十町中央ICから車で約30分。',last_verified_at:'2026-10-02',description:'天日塩ができるまでの説明を受けたあと、塩のかくはん、採塩、袋詰めまでを体験できます。自分で採った塩は持ち帰ることができます。'},
   'tano-solar-salt':{address:'高知県安芸郡田野町2703-6',opening_hours:'9:00〜（最終入館16:00）',closed_days:'火曜日（祝日の場合は翌平日）、年末年始',price_text:'町外：体験 大人800円・小中学生400円・幼児無料／見学 大人400円・小中学生200円・幼児無料',phone:'0887-38-2390',official_url:'https://kochi-tabi.jp/search_spot_activity.html?id=16461',parking_text:'無料。普通車5台・大型1台',access:'南国ICから車で約1時間10分。芸西西ICから約40分。',last_verified_at:'2026-10-02',description:'太陽の熱と風だけでつくる完全天日塩を見学・体験できます。自分で作った塩は持ち帰り可能で、見学・体験とも利用日の10日前までに予約が必要です。'},
   'tosacho-woodwork':{address:'高知県土佐郡土佐町西石原1228（石原コミュニティセンター）',opening_hours:'毎週日曜日（7月〜9月を除く）。9:30集合または12:00集合',closed_days:'7月〜9月、不定休あり',price_text:'1人5,000円（税込、材料・昼食・保険込み）',phone:'0887-72-9328',official_url:'https://doppuri.kochi-tabi.jp/selection.html?id=19',parking_text:'石原コミュニティセンター駐車場',access:'高知龍馬空港から車で約1時間10分。大豊ICから約35分。',last_verified_at:'2026-10-02',description:'地元材を使い、釘を使わない木組みで鍋敷きをつくる約3.5時間の体験です。昼食に地元のたけのこ寿司とうどんが付き、申込締切は1週間前です。'},
-  'shimanto-traditional-fishing':{address:'高知県四万十市山路',opening_hours:'9:00・11:00・13:00・15:00開始（各約90分）',closed_days:'不定期',price_text:'1組4名まで25,000円。5名以上は1名追加ごとに3,000円（最新料金は予約時に確認）',official_url:'https://doppuri.kochi-tabi.jp/selection.html?id=109',parking_text:'集合場所・駐車場は予約時に確認',access:'四万十市山路。詳細な集合場所は予約案内で確認。',last_verified_at:'2026-10-02',description:'四万十川の川漁師の案内で、伝統漁法の柴漬け漁・投網の体験や実演、櫓を使った舟漕ぎを楽しめます。季節によって対象となる川の生きものや禁漁期間が異なります。'}
+  'shimanto-traditional-fishing':{address:'高知県四万十市山路',opening_hours:'9:00・11:00・13:00・15:00開始（各約90分）',closed_days:'不定期',price_text:'1組4名まで25,000円。5名以上は1名追加ごとに3,000円（最新料金は予約時に確認）',official_url:'https://doppuri.kochi-tabi.jp/selection.html?id=109',parking_text:'集合場所・駐車場は予約時に確認',access:'四万十市山路。詳細な集合場所は予約案内で確認。',last_verified_at:'2026-10-02',description:'四万十川の川漁師の案内で、伝統漁法の柴漬け漁・投網の体験や実演、櫓を使った舟漕ぎを楽しめます。季節によって対象となる川の生きものや禁漁期間が異なります。'},
+  'kuroshio-soba':{address:'高知県幡多郡黒潮町蜷川660-1',opening_hours:'10:00〜16:00の間で約2時間30分（最終開始13:00）',closed_days:'お盆・年末年始',price_text:'料金は予約サイトで確認',official_url:'https://kochi-tabi.jp/search_activity_plan.html?plan_id=0000227166&plan_ota=ha',parking_text:'施設へ確認',access:'黒潮町蜷川地区。詳細は予約時に確認。',last_verified_at:'2026-10-02',description:'蜷川地区で栽培されたそば粉を使い、地元の方と一緒に水回し・練り・そば打ちを体験し、打ちたてのそばを食べます。所要は食事を含め約2時間30分です。'},
+  'hinodeya-konnyaku':{address:'高知県長岡郡大豊町立川上名1239-13',opening_hours:'予約受付10:00〜16:00',closed_days:'不定休',price_text:'料金は予約時に確認',phone:'0887-78-0430',official_url:'https://lb1.kochi-tabi.jp/search_spot_activity.html?id=8024',parking_text:'無料駐車場あり',access:'高知自動車道・大豊ICから車で約15分。',last_verified_at:'2026-10-02',description:'吉野川支流の立川川近くにある農家民宿で楽しむこんにゃく作り体験。実施時期は3月下旬〜10月で、事前予約がおすすめです。'},
+  'seiran-konnyaku':{address:'高知県高岡郡津野町船戸1321',opening_hours:'10:00〜14:00（約1時間〜1時間30分）',closed_days:'不定休',price_text:'1人1,500円。1名参加の場合は2名分3,000円',phone:'0889-43-9025',official_url:'https://kochi-tabi.jp/search_spot.html?id=8280',parking_text:'無料駐車場あり',access:'高知自動車道・須崎東ICから車で約35分。',last_verified_at:'2026-10-02',description:'地元産こんにゃく芋を使った手作りこんにゃく体験。2名から受付で、3日前までの予約が必要です。できたてを刺身こんにゃくで味わえます。'},
+  'qraud-papermaking':{address:'高知県吾川郡いの町鹿敷1226 土佐和紙工芸村内',opening_hours:'予約受付9:00〜16:00',closed_days:'水曜日',price_text:'無地400円〜、草花入り600円、うちわ800円など',phone:'088-892-0127',official_url:'https://kochi-tabi.jp/search_ryoma_pass.html?id=1738',parking_text:'無料。普通車75台・大型5台',access:'伊野ICから車で約20分。JR伊野駅からバス「岩村」下車すぐ。',last_verified_at:'2026-10-02',description:'土佐和紙の紙漉きを体験し、オリジナルのはがきや色紙を作れます。夏はうちわ作りもあり、1名から参加できます。20名以上は予約が必要です。'}
 };
 const rank={};
 export const spots=rows.map(([slug,name,category,area,municipality,tags,catchphrase],i)=>({id:`00000000-0000-4000-8000-${String(i+1).padStart(12,'0')}`,slug,name,category,area,municipality,tags:tags.split(','),catchphrase,initial_rank:rank[category]=(rank[category]||0)+1,recommend_count:0,is_published:true,is_demo:false,photo:photos[slug]||null,main_image_url:photos[slug]?.src||'',description:'',created_at:`2026-09-${String(i+1).padStart(2,'0')}T00:00:00Z`,...(spotInfo[slug]||{})}));
