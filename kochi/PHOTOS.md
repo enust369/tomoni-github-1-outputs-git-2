@@ -221,3 +221,8 @@ CC BY 2.0/2.5は著作者・出典・ライセンス・変更を表示。写真�
 
 - 大方ホエールウォッチング：`irino-surf.jpg` を黒潮町・入野海岸の海辺イメージとして使用。Ubuhouse / Wikimedia Commons / CC BY-SA 3.0。クジラそのものの写真ではない。
 - 上ノ加江漁業体験：`kaminokae-fishery.jpg` を漁業体験イメージとして使用。Long (lTiga) Nguyen / Unsplash / Unsplash License。実際の上ノ加江で撮影された写真ではないため、イメージ写真として扱う。
+
+### 動物園・ドルフィンセンター追加（2026-10-02）
+
+- 高知県立のいち動物公園：`noichi-zoo.jpg`。Shoichi Masuhara / Wikimedia Commons / CC BY 2.0。実際の園内写真。
+- 室戸ドルフィンセンター：`muroto-dolphin.jpg`。safaritravelplus / Wikimedia Commons / CC0。施設で撮影された写真ではないため、イルカ体験イメージとして扱う。

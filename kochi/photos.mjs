@@ -40,6 +40,34 @@ export const photos={
     "position": "50% 50%",
     "checkedAt": "2026-10-02"
   },
+  "noichi-zoo": {
+    "src": "/assets/photos/noichi-zoo.jpg",
+    "name": "高知県立のいち動物公園",
+    "alt": "高知県立のいち動物公園の園内",
+    "author": "Shoichi Masuhara",
+    "source": "https://commons.wikimedia.org/wiki/File:Noichi_zoo2.jpg",
+    "title": "Noichi zoo2.jpg",
+    "license": "CC BY 2.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by/2.0/",
+    "width": 1280,
+    "height": 819,
+    "position": "50% 50%",
+    "checkedAt": "2026-10-02"
+  },
+  "muroto-dolphin": {
+    "src": "/assets/photos/muroto-dolphin.jpg",
+    "name": "室戸ドルフィンセンター",
+    "alt": "ハンドウイルカのイメージ",
+    "author": "safaritravelplus",
+    "source": "https://commons.wikimedia.org/wiki/File:Bottlenose_Dolphin.jpg",
+    "title": "Bottlenose Dolphin.jpg",
+    "license": "CC0",
+    "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/",
+    "width": 1280,
+    "height": 914,
+    "position": "50% 50%",
+    "checkedAt": "2026-10-02"
+  },
   "kaminokae-fishery": {
     "src": "/assets/photos/kaminokae-fishery.jpg",
     "name": "上ノ加江漁業体験",
