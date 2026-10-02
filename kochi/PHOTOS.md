@@ -209,9 +209,10 @@ CC BY 2.0/2.5は著作者・出典・ライセンス・変更を表示。写真�
 |---|---|---|---|
 | 生見サーフィンビーチ | ikumi-surf.jpg | Araiyasushige / Wikimedia Commons | CC0 |
 | 入野海岸 | irino-surf.jpg | Ubuhouse / Wikimedia Commons | CC BY-SA 3.0 |
+| 大岐海岸 | Wikimedia Commons original URL | Yobito KAYANUMA / Wikimedia Commons | CC BY-SA 3.0 |
 | 竜串 船釣り体験 | tatsukushi-fishing.jpg（竜串海岸） | Reggaeman / Wikimedia Commons | CC BY-SA 3.0 |
 | 仁淀川の釣り | niyodo-fishing.jpg（中仁淀橋付近） | 谷本 一郎 / Wikimedia Commons | CC BY-SA 4.0 |
 
-大岐海岸、須崎・富士ヶ浜 海釣り体験は、利用許諾を確認できる写真をまだ確保していないため写真未設定。別スポットの写真は流用しない。
+須崎・富士ヶ浜 海釣り体験は、利用許諾を確認できる写真をまだ確保していないため写真未設定。別スポットの写真は流用しない。
 
 - 鵜来島 釣り体験：uguru-fishing.jpg / ブルーノ・プラス / Wikimedia Commons / CC BY 4.0

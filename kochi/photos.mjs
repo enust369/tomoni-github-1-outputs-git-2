@@ -1,5 +1,19 @@
 // Individual photo licenses and provenance: PHOTOS.md. No API or database data.
 export const photos={
+  "oki-surf": {
+    "src": "https://upload.wikimedia.org/wikipedia/commons/a/a0/%E5%A4%A7%E5%B2%90%E6%B5%B7%E5%B2%B8_-_panoramio.jpg",
+    "name": "大岐海岸",
+    "alt": "土佐清水市の大岐海岸",
+    "author": "Yobito KAYANUMA",
+    "source": "https://commons.wikimedia.org/wiki/File:大岐海岸_-_panoramio.jpg",
+    "title": "大岐海岸 - panoramio.jpg",
+    "license": "CC BY-SA 3.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0/",
+    "width": 1600,
+    "height": 902,
+    "position": "50% 50%",
+    "checkedAt": "2026-10-02"
+  },
   "ikumi-surf": {
     "src": "/assets/photos/ikumi-surf.jpg",
     "name": "生見サーフィンビーチ",
