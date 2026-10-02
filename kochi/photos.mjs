@@ -456,6 +456,34 @@ export const photos={
     "position": "50% 46%",
     "checkedAt": "2026-10-01"
   },
+  "ioki-morning-market-tour": {
+    "src": "/assets/photos/iokido.jpg",
+    "name": "朝の伊尾木洞探検＋ぢばさん市場ツアー",
+    "alt": "伊尾木洞の苔むした渓谷風景",
+    "author": "既存サイト画像", "source": "", "license": "既存サイト資産", "licenseUrl": "",
+    "width": 1280, "height": 960, "position": "50% 50%", "checkedAt": "2026-10-02"
+  },
+  "yodo-line-cycle-rafting": {
+    "src": "/assets/photos/hero-rafting.png",
+    "name": "予土線＋自転車＋ラフティングで巡る四万十川",
+    "alt": "四万十川のラフティングをイメージした写真",
+    "author": "既存サイト画像", "source": "", "license": "既存サイト資産", "licenseUrl": "",
+    "width": 1456, "height": 1020, "position": "50% 50%", "checkedAt": "2026-10-02"
+  },
+  "shimizu-saba-town-tour": {
+    "src": "/assets/photos/course-ocean-seafood.png",
+    "name": "清水さば漁港ツアー＋漁師町食べ歩き",
+    "alt": "土佐清水の魚食文化をイメージした海鮮写真",
+    "author": "既存サイト画像", "source": "", "license": "既存サイト資産", "licenseUrl": "",
+    "width": 552, "height": 414, "position": "50% 50%", "checkedAt": "2026-10-02"
+  },
+  "kuroshio-earthing-stay": {
+    "src": "/assets/photos/irino-surf.jpg",
+    "name": "黒潮町 渚のアーシング体験 1泊2日",
+    "alt": "黒潮町・入野海岸の海辺をイメージした写真",
+    "author": "既存サイト画像", "source": "", "license": "既存サイト資産", "licenseUrl": "",
+    "width": 1280, "height": 853, "position": "50% 50%", "checkedAt": "2026-10-02"
+  },
   "tsuno-tea-fullcourse": {
     "src": "/assets/photos/field-kochi.jpg",
     "name": "津野町 茶畑ウォーキング＋茶摘み＋田舎ごはん",
