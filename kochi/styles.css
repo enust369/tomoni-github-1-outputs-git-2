@@ -759,3 +759,15 @@ body:has(.page-home) .home-slide:first-child .home-slide-content .eyebrow{max-wi
     object-position:50% 8%;
   }
 }
+
+/* Mobile: show roughly half of the paraglider canopy in the Sky & Niyodo Blue card. */
+@media(max-width:700px){
+  .home-course-media[href="/courses/niyodo-classic/"] .home-course-main{
+    object-position:50% 22%;
+  }
+}
+@media(max-width:420px){
+  .home-course-media[href="/courses/niyodo-classic/"] .home-course-main{
+    object-position:50% 20%;
+  }
+}
