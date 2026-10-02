@@ -130,7 +130,7 @@ async function start(){
      bind();
    }else{
      voted=new Set(readLocal('kochi-demo-votes',[]));spots.forEach(s=>s.recommend_count=voted.has(s.id)?1:0);
-     const note=document.createElement('div');note.className='notice wrap';note.textContent='プレビュー：投票・申請はこのブラウザ内の体験用です。';document.querySelector('main').prepend(note);
+     if(!document.querySelector('main')?.classList.contains('page-activity')){const note=document.createElement('div');note.className='notice wrap';note.textContent='プレビュー：投票・申請はこのブラウザ内の体験用です。';document.querySelector('main').prepend(note);}
    }
    ready=true;filterSpots();syncButtons();
  }catch(error){toast(error.message);document.querySelectorAll('[data-vote]').forEach(b=>b.disabled=true)}
