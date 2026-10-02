@@ -505,3 +505,8 @@ CC BY 2.0/2.5は著作者・出典・ライセンス・変更を表示。写真�
 - `shimanto-sada-cycling`：四万十川の汎用風景から、実際の佐田沈下橋 `shimanto-sada-cycling.jpg` へ差し替え。四万十人 / Wikimedia Commons / CC BY-SA 3.0。ツアー主要立ち寄り地と一致。
 - `shimanto-yakatabune-cafe`：四万十川の汎用風景から、日本の屋根付き遊覧船 `shimanto-yakatabune-cafe.jpg` へ差し替え。ブルーノ・プラス / Wikimedia Commons / CC BY 4.0。四万十川・屋形船なっとくの実写ではなく、屋形船タイプのイメージとして扱う。
 - `shimanto-traditional-fishing`：四万十川の汎用風景から、投網を使った伝統漁の実演 `shimanto-traditional-fishing.jpg` へ差し替え。Zaheed Sarwer Khan / Wikimedia Commons / CC BY 4.0。四万十川の実写ではないが、体験内容との一致度を優先。
+
+### 写真差し替え実施 第15弾（2026-10-03）
+
+- `yoshino-headwaters-track-walk`：汎用森林画像から、森林鉄道の廃線跡が分かる `yoshino-headwaters-track-walk.jpg` へ差し替え。ブルーノ・プラス / Wikimedia Commons / CC BY-SA 4.0。吉野川源流域の実写ではないが、「森林軌道跡を歩く」体験内容との一致度を優先。
+- `shimanto-yairocho-walk`：汎用森林画像から、ヤイロチョウ（Pitta nympha）の実物 `shimanto-yairocho-walk.jpg` へ差し替え。Jason Thompson / Wikimedia Commons / CC BY 2.0。四万十町で撮影された個体ではないが、観察対象の鳥そのものが分かる写真として使用。

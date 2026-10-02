@@ -702,11 +702,15 @@ export const photos={
     "width": 1456, "height": 1020, "position": "50% 50%", "checkedAt": "2026-10-02"
   },
   "yoshino-headwaters-track-walk": {
-    "src": "/assets/photos/hero-forest-adventure.png",
+    "src": "/assets/photos/yoshino-headwaters-track-walk.jpg",
     "name": "吉野川源流森林軌道ウォーク",
-    "alt": "高知の森林を歩く体験のイメージ",
-    "author": "既存サイト画像", "source": "", "license": "既存サイト資産", "licenseUrl": "",
-    "width": 1456, "height": 1020, "position": "50% 50%", "checkedAt": "2026-10-02"
+    "alt": "森の中に残る森林鉄道の廃線跡イメージ",
+    "author": "ブルーノ・プラス",
+    "source": "https://commons.wikimedia.org/wiki/File:Cygnus_Forest_Railway_Ruins.jpg",
+    "title": "Cygnus Forest Railway Ruins.jpg",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "width": 1600, "height": 1200, "position": "50% 50%", "checkedAt": "2026-10-03"
   },
   "monobe-izanagi-stay": {
     "src": "/assets/photos/monobe-stay-area.jpg",
@@ -720,11 +724,15 @@ export const photos={
     "width": 1600, "height": 902, "position": "50% 50%", "checkedAt": "2026-10-03"
   },
   "shimanto-yairocho-walk": {
-    "src": "/assets/photos/hero-forest-adventure.png",
+    "src": "/assets/photos/shimanto-yairocho-walk.jpg",
     "name": "四万十ヤイロチョウの森と森林鉄道遺構ウォーク",
-    "alt": "高知の深い森を歩く自然観察のイメージ",
-    "author": "既存サイト画像", "source": "", "license": "既存サイト資産", "licenseUrl": "",
-    "width": 1456, "height": 1020, "position": "50% 50%", "checkedAt": "2026-10-02"
+    "alt": "ヤイロチョウ（Pitta nympha）の実物写真",
+    "author": "Jason Thompson",
+    "source": "https://commons.wikimedia.org/wiki/File:Pitta_nympha_by_Jason_Thompson.jpg",
+    "title": "Pitta nympha by Jason Thompson.jpg",
+    "license": "CC BY 2.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by/2.0/",
+    "width": 1600, "height": 1065, "position": "50% 45%", "checkedAt": "2026-10-03"
   },
   "takemasa-sodabushi": {
     "src": "/assets/photos/course-katsuo-tataki.png",
