@@ -563,11 +563,15 @@ export const photos={
     "width": 1280, "height": 853, "position": "50% 50%", "checkedAt": "2026-10-03"
   },
   "shimanto-fisher-firefly": {
-    "src": "/assets/photos/shimanto-canoe.jpg",
+    "src": "/assets/photos/shimanto-fisher-firefly.jpg",
     "name": "四万十川 漁師体験＋幻想ホタル遊覧ツアー",
-    "alt": "四万十川の水辺をイメージした写真",
-    "author": "既存サイト画像", "source": "", "license": "既存サイト資産", "licenseUrl": "",
-    "width": 1280, "height": 853, "position": "50% 50%", "checkedAt": "2026-10-02"
+    "alt": "川面の上を飛ぶホタルの夜景イメージ",
+    "author": "Kyu3a",
+    "source": "https://commons.wikimedia.org/wiki/File:Fireflies_dancing_above_the_river_-_1.jpg",
+    "title": "Fireflies dancing above the river - 1.jpg",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "width": 1600, "height": 1200, "position": "50% 50%", "checkedAt": "2026-10-03"
   },
   "ioki-morning-market-tour": {
     "src": "/assets/photos/iokido.jpg",
@@ -879,14 +883,15 @@ export const photos={
     "width": 1024, "height": 768, "position": "50% 50%", "checkedAt": "2026-10-03"
   },
   "tatsukushi-minokoshi-tour": {
-    "src": "/assets/photos/tatsukushi-fishing.jpg",
+    "src": "/assets/photos/tatsukushi-minokoshi-tour.jpg",
     "name": "見残し奇岩パークツアー＋グラスボート",
-    "alt": "土佐清水市の竜串海岸",
+    "alt": "竜串・見残し周辺の奇岩海岸の実景",
     "author": "Reggaeman",
-    "source": "https://commons.wikimedia.org/wiki/File:Tatsukushi_05.JPG",
+    "source": "https://commons.wikimedia.org/wiki/File:Tatsukushi_09.JPG",
+    "title": "Tatsukushi 09.JPG",
     "license": "CC BY-SA 3.0",
     "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0/",
-    "width": 1280, "height": 850, "position": "50% 50%", "checkedAt": "2026-10-02"
+    "width": 1600, "height": 1062, "position": "50% 50%", "checkedAt": "2026-10-03"
   },
   "otsuki-glassboat-yubari": {
     "src": "/assets/photos/kashiwajima.jpg",
@@ -1179,18 +1184,18 @@ export const photos={
     "checkedAt": "2026-10-03"
   },
   "withriver-shimanto": {
-    "src": "/assets/photos/shimanto-canoe.jpg",
+    "src": "/assets/photos/withriver-shimanto.jpg",
     "name": "四万十川 SUP・カヌー ガイドツアー（withRIVER）",
-    "alt": "四万十市西土佐を流れる四万十川",
-    "author": "Cherrysherbet",
-    "source": "https://commons.wikimedia.org/wiki/File:Nishitosa_Shimanto_river.jpg",
-    "title": "Nishitosa Shimanto river.jpg",
-    "license": "CC BY-SA 3.0",
-    "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0/",
-    "width": 604,
-    "height": 453,
+    "alt": "川でSUPを楽しむ体験のイメージ",
+    "author": "Stekirr",
+    "source": "https://commons.wikimedia.org/wiki/File:Stand_up_paddle_boarding.jpg",
+    "title": "Stand up paddle boarding.jpg",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "width": 1600,
+    "height": 1200,
     "position": "50% 50%",
-    "checkedAt": "2026-10-02"
+    "checkedAt": "2026-10-03"
   },
   "garbanzo-yoshino": {
     "src": "/assets/photos/hero-rafting.png",

@@ -524,3 +524,9 @@ CC BY 2.0/2.5は著作者・出典・ライセンス・変更を表示。写真�
 - `tosa-tataki-dojo`：既存の共通カツオ画像から、高知市で撮影されたカツオのたたき `tosa-tataki-dojo.jpg` へ差し替え。ノボホショコロトソ / Wikimedia Commons / CC BY 4.0。土佐タタキ道場の実写ではないが、地域と料理内容が一致。
 - `tatsukushi-diving`：竜串海岸の汎用写真から、竜串海中公園の水中実景 `tatsukushi-diving.jpg` へ差し替え。Tso331 / Wikimedia Commons / CC BY-SA 3.0。体験ダイビングで見る海中環境そのものに近い写真として使用。
 - `tatsukushi-glassboat`：竜串海岸の汎用写真から、土佐清水市のグラスボート乗り場実景 `tatsukushi-glassboat.jpg` へ差し替え。jkyZjdjNjN / Wikimedia Commons / CC BY 3.0。
+
+### 写真差し替え実施 第18弾（2026-10-03）
+
+- `tatsukushi-minokoshi-tour`：竜串海岸の共通写真から、竜串・見残し周辺の奇岩海岸実景 `tatsukushi-minokoshi-tour.jpg` へ差し替え。Reggaeman / Wikimedia Commons / CC BY-SA 3.0。
+- `shimanto-fisher-firefly`：四万十川の昼間風景から、川面の上を舞うホタルの夜景 `shimanto-fisher-firefly.jpg` へ差し替え。Kyu3a / Wikimedia Commons / CC BY-SA 4.0。四万十川の実写ではないため、ホタル遊覧のイメージとして扱う。
+- `withriver-shimanto`：四万十川の汎用風景から、川でSUPを楽しむ `withriver-shimanto.jpg` へ差し替え。Stekirr / Wikimedia Commons / CC BY-SA 4.0。四万十川・withRIVERの実写ではなく、SUP体験のイメージとして扱う。
