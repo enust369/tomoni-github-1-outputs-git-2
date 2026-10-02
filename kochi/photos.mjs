@@ -456,6 +456,34 @@ export const photos={
     "position": "50% 46%",
     "checkedAt": "2026-10-01"
   },
+  "tosa-mokumen-factory": {
+    "src": "/assets/photos/hero-forest-adventure.png",
+    "name": "日本唯一のもくめん工場見学＋クラフト体験",
+    "alt": "高知県産木材とものづくりをイメージした写真",
+    "author": "既存サイト画像", "source": "", "license": "既存サイト資産", "licenseUrl": "",
+    "width": 1456, "height": 1020, "position": "50% 50%", "checkedAt": "2026-10-02"
+  },
+  "otsuki-squid-fishing": {
+    "src": "/assets/photos/uguru-fishing.jpg",
+    "name": "大月満喫ツアー イカ釣り体験",
+    "alt": "高知西部の海釣りをイメージした写真",
+    "author": "既存サイト画像", "source": "", "license": "既存サイト資産", "licenseUrl": "",
+    "width": 1280, "height": 853, "position": "50% 50%", "checkedAt": "2026-10-02"
+  },
+  "yasea-sup-kayak": {
+    "src": "/assets/photos/ikumi-surf.jpg",
+    "name": "ヤ・シィパーク SUP＆カヤック体験",
+    "alt": "高知東部の海をイメージした写真",
+    "author": "既存サイト画像", "source": "", "license": "既存サイト資産", "licenseUrl": "",
+    "width": 1280, "height": 853, "position": "50% 50%", "checkedAt": "2026-10-02"
+  },
+  "shimizu-katsuo-show": {
+    "src": "/assets/photos/course-katsuo-tataki.png",
+    "name": "市場直送カツオ 解体ショー＋藁焼き3種食べ比べ",
+    "alt": "高知のカツオ藁焼きをイメージした写真",
+    "author": "既存サイト画像", "source": "", "license": "既存サイト資産", "licenseUrl": "",
+    "width": 1456, "height": 1020, "position": "50% 50%", "checkedAt": "2026-10-02"
+  },
   "sakawa-black-tea-tasting": {
     "src": "/assets/photos/field-kochi.jpg",
     "name": "紅茶農家で国産紅茶6品種テイスティング＋スイーツ",
