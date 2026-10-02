@@ -799,14 +799,15 @@ export const photos={
     "width": 1600, "height": 900, "position": "50% 50%", "checkedAt": "2026-10-03"
   },
   "shimanto-sada-cycling": {
-    "src": "/assets/photos/shimanto-canoe.jpg",
+    "src": "/assets/photos/shimanto-sada-cycling.jpg",
     "name": "佐田沈下橋 ガイドサイクリング",
-    "alt": "四万十川の自然を感じる風景",
-    "author": "Cherrysherbet",
-    "source": "https://commons.wikimedia.org/wiki/File:Nishitosa_Shimanto_river.jpg",
+    "alt": "四万十川に架かる佐田沈下橋の実景",
+    "author": "四万十人",
+    "source": "https://commons.wikimedia.org/wiki/File:Shimanto_sada_chinkabashi.jpg",
+    "title": "Shimanto sada chinkabashi.jpg",
     "license": "CC BY-SA 3.0",
     "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0/",
-    "width": 604, "height": 453, "position": "50% 50%", "checkedAt": "2026-10-02"
+    "width": 1600, "height": 1200, "position": "50% 50%", "checkedAt": "2026-10-03"
   },
   "akano-shishimai": {
     "src": "/assets/photos/akano-shishimai.jpg",
@@ -827,14 +828,15 @@ export const photos={
     "width": 1456, "height": 1020, "position": "50% 50%", "checkedAt": "2026-10-02"
   },
   "shimanto-yakatabune-cafe": {
-    "src": "/assets/photos/shimanto-canoe.jpg",
+    "src": "/assets/photos/shimanto-yakatabune-cafe.jpg",
     "name": "四万十川屋形船 水上カフェ",
-    "alt": "四万十川の自然を感じる風景",
-    "author": "Cherrysherbet",
-    "source": "https://commons.wikimedia.org/wiki/File:Nishitosa_Shimanto_river.jpg",
-    "license": "CC BY-SA 3.0",
-    "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0/",
-    "width": 604, "height": 453, "position": "50% 50%", "checkedAt": "2026-10-02"
+    "alt": "日本の屋根付き遊覧船のイメージ",
+    "author": "ブルーノ・プラス",
+    "source": "https://commons.wikimedia.org/wiki/File:Horikawa_sightseeing_boat_with_lowering_roof.jpg",
+    "title": "Horikawa sightseeing boat with lowering roof.jpg",
+    "license": "CC BY 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by/4.0/",
+    "width": 1600, "height": 1200, "position": "50% 50%", "checkedAt": "2026-10-03"
   },
   "shimanto-observatory": {
     "src": "/assets/photos/course-classic-camping.png",
@@ -1143,17 +1145,18 @@ export const photos={
     "checkedAt": "2026-10-03"
   },
   "shimanto-traditional-fishing": {
-    "src": "/assets/photos/shimanto-canoe.jpg",
+    "src": "/assets/photos/shimanto-traditional-fishing.jpg",
     "name": "四万十川 伝統漁法体験",
-    "alt": "四万十市西土佐を流れる四万十川",
-    "author": "Cherrysherbet",
-    "source": "https://commons.wikimedia.org/wiki/File:Nishitosa_Shimanto_river.jpg",
-    "license": "CC BY-SA 3.0",
-    "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0/",
-    "width": 604,
-    "height": 453,
+    "alt": "投網を使った伝統的な漁のイメージ",
+    "author": "Zaheed Sarwer Khan",
+    "source": "https://commons.wikimedia.org/wiki/File:Fishing_by_cast_net.jpg",
+    "title": "Fishing by cast net.jpg",
+    "license": "CC BY 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by/4.0/",
+    "width": 1600,
+    "height": 1066,
     "position": "50% 50%",
-    "checkedAt": "2026-10-02"
+    "checkedAt": "2026-10-03"
   },
   "withriver-shimanto": {
     "src": "/assets/photos/shimanto-canoe.jpg",
