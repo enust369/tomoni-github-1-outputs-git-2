@@ -456,6 +456,37 @@ export const photos={
     "position": "50% 46%",
     "checkedAt": "2026-10-01"
   },
+  "aki-shirasu-fisher-tour": {
+    "src": "/assets/photos/shirasu.png",
+    "name": "五感で感じる しらす漁師ツアー",
+    "alt": "安芸のしらす文化をイメージした写真",
+    "author": "既存サイト画像", "source": "", "license": "既存サイト資産", "licenseUrl": "",
+    "width": 1456, "height": 1020, "position": "50% 50%", "checkedAt": "2026-10-02"
+  },
+  "ino-cosplay-photo-tour": {
+    "src": "/assets/photos/field-kochi.jpg",
+    "name": "コスプレで巡る レトロな街 いの町 フォトツアー",
+    "alt": "いの町周辺の地域風景をイメージした写真",
+    "author": "Indiana jo",
+    "source": "https://commons.wikimedia.org/wiki/File:Kiiji,_Haratani_village_02.jpg",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "width": 1280, "height": 960, "position": "50% 50%", "checkedAt": "2026-10-02"
+  },
+  "kochi-kimono-ozashiki": {
+    "src": "/assets/photos/event-yosakoi.png",
+    "name": "着物で楽しむ 料亭濱長お座敷遊び体験",
+    "alt": "高知の伝統文化をイメージした写真",
+    "author": "既存サイト画像", "source": "", "license": "既存サイト資産", "licenseUrl": "",
+    "width": 1456, "height": 1020, "position": "50% 50%", "checkedAt": "2026-10-02"
+  },
+  "hanpeita-harimaya-guide": {
+    "src": "/assets/photos/sakamoto-ryoma-memorial-museum.png",
+    "name": "半平太・はりまや橋コース",
+    "alt": "幕末の土佐をイメージした坂本龍馬記念館",
+    "author": "既存サイト画像", "source": "", "license": "既存サイト資産", "licenseUrl": "",
+    "width": 1456, "height": 1020, "position": "50% 50%", "checkedAt": "2026-10-02"
+  },
   "yoshino-headwaters-track-walk": {
     "src": "/assets/photos/hero-forest-adventure.png",
     "name": "吉野川源流森林軌道ウォーク",
