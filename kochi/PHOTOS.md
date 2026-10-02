@@ -480,3 +480,10 @@ CC BY 2.0/2.5は著作者・出典・ライセンス・変更を表示。写真�
 - `kuroshio-soba`：汎用里山画像から、そば打ちの実際の工程（そば生地を切る様子）`kuroshio-soba-making.jpg` へ差し替え。Chris 73 / Wikimedia Commons / CC BY-SA 3.0。黒潮町・であいの里蜷川の実写ではなく、そば打ち工程のイメージとして扱う。
 - `obuchi-kokedama`：汎用里山画像から、苔玉の実物 `obuchi-kokedama.jpg` へ差し替え。TRIAN FITRIYANI / Wikimedia Commons / CC BY 4.0。おおぶち自然村の実写ではなく、体験内容を示す苔玉イメージとして扱う。
 - `tosacho-woodwork`：汎用里山画像から、日本の指物の木組み接合 `tosacho-woodwork.jpg` へ差し替え。Andy Li / Wikimedia Commons / CC0。土佐町の実写ではなく、木組み・木工体験の内容イメージとして扱う。
+
+### 写真差し替え実施 第11弾（2026-10-03）
+
+- `hinodeya-konnyaku`：汎用里山画像から、ブロック状のこんにゃく実物 `hinodeya-konnyaku.jpg` へ差し替え。Fumikas Sagisavas / Wikimedia Commons / CC0。燈ので家の実写ではなく、こんにゃく作りの完成品イメージとして扱う。
+- `seiran-konnyaku`：汎用里山画像から、刺身こんにゃく実物 `seiran-konnyaku.jpg` へ差し替え。Ocdp / Wikimedia Commons / CC0。せいらんの里の実写ではなく、体験後に味わう刺身こんにゃくのイメージとして扱う。
+- `kiriyama-roasting-teacan`：汎用里山画像から、焙煎済みほうじ茶の茶葉 `kiriyama-hojicha.jpg` へ差し替え。Green / Wikimedia Commons / Public Domain。霧山茶園や焙煎作業そのものの実写ではなく、体験内容を示すほうじ茶イメージとして扱う。
+- `tosayama-haiku` と `tosa-shio-no-michi-walk` は、開催地・体験内容・再利用条件を同時に満たす写真がまだ不足しているため今回は未変更。

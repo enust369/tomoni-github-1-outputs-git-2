@@ -602,14 +602,15 @@ export const photos={
     "width": 1600, "height": 1200, "position": "50% 50%", "checkedAt": "2026-10-03"
   },
   "kiriyama-roasting-teacan": {
-    "src": "/assets/photos/field-kochi.jpg",
+    "src": "/assets/photos/kiriyama-hojicha.jpg",
     "name": "霧山茶園 ほうじ茶焙煎＋和紙茶缶づくり",
-    "alt": "高知の茶畑と里山をイメージした風景",
-    "author": "Indiana jo",
-    "source": "https://commons.wikimedia.org/wiki/File:Kiiji,_Haratani_village_02.jpg",
-    "license": "CC BY-SA 4.0",
-    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
-    "width": 1280, "height": 960, "position": "50% 50%", "checkedAt": "2026-10-02"
+    "alt": "焙煎したほうじ茶の茶葉のイメージ",
+    "author": "Green",
+    "source": "https://commons.wikimedia.org/wiki/File:Karigane-hojicha.jpeg",
+    "title": "Karigane-hojicha.jpeg",
+    "license": "Public Domain",
+    "licenseUrl": "https://creativecommons.org/publicdomain/mark/1.0/",
+    "width": 640, "height": 480, "position": "50% 50%", "checkedAt": "2026-10-03"
   },
   "yusuhara-china-paint": {
     "src": "/assets/photos/yusuhara-town.jpg",
@@ -1057,30 +1058,32 @@ export const photos={
     "checkedAt": "2026-10-03"
   },
   "hinodeya-konnyaku": {
-    "src": "/assets/photos/field-kochi.jpg",
+    "src": "/assets/photos/hinodeya-konnyaku.jpg",
     "name": "こんにゃく作り体験（燈ので家）",
-    "alt": "山あいの農家体験のイメージ",
-    "author": "Indiana jo",
-    "source": "https://commons.wikimedia.org/wiki/File:Kiiji,_Haratani_village_02.jpg",
-    "license": "CC BY-SA 4.0",
-    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
-    "width": 1280,
-    "height": 960,
+    "alt": "手作りこんにゃくをイメージしたブロック状のこんにゃく",
+    "author": "Fumikas Sagisavas",
+    "source": "https://commons.wikimedia.org/wiki/File:Konjac_bricks.jpg",
+    "title": "Konjac bricks.jpg",
+    "license": "CC0",
+    "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/",
+    "width": 1600,
+    "height": 1600,
     "position": "50% 50%",
-    "checkedAt": "2026-10-02"
+    "checkedAt": "2026-10-03"
   },
   "seiran-konnyaku": {
-    "src": "/assets/photos/field-kochi.jpg",
+    "src": "/assets/photos/seiran-konnyaku.jpg",
     "name": "田舎こんにゃく体験（せいらんの里）",
-    "alt": "津野町の山里体験のイメージ",
-    "author": "Indiana jo",
-    "source": "https://commons.wikimedia.org/wiki/File:Kiiji,_Haratani_village_02.jpg",
-    "license": "CC BY-SA 4.0",
-    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
-    "width": 1280,
-    "height": 960,
+    "alt": "刺身こんにゃくの盛り付けイメージ",
+    "author": "Ocdp",
+    "source": "https://commons.wikimedia.org/wiki/File:Konnyaku_001.jpg",
+    "title": "Konnyaku 001.jpg",
+    "license": "CC0",
+    "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/",
+    "width": 1600,
+    "height": 1200,
     "position": "50% 50%",
-    "checkedAt": "2026-10-02"
+    "checkedAt": "2026-10-03"
   },
   "qraud-papermaking": {
     "src": "/assets/photos/ino-papermaking.jpg",
