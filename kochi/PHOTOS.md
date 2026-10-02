@@ -571,3 +571,8 @@ CC BY 2.0/2.5は著作者・出典・ライセンス・変更を表示。写真�
 ### 写真差し替え実施 第26弾（2026-10-03）
 
 - `qraud-papermaking`：歴史資料の紙漉き画像から、実際の土佐和紙工芸村「くらうど」施設実景 `qraud-papermaking.jpg` へ差し替え。As6022014 / Wikimedia Commons / Public Domain。体験場所そのものが分かる写真として使用。
+
+### 写真差し替え実施 第27弾（2026-10-03）
+
+- `tano-solar-salt`：室戸岬の汎用海岸写真から、天日塩づくりの工程が伝わる `tano-solar-salt.jpg` へ差し替え。Bernard Spragg. NZ / Wikimedia Commons / CC0。田野町の実写ではないため、完全天日塩の製法イメージとして扱う。
+- `aki-shirasu-fisher-tour`：しらす食堂と共通だった既存画像から、生しらすの実物が分かる `aki-shirasu-fisher-tour.jpg` へ差し替え。Kentin / Wikimedia Commons / CC BY-SA 4.0。安芸市の実写ではなく、ツアーで扱うしらすの内容イメージとして使用。

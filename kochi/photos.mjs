@@ -707,11 +707,18 @@ export const photos={
     "width": 1456, "height": 1020, "position": "50% 50%", "checkedAt": "2026-10-02"
   },
   "aki-shirasu-fisher-tour": {
-    "src": "/assets/photos/shirasu.png",
+    "src": "/assets/photos/aki-shirasu-fisher-tour.jpg",
     "name": "五感で感じる しらす漁師ツアー",
-    "alt": "安芸のしらす文化をイメージした写真",
-    "author": "既存サイト画像", "source": "", "license": "既存サイト資産", "licenseUrl": "",
-    "width": 1456, "height": 1020, "position": "50% 50%", "checkedAt": "2026-10-02"
+    "alt": "生しらすの実物を含む魚料理のイメージ",
+    "author": "Kentin",
+    "source": "https://commons.wikimedia.org/wiki/File:Japanese_raw_whitebait_and_shimesaba_2014.jpg",
+    "title": "Japanese raw whitebait and shimesaba 2014.jpg",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "width": 1600,
+    "height": 1277,
+    "position": "50% 50%",
+    "checkedAt": "2026-10-03"
   },
   "ino-cosplay-photo-tour": {
     "src": "/assets/photos/ino-photo-tour.jpg",
@@ -1187,17 +1194,18 @@ export const photos={
     "checkedAt": "2026-10-02"
   },
   "tano-solar-salt": {
-    "src": "/assets/photos/muroto.jpg",
+    "src": "/assets/photos/tano-solar-salt.jpg",
     "name": "完全天日塩づくり体験（田野町）",
-    "alt": "高知県東部の海岸風景のイメージ",
-    "author": "Rsa",
-    "source": "https://commons.wikimedia.org/wiki/File:Cape-Muroto-20100526.jpg",
-    "license": "CC BY-SA 3.0",
-    "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0/",
-    "width": 1280,
-    "height": 960,
+    "alt": "太陽光で海水を蒸発させる天日塩づくりのイメージ",
+    "author": "Bernard Spragg. NZ",
+    "source": "https://commons.wikimedia.org/wiki/File:Solar_salt._New_Zealand._(8107348401).jpg",
+    "title": "Solar salt. New Zealand. (8107348401).jpg",
+    "license": "CC0",
+    "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/",
+    "width": 1600,
+    "height": 1134,
     "position": "50% 50%",
-    "checkedAt": "2026-10-02"
+    "checkedAt": "2026-10-03"
   },
   "tosacho-woodwork": {
     "src": "/assets/photos/tosacho-woodwork.jpg",
