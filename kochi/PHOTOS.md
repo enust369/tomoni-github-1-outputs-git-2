@@ -235,3 +235,10 @@ CC BY 2.0/2.5は著作者・出典・ライセンス・変更を表示。写真�
 - カツオの藁焼きタタキづくり体験：既存サイト資産 `course-katsuo-tataki.png` を使用。
 - 紙漉き体験：`ino-papermaking.jpg`。Library of Congress由来の1772年の紙漉き版画 / Public Domain。現代のいの町紙の博物館の実写ではないため、紙漉きイメージとして扱う。
 - 鳴子づくり体験：`yosakoi-naruko.jpg`。Mycomp / Wikimedia Commons / CC BY-SA 3.0。よさこいで使われる鳴子そのものの写真。
+
+### 体験ページ追加 第2弾（2026-10-02）
+
+- 土佐タタキ道場：既存サイト資産 `course-katsuo-tataki.png` を使用。
+- FIELD KOCHI：`field-kochi.jpg`。Indiana jo / Wikimedia Commons / CC BY-SA 4.0。和歌山県の里山写真のため、FIELD KOCHI現地写真ではなく里山体験イメージとして扱う。
+- 龍河洞キャンドルづくり：`ryugado-candle.jpg`。Wellcome Library, London / Wikimedia Commons / CC BY 4.0。現代の38 phyto lab.の実写ではなくキャンドルづくりイメージとして扱う。
+- 四万十川カヌー体験：`shimanto-canoe.jpg`。Cherrysherbet / Wikimedia Commons / CC BY-SA 3.0。四万十市西土佐で撮影された四万十川の実景。
