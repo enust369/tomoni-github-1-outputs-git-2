@@ -456,6 +456,43 @@ export const photos={
     "position": "50% 46%",
     "checkedAt": "2026-10-01"
   },
+  "tsuno-tea-fullcourse": {
+    "src": "/assets/photos/field-kochi.jpg",
+    "name": "津野町 茶畑ウォーキング＋茶摘み＋田舎ごはん",
+    "alt": "津野町の茶畑体験をイメージした山あいの風景",
+    "author": "Indiana jo",
+    "source": "https://commons.wikimedia.org/wiki/File:Kiiji,_Haratani_village_02.jpg",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "width": 1280, "height": 960, "position": "50% 50%", "checkedAt": "2026-10-02"
+  },
+  "kiriyama-roasting-teacan": {
+    "src": "/assets/photos/field-kochi.jpg",
+    "name": "霧山茶園 ほうじ茶焙煎＋和紙茶缶づくり",
+    "alt": "高知の茶畑と里山をイメージした風景",
+    "author": "Indiana jo",
+    "source": "https://commons.wikimedia.org/wiki/File:Kiiji,_Haratani_village_02.jpg",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "width": 1280, "height": 960, "position": "50% 50%", "checkedAt": "2026-10-02"
+  },
+  "yusuhara-china-paint": {
+    "src": "/assets/photos/yusuhara.jpg",
+    "name": "梼原 本格絵付け体験",
+    "alt": "梼原町の町並みをイメージした写真",
+    "author": "既存サイト画像", "source": "", "license": "既存サイト資産", "licenseUrl": "",
+    "width": 1280, "height": 960, "position": "50% 50%", "checkedAt": "2026-10-02"
+  },
+  "tosayama-haiku": {
+    "src": "/assets/photos/field-kochi.jpg",
+    "name": "英語でHAIKU in 土佐山",
+    "alt": "土佐山の里山体験をイメージした風景",
+    "author": "Indiana jo",
+    "source": "https://commons.wikimedia.org/wiki/File:Kiiji,_Haratani_village_02.jpg",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "width": 1280, "height": 960, "position": "50% 50%", "checkedAt": "2026-10-02"
+  },
   "uranouchi-akame-fishing": {
     "src": "/assets/photos/niyodo-fishing.jpg",
     "name": "浦ノ内湾 アカメ釣り体験",
