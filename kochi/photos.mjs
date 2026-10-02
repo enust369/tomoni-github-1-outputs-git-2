@@ -148,17 +148,18 @@ export const photos={
     "checkedAt": "2026-10-02"
   },
   "uguru-snorkel": {
-    "src": "/assets/photos/uguru-fishing.jpg",
+    "src": "/assets/photos/uguru-snorkel.jpg",
     "name": "鵜来島 シュノーケル体験（うぐるBOX）",
-    "alt": "鵜来島の海のイメージ",
+    "alt": "鵜来島の海岸と青い海の実景",
     "author": "ブルーノ・プラス",
-    "source": "https://commons.wikimedia.org/wiki/File:Ugurushima_Island_01.jpg",
+    "source": "https://commons.wikimedia.org/wiki/File:Ugurushima_Island_02.jpg",
+    "title": "Ugurushima Island 02.jpg",
     "license": "CC BY 4.0",
     "licenseUrl": "https://creativecommons.org/licenses/by/4.0/",
-    "width": 1280,
-    "height": 960,
+    "width": 1600,
+    "height": 1200,
     "position": "50% 50%",
-    "checkedAt": "2026-10-02"
+    "checkedAt": "2026-10-03"
   },
   "sakoda-knife": {
     "src": "/assets/photos/sakoda-knife.jpg",
@@ -608,11 +609,18 @@ export const photos={
     "width": 552, "height": 414, "position": "50% 50%", "checkedAt": "2026-10-02"
   },
   "kuroshio-earthing-stay": {
-    "src": "/assets/photos/irino-surf.jpg",
+    "src": "/assets/photos/kuroshio-earthing-stay.jpg",
     "name": "黒潮町 渚のアーシング体験 1泊2日",
-    "alt": "黒潮町・入野海岸の海辺をイメージした写真",
-    "author": "既存サイト画像", "source": "", "license": "既存サイト資産", "licenseUrl": "",
-    "width": 1280, "height": 853, "position": "50% 50%", "checkedAt": "2026-10-02"
+    "alt": "黒潮町・入野海岸の実景",
+    "author": "Dokudami",
+    "source": "https://commons.wikimedia.org/wiki/File:Irino_kaigan20220628_1.jpg",
+    "title": "Irino kaigan20220628 1.jpg",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "width": 1600,
+    "height": 685,
+    "position": "50% 50%",
+    "checkedAt": "2026-10-03"
   },
   "tsuno-tea-fullcourse": {
     "src": "/assets/photos/tsuno-source-river.jpg",

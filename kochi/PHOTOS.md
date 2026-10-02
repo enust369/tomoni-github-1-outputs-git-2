@@ -553,3 +553,8 @@ CC BY 2.0/2.5は著作者・出典・ライセンス・変更を表示。写真�
 
 - `ashizuri-secret-guide`：足摺岬の共通画像から、別カットの足摺岬断崖実景 `ashizuri-secret-guide.jpg` へ差し替え。z tanuki / Wikimedia Commons / CC BY 3.0。秘境ガイドの舞台となる断崖景観が分かる写真として使用。
 - `ashizuri-ebike`：足摺岬の共通画像から、別カットの足摺岬周辺海岸 `ashizuri-ebike.jpg` へ差し替え。z tanuki / Wikimedia Commons / CC BY 3.0。E-bikeそのものは写っていないが、ツアー開催地の実景を優先。
+
+### 写真差し替え実施 第23弾（2026-10-03）
+
+- `uguru-snorkel`：釣り体験と共用していた鵜来島写真から、別カットの鵜来島海岸実景 `uguru-snorkel.jpg` へ差し替え。ブルーノ・プラス / Wikimedia Commons / CC BY 4.0。シュノーケルの舞台となる海の透明感が分かる写真として使用。
+- `kuroshio-earthing-stay`：入野海岸の共通画像から、別カットの実際の入野海岸 `kuroshio-earthing-stay.jpg` へ差し替え。Dokudami / Wikimedia Commons / CC BY-SA 4.0。体験地と一致。
