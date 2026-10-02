@@ -918,14 +918,15 @@ export const photos={
     "width": 1280, "height": 853, "position": "50% 50%", "checkedAt": "2026-10-02"
   },
   "shimanto-botanical-dye": {
-    "src": "/assets/photos/shimanto-canoe.jpg",
+    "src": "/assets/photos/shimanto-botanical-dye.jpg",
     "name": "草木染め体験（四万十かわらっこ）",
-    "alt": "四万十川の自然を感じる風景",
-    "author": "Cherrysherbet",
-    "source": "https://commons.wikimedia.org/wiki/File:Nishitosa_Shimanto_river.jpg",
-    "license": "CC BY-SA 3.0",
-    "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0/",
-    "width": 604, "height": 453, "position": "50% 50%", "checkedAt": "2026-10-02"
+    "alt": "天然染料の素材と草木染めされた布のイメージ",
+    "author": "SEN Heritage Looms - Sophia Tsourinaki",
+    "source": "https://commons.wikimedia.org/wiki/File:NATURAL_DYES.jpg",
+    "title": "NATURAL DYES.jpg",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "width": 1600, "height": 1059, "position": "50% 50%", "checkedAt": "2026-10-03"
   },
   "mihara-rural-stay": {
     "src": "/assets/photos/mihara-hoshigaoka.jpg",
@@ -1210,18 +1211,18 @@ export const photos={
     "checkedAt": "2026-10-02"
   },
   "muroto-geo-guide": {
-    "src": "/assets/photos/muroto.jpg",
+    "src": "/assets/photos/muroto-geopark-center.jpg",
     "name": "室戸世界ジオパーク ガイドツアー",
-    "alt": "室戸世界ジオパークの海岸風景",
-    "author": "Rsa",
-    "source": "https://commons.wikimedia.org/wiki/File:Cape-Muroto-20100526.jpg",
-    "title": "Cape-Muroto-20100526.jpg",
-    "license": "CC BY-SA 3.0",
-    "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0/",
-    "width": 1280,
-    "height": 960,
+    "alt": "室戸世界ジオパークセンターの実景",
+    "author": "Dokudami",
+    "source": "https://commons.wikimedia.org/wiki/File:Muroto_Geopark_center_01.jpg",
+    "title": "Muroto Geopark center 01.jpg",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "width": 1600,
+    "height": 713,
     "position": "50% 50%",
-    "checkedAt": "2026-10-02"
+    "checkedAt": "2026-10-03"
   },
   "muroto-rockpool": {
     "src": "/assets/photos/muroto.jpg",

@@ -494,3 +494,8 @@ CC BY 2.0/2.5は著作者・出典・ライセンス・変更を表示。写真�
 - `akano-shishimai`：よさこい鳴子画像から、日本の獅子舞実演 `akano-shishimai.jpg` へ差し替え。Takumi pandagraph / Wikimedia Commons / CC BY-SA 4.0。赤野・大元神社の実写ではないが、体験内容と一致する獅子舞イメージとして扱う。
 - `susaki-warauma`：よさこい鳴子画像から、藁で作られた日本のわら馬 `susaki-warauma.jpg` へ差し替え。Yanajin33 / Wikimedia Commons / CC BY-SA 3.0。須崎の実作例ではないが、制作物そのものが分かるイメージとして扱う。
 - `tosayama-haiku` は土佐山の現地画像候補を再確認したが、俳句・里山散策・会席の内容まで自然に伝えられる再利用可写真が不足しているため今回は未変更。
+
+### 写真差し替え実施 第13弾（2026-10-03）
+
+- `shimanto-botanical-dye`：四万十川の汎用風景から、天然染料の素材と染色布が分かる `shimanto-botanical-dye.jpg` へ差し替え。SEN Heritage Looms - Sophia Tsourinaki / Wikimedia Commons / CC BY-SA 4.0。四万十かわらっこの実写ではないが、体験内容との一致度を優先。
+- `muroto-geo-guide`：室戸岬の汎用海岸写真から、実際の室戸世界ジオパークセンター `muroto-geopark-center.jpg` へ差し替え。Dokudami / Wikimedia Commons / CC BY-SA 4.0。集合・案内拠点の実景として使用。
