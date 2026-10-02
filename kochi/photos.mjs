@@ -40,6 +40,58 @@ export const photos={
     "position": "50% 50%",
     "checkedAt": "2026-10-02"
   },
+  "forest-adventure-kochi": {
+    "src": "/assets/photos/hero-forest-adventure.png",
+    "name": "フォレストアドベンチャー・高知",
+    "alt": "森の中で楽しむアドベンチャー体験のイメージ",
+    "author": "既存サイト画像",
+    "source": "",
+    "license": "既存サイト資産",
+    "licenseUrl": "",
+    "width": 1672,
+    "height": 941,
+    "position": "50% 50%",
+    "checkedAt": "2026-10-02"
+  },
+  "niyodo-buggy": {
+    "src": "/assets/photos/hero-buggy.png",
+    "name": "NIYODO バギー体験（NOZUアドベンチャー）",
+    "alt": "自然の中を走るバギー体験のイメージ",
+    "author": "既存サイト画像",
+    "source": "",
+    "license": "既存サイト資産",
+    "licenseUrl": "",
+    "width": 1448,
+    "height": 1086,
+    "position": "50% 50%",
+    "checkedAt": "2026-10-02"
+  },
+  "agawa-paragliding": {
+    "src": "/assets/photos/hero-paragliding.png",
+    "name": "吾川スカイパーク パラグライダー",
+    "alt": "山の上空を飛ぶパラグライダー体験のイメージ",
+    "author": "既存サイト画像",
+    "source": "",
+    "license": "既存サイト資産",
+    "licenseUrl": "",
+    "width": 1672,
+    "height": 941,
+    "position": "50% 50%",
+    "checkedAt": "2026-10-02"
+  },
+  "katsuo-waraya": {
+    "src": "/assets/photos/course-katsuo-tataki.png",
+    "name": "カツオの藁焼きタタキづくり体験（黒潮一番館）",
+    "alt": "カツオの藁焼きタタキのイメージ",
+    "author": "既存サイト画像",
+    "source": "",
+    "license": "既存サイト資産",
+    "licenseUrl": "",
+    "width": 469,
+    "height": 340,
+    "position": "50% 50%",
+    "checkedAt": "2026-10-02"
+  },
   "noichi-zoo": {
     "src": "/assets/photos/noichi-zoo.jpg",
     "name": "高知県立のいち動物公園",

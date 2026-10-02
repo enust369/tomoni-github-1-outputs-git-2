@@ -226,3 +226,11 @@ CC BY 2.0/2.5は著作者・出典・ライセンス・変更を表示。写真�
 
 - 高知県立のいち動物公園：`noichi-zoo.jpg`。Shoichi Masuhara / Wikimedia Commons / CC BY 2.0。実際の園内写真。
 - 室戸ドルフィンセンター：`muroto-dolphin.jpg`。safaritravelplus / Wikimedia Commons / CC0。施設で撮影された写真ではないため、イルカ体験イメージとして扱う。
+
+### 体験ページ追加（2026-10-02）
+
+- フォレストアドベンチャー・高知：既存サイト資産 `hero-forest-adventure.png` を使用。
+- NIYODO バギー体験：既存サイト資産 `hero-buggy.png` を使用。
+- 吾川スカイパーク パラグライダー：既存サイト資産 `hero-paragliding.png` を使用。
+- カツオの藁焼きタタキづくり体験：既存サイト資産 `course-katsuo-tataki.png` を使用。
+- 紙漉き体験、鳴子づくり体験：現時点では権利確認済みの専用写真を追加せず、共通プレースホルダーを使用。
