@@ -718,3 +718,20 @@ body:has(.page-home) .home-slide:first-child .home-slide-content .eyebrow{max-wi
 @media(max-width:900px){.home-course-media[href="/courses/niyodo-classic/"],.home-course-media[href="/courses/ocean-trip/"]{grid-template-rows:210px}.home-course-media[href="/courses/niyodo-classic/"] .home-course-main,.home-course-media[href="/courses/ocean-trip/"] .home-course-main,.home-course-media[href="/courses/niyodo-classic/"] .home-course-thumbs,.home-course-media[href="/courses/ocean-trip/"] .home-course-thumbs{height:210px}}
 @media(max-width:700px){.home-course-media[href="/courses/niyodo-classic/"],.home-course-media[href="/courses/ocean-trip/"]{grid-template-columns:1fr;grid-template-rows:195px 72px}.home-course-media[href="/courses/niyodo-classic/"] .home-course-main,.home-course-media[href="/courses/ocean-trip/"] .home-course-main{height:195px;border-radius:11px 11px 3px 3px}.home-course-media[href="/courses/niyodo-classic/"] .home-course-thumbs,.home-course-media[href="/courses/ocean-trip/"] .home-course-thumbs{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));grid-template-rows:72px;height:72px;gap:4px}.home-course-media[href="/courses/niyodo-classic/"] .home-course-thumbs img,.home-course-media[href="/courses/ocean-trip/"] .home-course-thumbs img{height:72px;min-height:72px;border-radius:3px}}
 @media(max-width:420px){.home-course-media[href="/courses/niyodo-classic/"],.home-course-media[href="/courses/ocean-trip/"]{grid-template-rows:168px 68px}.home-course-media[href="/courses/niyodo-classic/"] .home-course-main,.home-course-media[href="/courses/ocean-trip/"] .home-course-main{height:168px}.home-course-media[href="/courses/niyodo-classic/"] .home-course-thumbs,.home-course-media[href="/courses/ocean-trip/"] .home-course-thumbs{grid-template-rows:68px;height:68px}.home-course-media[href="/courses/niyodo-classic/"] .home-course-thumbs img,.home-course-media[href="/courses/ocean-trip/"] .home-course-thumbs img{height:68px;min-height:68px}}
+
+/* Slightly lower the large image on mobile for the two collage-style course cards. */
+@media(max-width:700px){
+  .home-course-media[href="/courses/niyodo-classic/"] .home-course-main,
+  .home-course-media[href="/courses/ocean-trip/"] .home-course-main{
+    align-self:end;
+    height:189px;
+    margin-top:6px;
+  }
+}
+@media(max-width:420px){
+  .home-course-media[href="/courses/niyodo-classic/"] .home-course-main,
+  .home-course-media[href="/courses/ocean-trip/"] .home-course-main{
+    height:162px;
+    margin-top:6px;
+  }
+}
