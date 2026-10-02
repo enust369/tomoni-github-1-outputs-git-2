@@ -640,14 +640,15 @@ export const photos={
     "width": 1600, "height": 1200, "position": "50% 50%", "checkedAt": "2026-10-03"
   },
   "tosayama-haiku": {
-    "src": "/assets/photos/field-kochi.jpg",
+    "src": "/assets/photos/tosayama-haiku.jpg",
     "name": "英語でHAIKU in 土佐山",
-    "alt": "土佐山の里山体験をイメージした風景",
-    "author": "Indiana jo",
-    "source": "https://commons.wikimedia.org/wiki/File:Kiiji,_Haratani_village_02.jpg",
-    "license": "CC BY-SA 4.0",
-    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
-    "width": 1280, "height": 960, "position": "50% 50%", "checkedAt": "2026-10-02"
+    "alt": "体験会場のオーベルジュ土佐山の実景",
+    "author": "jkyZjdjNjN",
+    "source": "https://commons.wikimedia.org/wiki/File:%E3%82%AA%E3%83%BC%E3%83%99%E3%83%AB%E3%82%B8%E3%83%A5%E5%9C%9F%E4%BD%90%E5%B1%B1_-_panoramio.jpg",
+    "title": "オーベルジュ土佐山 - panoramio.jpg",
+    "license": "CC BY 3.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by/3.0",
+    "width": 1600, "height": 1200, "position": "50% 50%", "checkedAt": "2026-10-03"
   },
   "uranouchi-akame-fishing": {
     "src": "/assets/photos/niyodo-fishing.jpg",
@@ -668,11 +669,15 @@ export const photos={
     "width": 1600, "height": 1066, "position": "50% 50%", "checkedAt": "2026-10-03"
   },
   "kure-fisher-town-fullcourse": {
-    "src": "/assets/photos/course-katsuo-tataki.png",
+    "src": "/assets/photos/kure-fisher-town-fullcourse.jpg",
     "name": "中土佐町久礼 漁師町フルコース",
-    "alt": "高知のカツオ文化をイメージした写真",
-    "author": "既存サイト画像", "source": "", "license": "既存サイト資産", "licenseUrl": "",
-    "width": 1456, "height": 1020, "position": "50% 50%", "checkedAt": "2026-10-02"
+    "alt": "中土佐町・久礼大正町市場の実景",
+    "author": "r18 INO (PACHIMO)",
+    "source": "https://commons.wikimedia.org/wiki/File:%E4%B9%85%E7%A4%BC%E5%A4%A7%E6%AD%A3%E7%94%BA%E5%B8%82%E5%A0%B4.jpg",
+    "title": "久礼大正町市場.jpg",
+    "license": "CC BY 3.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by/3.0",
+    "width": 1600, "height": 900, "position": "50% 50%", "checkedAt": "2026-10-03"
   },
   "bentenza-backstage-experience": {
     "src": "/assets/photos/event-yosakoi.png",
@@ -755,11 +760,15 @@ export const photos={
     "width": 1600, "height": 1065, "position": "50% 45%", "checkedAt": "2026-10-03"
   },
   "takemasa-sodabushi": {
-    "src": "/assets/photos/course-katsuo-tataki.png",
+    "src": "/assets/photos/takemasa-sodabushi.jpg",
     "name": "伝統の節納屋見学＆宗田節体験（たけまさ商店）",
-    "alt": "高知のかつお文化をイメージした写真",
-    "author": "既存サイト画像", "source": "", "license": "既存サイト資産", "licenseUrl": "",
-    "width": 1456, "height": 1020, "position": "50% 50%", "checkedAt": "2026-10-02"
+    "alt": "鰹節の節そのものの実物写真",
+    "author": "Sakurai Midori",
+    "source": "https://commons.wikimedia.org/wiki/File:Katsuobushi.jpg",
+    "title": "Katsuobushi.jpg",
+    "license": "CC BY-SA 3.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0/",
+    "width": 1600, "height": 1200, "position": "50% 50%", "checkedAt": "2026-10-03"
   },
   "niyodogawa-seicho-paper": {
     "src": "/assets/photos/ino-papermaking.jpg",
@@ -849,11 +858,15 @@ export const photos={
     "width": 1066, "height": 1600, "position": "50% 45%", "checkedAt": "2026-10-03"
   },
   "shimanto-fish-auction-lunch": {
-    "src": "/assets/photos/course-ocean-seafood.png",
+    "src": "/assets/photos/shimanto-fish-auction-lunch.jpg",
     "name": "四万十 公設卸売市場 模擬競り＋おさかなランチ",
-    "alt": "高知の海鮮料理をイメージした写真",
-    "author": "既存サイト画像", "source": "", "license": "既存サイト資産", "licenseUrl": "",
-    "width": 1456, "height": 1020, "position": "50% 50%", "checkedAt": "2026-10-02"
+    "alt": "日本の魚市場で行われる競りのイメージ",
+    "author": "PennyLane24",
+    "source": "https://commons.wikimedia.org/wiki/File:Tsukiji_fish_market_tuna_auction.jpg",
+    "title": "Tsukiji fish market tuna auction.jpg",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "width": 1200, "height": 1600, "position": "50% 50%", "checkedAt": "2026-10-03"
   },
   "shimanto-yakatabune-cafe": {
     "src": "/assets/photos/shimanto-yakatabune-cafe.jpg",

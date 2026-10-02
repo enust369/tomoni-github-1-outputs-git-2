@@ -536,3 +536,10 @@ CC BY 2.0/2.5は著作者・出典・ライセンス・変更を表示。写真�
 - `tosappo-ryoma-walk`：坂本龍馬記念館の共通画像から、桂浜の坂本龍馬像 `tosappo-ryoma-walk.jpg` へ差し替え。Chehikone / Wikimedia Commons / CC0。
 - `hanpeita-harimaya-guide`：坂本龍馬記念館の共通画像から、実際のはりまや橋 `hanpeita-harimaya-guide.jpg` へ差し替え。Nobunaga24 / Wikimedia Commons / Public Domain。
 - `katsurahama-guide`：坂本龍馬記念館の共通画像から、実際の桂浜 `katsurahama-guide.jpg` へ差し替え。京浜にけ / Wikimedia Commons / CC BY-SA 3.0。
+
+### 写真差し替え実施 第20弾（2026-10-03）
+
+- `kure-fisher-town-fullcourse`：共通カツオ画像から、実際の久礼大正町市場へ差し替え。r18 INO (PACHIMO) / Wikimedia Commons / CC BY 3.0。
+- `takemasa-sodabushi`：共通カツオ画像から、鰹節の節そのものの実物写真へ差し替え。Sakurai Midori / Wikimedia Commons / CC BY-SA 3.0。たけまさ商店の実写ではないため宗田節体験の内容イメージとして扱う。
+- `shimanto-fish-auction-lunch`：海鮮料理の共通画像から、日本の魚市場での競り写真へ差し替え。PennyLane24 / Wikimedia Commons / CC BY-SA 4.0。四万十公設卸売市場の実写ではなく、模擬競りの内容イメージとして扱う。
+- `tosayama-haiku`：汎用里山画像から、実際の体験会場オーベルジュ土佐山の実景へ差し替え。jkyZjdjNjN / Wikimedia Commons / CC BY 3.0。
