@@ -581,3 +581,8 @@ CC BY 2.0/2.5は著作者・出典・ライセンス・変更を表示。写真�
 
 - `ioki-morning-market-tour`：伊尾木洞の共通画像から、別カットの伊尾木洞内部実景 `ioki-morning-market-tour.jpg` へ差し替え。Saigen Jiro / Wikimedia Commons / CC0。朝の探検パートの実景として使用。
 - `mihara-rural-stay`：三原村・星ヶ丘公園の共通画像から、三原村内の御社神社と山里実景 `mihara-rural-stay.jpg` へ差し替え。Lumi iori / Wikimedia Commons / CC BY-SA 4.0。農家民宿くろうさぎ自体の実写ではないが、同じ三原村の里山生活イメージとして地域一致を優先。
+
+### 写真差し替え実施 第29弾（2026-10-03）
+
+- `yoshinogawa-rafting`：既存のラフティング共通画像から、実際の吉野川ラフティング実景 `yoshinogawa-rafting.jpg` へ差し替え。(WT-en) Prestonpreston / Wikimedia Commons / Public Domain。体験地と内容が一致。
+- `makino-guide-walk`：牧野植物園の共通提供画像から、園内の別カット実景 `makino-guide-walk.jpg` へ差し替え。663highland / Wikimedia Commons / CC BY-SA 4.0。ガイドウォークの舞台そのものが分かる写真として使用。

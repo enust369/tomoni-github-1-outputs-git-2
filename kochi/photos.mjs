@@ -121,17 +121,18 @@ export const photos={
     "checkedAt": "2026-10-03"
   },
   "yoshinogawa-rafting": {
-    "src": "/assets/photos/hero-rafting.png",
+    "src": "/assets/photos/yoshinogawa-rafting.jpg",
     "name": "吉野川ラフティング体験（You Me Rafting）",
-    "alt": "吉野川ラフティング体験のイメージ",
-    "author": "既存サイト画像",
-    "source": "",
-    "license": "既存サイト資産",
-    "licenseUrl": "",
-    "width": 1448,
-    "height": 1086,
+    "alt": "吉野川でラフティングを楽しむ実景",
+    "author": "(WT-en) Prestonpreston",
+    "source": "https://commons.wikimedia.org/wiki/File:Rafting_on_the_Yoshino_River.jpg",
+    "title": "Rafting on the Yoshino River.jpg",
+    "license": "Public Domain",
+    "licenseUrl": "https://creativecommons.org/publicdomain/mark/1.0/",
+    "width": 1600,
+    "height": 1043,
     "position": "50% 50%",
-    "checkedAt": "2026-10-02"
+    "checkedAt": "2026-10-03"
   },
   "kochi-horse-riding": {
     "src": "/assets/photos/kochi-horse-riding.jpg",
@@ -1063,14 +1064,15 @@ export const photos={
     "width": 1600, "height": 1200, "position": "50% 50%", "checkedAt": "2026-10-03"
   },
   "makino-guide-walk": {
-    "src": "/assets/photos/makino-botanical-garden.png",
+    "src": "/assets/photos/makino-guide-walk.jpg",
     "name": "まきのガイドウォーク",
-    "alt": "高知県立牧野植物園の園内",
-    "author": "既存サイト画像",
-    "source": "",
-    "license": "既存サイト資産",
-    "licenseUrl": "",
-    "width": 1456, "height": 816, "position": "50% 50%", "checkedAt": "2026-10-02"
+    "alt": "高知県立牧野植物園の園内実景",
+    "author": "663highland",
+    "source": "https://commons.wikimedia.org/wiki/File:200104_Kochi_Prefectural_Makino_Botanical_Garden03s3.jpg",
+    "title": "200104 Kochi Prefectural Makino Botanical Garden03s3.jpg",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "width": 1600, "height": 1066, "position": "50% 50%", "checkedAt": "2026-10-03"
   },
   "kashiwajima-diving-aquas": {
     "src": "/assets/photos/kashiwajima-diving-aquas.jpg",
