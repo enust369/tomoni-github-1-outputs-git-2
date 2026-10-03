@@ -829,3 +829,5 @@ body:has(.page-home) .home-slide:first-child .home-slide-content .eyebrow{max-wi
 
 .home-category-travel-head{display:flex;align-items:baseline;gap:12px;margin:26px 0 10px}.home-category-travel-head span{font-size:10px;font-weight:800;letter-spacing:.14em;color:var(--blue)}.home-category-travel-head strong{font-size:15px;color:#174c63}.home-category-travel{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:10px}.home-travel-card{min-height:66px;padding:10px 13px}.home-travel-card .home-category-subicon{background:#eef8f5;color:var(--green)}
 @media(max-width:700px){.home-category-travel-head{margin-top:20px}.home-category-travel{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}.home-category-travel .home-travel-card:last-child{grid-column:span 2}.home-travel-card{min-height:54px}}
+
+.area-category-links{margin-top:0}.area-all-spots{margin-top:18px}.area-all-spots .button{font-weight:700}
