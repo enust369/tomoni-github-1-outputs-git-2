@@ -1187,17 +1187,18 @@ export const photos={
     "checkedAt": "2026-10-03"
   },
   "soltive-salt": {
-    "src": "/assets/photos/irino-surf.jpg",
+    "src": "/assets/photos/soltive-salt.jpg",
     "name": "天日塩づくり体験（ソルティーブ）",
-    "alt": "黒潮町・入野海岸の海のイメージ",
-    "author": "Ubuhouse",
-    "source": "https://commons.wikimedia.org/wiki/File:Irino_beach_Kuroshio_Kochi.jpg",
-    "license": "CC BY-SA 3.0",
-    "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0/",
-    "width": 960,
-    "height": 720,
+    "alt": "太陽と風で塩を結晶化させる天日塩づくりのイメージ",
+    "author": "Bernard Spragg. NZ",
+    "source": "https://commons.wikimedia.org/wiki/File:Solar_salt._(8107350195).jpg",
+    "title": "Solar salt. (8107350195).jpg",
+    "license": "CC0",
+    "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/",
+    "width": 1600,
+    "height": 1200,
     "position": "50% 50%",
-    "checkedAt": "2026-10-02"
+    "checkedAt": "2026-10-03"
   },
   "tano-solar-salt": {
     "src": "/assets/photos/tano-solar-salt.jpg",

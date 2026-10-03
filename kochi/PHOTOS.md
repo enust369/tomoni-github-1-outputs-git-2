@@ -591,3 +591,7 @@ CC BY 2.0/2.5は著作者・出典・ライセンス・変更を表示。写真�
 
 - `tsuno-tea-field`：四万十川源流部の共通風景から、日本の山間茶畑 `tsuno-tea-field.jpg` へ差し替え。STA3816 / Wikimedia Commons / CC BY-SA 3.0。津野町の実写ではないため、茶畑見学体験の内容イメージとして扱う。
 - `garbanzo-yoshino`：既存のラフティング共通画像から、急流を下るラフト実景 `garbanzo-yoshino.jpg` へ差し替え。さかおり / Wikimedia Commons / CC BY-SA 4.0。吉野川の実写ではないため、リバーアクティビティの内容イメージとして扱う。
+
+### 写真差し替え実施 第31弾（2026-10-03）
+
+- `soltive-salt`：入野海岸の共通写真から、天日塩の結晶化工程が分かる `soltive-salt.jpg` へ差し替え。Bernard Spragg. NZ / Wikimedia Commons / CC0。黒潮町ソルティーブの実写ではないため、天日塩づくりの工程イメージとして扱う。
