@@ -292,75 +292,75 @@ const courseDayBreaks={
 const courseSchedules={
   'kochi-classic':[
     {time:'09:00',slug:'kochi-castle-history-museum'},
-    {time:'10:15',slug:'kochi-castle'},
-    {time:'12:00',title:'高知市中心部で昼食',note:'ひろめ市場や帯屋町周辺などで、午後に備えてゆっくり昼食。'},
-    {time:'14:00',slug:'makino-botanical-garden'},
-    {time:'17:30',slug:'myojinmaru'},
-    {time:'19:30',slug:'yasube'}
+    {time:'10:15',slug:'kochi-castle',move:'徒歩約5分'},
+    {time:'12:00',title:'高知市中心部で昼食',move:'徒歩約10分',note:'ひろめ市場や帯屋町周辺などで、午後に備えてゆっくり昼食。'},
+    {time:'14:00',slug:'makino-botanical-garden',move:'車で約20分'},
+    {time:'17:30',slug:'myojinmaru',move:'車で約20分'},
+    {time:'19:30',slug:'yasube',move:'徒歩約10分'}
   ],
   'niyodo-classic':[
     {time:'09:00',slug:'agawa-paragliding',note:'体験開始時刻は事前予約で確定。天候により中止あり。'},
-    {time:'12:30',title:'仁淀川町周辺で昼食',note:'午後の移動に備えて早めの昼食。'},
-    {time:'13:45',slug:'nikobuchi'},
-    {time:'15:45',slug:'ice'}
+    {time:'12:30',title:'仁淀川町周辺で昼食',move:'車で約20〜30分',note:'午後の移動に備えて早めの昼食。'},
+    {time:'13:45',slug:'nikobuchi',move:'車で約30分'},
+    {time:'15:45',slug:'ice',move:'車で約45〜50分'}
   ],
   'niyodo-active':[
     {time:'09:00',slug:'kayak',note:'予約枠に合わせて開始時刻を調整。'},
-    {time:'12:00',title:'仁淀川沿いで昼食',note:'カヤック終了後に昼食休憩。'},
-    {time:'13:30',slug:'ice'},
-    {time:'15:00',slug:'nakatsu'}
+    {time:'12:00',title:'仁淀川沿いで昼食',move:'車で約15分',note:'カヤック終了後に昼食休憩。'},
+    {time:'13:30',slug:'ice',move:'車で約15〜20分'},
+    {time:'15:00',slug:'nakatsu',move:'車で約50〜60分'}
   ],
   'east-drive':[
     {time:'09:00',slug:'iokido'},
-    {time:'11:00',slug:'shirasu'},
-    {time:'13:00',slug:'noichi-zoo'}
+    {time:'11:00',slug:'shirasu',move:'車で約10分'},
+    {time:'13:00',slug:'noichi-zoo',move:'車で約30分'}
   ],
   'ocean-trip':[
     {day:'DAY 1',time:'09:00',slug:'kashiwajima-diving-aquas',note:'事前予約推奨。海況により内容変更・中止あり。'},
-    {time:'12:30',title:'柏島周辺で昼食',note:'ダイビング後は休憩を兼ねて昼食。'},
-    {time:'14:00',slug:'kashiwajima'},
-    {time:'16:30',title:'宿へ移動・夕景を楽しむ',note:'翌日に備えて土佐清水・竜串方面へ移動。'},
-    {day:'DAY 2',time:'09:10',slug:'tatsukushi-minokoshi-tour'},
-    {time:'12:00',title:'竜串周辺で昼食'},
-    {time:'14:00',slug:'ashizuri'}
+    {time:'12:30',title:'柏島周辺で昼食',move:'車で約5〜10分',note:'ダイビング後は休憩を兼ねて昼食。'},
+    {time:'14:00',slug:'kashiwajima',move:'車で約5〜10分'},
+    {time:'16:30',title:'宿へ移動・夕景を楽しむ',move:'車で約60〜75分',note:'翌日に備えて土佐清水・竜串方面へ移動。'},
+    {day:'DAY 2',time:'09:10',slug:'tatsukushi-minokoshi-tour',move:'宿から車で約10〜30分'},
+    {time:'12:00',title:'竜串周辺で昼食',move:'徒歩〜車で約5分'},
+    {time:'14:00',slug:'ashizuri',move:'車で約30〜40分'}
   ],
   'karst-drive':[
     {time:'09:00',slug:'forest-adventure-kochi',note:'予約枠に合わせて開始。'},
-    {time:'12:30',title:'津野町周辺で昼食'},
-    {time:'13:30',slug:'karst'},
-    {time:'15:30',slug:'yusuhara'}
+    {time:'12:30',title:'津野町周辺で昼食',move:'車で約20〜30分'},
+    {time:'13:30',slug:'karst',move:'車で約30〜40分'},
+    {time:'15:30',slug:'yusuhara',move:'車で約45〜60分'}
   ],
   'kochi-gourmet':[
     {time:'17:30',slug:'myojinmaru'},
-    {time:'19:30',title:'高知市中心部を散策',note:'帯屋町・追手筋周辺を歩きながら次の店へ。'},
-    {time:'20:30',slug:'yasube',note:'日曜定休。悪天候時は臨時休業の場合あり。'}
+    {time:'19:30',title:'高知市中心部を散策',move:'徒歩約5〜10分',note:'帯屋町・追手筋周辺を歩きながら次の店へ。'},
+    {time:'20:30',slug:'yasube',move:'徒歩約10分',note:'日曜定休。悪天候時は臨時休業の場合あり。'}
   ],
   'kami-konan':[
     {time:'08:30',slug:'ryugado'},
-    {time:'10:30',slug:'noichi-zoo'},
-    {time:'13:15',title:'香南市周辺で昼食'},
-    {time:'14:30',slug:'bentenza-backstage-experience',note:'体験実施時刻は事前予約で確認。月曜休館（祝日の場合は翌日）。'}
+    {time:'10:30',slug:'noichi-zoo',move:'車で約20分'},
+    {time:'13:15',title:'香南市周辺で昼食',move:'車で約10分'},
+    {time:'14:30',slug:'bentenza-backstage-experience',move:'車で約15分',note:'体験実施時刻は事前予約で確認。月曜休館（祝日の場合は翌日）。'}
   ],
   'family':[
     {time:'09:00',slug:'kochi-castle'},
-    {time:'11:00',slug:'makino-botanical-garden'},
-    {time:'13:15',title:'五台山〜南国方面で昼食'},
-    {time:'14:30',slug:'noichi-zoo'}
+    {time:'11:00',slug:'makino-botanical-garden',move:'車で約20分'},
+    {time:'13:15',title:'五台山〜南国方面で昼食',move:'車で約15分'},
+    {time:'14:30',slug:'noichi-zoo',move:'車で約20〜25分'}
   ],
   'three-days':[
     {day:'DAY 1',time:'09:00',slug:'kochi-castle'},
     {time:'11:00',slug:'makino-botanical-garden'},
-    {time:'13:30',title:'高知市内で昼食・市街地散策'},
-    {day:'DAY 2',time:'09:30',slug:'nikobuchi'},
-    {time:'11:30',slug:'ice'},
-    {time:'13:30',slug:'nakatsu'},
-    {day:'DAY 3',time:'09:00',slug:'iokido'},
-    {time:'11:00',slug:'shirasu'},
-    {time:'13:00',slug:'noichi-zoo'}
+    {time:'13:30',title:'高知市内で昼食・市街地散策',move:'車で約20分'},
+    {day:'DAY 2',time:'09:30',slug:'nikobuchi',move:'高知市内から車で約60分'},
+    {time:'11:30',slug:'ice',move:'車で約45〜50分'},
+    {time:'13:30',slug:'nakatsu',move:'車で約50〜60分'},
+    {day:'DAY 3',time:'09:00',slug:'iokido',move:'高知市内から車で約45分'},
+    {time:'11:00',slug:'shirasu',move:'車で約10分'},
+    {time:'13:00',slug:'noichi-zoo',move:'車で約30分'}
   ]
 };
 const coursePhotoOverrides={
-  'niyodo-classic':{src:'/assets/photos/course-niyodo-sky-camp.png',name:'空と仁淀ブルーキャンプ1日コース',alt:'パラグライダー、仁淀ブルー、キャンプを組み合わせたモデルコースのコラージュ',author:'ユーザー提供画像',source:'',license:'提供画像（サイト掲載用）',licenseUrl:'',width:1456,height:1020,position:'50% 50%',checkedAt:'2026-10-02'},
+  'niyodo-classic':{src:'/assets/photos/course-niyodo-sky-camp.png',name:'空と仁淀ブルー 絶景1日コース',alt:'パラグライダーと仁淀ブルーの絶景を組み合わせたモデルコースのコラージュ',author:'ユーザー提供画像',source:'',license:'提供画像（サイト掲載用）',licenseUrl:'',width:1456,height:1020,position:'50% 50%',checkedAt:'2026-10-02'},
   'ocean-trip':{src:'/assets/photos/course-ocean-trip-collage.png',name:'柏島・足摺 海の1泊2日コース',alt:'柏島の海、海鮮、夕日をまとめたモデルコースのコラージュ',author:'ユーザー提供画像',source:'',license:'提供画像（サイト掲載用）',licenseUrl:'',width:1448,height:1086,position:'50% 50%',checkedAt:'2026-10-02'}
 };
 export const courses=courseRows.map(([slug,name,area,theme,duration,stops],i)=>{const photo=coursePhotoOverrides[slug]||stops.map(slug=>photos[slug]).find(Boolean)||null;return {slug,name,area,theme,duration,stops,schedule:courseSchedules[slug]||[],stopMinutes:Object.fromEntries(stops.map(s=>[s,courseStopMinutes[s]||90])),dayBreaks:courseDayBreaks[slug]||{},initial_rank:i+1,transport:'車＋徒歩',season:'季節・天候に応じて',audience:theme==='子連れ'?'家族':theme==='カップル'?'カップル':'友人・ひとり旅',photo,image:photo?.src||''};});
