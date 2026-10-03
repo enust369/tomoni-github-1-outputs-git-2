@@ -605,3 +605,8 @@ CC BY 2.0/2.5は著作者・出典・ライセンス・変更を表示。写真�
 ### 写真差し替え実施 第33弾（2026-10-03）
 
 - `tosa-terrace-cycle`：市街地サイクリングの汎用画像から、出発拠点「こうち旅広場」の隣にあるJR高知駅実景 `tosa-terrace-cycle.jpg` へ差し替え。Drivephotographer / Wikimedia Commons / CC0。レンタサイクルの起点が分かる写真として使用。
+
+### 写真差し替え実施 第34弾（2026-10-03）
+
+- `forest-adventure-kochi`：既存の汎用森林アドベンチャー画像から、高所アスレチック設備が明確に分かる `forest-adventure-kochi.jpg` へ差し替え。Klaus wyss / Wikimedia Commons / CC BY-SA 3.0。フォレストアドベンチャー・高知の実写ではないため、体験内容のイメージとして扱う。
+- `niyodo-buggy`：既存の汎用バギー画像から、林道を走るATV実景 `niyodo-buggy.jpg` へ差し替え。U.S. Fish and Wildlife Service Southeast Region / Wikimedia Commons / Public Domain。NOZUアドベンチャーの実写ではないため、バギー走行体験のイメージとして扱う。
