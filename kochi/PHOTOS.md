@@ -87,9 +87,9 @@ CC BY 2.0/2.5は著作者・出典・ライセンス・変更を表示。写真�
 | スポット | ファイル | alt | 出典 |
 |---|---|---|---|
 | 竹林寺 | `chikurinji-pagoda.jpg` | 新緑に囲まれた竹林寺の五重塔と石段 | ユーザー提供画像を加工 |
-| 高知県立高知城歴史博物館 | `kochi-castle-history-museum.png` | 青空の下に建つ高知県立高知城歴史博物館 | ユーザー提供画像（2×2分割） |
-| 高知県立坂本龍馬記念館 | `sakamoto-ryoma-memorial-museum.png` | 青空と海を望む高知県立坂本龍馬記念館 | ユーザー提供画像（2×2分割） |
-| 潮江天満宮 | `shioe-tenmangu.png` | 緑に囲まれた潮江天満宮の参道と社殿 | ユーザー提供画像（2×2分割） |
+| 高知県立高知城歴史博物館 | `kochi-castle-history-museum.jpg` | 青空の下に建つ高知県立高知城歴史博物館 | ユーザー提供画像（2×2分割） |
+| 高知県立坂本龍馬記念館 | `sakamoto-ryoma-memorial-museum.jpg` | 青空と海を望む高知県立坂本龍馬記念館 | ユーザー提供画像（2×2分割） |
+| 潮江天満宮 | `shioe-tenmangu.jpg` | 緑に囲まれた潮江天満宮の参道と社殿 | ユーザー提供画像（2×2分割） |
 
 ### コースのメイン写真
 
@@ -148,9 +148,9 @@ CC BY 2.0/2.5は著作者・出典・ライセンス・変更を表示。写真�
 以下4点は、ユーザー提供の加工済み画像を分割してサイト内アセットとして使用。外部ホットリンクなし。
 
 - 竹林寺: `chikurinji-pagoda.jpg`（ユーザー提供画像を加工。人物を除去し、自然な範囲で明るさ・色調を調整）
-- 高知県立高知城歴史博物館: `kochi-castle-history-museum.png`
-- 高知県立坂本龍馬記念館: `sakamoto-ryoma-memorial-museum.png`
-- 潮江天満宮: `shioe-tenmangu.png`
+- 高知県立高知城歴史博物館: `kochi-castle-history-museum.jpg`
+- 高知県立坂本龍馬記念館: `sakamoto-ryoma-memorial-museum.jpg`
+- 潮江天満宮: `shioe-tenmangu.jpg`
 
 ## 体験ページ用追加画像（2026-09-30）
 
@@ -256,7 +256,7 @@ CC BY 2.0/2.5は著作者・出典・ライセンス・変更を表示。写真�
 - TOSACO TAP STAND・醸造所：施設公式写真は転載条件未確認のため専用写真未設定。
 - 高木酒造 酒蔵見学：施設公式写真は転載条件未確認のため専用写真未設定。
 - こうち旅広場 レンタサイクル：既存サイト資産 `course-classic-bridge.png` を高知市街サイクリングのイメージとして使用。
-- 龍馬の生まれたまち歩き〜土佐っ歩〜：既存サイト資産 `sakamoto-ryoma-memorial-museum.png` を龍馬ゆかりの高知を歩くイメージとして使用。
+- 龍馬の生まれたまち歩き〜土佐っ歩〜：既存サイト資産 `sakamoto-ryoma-memorial-museum.jpg` を龍馬ゆかりの高知を歩くイメージとして使用。
 
 ### 体験ページ追加 第5弾（2026-10-02）
 
@@ -294,7 +294,7 @@ CC BY 2.0/2.5は著作者・出典・ライセンス・変更を表示。写真�
 
 - 牧野公園ガイド：既存の `field-kochi.jpg` を里山イメージとして使用。Indiana jo / Wikimedia Commons / CC BY-SA 4.0。佐川町・牧野公園の実写ではない。
 - 牧野博士の聖地を歩く（南山麓コース）：既存の `field-kochi.jpg` を里山ウォーキングのイメージとして使用。実際のコース写真ではない。
-- 桂浜散策ガイド：既存サイト資産 `sakamoto-ryoma-memorial-museum.png` を桂浜エリアのイメージとして使用。ガイド中の実写ではない。
+- 桂浜散策ガイド：既存サイト資産 `sakamoto-ryoma-memorial-museum.jpg` を桂浜エリアのイメージとして使用。ガイド中の実写ではない。
 - まきのガイドウォーク：既存サイト資産 `makino-botanical-garden.jpg` を牧野植物園のイメージとして使用。
 
 ### 体験ページ追加 第11弾（2026-10-02）
@@ -350,7 +350,7 @@ CC BY 2.0/2.5は著作者・出典・ライセンス・変更を表示。写真�
 - 五感で感じる しらす漁師ツアー：既存の `shirasu.jpg` を安芸のしらす文化イメージとして使用。実際の2026年ツアー写真ではない。
 - コスプレで巡る レトロな街 いの町 フォトツアー：既存の `field-kochi.jpg` を地域風景イメージとして使用。Indiana jo / Wikimedia Commons / CC BY-SA 4.0。コスプレ撮影の実写ではない。
 - 着物で楽しむ 料亭濱長お座敷遊び体験：既存の `event-yosakoi.png` を高知の伝統文化イメージとして使用。濱長・着物・芸妓の実写ではない。
-- 半平太・はりまや橋コース：既存の `sakamoto-ryoma-memorial-museum.png` を幕末の土佐イメージとして使用。コース上の実写ではない。
+- 半平太・はりまや橋コース：既存の `sakamoto-ryoma-memorial-museum.jpg` を幕末の土佐イメージとして使用。コース上の実写ではない。
 
 ### 体験追加 第19弾（2026-10-02）
 
@@ -660,3 +660,11 @@ CC BY 2.0/2.5は著作者・出典・ライセンス・変更を表示。写真�
 - トップヒーロー関連7枚（`kochi-sup-hero`、`hero-sup-mobile`、`hero-paragliding`、`hero-buggy`、`hero-forest-adventure`、`hero-camping`、`hero-rafting`）は、元PNGのアルファ値を全ピクセル確認し、透明部分が実際には存在しないことを確認したうえでAVIFへ変換。
 - 画質86で変換し、合計約26.4MBから約3.7MBへ削減。表示内容・縦横比は維持。
 - SNS/OGP互換性のため、AVIF化した主要ヒーロー6枚には同名JPEGをOGP専用として併存させる。画面表示はAVIF、`og:image` / `twitter:image` はJPEGを使用する。
+
+### 画像軽量化（2026-10-03 / モバイルヒーロー）
+
+- `hero-sup-mobile.avif` は元PNGから幅820pxへ再生成し、AVIF品質86で約620KBから約487KBへ削減。スマホ高DPI表示に必要な解像度を確保したまま軽量化。
+
+### 画像軽量化（2026-10-03 / 追加写真）
+
+- `shioe-tenmangu`、`kochi-castle-history-museum`、`sakamoto-ryoma-memorial-museum`、`course-ocean-beach` は透過のない写真系PNGだったため、JPEG品質85へ変換。4枚合計の容量を大幅に削減し、表示内容・縦横比・出典情報は維持。

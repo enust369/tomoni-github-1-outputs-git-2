@@ -1535,7 +1535,7 @@ export const photos={
     "checkedAt": "2026-10-01"
   },
   "kochi-castle-history-museum": {
-    "src": "/assets/photos/kochi-castle-history-museum.png",
+    "src": "/assets/photos/kochi-castle-history-museum.jpg",
     "name": "高知県立高知城歴史博物館",
     "alt": "青空の下に建つ高知県立高知城歴史博物館",
     "author": "提供画像",
@@ -1549,7 +1549,7 @@ export const photos={
     "checkedAt": "2026-09-26"
   },
   "sakamoto-ryoma-memorial-museum": {
-    "src": "/assets/photos/sakamoto-ryoma-memorial-museum.png",
+    "src": "/assets/photos/sakamoto-ryoma-memorial-museum.jpg",
     "name": "高知県立坂本龍馬記念館",
     "alt": "青空と海を望む高知県立坂本龍馬記念館",
     "author": "提供画像",
@@ -1563,7 +1563,7 @@ export const photos={
     "checkedAt": "2026-09-26"
   },
   "shioe-tenmangu": {
-    "src": "/assets/photos/shioe-tenmangu.png",
+    "src": "/assets/photos/shioe-tenmangu.jpg",
     "name": "潮江天満宮",
     "alt": "緑に囲まれた潮江天満宮の参道と社殿",
     "author": "提供画像",
