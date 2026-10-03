@@ -1589,5 +1589,47 @@ export const photos={
     "height": 1024,
     "position": "50% 50%",
     "checkedAt": "2026-09-26"
+  }  ,"snowpeak-ochi-niyodogawa": {
+    "src": "/assets/photos/snowpeak-ochi-niyodogawa.jpg",
+    "name": "スノーピークおち仁淀川キャンプフィールド",
+    "alt": "仁淀川の流れと周辺の山並み（キャンプフィールド周辺地域のイメージ）",
+    "author": "Reggaeman",
+    "source": "https://commons.wikimedia.org/wiki/File:Niyodo_river_01.jpg",
+    "title": "Niyodo river 01.jpg",
+    "license": "CC BY-SA 3.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0",
+    "width": 1600,
+    "height": 481,
+    "position": "50% 50%",
+    "checkedAt": "2026-10-03"
+  },
+  "umaji-onsen": {
+    "src": "/assets/photos/umaji-onsen.jpg",
+    "name": "馬路温泉",
+    "alt": "馬路温泉の施設外観と山あいの景観",
+    "author": "ブルーノ・プラス",
+    "source": "https://commons.wikimedia.org/wiki/File:Facilities_at_Umaji_Onsen.jpg",
+    "title": "Facilities at Umaji Onsen.jpg",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+    "width": 1600,
+    "height": 1200,
+    "position": "50% 50%",
+    "checkedAt": "2026-10-03"
+  },
+  "michinoeki-nakatosa": {
+    "src": "/assets/photos/michinoeki-nakatosa.jpg",
+    "name": "道の駅なかとさ",
+    "alt": "道の駅なかとさの木造施設外観",
+    "author": "On-neko",
+    "source": "https://commons.wikimedia.org/wiki/File:%E9%81%93%E3%81%AE%E9%A7%85_%E3%81%AA%E3%81%8B%E3%81%A8%E3%81%95.jpg",
+    "title": "道の駅 なかとさ.jpg",
+    "license": "CC0",
+    "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/",
+    "width": 1600,
+    "height": 1200,
+    "position": "50% 50%",
+    "checkedAt": "2026-10-03"
   }
+
 };

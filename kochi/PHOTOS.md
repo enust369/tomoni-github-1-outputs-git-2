@@ -628,3 +628,9 @@ CC BY 2.0/2.5は著作者・出典・ライセンス・変更を表示。写真�
 ### 写真差し替え実施 第38弾（2026-10-03）
 
 - `asemikawa-ebike`：Farm-to-table体験と共通だった本山町の山里写真から、本山町内・吉野川水系の山崎ダム周辺実景 `asemikawa-ebike.jpg` へ差し替え。Qurren / Wikimedia Commons / CC BY-SA 3.0。汗見川そのものの実写ではないが、同じ本山町内の水辺・サイクリング地域の実景として使用。これにより `photos.mjs` の画像重複を解消。
+
+### 写真追加 第39弾（2026-10-03）
+
+- `snowpeak-ochi-niyodogawa`：仁淀川の実景 `snowpeak-ochi-niyodogawa.jpg` を使用。Reggaeman / Wikimedia Commons / CC BY-SA 3.0。スノーピークおち仁淀川キャンプフィールドそのものの実写ではないため、仁淀川沿いキャンプの地域イメージとして扱う。
+- `umaji-onsen`：馬路温泉の施設実景 `umaji-onsen.jpg` を使用。ブルーノ・プラス / Wikimedia Commons / CC BY-SA 4.0。施設外観が分かる実景写真として使用。
+- `michinoeki-nakatosa`：道の駅なかとさの施設実景 `michinoeki-nakatosa.jpg` を使用。On-neko / Wikimedia Commons / CC0。施設外観が分かる実景写真として使用。
