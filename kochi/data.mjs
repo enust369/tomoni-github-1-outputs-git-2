@@ -359,11 +359,23 @@ const courseSchedules={
     {time:'13:00',slug:'noichi-zoo',move:'車で約30分'}
   ]
 };
+const coursePractical={
+  'kochi-classic':{recommended:'火〜土を基本に、各施設の休館日を確認',reservation:'基本不要。飲食店は混雑時の事前確認がおすすめ',caution:'高知城歴史博物館・牧野植物園・高知城は年末年始や臨時休館日に注意。屋台安兵衛は日曜休み。'},
+  'niyodo-classic':{recommended:'4〜11月の晴天日',reservation:'パラグライダーは事前予約が必要',caution:'吾川スカイパークは12〜3月冬季休止。にこ淵は雨天・増水時を避け、歩きやすい靴で。'},
+  'niyodo-active':{recommended:'春〜秋の晴天・水況が安定した日',reservation:'クリスタルカヤックは事前予約推奨',caution:'河川状況で体験内容が変わる場合あり。高知アイスは第2・第4月曜など定休に注意。'},
+  'east-drive':{recommended:'水曜・金〜日曜を基本に計画',reservation:'基本不要',caution:'安芸しらす食堂は木曜・第1火曜休み。のいち動物公園は月曜休園（祝日の場合は翌日）。'},
+  'ocean-trip':{recommended:'春〜秋の海況が安定した2日間',reservation:'柏島ダイビングは事前予約推奨。グラスボートも運航確認推奨',caution:'海況・天候でダイビングや船便が変更・中止になる場合あり。'},
+  'karst-drive':{recommended:'春〜秋の晴天日',reservation:'フォレストアドベンチャーは事前予約推奨',caution:'山間部は天候・通行規制・霧に注意。冬季は積雪や路面凍結の可能性あり。'},
+  'kochi-gourmet':{recommended:'月〜土の夕方〜夜',reservation:'明神丸は混雑時の予約・空席確認がおすすめ',caution:'屋台安兵衛は日曜休み。悪天候時は臨時休業の場合あり。'},
+  'kami-konan':{recommended:'火〜日曜を基本に計画',reservation:'弁天座バックヤード体験は事前予約が必要',caution:'のいち動物公園と弁天座は月曜休みを基本とし、祝日の場合は翌日休館になる場合あり。'},
+  'family':{recommended:'火〜日曜を基本に、休園日を確認',reservation:'基本不要',caution:'のいち動物公園は月曜休園。牧野植物園はメンテナンス休園日あり。子どもの年齢に合わせて滞在時間を短縮してもOK。'},
+  'three-days':{recommended:'DAY 3が木曜・第1火曜にならない日程',reservation:'基本不要。繁忙期は飲食店・宿泊先を事前予約',caution:'DAY 3の安芸しらす食堂は木曜・第1火曜休み、のいち動物公園は月曜休園。各日の休館日を事前確認。'}
+};
 const coursePhotoOverrides={
   'niyodo-classic':{src:'/assets/photos/course-niyodo-sky-camp.png',name:'空と仁淀ブルー 絶景1日コース',alt:'パラグライダーと仁淀ブルーの絶景を組み合わせたモデルコースのコラージュ',author:'ユーザー提供画像',source:'',license:'提供画像（サイト掲載用）',licenseUrl:'',width:1456,height:1020,position:'50% 50%',checkedAt:'2026-10-02'},
   'ocean-trip':{src:'/assets/photos/course-ocean-trip-collage.png',name:'柏島・足摺 海の1泊2日コース',alt:'柏島の海、海鮮、夕日をまとめたモデルコースのコラージュ',author:'ユーザー提供画像',source:'',license:'提供画像（サイト掲載用）',licenseUrl:'',width:1448,height:1086,position:'50% 50%',checkedAt:'2026-10-02'}
 };
-export const courses=courseRows.map(([slug,name,area,theme,duration,stops],i)=>{const photo=coursePhotoOverrides[slug]||stops.map(slug=>photos[slug]).find(Boolean)||null;return {slug,name,area,theme,duration,stops,schedule:courseSchedules[slug]||[],stopMinutes:Object.fromEntries(stops.map(s=>[s,courseStopMinutes[s]||90])),dayBreaks:courseDayBreaks[slug]||{},initial_rank:i+1,transport:'車＋徒歩',season:'季節・天候に応じて',audience:theme==='子連れ'?'家族':theme==='カップル'?'カップル':'友人・ひとり旅',photo,image:photo?.src||''};});
+export const courses=courseRows.map(([slug,name,area,theme,duration,stops],i)=>{const photo=coursePhotoOverrides[slug]||stops.map(slug=>photos[slug]).find(Boolean)||null;const practical=coursePractical[slug]||{};return {slug,name,area,theme,duration,stops,schedule:courseSchedules[slug]||[],stopMinutes:Object.fromEntries(stops.map(s=>[s,courseStopMinutes[s]||90])),dayBreaks:courseDayBreaks[slug]||{},recommended:practical.recommended||'',reservation:practical.reservation||'',caution:practical.caution||'',initial_rank:i+1,transport:'車＋徒歩',season:'季節・天候に応じて',audience:theme==='子連れ'?'家族':theme==='カップル'?'カップル':'友人・ひとり旅',photo,image:photo?.src||''};});
 export const eventCategories=['祭り・花火','グルメ','マルシェ','自然・アウトドア','文化・展覧会','子ども向け','スポーツ','期間限定体験'];
 export const events=[
   {
