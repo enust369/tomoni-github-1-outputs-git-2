@@ -643,3 +643,8 @@ CC BY 2.0/2.5は著作者・出典・ライセンス・変更を表示。写真�
 - `musasabi-onsen`：仁淀川の実景 `musasabi-onsen.jpg` を使用。Reggaeman / Wikimedia Commons / CC BY-SA 3.0。吾北むささび温泉そのものの実写ではなく、吾北・仁淀川流域の水辺イメージとして扱う。
 - `michinoeki-633bi`：道の駅633美の里の施設実景 `michinoeki-633bi.jpg` を使用。As6022014 / Wikimedia Commons / Public domain。
 - `michinoeki-toowa`：道の駅四万十とおわの施設実景 `michinoeki-toowa.jpg` を使用。As6022014 / Wikimedia Commons / Public domain。
+
+### 写真追加 第41弾（2026-10-03）
+
+- `auberge-tosayama`：オーベルジュ土佐山の施設実景 `auberge-tosayama.jpg` を使用。jkyZjdjNjN / Wikimedia Commons / CC BY 3.0。
+- `joseikan`：高知市内を走る路面電車の実景 `joseikan.jpg` を使用。Windmemories / Wikimedia Commons / CC BY-SA 4.0。城西館そのものの実写ではないため、上町・市街地アクセスの地域イメージとして扱う。

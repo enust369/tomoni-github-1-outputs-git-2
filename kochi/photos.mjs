@@ -1715,5 +1715,33 @@ export const photos={
     "position": "50% 50%",
     "checkedAt": "2026-10-03"
   }
+  ,"auberge-tosayama": {
+    "src": "/assets/photos/auberge-tosayama.jpg",
+    "name": "オーベルジュ土佐山",
+    "alt": "オーベルジュ土佐山の施設外観",
+    "author": "jkyZjdjNjN",
+    "source": "https://commons.wikimedia.org/wiki/File:%E3%82%AA%E3%83%BC%E3%83%99%E3%83%AB%E3%82%B8%E3%83%A5%E5%9C%9F%E4%BD%90%E5%B1%B1_-_panoramio.jpg",
+    "title": "オーベルジュ土佐山 - panoramio.jpg",
+    "license": "CC BY 3.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by/3.0",
+    "width": 1600,
+    "height": 1200,
+    "position": "50% 50%",
+    "checkedAt": "2026-10-03"
+  },
+  "joseikan": {
+    "src": "/assets/photos/joseikan.jpg",
+    "name": "城西館",
+    "alt": "高知市内を走る路面電車（城西館周辺の市街地イメージ）",
+    "author": "Windmemories",
+    "source": "https://commons.wikimedia.org/wiki/File:Tram_in_Kochi,_Shikoku.jpg",
+    "title": "Tram in Kochi, Shikoku.jpg",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+    "width": 1600,
+    "height": 1066,
+    "position": "50% 50%",
+    "checkedAt": "2026-10-03"
+  }
 
 };
