@@ -295,11 +295,11 @@ const courseRows=[
 ['niyodo-classic','空と仁淀ブルー 絶景1日コース','north_niyodo','アクティブ','1日',['agawa-paragliding','nikobuchi','ice']],
 ['niyodo-active','仁淀川 カヤック＆渓谷1日コース','north_niyodo','アクティブ','1日',['kayak','ice','nakatsu']],
 ['east-drive','東部 洞窟・しらす・動物園1日コース','east','グルメ','1日',['iokido','shirasu','noichi-zoo']],
-['ocean-trip','柏島・足摺 海の1泊2日コース','west','カップル','1泊2日',['kashiwajima','kashiwajima-diving-aquas','tatsukushi-minokoshi-tour','ashizuri']],
+['ocean-trip','柏島・足摺 海の1泊2日コース','west','カップル','1泊2日',['kashiwajima-diving-aquas','kashiwajima','tatsukushi-minokoshi-tour','ashizuri']],
 ['karst-drive','四国カルスト・梼原 絶景ドライブ','west','ドライブ','1日',['forest-adventure-kochi','karst','yusuhara']],
 ['kochi-gourmet','高知市内 夜グルメ満喫コース','kochi_city','グルメ','夕方〜夜',['myojinmaru','yasube']],
 ['kami-konan','龍河洞・香美香南 1日コース','east','アクティブ','1日',['ryugado','noichi-zoo','bentenza-backstage-experience']],
-['family','高知 子連れ1日コース','kochi_city','子連れ','1日',['makino-botanical-garden','kochi-castle','noichi-zoo']],
+['family','高知 子連れ1日コース','kochi_city','子連れ','1日',['kochi-castle','makino-botanical-garden','noichi-zoo']],
 ['three-days','高知満喫2泊3日コース','north_niyodo','王道','2泊3日',['kochi-castle','makino-botanical-garden','nikobuchi','ice','nakatsu','iokido','shirasu','noichi-zoo']]];
 const courseStopMinutes={
   'kochi-castle-history-museum':60,'kochi-castle':90,'makino-botanical-garden':120,'myojinmaru':90,'yasube':45,
@@ -330,7 +330,7 @@ const courseSchedules={
     {time:'09:00',slug:'kayak',note:'予約枠に合わせて開始時刻を調整。'},
     {time:'12:00',title:'仁淀川沿いで昼食',move:'車で約15分',note:'カヤック終了後に昼食休憩。'},
     {time:'13:30',slug:'ice',move:'車で約15〜20分'},
-    {time:'15:00',slug:'nakatsu',move:'車で約50〜60分'}
+    {time:'15:15',slug:'nakatsu',move:'車で約50〜60分'}
   ],
   'east-drive':[
     {time:'09:00',slug:'iokido'},
@@ -350,7 +350,7 @@ const courseSchedules={
     {time:'09:00',slug:'forest-adventure-kochi',note:'予約枠に合わせて開始。'},
     {time:'12:30',title:'津野町周辺で昼食',move:'車で約20〜30分'},
     {time:'13:30',slug:'karst',move:'車で約30〜40分'},
-    {time:'15:30',slug:'yusuhara',move:'車で約45〜60分'}
+    {time:'16:00',slug:'yusuhara',move:'車で約45〜60分'}
   ],
   'kochi-gourmet':[
     {time:'17:30',slug:'myojinmaru'},
