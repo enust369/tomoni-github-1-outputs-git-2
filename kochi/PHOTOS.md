@@ -648,3 +648,9 @@ CC BY 2.0/2.5は著作者・出典・ライセンス・変更を表示。写真�
 
 - `auberge-tosayama`：オーベルジュ土佐山の施設実景 `auberge-tosayama.jpg` を使用。jkyZjdjNjN / Wikimedia Commons / CC BY 3.0。
 - `joseikan`：高知市内を走る路面電車の実景 `joseikan.jpg` を使用。Windmemories / Wikimedia Commons / CC BY-SA 4.0。城西館そのものの実写ではないため、上町・市街地アクセスの地域イメージとして扱う。
+
+### 写真追加 第42弾（2026-10-03）
+
+- `susaki-fishing`：高知県内の漁港実景 `susaki-fishing.jpg` を使用。ikm / Wikimedia Commons / CC BY-SA 3.0。須崎・富士ヶ浜そのものの実写ではないため、海釣り体験の地域イメージとして扱う。
+- `tosaco-brewery`：クラフトビール醸造所の実景 `tosaco-brewery.jpg` を使用。掬茶 / Wikimedia Commons / CC BY-SA 4.0。TOSACOそのものの実写ではないため、クラフトビール醸造のイメージとして扱う。
+- `takagi-sake`：高知県内の酒蔵実景 `takagi-sake.jpg` を使用。Asturio Cantabrio / Wikimedia Commons / CC BY-SA 4.0。高木酒造そのものの実写ではないため、高知の酒蔵見学イメージとして扱う。

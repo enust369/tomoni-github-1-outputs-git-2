@@ -1743,5 +1743,47 @@ export const photos={
     "position": "50% 50%",
     "checkedAt": "2026-10-03"
   }
+  ,"susaki-fishing": {
+    "src": "/assets/photos/susaki-fishing.jpg",
+    "name": "須崎・富士ヶ浜 海釣り体験",
+    "alt": "高知県内の漁港風景（須崎の海釣り体験イメージ）",
+    "author": "ikm",
+    "source": "https://commons.wikimedia.org/wiki/File:Tei_Fishing_Port_-_panoramio.jpg",
+    "title": "Tei Fishing Port - panoramio.jpg",
+    "license": "CC BY-SA 3.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0",
+    "width": 1600,
+    "height": 1200,
+    "position": "50% 50%",
+    "checkedAt": "2026-10-03"
+  },
+  "tosaco-brewery": {
+    "src": "/assets/photos/tosaco-brewery.jpg",
+    "name": "TOSACO TAP STAND・醸造所",
+    "alt": "クラフトビール醸造所の実景（TOSACOの醸造体験イメージ）",
+    "author": "掬茶",
+    "source": "https://commons.wikimedia.org/wiki/File:Tazawako_Craft_Beer_brewery_and_restaurant.jpg",
+    "title": "Tazawako Craft Beer brewery and restaurant.jpg",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+    "width": 1600,
+    "height": 900,
+    "position": "50% 50%",
+    "checkedAt": "2026-10-03"
+  },
+  "takagi-sake": {
+    "src": "/assets/photos/takagi-sake.jpg",
+    "name": "高木酒造 酒蔵見学",
+    "alt": "高知県内の酒蔵実景（高木酒造の酒蔵見学イメージ）",
+    "author": "Asturio Cantabrio",
+    "source": "https://commons.wikimedia.org/wiki/File:Nishioka_Brewery_ac_(1).jpg",
+    "title": "Nishioka Brewery ac (1).jpg",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+    "width": 1600,
+    "height": 1064,
+    "position": "50% 50%",
+    "checkedAt": "2026-10-03"
+  }
 
 };
