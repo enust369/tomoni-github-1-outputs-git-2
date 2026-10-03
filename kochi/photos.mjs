@@ -584,11 +584,15 @@ export const photos={
     "width": 1600, "height": 1200, "position": "50% 50%", "checkedAt": "2026-10-03"
   },
   "ioki-morning-market-tour": {
-    "src": "/assets/photos/iokido.jpg",
+    "src": "/assets/photos/ioki-morning-market-tour.jpg",
     "name": "朝の伊尾木洞探検＋ぢばさん市場ツアー",
-    "alt": "伊尾木洞の苔むした渓谷風景",
-    "author": "既存サイト画像", "source": "", "license": "既存サイト資産", "licenseUrl": "",
-    "width": 1280, "height": 960, "position": "50% 50%", "checkedAt": "2026-10-02"
+    "alt": "伊尾木洞内部の実景",
+    "author": "Saigen Jiro",
+    "source": "https://commons.wikimedia.org/wiki/File:Iokido_Cave-2.jpg",
+    "title": "Iokido Cave-2.jpg",
+    "license": "CC0",
+    "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/",
+    "width": 1600, "height": 1064, "position": "50% 50%", "checkedAt": "2026-10-03"
   },
   "yodo-line-cycle-rafting": {
     "src": "/assets/photos/yodo-line-shimanto.jpg",
@@ -1004,12 +1008,12 @@ export const photos={
     "width": 1600, "height": 1059, "position": "50% 50%", "checkedAt": "2026-10-03"
   },
   "mihara-rural-stay": {
-    "src": "/assets/photos/mihara-hoshigaoka.jpg",
+    "src": "/assets/photos/mihara-rural-stay.jpg",
     "name": "農家民宿くろうさぎ 田舎暮らし体験",
-    "alt": "高知県三原村・星ヶ丘公園の池と緑の実景",
+    "alt": "高知県三原村の御社神社と山里の実景",
     "author": "Lumi iori",
-    "source": "https://commons.wikimedia.org/wiki/File:%E9%AB%98%E7%9F%A5%E7%9C%8C%E4%B8%89%E5%8E%9F%E6%9D%91_%E6%98%9F%E3%83%B6%E4%B8%98%E5%85%AC%E5%9C%92.jpg",
-    "title": "高知県三原村 星ヶ丘公園.jpg",
+    "source": "https://commons.wikimedia.org/wiki/File:Gosha_shrine_mihara_village.jpg",
+    "title": "Gosha shrine mihara village.jpg",
     "license": "CC BY-SA 4.0",
     "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
     "width": 1600, "height": 1066, "position": "50% 50%", "checkedAt": "2026-10-03"
