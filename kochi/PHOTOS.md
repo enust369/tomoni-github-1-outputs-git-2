@@ -595,3 +595,9 @@ CC BY 2.0/2.5は著作者・出典・ライセンス・変更を表示。写真�
 ### 写真差し替え実施 第31弾（2026-10-03）
 
 - `soltive-salt`：入野海岸の共通写真から、天日塩の結晶化工程が分かる `soltive-salt.jpg` へ差し替え。Bernard Spragg. NZ / Wikimedia Commons / CC0。黒潮町ソルティーブの実写ではないため、天日塩づくりの工程イメージとして扱う。
+
+### 写真差し替え実施 第32弾（2026-10-03）
+
+- `tosa-kokubunji-culture`：竹林寺の代替画像から、実際の土佐国分寺金堂 `tosa-kokubunji-culture.jpg` へ差し替え。Naokijp / Wikimedia Commons / CC BY-SA 4.0。体験場所そのものが分かる写真として使用。
+- `shimanto-observatory`：キャンプ系の汎用夜景から、天体観測室と望遠鏡 `shimanto-observatory.jpg` へ差し替え。KKPCW / Wikimedia Commons / CC BY-SA 4.0。四万十天文台の実写ではないため、天体観望体験の内容イメージとして扱う。
+- `agawa-paragliding`：既存のパラグライダー共通画像から、山地のパラグライダー離陸地点実景 `agawa-paragliding.jpg` へ差し替え。hideki higano / Wikimedia Commons / CC BY-SA 3.0。吾川スカイパークの実写ではないため、体験内容のイメージとして扱う。

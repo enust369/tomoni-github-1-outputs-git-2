@@ -67,17 +67,18 @@ export const photos={
     "checkedAt": "2026-10-02"
   },
   "agawa-paragliding": {
-    "src": "/assets/photos/hero-paragliding.png",
+    "src": "/assets/photos/agawa-paragliding.jpg",
     "name": "吾川スカイパーク パラグライダー",
-    "alt": "山の上空を飛ぶパラグライダー体験のイメージ",
-    "author": "既存サイト画像",
-    "source": "",
-    "license": "既存サイト資産",
-    "licenseUrl": "",
-    "width": 1672,
-    "height": 941,
+    "alt": "山地のパラグライダー離陸地点と空のイメージ",
+    "author": "hideki higano",
+    "source": "https://commons.wikimedia.org/wiki/File:Tannzawa_%E4%B8%B9%E6%B2%A2_Paragliding_catapult_from_Tanzawa,_overlooking_the_Hadano_-_panoramio.jpg",
+    "title": "Tannzawa 丹沢 Paragliding catapult from Tanzawa, overlooking the Hadano - panoramio.jpg",
+    "license": "CC BY-SA 3.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0/",
+    "width": 1600,
+    "height": 1200,
     "position": "50% 50%",
-    "checkedAt": "2026-10-02"
+    "checkedAt": "2026-10-03"
   },
   "katsuo-waraya": {
     "src": "/assets/photos/katsuo-waraya.jpg",
@@ -912,14 +913,15 @@ export const photos={
     "width": 1600, "height": 1200, "position": "50% 50%", "checkedAt": "2026-10-03"
   },
   "shimanto-observatory": {
-    "src": "/assets/photos/course-classic-camping.png",
+    "src": "/assets/photos/shimanto-observatory.jpg",
     "name": "星空の街で天体観望会（四万十天文台）",
-    "alt": "高知の夜のアウトドアをイメージした風景",
-    "author": "既存サイト画像",
-    "source": "",
-    "license": "既存サイト資産",
-    "licenseUrl": "",
-    "width": 1456, "height": 1020, "position": "50% 50%", "checkedAt": "2026-10-02"
+    "alt": "天体観測室と望遠鏡のイメージ",
+    "author": "KKPCW",
+    "source": "https://commons.wikimedia.org/wiki/File:Astronomical_Observation_Room_of_Skyward_Asahi_-_2.jpg",
+    "title": "Astronomical Observation Room of Skyward Asahi - 2.jpg",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "width": 1275, "height": 1600, "position": "50% 50%", "checkedAt": "2026-10-03"
   },
   "tatsukushi-glassboat": {
     "src": "/assets/photos/tatsukushi-glassboat.jpg",
@@ -955,14 +957,15 @@ export const photos={
     "width": 1600, "height": 1057, "position": "50% 50%", "checkedAt": "2026-10-03"
   },
   "tosa-kokubunji-culture": {
-    "src": "/assets/photos/chikurinji.png",
+    "src": "/assets/photos/tosa-kokubunji-culture.jpg",
     "name": "土佐国分寺 日本文化・瞑想体験",
-    "alt": "高知の寺院文化をイメージした竹林寺",
-    "author": "既存サイト画像",
-    "source": "",
-    "license": "既存サイト資産",
-    "licenseUrl": "",
-    "width": 1456, "height": 816, "position": "50% 50%", "checkedAt": "2026-10-02"
+    "alt": "土佐国分寺金堂の実景",
+    "author": "Naokijp",
+    "source": "https://commons.wikimedia.org/wiki/File:Tosa_Kokubun-ji,_Kon-d%C5%8D_Hall_01.jpg",
+    "title": "Tosa Kokubun-ji, Kon-dō Hall 01.jpg",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "width": 1600, "height": 1200, "position": "50% 50%", "checkedAt": "2026-10-03"
   },
   "ashizuri-secret-guide": {
     "src": "/assets/photos/ashizuri-secret-guide.jpg",
