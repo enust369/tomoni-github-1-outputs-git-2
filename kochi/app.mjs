@@ -54,12 +54,14 @@ function initCarousels(){
   const dots=[...carousel.querySelectorAll('[data-carousel-dot]')];
   if(!track||slides.length<2)continue;
   const reduced=matchMedia('(prefers-reduced-motion: reduce)').matches;
-  const index=()=>Math.max(0,Math.min(slides.length-1,Math.round(track.scrollLeft/Math.max(track.clientWidth,1))));
+  const desktop=matchMedia('(min-width: 701px)');
+  let current=0;
+  const index=()=>desktop.matches?current:Math.max(0,Math.min(slides.length-1,Math.round(track.scrollLeft/Math.max(track.clientWidth,1))));
   const numbers=[...carousel.querySelectorAll('[data-carousel-index]')];
-  const active=i=>{slides.forEach((slide,n)=>slide.setAttribute('aria-hidden',String(n!==i)));dots.forEach((dot,n)=>dot.setAttribute('aria-current',String(n===i)));numbers.forEach((number,n)=>number.setAttribute('aria-current',String(n===i)));};
+  const active=i=>{current=i;slides.forEach((slide,n)=>slide.setAttribute('aria-hidden',String(n!==i)));dots.forEach((dot,n)=>dot.setAttribute('aria-current',String(n===i)));numbers.forEach((number,n)=>number.setAttribute('aria-current',String(n===i)));};
   const ensureSlide=async i=>{const img=slides[i]?.querySelector('img');if(!img||img.complete&&img.naturalWidth>0)return;img.loading='eager';img.fetchPriority='high';await Promise.race([img.decode?.().catch(()=>{}),new Promise(resolve=>{img.addEventListener('load',resolve,{once:true});img.addEventListener('error',resolve,{once:true})}),new Promise(resolve=>setTimeout(resolve,3000))])};
   const warmNext=i=>{const next=(i+1)%slides.length;ensureSlide(next).then(()=>{const img=slides[next]?.querySelector('img');if(img)img.fetchPriority='low'})};
-  const go=async next=>{await ensureSlide(next);track.scrollTo({left:slides[next].offsetLeft,behavior:reduced?'auto':'smooth'});active(next);warmNext(next)};
+  const go=async next=>{await ensureSlide(next);if(desktop.matches){active(next)}else{track.scrollTo({left:slides[next].offsetLeft,behavior:reduced?'auto':'smooth'});active(next)}warmNext(next)};
   const move=delta=>go((index()+delta+slides.length)%slides.length);
   let timer=0,resumeTimer=0;
   const stop=()=>{clearInterval(timer);timer=0;clearTimeout(resumeTimer);};
