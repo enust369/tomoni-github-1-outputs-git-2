@@ -611,11 +611,15 @@ export const photos={
     "width": 1600, "height": 1200, "position": "50% 50%", "checkedAt": "2026-10-03"
   },
   "shimizu-saba-town-tour": {
-    "src": "/assets/photos/course-ocean-seafood.png",
+    "src": "/assets/photos/shimizu-saba-town-tour.jpg",
     "name": "清水さば漁港ツアー＋漁師町食べ歩き",
-    "alt": "土佐清水の魚食文化をイメージした海鮮写真",
-    "author": "既存サイト画像", "source": "", "license": "既存サイト資産", "licenseUrl": "",
-    "width": 552, "height": 414, "position": "50% 50%", "checkedAt": "2026-10-02"
+    "alt": "マサバ（Scomber japonicus）の水揚げ実景",
+    "author": "Ruff tuff cream puff",
+    "source": "https://commons.wikimedia.org/wiki/File:Scomber_japonicus_haul.jpg",
+    "title": "Scomber japonicus haul.jpg",
+    "license": "CC0",
+    "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/",
+    "width": 1600, "height": 1011, "position": "50% 50%", "checkedAt": "2026-10-03"
   },
   "kuroshio-earthing-stay": {
     "src": "/assets/photos/kuroshio-earthing-stay.jpg",

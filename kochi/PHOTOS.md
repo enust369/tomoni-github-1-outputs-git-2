@@ -610,3 +610,7 @@ CC BY 2.0/2.5は著作者・出典・ライセンス・変更を表示。写真�
 
 - `forest-adventure-kochi`：既存の汎用森林アドベンチャー画像から、高所アスレチック設備が明確に分かる `forest-adventure-kochi.jpg` へ差し替え。Klaus wyss / Wikimedia Commons / CC BY-SA 3.0。フォレストアドベンチャー・高知の実写ではないため、体験内容のイメージとして扱う。
 - `niyodo-buggy`：既存の汎用バギー画像から、林道を走るATV実景 `niyodo-buggy.jpg` へ差し替え。U.S. Fish and Wildlife Service Southeast Region / Wikimedia Commons / Public Domain。NOZUアドベンチャーの実写ではないため、バギー走行体験のイメージとして扱う。
+
+### 写真差し替え実施 第35弾（2026-10-03）
+
+- `shimizu-saba-town-tour`：既存の汎用海鮮画像から、マサバ（Scomber japonicus）の水揚げ実景 `shimizu-saba-town-tour.jpg` へ差し替え。Ruff tuff cream puff / Wikimedia Commons / CC0。土佐清水漁港そのものの実写ではないため、清水さばの市場・水揚げ体験内容を伝えるイメージとして扱う。
