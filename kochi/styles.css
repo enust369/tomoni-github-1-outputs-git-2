@@ -831,3 +831,6 @@ body:has(.page-home) .home-slide:first-child .home-slide-content .eyebrow{max-wi
 @media(max-width:700px){.home-category-travel-head{margin-top:20px}.home-category-travel{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}.home-category-travel .home-travel-card:last-child{grid-column:span 2}.home-travel-card{min-height:54px}}
 
 .area-category-links{margin-top:0}.area-all-spots{margin-top:18px}.area-all-spots .button{font-weight:700}
+
+.course-quick{padding-top:36px}.course-quick h2{margin-bottom:10px}.course-quick .chips{margin-top:12px}
+@media(max-width:700px){.course-quick{padding-top:24px}.course-quick h2{font-size:20px}}
