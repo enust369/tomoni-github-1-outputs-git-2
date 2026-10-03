@@ -713,11 +713,15 @@ export const photos={
     "width": 1600, "height": 900, "position": "50% 50%", "checkedAt": "2026-10-03"
   },
   "bentenza-backstage-experience": {
-    "src": "/assets/photos/event-yosakoi.png",
+    "src": "/assets/photos/bentenza-backstage-experience.jpg",
     "name": "弁天座 芝居小屋バックヤード見学＆体験ツアー",
-    "alt": "高知の舞台文化をイメージした写真",
-    "author": "既存サイト画像", "source": "", "license": "既存サイト資産", "licenseUrl": "",
-    "width": 1456, "height": 1020, "position": "50% 50%", "checkedAt": "2026-10-02"
+    "alt": "日本の芝居小屋にある廻り舞台の実景イメージ",
+    "author": "Unknown author",
+    "source": "https://commons.wikimedia.org/wiki/File:Traditional_theater_of_Japan,_revolving_stage_of_Murakuniza.jpg",
+    "title": "Traditional theater of Japan, revolving stage of Murakuniza.jpg",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "width": 1600, "height": 958, "position": "50% 50%", "checkedAt": "2026-10-03"
   },
   "aki-shirasu-fisher-tour": {
     "src": "/assets/photos/aki-shirasu-fisher-tour.jpg",

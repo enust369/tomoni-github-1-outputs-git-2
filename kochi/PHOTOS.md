@@ -614,3 +614,7 @@ CC BY 2.0/2.5は著作者・出典・ライセンス・変更を表示。写真�
 ### 写真差し替え実施 第35弾（2026-10-03）
 
 - `shimizu-saba-town-tour`：既存の汎用海鮮画像から、マサバ（Scomber japonicus）の水揚げ実景 `shimizu-saba-town-tour.jpg` へ差し替え。Ruff tuff cream puff / Wikimedia Commons / CC0。土佐清水漁港そのものの実写ではないため、清水さばの市場・水揚げ体験内容を伝えるイメージとして扱う。
+
+### 写真差し替え実施 第36弾（2026-10-03）
+
+- `bentenza-backstage-experience`：よさこい系の汎用画像から、日本の芝居小屋の廻り舞台実景 `bentenza-backstage-experience.jpg` へ差し替え。Unknown author / Wikimedia Commons / CC BY-SA 4.0。弁天座そのものの実写ではないため、バックヤード見学で体験する廻り舞台の内容イメージとして扱う。
