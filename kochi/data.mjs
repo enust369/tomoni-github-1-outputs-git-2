@@ -304,14 +304,21 @@ const courseRows=[
 ['kuroshio-kure-sea','黒潮・久礼 海＆温泉1日コース','west','ドライブ','1日',['irino-surf','michinoeki-nakatosa','kuroshio-honjin']],
 ['niyodo-camp-stay','仁淀川 キャンプ1泊2日コース','north_niyodo','アクティブ','1泊2日',['michinoeki-633bi','musasabi-onsen','snowpeak-ochi-niyodogawa']],
 ['mihara-cycling-stay','三原村 田舎泊＆朝サイクリング1泊2日コース','west','アクティブ','1泊2日',['mihara-rural-stay','mihara-slow-cycling']],
-['nakatosa-fishing','中土佐 漁業体験＆海釣り1日コース','west','アクティブ','1日',['kaminokae-fishery','susaki-fishing']]];
+['nakatosa-fishing','中土佐 漁業体験＆海釣り1日コース','west','アクティブ','1日',['kaminokae-fishery','susaki-fishing']],
+['kochi-rainy-culture','高知市 雨の日文化体験1日コース','kochi_city','雨の日','1日',['tosa-tataki-dojo','kochi-castle-history-museum','yosakoi-naruko']],
+['east-craft-day','東部 ものづくり1日コース','east','雨の日','1日',['kaiyodo-nankoku-workshop','bentenza-backstage-experience','uchiharano-craft']],
+['muroto-family-sea','室戸 親子で海を学ぶ1日コース','east','子連れ','1日',['muroto-aqua-farm','muroto-dolphin','muroto-rockpool']],
+['tatsukushi-underwater','竜串 海中世界1日コース','west','アクティブ','1日',['tatsukushi-diving','tatsukushi-glassboat']]];
 const courseStopMinutes={
   'kochi-castle-history-museum':60,'kochi-castle':90,'makino-botanical-garden':120,'myojinmaru':90,'yasube':45,
   'agawa-paragliding':180,'nikobuchi':60,'ice':45,'kayak':150,'nakatsu':120,'iokido':60,'shirasu':60,'noichi-zoo':150,
   'kashiwajima':120,'kashiwajima-diving-aquas':180,'tatsukushi-minokoshi-tour':120,'ashizuri':90,
   'forest-adventure-kochi':180,'karst':90,'yusuhara':120,'ryugado':90,'yasea-sup-kayak':120,
   'irino-surf':120,'michinoeki-nakatosa':60,'kuroshio-honjin':90,'michinoeki-633bi':60,'musasabi-onsen':90,
-  'snowpeak-ochi-niyodogawa':180,'mihara-rural-stay':120,'mihara-slow-cycling':90,'kaminokae-fishery':150,'susaki-fishing':120
+  'snowpeak-ochi-niyodogawa':180,'mihara-rural-stay':120,'mihara-slow-cycling':90,'kaminokae-fishery':150,'susaki-fishing':120,
+  'tosa-tataki-dojo':90,'yosakoi-naruko':75,'kaiyodo-nankoku-workshop':120,'bentenza-backstage-experience':90,
+  'uchiharano-craft':120,'muroto-aqua-farm':60,'muroto-dolphin':120,'muroto-rockpool':120,
+  'tatsukushi-diving':180,'tatsukushi-glassboat':75
 };
 const courseDayBreaks={
   'ocean-trip':{0:'DAY 1',2:'DAY 2'},
@@ -405,6 +412,25 @@ const courseSchedules={
   'nakatosa-fishing':[
     {time:'09:30',slug:'kaminokae-fishery',note:'体験内容・料金は季節で変わるため事前予約時に確認。'},
     {time:'13:30',slug:'susaki-fishing',move:'車で移動',note:'釣具レンタルやインストラクター利用は事前確認がおすすめ。'}
+  ],
+  'kochi-rainy-culture':[
+    {time:'10:30',slug:'tosa-tataki-dojo',note:'カツオがなくなり次第終了するため午前がおすすめ。'},
+    {time:'12:30',slug:'kochi-castle-history-museum',move:'車で約15〜20分'},
+    {time:'14:30',slug:'yosakoi-naruko',move:'車で約10分',note:'水曜休館に注意。'}
+  ],
+  'east-craft-day':[
+    {time:'10:00',slug:'kaiyodo-nankoku-workshop',note:'体験は予約優先。火曜休館に注意。'},
+    {time:'12:45',slug:'bentenza-backstage-experience',move:'車で約20分',note:'体験時刻は予約時に確認。'},
+    {time:'14:45',slug:'uchiharano-craft',move:'車で約20〜25分',note:'体験受付終了時刻と工房ごとの休館日を確認。'}
+  ],
+  'muroto-family-sea':[
+    {time:'09:00',slug:'muroto-aqua-farm',note:'日曜・祝日は休館。'},
+    {time:'10:30',slug:'muroto-dolphin',move:'車で約10分',note:'イルカ体験は内容・実施時刻を事前確認。'},
+    {time:'14:00',slug:'muroto-rockpool',move:'車で約10分',note:'海況・潮位・予約条件を事前確認。'}
+  ],
+  'tatsukushi-underwater':[
+    {time:'09:00',slug:'tatsukushi-diving',note:'事前予約・参加条件・海況を確認。'},
+    {time:'13:30',slug:'tatsukushi-glassboat',move:'車で約5分',note:'海況により欠航する場合あり。'}
   ]
 };
 const coursePractical={
@@ -421,7 +447,11 @@ const coursePractical={
   'kuroshio-kure-sea':{recommended:'海況が安定した晴天日',reservation:'サーフィン利用条件や日帰り入浴は事前確認がおすすめ',caution:'高波・強風時は海に入らず、黒潮本陣の日帰り入浴時間も当日確認。'},
   'niyodo-camp-stay':{recommended:'春〜秋の晴天日',reservation:'キャンプ場は事前予約推奨',caution:'むささび温泉は木曜定休。キャンプ場のチェックイン時刻と河川・天候状況を事前確認。'},
   'mihara-cycling-stay':{recommended:'雨の少ない時期の1泊2日',reservation:'宿泊と朝サイクリングは事前予約',caution:'サイクリングは天候で中止の場合あり。朝が早いため前泊向き。'},
-  'nakatosa-fishing':{recommended:'海況が安定した日',reservation:'漁業体験は事前予約。海釣りも3名以上は事前予約推奨',caution:'天候・海況で内容変更や中止の可能性あり。濡れてもよい服装と滑りにくい靴がおすすめ。'}
+  'nakatosa-fishing':{recommended:'海況が安定した日',reservation:'漁業体験は事前予約。海釣りも3名以上は事前予約推奨',caution:'天候・海況で内容変更や中止の可能性あり。濡れてもよい服装と滑りにくい靴がおすすめ。'},
+  'kochi-rainy-culture':{recommended:'水曜以外の雨の日・曇天日',reservation:'鳴子づくりは混雑時の事前確認がおすすめ',caution:'土佐タタキ道場はカツオがなくなり次第終了。高知よさこい情報交流館は水曜休館。'},
+  'east-craft-day':{recommended:'月・火・水曜の休館条件を避けた日',reservation:'海洋堂は予約優先、弁天座は事前予約推奨、内原野陶芸館も体験内容により予約推奨',caution:'施設ごとに定休日が異なるため、3施設すべての営業日を事前確認。'},
+  'muroto-family-sea':{recommended:'平日の海況が安定した日',reservation:'ドルフィン体験・磯遊び体験は事前確認・予約推奨',caution:'アクア・ファームは日曜・祝日休館。磯遊びは海況・潮位により変更や中止の可能性あり。'},
+  'tatsukushi-underwater':{recommended:'春〜秋の海況が安定した日',reservation:'体験ダイビングは事前予約推奨。グラスボートも運航確認推奨',caution:'海況・天候によりダイビングやグラスボートが変更・中止になる場合あり。'}
 };
 const coursePhotoOverrides={
   'family':photos['makino-botanical-garden'],
