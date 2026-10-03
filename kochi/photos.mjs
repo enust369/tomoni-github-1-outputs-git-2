@@ -95,17 +95,18 @@ export const photos={
     "checkedAt": "2026-10-03"
   },
   "tosa-terrace-cycle": {
-    "src": "/assets/photos/course-classic-bridge.png",
+    "src": "/assets/photos/tosa-terrace-cycle.jpg",
     "name": "こうち旅広場 レンタサイクル",
-    "alt": "高知市街を自転車でめぐるイメージ",
-    "author": "既存サイト画像",
-    "source": "",
-    "license": "既存サイト資産",
-    "licenseUrl": "",
-    "width": 511,
-    "height": 342,
+    "alt": "レンタサイクル出発地点に隣接するJR高知駅の実景",
+    "author": "Drivephotographer",
+    "source": "https://commons.wikimedia.org/wiki/File:JR%E9%AB%98%E7%9F%A5%E9%A7%85.jpg",
+    "title": "JR高知駅.jpg",
+    "license": "CC0",
+    "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/",
+    "width": 1600,
+    "height": 900,
     "position": "50% 50%",
-    "checkedAt": "2026-10-02"
+    "checkedAt": "2026-10-03"
   },
   "tosappo-ryoma-walk": {
     "src": "/assets/photos/tosappo-ryoma-walk.jpg",

@@ -601,3 +601,7 @@ CC BY 2.0/2.5は著作者・出典・ライセンス・変更を表示。写真�
 - `tosa-kokubunji-culture`：竹林寺の代替画像から、実際の土佐国分寺金堂 `tosa-kokubunji-culture.jpg` へ差し替え。Naokijp / Wikimedia Commons / CC BY-SA 4.0。体験場所そのものが分かる写真として使用。
 - `shimanto-observatory`：キャンプ系の汎用夜景から、天体観測室と望遠鏡 `shimanto-observatory.jpg` へ差し替え。KKPCW / Wikimedia Commons / CC BY-SA 4.0。四万十天文台の実写ではないため、天体観望体験の内容イメージとして扱う。
 - `agawa-paragliding`：既存のパラグライダー共通画像から、山地のパラグライダー離陸地点実景 `agawa-paragliding.jpg` へ差し替え。hideki higano / Wikimedia Commons / CC BY-SA 3.0。吾川スカイパークの実写ではないため、体験内容のイメージとして扱う。
+
+### 写真差し替え実施 第33弾（2026-10-03）
+
+- `tosa-terrace-cycle`：市街地サイクリングの汎用画像から、出発拠点「こうち旅広場」の隣にあるJR高知駅実景 `tosa-terrace-cycle.jpg` へ差し替え。Drivephotographer / Wikimedia Commons / CC0。レンタサイクルの起点が分かる写真として使用。
