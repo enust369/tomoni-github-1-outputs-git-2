@@ -58,7 +58,7 @@ R: https://visitkochijapan.com/image/rendering/article_image/1948/keep/640/640/d
 | 龍河洞 | R | `ryugado.jpg`（龍河洞の鍾乳石「奥の千本」） | [京浜にけ / Wikimedia Commons](https://commons.wikimedia.org/wiki/File:Kami_Kochi_Ryugado_Inside_4.JPG) | [CC BY-SA 3.0](https://creativecommons.org/licenses/by-sa/3.0)・表示／縮小・トリミング明記・写真の派生物は同一ライセンス |
 | にこ淵 | R | `nikobuchi.jpg`（にこ淵の青い滝つぼと滝） | [かるちる / Wikimedia Commons](https://commons.wikimedia.org/wiki/File:Niko_Buchi_deep_water_No.1.jpg) | [CC0](https://creativecommons.org/publicdomain/zero/1.0/deed.en)・表示／縮小・トリミング明記 |
 | 伊尾木洞 | R | `iokido.jpg`（伊尾木洞のシダに覆われた岩壁） | [Saigen Jiro / Wikimedia Commons](https://commons.wikimedia.org/wiki/File:Iokido_Cave-2.jpg) | [CC0](https://creativecommons.org/publicdomain/zero/1.0/deed.en)・表示／縮小・トリミング明記 |
-| 高知城 | R | `kochi-castle-new.png`（青空の下にそびえる高知城の天守と石垣） | ユーザー提供画像を加工 | 提供画像（サイト掲載用） |
+| 高知城 | R | `kochi-castle-new.jpg`（青空の下にそびえる高知城の天守と石垣） | ユーザー提供画像を加工 | 提供画像（サイト掲載用） |
 | 柏島 | R | `kashiwajima.jpg`（柏島の集落と青い海を見渡す全景） | [Saigen Jiro / Wikimedia Commons](https://commons.wikimedia.org/wiki/File:Kashiwajima_(Otsuki),_zenkei-1.jpg) | [CC0](https://creativecommons.org/publicdomain/zero/1.0/deed.en)・表示／縮小・トリミング明記 |
 | 中津渓谷 | R | `nakatsu.jpg`（中津渓谷の清流と岩場） | [Koda6029 / Wikimedia Commons](https://commons.wikimedia.org/wiki/File:%E4%B8%AD%E6%B4%A5%E6%B8%93%E8%B0%B7%EF%BC%92.jpg) | [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0)・表示／縮小・トリミング明記・写真の派生物は同一ライセンス |
 | 北川村「モネの庭」マルモッタン | R | `monet.jpg`（北川村「モネの庭」マルモッタンの水の庭） | [Earthboud1960 / Wikimedia Commons](https://commons.wikimedia.org/wiki/File:Monet-Marumottan-mizu02.jpg) | [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0)・表示／縮小・トリミング明記・写真の派生物は同一ライセンス |
@@ -78,7 +78,7 @@ CC BY 2.0/2.5は著作者・出典・ライセンス・変更を表示。写真�
 
 ### 高知県立牧野植物園
 
-`makino-botanical-garden.png` はサイト掲載用に提供された画像を、加工せずそのまま登録。スポット slug `makino-botanical-garden` にのみ紐付け、カードと詳細ページで共通利用します。
+`makino-botanical-garden.jpg` はサイト掲載用に提供された画像を、加工せずそのまま登録。スポット slug `makino-botanical-garden` にのみ紐付け、カードと詳細ページで共通利用します。
 
 ### 歴史文化スポット用の提供画像
 
@@ -86,7 +86,7 @@ CC BY 2.0/2.5は著作者・出典・ライセンス・変更を表示。写真�
 
 | スポット | ファイル | alt | 出典 |
 |---|---|---|---|
-| 竹林寺 | `chikurinji-pagoda.png` | 新緑に囲まれた竹林寺の五重塔と石段 | ユーザー提供画像を加工 |
+| 竹林寺 | `chikurinji-pagoda.jpg` | 新緑に囲まれた竹林寺の五重塔と石段 | ユーザー提供画像を加工 |
 | 高知県立高知城歴史博物館 | `kochi-castle-history-museum.png` | 青空の下に建つ高知県立高知城歴史博物館 | ユーザー提供画像（2×2分割） |
 | 高知県立坂本龍馬記念館 | `sakamoto-ryoma-memorial-museum.png` | 青空と海を望む高知県立坂本龍馬記念館 | ユーザー提供画像（2×2分割） |
 | 潮江天満宮 | `shioe-tenmangu.png` | 緑に囲まれた潮江天満宮の参道と社殿 | ユーザー提供画像（2×2分割） |
@@ -147,7 +147,7 @@ CC BY 2.0/2.5は著作者・出典・ライセンス・変更を表示。写真�
 
 以下4点は、ユーザー提供の加工済み画像を分割してサイト内アセットとして使用。外部ホットリンクなし。
 
-- 竹林寺: `chikurinji-pagoda.png`（ユーザー提供画像を加工。人物を除去し、自然な範囲で明るさ・色調を調整）
+- 竹林寺: `chikurinji-pagoda.jpg`（ユーザー提供画像を加工。人物を除去し、自然な範囲で明るさ・色調を調整）
 - 高知県立高知城歴史博物館: `kochi-castle-history-museum.png`
 - 高知県立坂本龍馬記念館: `sakamoto-ryoma-memorial-museum.png`
 - 潮江天満宮: `shioe-tenmangu.png`
@@ -160,12 +160,12 @@ CC BY 2.0/2.5は著作者・出典・ライセンス・変更を表示。写真�
 
 ## グルメページ用追加画像（2026-09-30）
 
-- 屋台安兵衛: `yasube.png`（ユーザー提供画像を加工）
-- 橋本食堂: `hashimoto.png`（ユーザー提供画像を加工）
-- 田中鮮魚店 漁師小屋: `tanaka.png`（ユーザー提供画像を加工。写っていた人物は架空の人物へ置換）
-- 安芸しらす食堂 本店: `shirasu.png`（ユーザー提供画像を加工）
-- 高知アイス売店 仁淀川カフェ: `ice.png`（ユーザー提供画像を加工。仁淀川を望む店内写真）
-- 明神丸 本店: `myojinmaru.png`（ユーザー提供画像を加工）。掲載スポットを「明神丸 本店」へ変更し、専用写真として使用。
+- 屋台安兵衛: `yasube.jpg`（ユーザー提供画像を加工）
+- 橋本食堂: `hashimoto.jpg`（ユーザー提供画像を加工）
+- 田中鮮魚店 漁師小屋: `tanaka.jpg`（ユーザー提供画像を加工。写っていた人物は架空の人物へ置換）
+- 安芸しらす食堂 本店: `shirasu.jpg`（ユーザー提供画像を加工）
+- 高知アイス売店 仁淀川カフェ: `ice.jpg`（ユーザー提供画像を加工。仁淀川を望む店内写真）
+- 明神丸 本店: `myojinmaru.jpg`（ユーザー提供画像を加工）。掲載スポットを「明神丸 本店」へ変更し、専用写真として使用。
 - 6点とも外部ホットリンクなし。サイト内アセットとして保管・使用。
 
 ## イベントページ用画像（2026-10-01）
@@ -176,32 +176,32 @@ CC BY 2.0/2.5は著作者・出典・ライセンス・変更を表示。写真�
 - 土佐の「おきゃく」: `event-okyaku.png`（同上）
 - 大川村謝肉祭: `event-okawa.png`（同上）
 - 高知城オータムフェスティバル: 既存の `kochi-castle.jpg` を会場イメージとして使用。
-- 仁淀川 紙のこいのぼり: 既存の `course-niyodo-sup.png` を仁淀川イメージとして使用。
+- 仁淀川 紙のこいのぼり: 既存の `course-niyodo-sup.jpg` を仁淀川イメージとして使用。
 - イベント画像は実際の2026年開催記録写真と誤認されないよう、カード上に「イメージ写真」「会場イメージ」「仁淀川イメージ」を表示する。
 
 ## 高知城写真差し替え（2026-10-01）
 
-- 高知城: `kochi-castle-new.png`（ユーザー提供画像を軽く加工。明るさ・コントラスト・色味・解像感を自然な範囲で調整）
+- 高知城: `kochi-castle-new.jpg`（ユーザー提供画像を軽く加工。明るさ・コントラスト・色味・解像感を自然な範囲で調整）
 - 高知城のランキング、観光一覧、詳細、歴史文化ページ、関連コース、イベント会場イメージなど、既存の高知城画像参照を新画像へ統一。
 - 外部ホットリンクなし。サイト内アセットとして使用。
 
 ## テントサウナ・四国カルスト写真差し替え（2026-10-02）
 
-- Niyodo Adventureのテントサウナ: `tent-sauna-niyodo.png`（ユーザー指定で作成・加工した白いテントサウナのイメージ画像）。スポット詳細、体験ページ、トップの体験カード、仁淀川アクティブコースで使用。
-- 四国カルスト: `shikoku-karst.png`（ユーザー提供画像を軽く加工。風車とカルスト台地の景観）。スポット詳細、景色・名所、モデルコース、関連ヒーローで使用。
+- Niyodo Adventureのテントサウナ: `tent-sauna-niyodo.jpg`（ユーザー指定で作成・加工した白いテントサウナのイメージ画像）。スポット詳細、体験ページ、トップの体験カード、仁淀川アクティブコースで使用。
+- 四国カルスト: `shikoku-karst.jpg`（ユーザー提供画像を軽く加工。風車とカルスト台地の景観）。スポット詳細、景色・名所、モデルコース、関連ヒーローで使用。
 - 2点とも外部ホットリンクなし。 `kochi/assets/photos/` に同梱。
 
 ## 空と仁淀ブルーキャンプ1日コース写真（2026-10-02）
 
-- `course-niyodo-sky-camp.png`（ユーザー提供画像）。パラグライダー、仁淀ブルー、キャンプのイメージをまとめたコラージュとして、モデルコース一覧・詳細・おすすめ表示に使用。
+- `course-niyodo-sky-camp.jpg`（ユーザー提供画像）。パラグライダー、仁淀ブルー、キャンプのイメージをまとめたコラージュとして、モデルコース一覧・詳細・おすすめ表示に使用。
 
 ## 柏島・足摺 海の1泊2日コース写真（2026-10-02）
 
-- `course-ocean-trip-collage.png`（ユーザー提供画像）。柏島の海、海鮮、夕日をまとめたコラージュとして、モデルコース一覧・詳細・関連導線に使用。
+- `course-ocean-trip-collage.jpg`（ユーザー提供画像）。柏島の海、海鮮、夕日をまとめたコラージュとして、モデルコース一覧・詳細・関連導線に使用。
 
 ## 龍河洞写真差し替え（2026-10-02）
 
-- 龍河洞: `ryugado-caving.png`（ユーザー提供画像）。ライトアップされた洞内とヘルメット姿の人物が写る写真として、龍河洞のランキング・一覧・詳細・関連コースで使用。
+- 龍河洞: `ryugado-caving.jpg`（ユーザー提供画像）。ライトアップされた洞内とヘルメット姿の人物が写る写真として、龍河洞のランキング・一覧・詳細・関連コースで使用。
 
 ### 釣り・サーフィン追加（2026-10-02）
 
@@ -295,7 +295,7 @@ CC BY 2.0/2.5は著作者・出典・ライセンス・変更を表示。写真�
 - 牧野公園ガイド：既存の `field-kochi.jpg` を里山イメージとして使用。Indiana jo / Wikimedia Commons / CC BY-SA 4.0。佐川町・牧野公園の実写ではない。
 - 牧野博士の聖地を歩く（南山麓コース）：既存の `field-kochi.jpg` を里山ウォーキングのイメージとして使用。実際のコース写真ではない。
 - 桂浜散策ガイド：既存サイト資産 `sakamoto-ryoma-memorial-museum.png` を桂浜エリアのイメージとして使用。ガイド中の実写ではない。
-- まきのガイドウォーク：既存サイト資産 `makino-botanical-garden.png` を牧野植物園のイメージとして使用。
+- まきのガイドウォーク：既存サイト資産 `makino-botanical-garden.jpg` を牧野植物園のイメージとして使用。
 
 ### 体験ページ追加 第11弾（2026-10-02）
 
@@ -347,7 +347,7 @@ CC BY 2.0/2.5は著作者・出典・ライセンス・変更を表示。写真�
 
 ### 体験追加 第18弾（2026-10-02）
 
-- 五感で感じる しらす漁師ツアー：既存の `shirasu.png` を安芸のしらす文化イメージとして使用。実際の2026年ツアー写真ではない。
+- 五感で感じる しらす漁師ツアー：既存の `shirasu.jpg` を安芸のしらす文化イメージとして使用。実際の2026年ツアー写真ではない。
 - コスプレで巡る レトロな街 いの町 フォトツアー：既存の `field-kochi.jpg` を地域風景イメージとして使用。Indiana jo / Wikimedia Commons / CC BY-SA 4.0。コスプレ撮影の実写ではない。
 - 着物で楽しむ 料亭濱長お座敷遊び体験：既存の `event-yosakoi.png` を高知の伝統文化イメージとして使用。濱長・着物・芸妓の実写ではない。
 - 半平太・はりまや橋コース：既存の `sakamoto-ryoma-memorial-museum.png` を幕末の土佐イメージとして使用。コース上の実写ではない。
@@ -375,7 +375,7 @@ CC BY 2.0/2.5は著作者・出典・ライセンス・変更を表示。写真�
 
 ### 体験追加 第22弾（2026-10-02）
 
-- 仁淀ブルーを眺めながら水上整体：既存の `course-niyodo-sup.png` を仁淀川の水辺イメージとして使用。水上整体の実写ではない。
+- 仁淀ブルーを眺めながら水上整体：既存の `course-niyodo-sup.jpg` を仁淀川の水辺イメージとして使用。水上整体の実写ではない。
 - 岩屋川渓谷ハイキング＋郷土茶菓いりもち：既存の `hero-forest-adventure.png` を渓谷・森林歩きのイメージとして使用。岩屋川渓谷・いりもちの実写ではない。
 - 四万十川 漁師体験＋幻想ホタル遊覧ツアー：既存の `shimanto-canoe.jpg` を四万十川の水辺イメージとして使用。ホタル・漁師体験・BBQの実写ではない。
 - 四万十川 伝統漁法体験は既存ページを維持し、2026-10-02に現行の料金・連絡先・予約締切情報へ更新。重複ページは作成しない。
@@ -383,7 +383,7 @@ CC BY 2.0/2.5は著作者・出典・ライセンス・変更を表示。写真�
 ### 体験追加 第23弾（2026-10-02）
 
 - 紅茶農家で国産紅茶6品種テイスティング＋スイーツ：既存の `field-kochi.jpg` を佐川町の茶畑・里山イメージとして使用。明郷園・テイスティングの実写ではない。
-- 仁淀ブルー絶景アフタヌーンティー：既存の `course-niyodo-sup.png` を仁淀川の水辺イメージとして使用。池川茶園・アフタヌーンティーの実写ではない。
+- 仁淀ブルー絶景アフタヌーンティー：既存の `course-niyodo-sup.jpg` を仁淀川の水辺イメージとして使用。池川茶園・アフタヌーンティーの実写ではない。
 - Farm-to-table ビーガン和食＆農園体験：既存の `field-kochi.jpg` を本山町の農園・里山イメージとして使用。めぐみめぐる農園・料理の実写ではない。
 - 汗見川 清流E-bikeサイクリング：既存の `hero-forest-adventure.png` を山間部アウトドアイメージとして使用。汗見川・E-bikeの実写ではない。
 

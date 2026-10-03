@@ -394,15 +394,15 @@ const coursePractical={
   'three-days':{recommended:'DAY 3が木曜・第1火曜にならない日程',reservation:'基本不要。繁忙期は飲食店・宿泊先を事前予約',caution:'DAY 3の安芸しらす食堂は木曜・第1火曜休み、のいち動物公園は月曜休園。各日の休館日を事前確認。'}
 };
 const coursePhotoOverrides={
-  'niyodo-classic':{src:'/assets/photos/course-niyodo-sky-camp.png',name:'空と仁淀ブルー 絶景1日コース',alt:'パラグライダーと仁淀ブルーの絶景を組み合わせたモデルコースのコラージュ',author:'ユーザー提供画像',source:'',license:'提供画像（サイト掲載用）',licenseUrl:'',width:1456,height:1020,position:'50% 50%',checkedAt:'2026-10-02'},
-  'ocean-trip':{src:'/assets/photos/course-ocean-trip-collage.png',name:'柏島・足摺 海の1泊2日コース',alt:'柏島の海、海鮮、夕日をまとめたモデルコースのコラージュ',author:'ユーザー提供画像',source:'',license:'提供画像（サイト掲載用）',licenseUrl:'',width:1448,height:1086,position:'50% 50%',checkedAt:'2026-10-02'}
+  'niyodo-classic':{src:'/assets/photos/course-niyodo-sky-camp.jpg',name:'空と仁淀ブルー 絶景1日コース',alt:'パラグライダーと仁淀ブルーの絶景を組み合わせたモデルコースのコラージュ',author:'ユーザー提供画像',source:'',license:'提供画像（サイト掲載用）',licenseUrl:'',width:1456,height:1020,position:'50% 50%',checkedAt:'2026-10-02'},
+  'ocean-trip':{src:'/assets/photos/course-ocean-trip-collage.jpg',name:'柏島・足摺 海の1泊2日コース',alt:'柏島の海、海鮮、夕日をまとめたモデルコースのコラージュ',author:'ユーザー提供画像',source:'',license:'提供画像（サイト掲載用）',licenseUrl:'',width:1448,height:1086,position:'50% 50%',checkedAt:'2026-10-02'}
 };
 export const courses=courseRows.map(([slug,name,area,theme,duration,stops],i)=>{const photo=coursePhotoOverrides[slug]||stops.map(slug=>photos[slug]).find(Boolean)||null;const practical=coursePractical[slug]||{};return {slug,name,area,theme,duration,stops,schedule:courseSchedules[slug]||[],stopMinutes:Object.fromEntries(stops.map(s=>[s,courseStopMinutes[s]||90])),dayBreaks:courseDayBreaks[slug]||{},recommended:practical.recommended||'',reservation:practical.reservation||'',caution:practical.caution||'',initial_rank:i+1,transport:'車＋徒歩',season:'季節・天候に応じて',audience:theme==='子連れ'?'家族':theme==='カップル'?'カップル':'友人・ひとり旅',photo,image:photo?.src||''};});
 export const eventCategories=['祭り・花火','グルメ','マルシェ','自然・アウトドア','文化・展覧会','子ども向け','スポーツ','期間限定体験'];
 export const events=[
   {
     slug:'kochi-castle-autumn-oct-2026',
-    image:'/assets/photos/kochi-castle-new.png',
+    image:'/assets/photos/kochi-castle-new.jpg',
     image_alt:'紅葉の時期をイメージした高知城',
     image_note:'会場イメージ',
     name:'高知城オータムフェスティバル（10月）',
@@ -438,7 +438,7 @@ export const events=[
   },
   {
     slug:'kochi-castle-autumn-nov-2026',
-    image:'/assets/photos/kochi-castle-new.png',
+    image:'/assets/photos/kochi-castle-new.jpg',
     image_alt:'秋の高知城',
     image_note:'会場イメージ',
     name:'高知城オータムフェスティバル（11月）',
@@ -490,7 +490,7 @@ export const events=[
   },
   {
     slug:'niyodogawa-koinobori-2026',
-    image:'/assets/photos/course-niyodo-sup.png',
+    image:'/assets/photos/course-niyodo-sup.jpg',
     image_alt:'仁淀川の清流',
     image_note:'仁淀川イメージ',
     name:'第30回 仁淀川 紙のこいのぼり',

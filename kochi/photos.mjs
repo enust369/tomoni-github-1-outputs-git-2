@@ -413,7 +413,7 @@ export const photos={
     "checkedAt": "2026-10-01"
   },
   "ryugado": {
-    "src": "/assets/photos/ryugado-caving.png",
+    "src": "/assets/photos/ryugado-caving.jpg",
     "name": "龍河洞",
     "alt": "ライトアップされた龍河洞の洞内でヘルメット姿の2人が立つ様子",
     "author": "ユーザー提供画像",
@@ -454,7 +454,7 @@ export const photos={
     "checkedAt": "2026-09-21"
   },
   "kochi-castle": {
-    "src": "/assets/photos/kochi-castle-new.png",
+    "src": "/assets/photos/kochi-castle-new.jpg",
     "name": "高知城",
     "alt": "青空の下にそびえる高知城の天守と石垣",
     "author": "提供画像を加工",
@@ -1436,7 +1436,7 @@ export const photos={
     "position": "50% 50%"
   },
   "sauna": {
-    "src": "/assets/photos/tent-sauna-niyodo.png",
+    "src": "/assets/photos/tent-sauna-niyodo.jpg",
     "name": "Niyodo Adventureのテントサウナ",
     "alt": "清流沿いに設置された白いテントサウナ",
     "author": "ユーザー指定の生成・加工画像",
@@ -1449,7 +1449,7 @@ export const photos={
     "checkedAt": "2026-10-02"
   },
   "yasube": {
-    "src": "/assets/photos/yasube.png",
+    "src": "/assets/photos/yasube.jpg",
     "name": "屋台安兵衛",
     "alt": "赤提灯が灯る夜の屋台安兵衛",
     "author": "提供画像",
@@ -1461,7 +1461,7 @@ export const photos={
     "position": "50% 52%"
   },
   "hashimoto": {
-    "src": "/assets/photos/hashimoto.png",
+    "src": "/assets/photos/hashimoto.jpg",
     "name": "橋本食堂",
     "alt": "橋本食堂の鍋焼きラーメン",
     "author": "提供画像",
@@ -1473,7 +1473,7 @@ export const photos={
     "position": "50% 50%"
   },
   "shirasu": {
-    "src": "/assets/photos/shirasu.png",
+    "src": "/assets/photos/shirasu.jpg",
     "name": "安芸しらす食堂 本店",
     "alt": "青空の下に建つ安芸しらす食堂 本店",
     "author": "提供画像",
@@ -1485,7 +1485,7 @@ export const photos={
     "position": "50% 50%"
   },
   "myojinmaru": {
-    "src": "/assets/photos/myojinmaru.png",
+    "src": "/assets/photos/myojinmaru.jpg",
     "name": "明神丸 本店",
     "alt": "夜に明かりが灯る明神丸 本店の外観",
     "author": "提供画像を加工",
@@ -1497,7 +1497,7 @@ export const photos={
     "position": "50% 50%"
   },
   "tanaka": {
-    "src": "/assets/photos/tanaka.png",
+    "src": "/assets/photos/tanaka.jpg",
     "name": "田中鮮魚店 漁師小屋",
     "alt": "田中鮮魚店 漁師小屋の店内で食事を楽しむ人々",
     "author": "提供画像を加工",
@@ -1509,7 +1509,7 @@ export const photos={
     "position": "50% 50%"
   },
   "ice": {
-    "src": "/assets/photos/ice.png",
+    "src": "/assets/photos/ice.jpg",
     "name": "高知アイス売店 仁淀川カフェ",
     "alt": "仁淀川を望む高知アイス売店 仁淀川カフェの店内",
     "author": "提供画像を加工",
@@ -1521,7 +1521,7 @@ export const photos={
     "position": "50% 50%"
   },
   "chikurinji": {
-    "src": "/assets/photos/chikurinji-pagoda.png",
+    "src": "/assets/photos/chikurinji-pagoda.jpg",
     "name": "竹林寺",
     "alt": "新緑に囲まれた竹林寺の五重塔と石段",
     "author": "提供画像を加工",
@@ -1577,7 +1577,7 @@ export const photos={
     "checkedAt": "2026-09-26"
   },
   "makino-botanical-garden": {
-    "src": "/assets/photos/makino-botanical-garden.png",
+    "src": "/assets/photos/makino-botanical-garden.jpg",
     "name": "高知県立牧野植物園",
     "alt": "高知県立牧野植物園の温室を見上げる植物と青空",
     "author": "提供画像",
