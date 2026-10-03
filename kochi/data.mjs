@@ -300,16 +300,24 @@ const courseRows=[
 ['kochi-gourmet','高知市内 夜グルメ満喫コース','kochi_city','グルメ','夕方〜夜',['myojinmaru','yasube']],
 ['kami-konan','龍河洞・香美香南 1日コース','east','アクティブ','1日',['ryugado','noichi-zoo','bentenza-backstage-experience']],
 ['family','高知 子連れ1日コース','kochi_city','子連れ','1日',['kochi-castle','makino-botanical-garden','noichi-zoo']],
-['three-days','高知満喫2泊3日コース','north_niyodo','王道','2泊3日',['kochi-castle','makino-botanical-garden','nikobuchi','ice','nakatsu','iokido','shirasu','noichi-zoo']]];
+['three-days','高知満喫2泊3日コース','north_niyodo','王道','2泊3日',['kochi-castle','makino-botanical-garden','nikobuchi','ice','nakatsu','iokido','shirasu','noichi-zoo']],
+['kuroshio-kure-sea','黒潮・久礼 海＆温泉1日コース','west','ドライブ','1日',['irino-surf','michinoeki-nakatosa','kuroshio-honjin']],
+['niyodo-camp-stay','仁淀川 キャンプ1泊2日コース','north_niyodo','アクティブ','1泊2日',['michinoeki-633bi','musasabi-onsen','snowpeak-ochi-niyodogawa']],
+['mihara-cycling-stay','三原村 田舎泊＆朝サイクリング1泊2日コース','west','アクティブ','1泊2日',['mihara-rural-stay','mihara-slow-cycling']],
+['nakatosa-fishing','中土佐 漁業体験＆海釣り1日コース','west','アクティブ','1日',['kaminokae-fishery','susaki-fishing']]];
 const courseStopMinutes={
   'kochi-castle-history-museum':60,'kochi-castle':90,'makino-botanical-garden':120,'myojinmaru':90,'yasube':45,
   'agawa-paragliding':180,'nikobuchi':60,'ice':45,'kayak':150,'nakatsu':120,'iokido':60,'shirasu':60,'noichi-zoo':150,
   'kashiwajima':120,'kashiwajima-diving-aquas':180,'tatsukushi-minokoshi-tour':120,'ashizuri':90,
-  'forest-adventure-kochi':180,'karst':90,'yusuhara':120,'ryugado':90,'yasea-sup-kayak':120
+  'forest-adventure-kochi':180,'karst':90,'yusuhara':120,'ryugado':90,'yasea-sup-kayak':120,
+  'irino-surf':120,'michinoeki-nakatosa':60,'kuroshio-honjin':90,'michinoeki-633bi':60,'musasabi-onsen':90,
+  'snowpeak-ochi-niyodogawa':180,'mihara-rural-stay':120,'mihara-slow-cycling':90,'kaminokae-fishery':150,'susaki-fishing':120
 };
 const courseDayBreaks={
   'ocean-trip':{0:'DAY 1',2:'DAY 2'},
-  'three-days':{0:'DAY 1',2:'DAY 2',4:'DAY 3'}
+  'three-days':{0:'DAY 1',2:'DAY 2',4:'DAY 3'},
+  'niyodo-camp-stay':{0:'DAY 1',2:'DAY 2'},
+  'mihara-cycling-stay':{0:'DAY 1',1:'DAY 2'}
 };
 const courseSchedules={
   'kochi-classic':[
@@ -379,6 +387,24 @@ const courseSchedules={
     {day:'DAY 3',time:'09:00',slug:'iokido',move:'高知市内から車で約45分'},
     {time:'11:00',slug:'shirasu',move:'車で約10分'},
     {time:'13:00',slug:'noichi-zoo',move:'車で約30分'}
+  ],
+  'kuroshio-kure-sea':[
+    {time:'09:00',slug:'irino-surf',note:'波・天候を確認し、無理のない範囲で海を楽しむ。'},
+    {time:'12:00',slug:'michinoeki-nakatosa',move:'車で移動',note:'昼食と買い物を兼ねて休憩。'},
+    {time:'15:00',slug:'kuroshio-honjin',move:'車で約5〜10分',note:'日帰り入浴の受付時間を事前確認。'}
+  ],
+  'niyodo-camp-stay':[
+    {day:'DAY 1',time:'10:00',slug:'michinoeki-633bi',note:'食材・土産・昼食候補をチェック。'},
+    {time:'13:00',slug:'musasabi-onsen',move:'車で移動',note:'木曜定休に注意。'},
+    {day:'DAY 2',time:'10:00',slug:'snowpeak-ochi-niyodogawa',move:'車で移動',note:'宿泊・手ぶらCAMP等は事前予約。'}
+  ],
+  'mihara-cycling-stay':[
+    {day:'DAY 1',time:'15:00',slug:'mihara-rural-stay',note:'到着時刻・夕食内容は宿へ事前確認。'},
+    {day:'DAY 2',time:'07:00',slug:'mihara-slow-cycling',note:'申込締切・開始時刻を事前に確認。'}
+  ],
+  'nakatosa-fishing':[
+    {time:'09:30',slug:'kaminokae-fishery',note:'体験内容・料金は季節で変わるため事前予約時に確認。'},
+    {time:'13:30',slug:'susaki-fishing',move:'車で移動',note:'釣具レンタルやインストラクター利用は事前確認がおすすめ。'}
   ]
 };
 const coursePractical={
@@ -391,7 +417,11 @@ const coursePractical={
   'kochi-gourmet':{recommended:'月〜土の夕方〜夜',reservation:'明神丸は混雑時の予約・空席確認がおすすめ',caution:'屋台安兵衛は日曜休み。悪天候時は臨時休業の場合あり。'},
   'kami-konan':{recommended:'火〜日曜を基本に計画',reservation:'弁天座バックヤード体験は事前予約が必要',caution:'のいち動物公園と弁天座は月曜休みを基本とし、祝日の場合は翌日休館になる場合あり。'},
   'family':{recommended:'火〜日曜を基本に、休園日を確認',reservation:'基本不要',caution:'のいち動物公園は月曜休園。牧野植物園はメンテナンス休園日あり。子どもの年齢に合わせて滞在時間を短縮してもOK。'},
-  'three-days':{recommended:'DAY 3が木曜・第1火曜にならない日程',reservation:'基本不要。繁忙期は飲食店・宿泊先を事前予約',caution:'DAY 3の安芸しらす食堂は木曜・第1火曜休み、のいち動物公園は月曜休園。各日の休館日を事前確認。'}
+  'three-days':{recommended:'DAY 3が木曜・第1火曜にならない日程',reservation:'基本不要。繁忙期は飲食店・宿泊先を事前予約',caution:'DAY 3の安芸しらす食堂は木曜・第1火曜休み、のいち動物公園は月曜休園。各日の休館日を事前確認。'},
+  'kuroshio-kure-sea':{recommended:'海況が安定した晴天日',reservation:'サーフィン利用条件や日帰り入浴は事前確認がおすすめ',caution:'高波・強風時は海に入らず、黒潮本陣の日帰り入浴時間も当日確認。'},
+  'niyodo-camp-stay':{recommended:'春〜秋の晴天日',reservation:'キャンプ場は事前予約推奨',caution:'むささび温泉は木曜定休。キャンプ場のチェックイン時刻と河川・天候状況を事前確認。'},
+  'mihara-cycling-stay':{recommended:'雨の少ない時期の1泊2日',reservation:'宿泊と朝サイクリングは事前予約',caution:'サイクリングは天候で中止の場合あり。朝が早いため前泊向き。'},
+  'nakatosa-fishing':{recommended:'海況が安定した日',reservation:'漁業体験は事前予約。海釣りも3名以上は事前予約推奨',caution:'天候・海況で内容変更や中止の可能性あり。濡れてもよい服装と滑りにくい靴がおすすめ。'}
 };
 const coursePhotoOverrides={
   'family':photos['makino-botanical-garden'],
