@@ -586,3 +586,8 @@ CC BY 2.0/2.5は著作者・出典・ライセンス・変更を表示。写真�
 
 - `yoshinogawa-rafting`：既存のラフティング共通画像から、実際の吉野川ラフティング実景 `yoshinogawa-rafting.jpg` へ差し替え。(WT-en) Prestonpreston / Wikimedia Commons / Public Domain。体験地と内容が一致。
 - `makino-guide-walk`：牧野植物園の共通提供画像から、園内の別カット実景 `makino-guide-walk.jpg` へ差し替え。663highland / Wikimedia Commons / CC BY-SA 4.0。ガイドウォークの舞台そのものが分かる写真として使用。
+
+### 写真差し替え実施 第30弾（2026-10-03）
+
+- `tsuno-tea-field`：四万十川源流部の共通風景から、日本の山間茶畑 `tsuno-tea-field.jpg` へ差し替え。STA3816 / Wikimedia Commons / CC BY-SA 3.0。津野町の実写ではないため、茶畑見学体験の内容イメージとして扱う。
+- `garbanzo-yoshino`：既存のラフティング共通画像から、急流を下るラフト実景 `garbanzo-yoshino.jpg` へ差し替え。さかおり / Wikimedia Commons / CC BY-SA 4.0。吉野川の実写ではないため、リバーアクティビティの内容イメージとして扱う。
