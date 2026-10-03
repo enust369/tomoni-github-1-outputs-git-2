@@ -394,6 +394,7 @@ const coursePractical={
   'three-days':{recommended:'DAY 3が木曜・第1火曜にならない日程',reservation:'基本不要。繁忙期は飲食店・宿泊先を事前予約',caution:'DAY 3の安芸しらす食堂は木曜・第1火曜休み、のいち動物公園は月曜休園。各日の休館日を事前確認。'}
 };
 const coursePhotoOverrides={
+  'family':photos['makino-botanical-garden'],
   'niyodo-classic':{src:'/assets/photos/course-niyodo-sky-camp.jpg',name:'空と仁淀ブルー 絶景1日コース',alt:'パラグライダーと仁淀ブルーの絶景を組み合わせたモデルコースのコラージュ',author:'ユーザー提供画像',source:'',license:'提供画像（サイト掲載用）',licenseUrl:'',width:1456,height:1020,position:'50% 50%',checkedAt:'2026-10-02'},
   'ocean-trip':{src:'/assets/photos/course-ocean-trip-collage.jpg',name:'柏島・足摺 海の1泊2日コース',alt:'柏島の海、海鮮、夕日をまとめたモデルコースのコラージュ',author:'ユーザー提供画像',source:'',license:'提供画像（サイト掲載用）',licenseUrl:'',width:1448,height:1086,position:'50% 50%',checkedAt:'2026-10-02'}
 };
