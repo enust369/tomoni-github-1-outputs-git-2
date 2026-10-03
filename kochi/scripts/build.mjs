@@ -3,6 +3,7 @@ import {resolve} from 'node:path';
 import {render,getRoutes} from '../render.mjs';
 import {loadContent} from '../content.mjs';
 import {DEFAULT_SITE_ORIGIN,isIndexablePath,isSearchIndexingEnabled} from '../site.mjs';
+import {clientDataSource} from './client-data.mjs';
 if(process.env.KOCHI_SUPABASE_URL)await loadContent(process.env.KOCHI_SUPABASE_URL,process.env.KOCHI_SUPABASE_ANON_KEY);
 const routes=getRoutes();
 const root=resolve(import.meta.dirname,'..'),out=resolve(root,'dist');
@@ -10,7 +11,8 @@ const origin=process.env.KOCHI_SITE_URL||DEFAULT_SITE_ORIGIN;
 const indexing=isSearchIndexingEnabled(process.env.KOCHI_SEARCH_INDEXING);
 if(!/^https:\/\/[^/]+\/?$/.test(origin))throw new Error('KOCHI_SITE_URL must be an https origin');
 await rm(out,{recursive:true,force:true});await mkdir(out,{recursive:true});
-for(const f of ['styles.css','app.mjs','data.mjs','render.mjs','content.mjs','photos.mjs','home-content.mjs','site.mjs','favicon.svg'])await copyFile(resolve(root,f),resolve(out,f));
+for(const f of ['styles.css','app.mjs','favicon.svg'])await copyFile(resolve(root,f),resolve(out,f));
+await writeFile(resolve(out,'client-data.mjs'),clientDataSource);
 await cp(resolve(root,'assets/photos'),resolve(out,'assets/photos'),{recursive:true});await cp(resolve(root,'assets/icons'),resolve(out,'assets/icons'),{recursive:true});
 await writeFile(resolve(out,'config.js'),`window.KOCHI_CONFIG=${JSON.stringify({supabaseUrl:process.env.KOCHI_SUPABASE_URL||'',supabaseAnonKey:process.env.KOCHI_SUPABASE_ANON_KEY||'',siteUrl:origin})};`);
 for(const path of routes){const dir=resolve(out,'.'+path);await mkdir(dir,{recursive:true});await writeFile(resolve(dir,'index.html'),render(path,origin,indexing).html)}

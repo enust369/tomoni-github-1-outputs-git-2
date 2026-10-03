@@ -1,5 +1,6 @@
-import {spots,courses,events,areas,categories,sortSpots} from './data.mjs';
-
+let spots=[],courses=[],events=[],areas={},categories={},sortSpots=items=>[...items];
+let clientDataLoaded=false;
+async function loadClientData(){if(clientDataLoaded)return;({spots,courses,events,areas,categories,sortSpots}=await import('./client-data.mjs'));clientDataLoaded=true}
 
 const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const photoImage=(photo,name)=>`<img src="${esc(photo?.src||'/assets/photos/unset.svg')}" alt="${esc(photo?.alt||name+'：写真未設定')}" width="${photo?.width||1280}" height="${photo?.height||800}" style="object-position:${esc(photo?.position||'50% 50%')}" loading="lazy">`;
@@ -12,14 +13,14 @@ const eventCard=e=>`<article class="card event-card">${e.image?`<a class="event-
 const featuredCategoryTop3=items=>{const top=items.slice(0,3);if(!top.length)return '<div class="empty"><h3>条件に合うスポットはありません。</h3><p>条件を変えて探してみてください。</p></div>';return `<div class="category-top3 count-${top.length}"><article class="category-top3-card category-top3-first"><a href="/spots/${esc(top[0].slug)}/">${photoImage(top[0].photo,top[0].name)}<span class="category-top3-rank rank-1">1</span><div class="category-top3-body"><span>${esc(areas[top[0].area])}</span><h3>${esc(top[0].name)}</h3><p>${esc(top[0].catchphrase)}</p></div></a>${photoCredit(top[0].photo)}<button class="vote" data-vote="${esc(top[0].id)}" aria-pressed="false">♡ おすすめ <span>${Number(top[0].recommend_count)||0}</span></button></article>${top.length>1?`<div class="category-top3-side">${top.slice(1).map((spot,i)=>`<article class="category-top3-card category-top3-small"><a href="/spots/${esc(spot.slug)}/">${photoImage(spot.photo,spot.name)}<span class="category-top3-rank rank-${i+2}">${i+2}</span><div class="category-top3-body"><span>${esc(areas[spot.area])}</span><h3>${esc(spot.name)}</h3><p>${esc(spot.catchphrase)}</p></div></a>${photoCredit(spot.photo)}<button class="vote" data-vote="${esc(spot.id)}" aria-pressed="false">♡ おすすめ <span>${Number(spot.recommend_count)||0}</span></button></article>`).join('')}</div>`:''}</div>`};
 
 const live=!['localhost','127.0.0.1'].includes(location.hostname);
-let voted=new Set(),ready=false,anonymousId='',savedSpots=new Set(),savedCourses=new Set();
+let voted=new Set(),voteCounts=new Map(),ready=false,anonymousId='',savedSpots=new Set(),savedCourses=new Set();
 
 const toast=message=>{const el=document.querySelector('#toast');if(!el)return;el.textContent=message;el.hidden=false;clearTimeout(toast.timer);toast.timer=setTimeout(()=>el.hidden=true,5000)};
 function readLocal(key,fallback){try{return JSON.parse(localStorage.getItem(key))??fallback}catch{return fallback}}
 function getIdentity(){let id=localStorage.getItem('kochi-anonymous-id');if(!id){id=crypto.randomUUID();localStorage.setItem('kochi-anonymous-id',id)}return id}
 async function api(path,body,method){const r=await fetch(path,{method:method||(body?'POST':'GET'),headers:{'Content-Type':'application/json'},body:body?JSON.stringify(body):undefined});let data;try{data=await r.json()}catch{data=null}if(!r.ok)throw new Error(r.status===429?'操作が続いています。1分ほど待ってください。':'保存できませんでした。通信状態をご確認ください。');return data}
 
-function syncButtons(){document.querySelectorAll('[data-vote]').forEach(b=>{const s=spots.find(s=>s.id===b.dataset.vote);b.disabled=!ready;b.setAttribute('aria-pressed',String(voted.has(b.dataset.vote)));b.innerHTML=`${voted.has(b.dataset.vote)?'♥':'♡'} おすすめ <span>${s?.recommend_count||0}</span>`});document.querySelectorAll('[data-save-spot]').forEach(b=>{const saved=savedSpots.has(b.dataset.saveSpot);b.setAttribute('aria-pressed',String(saved));b.textContent=saved?'♥ 保存済み':'♡ 行ってみたい'});document.querySelectorAll('[data-save-course]').forEach(b=>{const saved=savedCourses.has(b.dataset.saveCourse);b.setAttribute('aria-pressed',String(saved));b.textContent=saved?'♥ 保存済み':'♡ コースを保存'})}
+function syncButtons(){document.querySelectorAll('[data-vote]').forEach(b=>{const id=b.dataset.vote,s=spots.find(s=>s.id===id);const count=voteCounts.has(id)?voteCounts.get(id):(s?.recommend_count||0);b.disabled=!ready;b.setAttribute('aria-pressed',String(voted.has(id)));b.innerHTML=`${voted.has(id)?'♥':'♡'} おすすめ <span>${count}</span>`});document.querySelectorAll('[data-save-spot]').forEach(b=>{const saved=savedSpots.has(b.dataset.saveSpot);b.setAttribute('aria-pressed',String(saved));b.textContent=saved?'♥ 保存済み':'♡ 行ってみたい'});document.querySelectorAll('[data-save-course]').forEach(b=>{const saved=savedCourses.has(b.dataset.saveCourse);b.setAttribute('aria-pressed',String(saved));b.textContent=saved?'♥ 保存済み':'♡ コースを保存'})}
 function renderSavedTrips(){const spotRoot=document.querySelector('#saved-spots'),courseRoot=document.querySelector('#saved-courses');if(spotRoot){const items=spots.filter(s=>savedSpots.has(s.slug));spotRoot.innerHTML=items.length?spotGrid(items):'<div class="empty">まだ保存したスポットはありません。スポット詳細の「行ってみたい」から追加できます。</div>'}if(courseRoot){const items=courses.filter(c=>savedCourses.has(c.slug));courseRoot.innerHTML=items.length?courseGrid(items):'<div class="empty">まだ保存したモデルコースはありません。コース詳細の「コースを保存」から追加できます。</div>'}syncButtons()}
 function saveLocalTrips(){localStorage.setItem('kochi-saved-spots',JSON.stringify([...savedSpots]));localStorage.setItem('kochi-saved-courses',JSON.stringify([...savedCourses]))}
 function filterSpots(){const f=document.querySelector('#spot-filter');if(!f)return;const data=new FormData(f),root=document.querySelector('[data-ranking]');if(!root)return;const cat=root.dataset.ranking;const historyOnly=root.dataset.historyOnly==='true';const historySlugs=new Set(['kochi-castle','chikurinji','kochi-castle-history-museum','sakamoto-ryoma-memorial-museum','makino-botanical-garden','shioe-tenmangu']);const items=sortSpots(spots.filter(s=>s.category===cat&&(!historyOnly||historySlugs.has(s.slug))&&(!data.get('area')||s.area===data.get('area'))&&(!data.get('theme')||s.tags?.includes(data.get('theme')))));const specialTop3=['camp','onsen','michinoeki'].includes(cat);document.querySelector('#rank-results').innerHTML=specialTop3?featuredCategoryTop3(items):spotGrid(items.slice(0,5),true);document.querySelector('#more-results').innerHTML=spotGrid(items.slice(specialTop3?3:5));syncButtons()}
@@ -111,11 +112,11 @@ document.addEventListener('click',async e=>{
  const saveCourse=e.target.closest('[data-save-course]');if(saveCourse){const slug=saveCourse.dataset.saveCourse;savedCourses.has(slug)?savedCourses.delete(slug):savedCourses.add(slug);saveLocalTrips();syncButtons();renderSavedTrips();toast(savedCourses.has(slug)?'モデルコースを保存しました。':'保存を解除しました。');return}
  const placeholder=e.target.closest('[data-placeholder]');if(placeholder)toast(placeholder.dataset.placeholder);
  const b=e.target.closest('[data-vote]');if(!b||!ready||b.disabled)return;
- const id=b.dataset.vote,s=spots.find(s=>s.id===id);if(!s)return;b.disabled=true;
+ const id=b.dataset.vote,s=spots.find(s=>s.id===id);b.disabled=true;
  try{
-   if(live){const result=await api('/api/vote',{spot_id:id,anonymous_id:anonymousId});s.recommend_count=result.recommend_count;result.voted?voted.add(id):voted.delete(id)}
-   else{voted.has(id)?voted.delete(id):voted.add(id);localStorage.setItem('kochi-demo-votes',JSON.stringify([...voted]));s.recommend_count=voted.has(id)?1:0;toast('このブラウザの体験用投票です。公開票には加算されません。')}
-   filterSpots();const current=document.querySelector('#current-rank');if(current)current.textContent=sortSpots(spots.filter(x=>x.category===s.category)).findIndex(x=>x.id===s.id)+1;syncButtons();
+   if(live){const result=await api('/api/vote',{spot_id:id,anonymous_id:anonymousId});voteCounts.set(id,Number(result.recommend_count)||0);if(s)s.recommend_count=Number(result.recommend_count)||0;result.voted?voted.add(id):voted.delete(id)}
+   else{voted.has(id)?voted.delete(id):voted.add(id);localStorage.setItem('kochi-demo-votes',JSON.stringify([...voted]));voteCounts.set(id,voted.has(id)?1:0);if(s)s.recommend_count=voted.has(id)?1:0;toast('このブラウザの体験用投票です。公開票には加算されません。')}
+   filterSpots();const current=document.querySelector('#current-rank');if(current&&s)current.textContent=sortSpots(spots.filter(x=>x.category===s.category)).findIndex(x=>x.id===s.id)+1;syncButtons();
  }catch(error){toast(error.message);b.disabled=false}
 });
 
@@ -126,17 +127,21 @@ document.addEventListener('keydown',e=>{
 });
 
 async function start(){
- anonymousId=getIdentity();
- bind();
+ const hasVotes=Boolean(document.querySelector('[data-vote]'));
+ const needsData=Boolean(document.querySelector('#current-rank,#spot-filter,#course-filter,#event-filter,#search-form,#saved-spots,#saved-courses,#request-form'));
+ const needsVoteState=hasVotes||Boolean(document.querySelector('#spot-filter,#search-form,#saved-spots'));
  try{
-   if(live){
-     const state=await api('/api/bootstrap?anonymous_id='+encodeURIComponent(anonymousId),null,'GET');
-     const counts=new Map((state.counts||[]).map(x=>[x.spot_id,Number(x.recommend_count||0)]));
-     spots.forEach(s=>s.recommend_count=counts.get(s.id)||0);
-     voted=new Set(state.voted||[]);
-   }else{
-     voted=new Set(readLocal('kochi-demo-votes',[]));spots.forEach(s=>s.recommend_count=voted.has(s.id)?1:0);
+   if(needsData)await loadClientData();
+   if(needsVoteState||document.querySelector('#request-form'))anonymousId=getIdentity();
+   bind();
+   if(!live){
+     if(needsVoteState){voted=new Set(readLocal('kochi-demo-votes',[]));for(const id of document.querySelectorAll('[data-vote]'))voteCounts.set(id.dataset.vote,voted.has(id.dataset.vote)?1:0);if(clientDataLoaded)spots.forEach(s=>s.recommend_count=voted.has(s.id)?1:0)}
      const note=document.createElement('div');note.className='notice wrap';note.textContent='プレビュー：投票・申請はこのブラウザ内の体験用です。';document.querySelector('main').prepend(note);
+   }else if(needsVoteState){
+     const state=await api('/api/bootstrap?anonymous_id='+encodeURIComponent(anonymousId),null,'GET');
+     voteCounts=new Map((state.counts||[]).map(x=>[x.spot_id,Number(x.recommend_count||0)]));
+     if(clientDataLoaded)spots.forEach(s=>s.recommend_count=voteCounts.get(s.id)||0);
+     voted=new Set(state.voted||[]);
    }
    ready=true;filterSpots();syncButtons();
  }catch(error){toast(error.message);document.querySelectorAll('[data-vote]').forEach(b=>b.disabled=true)}
