@@ -545,14 +545,14 @@ export const photos={
     "width": 1600, "height": 1200, "position": "50% 50%", "checkedAt": "2026-10-03"
   },
   "asemikawa-ebike": {
-    "src": "/assets/photos/motoyama-vegan-area.jpg",
+    "src": "/assets/photos/asemikawa-ebike.jpg",
     "name": "汗見川 清流E-bikeサイクリング",
-    "alt": "汗見川エリアのある高知県本山町の山里風景",
-    "author": "As6022014",
-    "source": "https://commons.wikimedia.org/wiki/File:Mt.Shiragayama-Motoyama.jpg",
-    "title": "Mt.Shiragayama-Motoyama.jpg",
-    "license": "Public Domain",
-    "licenseUrl": "https://creativecommons.org/publicdomain/mark/1.0/",
+    "alt": "高知県本山町・吉野川水系の山崎ダム周辺実景",
+    "author": "Qurren",
+    "source": "https://commons.wikimedia.org/wiki/File:Yamazaki_Dam_right_view.jpg",
+    "title": "Yamazaki Dam right view.jpg",
+    "license": "CC BY-SA 3.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0/",
     "width": 1600, "height": 1200, "position": "50% 50%", "checkedAt": "2026-10-03"
   },
   "niyodo-water-seitai": {
