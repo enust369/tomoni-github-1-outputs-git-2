@@ -270,15 +270,15 @@ const rank={};
 export const spots=rows.map(([slug,name,category,area,municipality,tags,catchphrase],i)=>({id:`00000000-0000-4000-8000-${String(i+1).padStart(12,'0')}`,slug,name,category,area,municipality,tags:tags.split(','),catchphrase,initial_rank:rank[category]=(rank[category]||0)+1,recommend_count:0,is_published:true,is_demo:false,photo:photos[slug]||null,main_image_url:photos[slug]?.src||'',description:'',created_at:`2026-09-${String(i+1).padStart(2,'0')}T00:00:00Z`,...(spotInfo[slug]||{})}));
 const courseRows=[
 ['kochi-classic','高知市内 王道1日コース','kochi_city','王道','1日',['kochi-castle-history-museum','kochi-castle','makino-botanical-garden','myojinmaru','yasube']],
-['niyodo-classic','空と仁淀ブルーキャンプ1日コース','north_niyodo','アクティブ','1日',['agawa-paragliding','nikobuchi','ice']],
+['niyodo-classic','空と仁淀ブルー 絶景1日コース','north_niyodo','アクティブ','1日',['agawa-paragliding','nikobuchi','ice']],
 ['niyodo-active','仁淀川 カヤック＆渓谷1日コース','north_niyodo','アクティブ','1日',['kayak','ice','nakatsu']],
 ['east-drive','東部 洞窟・しらす・動物園1日コース','east','グルメ','1日',['iokido','shirasu','noichi-zoo']],
 ['ocean-trip','柏島・足摺 海の1泊2日コース','west','カップル','1泊2日',['kashiwajima','kashiwajima-diving-aquas','tatsukushi-minokoshi-tour','ashizuri']],
 ['karst-drive','四国カルスト・梼原 絶景ドライブ','west','ドライブ','1日',['forest-adventure-kochi','karst','yusuhara']],
-['kochi-gourmet','高知市内 グルメ満喫1日コース','kochi_city','グルメ','1日',['myojinmaru','yasube']],
-['kami-konan','龍河洞・香美香南 1日コース','east','アクティブ','1日',['ryugado','noichi-zoo','yasea-sup-kayak']],
+['kochi-gourmet','高知市内 夜グルメ満喫コース','kochi_city','グルメ','夕方〜夜',['myojinmaru','yasube']],
+['kami-konan','龍河洞・香美香南 1日コース','east','アクティブ','1日',['ryugado','noichi-zoo','bentenza-backstage-experience']],
 ['family','高知 子連れ1日コース','kochi_city','子連れ','1日',['makino-botanical-garden','kochi-castle','noichi-zoo']],
-['three-days','高知満喫2泊3日コース','north_niyodo','王道','2泊3日',['kochi-castle','makino-botanical-garden','nikobuchi','ice','iokido','shirasu','noichi-zoo']]];
+['three-days','高知満喫2泊3日コース','north_niyodo','王道','2泊3日',['kochi-castle','makino-botanical-garden','nikobuchi','ice','nakatsu','iokido','shirasu','noichi-zoo']]];
 const courseStopMinutes={
   'kochi-castle-history-museum':60,'kochi-castle':90,'makino-botanical-garden':120,'myojinmaru':90,'yasube':45,
   'agawa-paragliding':180,'nikobuchi':60,'ice':45,'kayak':150,'nakatsu':120,'iokido':60,'shirasu':60,'noichi-zoo':150,
@@ -289,11 +289,81 @@ const courseDayBreaks={
   'ocean-trip':{0:'DAY 1',2:'DAY 2'},
   'three-days':{0:'DAY 1',2:'DAY 2',4:'DAY 3'}
 };
+const courseSchedules={
+  'kochi-classic':[
+    {time:'09:00',slug:'kochi-castle-history-museum'},
+    {time:'10:15',slug:'kochi-castle'},
+    {time:'12:00',title:'高知市中心部で昼食',note:'ひろめ市場や帯屋町周辺などで、午後に備えてゆっくり昼食。'},
+    {time:'14:00',slug:'makino-botanical-garden'},
+    {time:'17:30',slug:'myojinmaru'},
+    {time:'19:30',slug:'yasube'}
+  ],
+  'niyodo-classic':[
+    {time:'09:00',slug:'agawa-paragliding',note:'体験開始時刻は事前予約で確定。天候により中止あり。'},
+    {time:'12:30',title:'仁淀川町周辺で昼食',note:'午後の移動に備えて早めの昼食。'},
+    {time:'13:45',slug:'nikobuchi'},
+    {time:'15:45',slug:'ice'}
+  ],
+  'niyodo-active':[
+    {time:'09:00',slug:'kayak',note:'予約枠に合わせて開始時刻を調整。'},
+    {time:'12:00',title:'仁淀川沿いで昼食',note:'カヤック終了後に昼食休憩。'},
+    {time:'13:30',slug:'ice'},
+    {time:'15:00',slug:'nakatsu'}
+  ],
+  'east-drive':[
+    {time:'09:00',slug:'iokido'},
+    {time:'11:00',slug:'shirasu'},
+    {time:'13:00',slug:'noichi-zoo'}
+  ],
+  'ocean-trip':[
+    {day:'DAY 1',time:'09:00',slug:'kashiwajima-diving-aquas',note:'事前予約推奨。海況により内容変更・中止あり。'},
+    {time:'12:30',title:'柏島周辺で昼食',note:'ダイビング後は休憩を兼ねて昼食。'},
+    {time:'14:00',slug:'kashiwajima'},
+    {time:'16:30',title:'宿へ移動・夕景を楽しむ',note:'翌日に備えて土佐清水・竜串方面へ移動。'},
+    {day:'DAY 2',time:'09:10',slug:'tatsukushi-minokoshi-tour'},
+    {time:'12:00',title:'竜串周辺で昼食'},
+    {time:'14:00',slug:'ashizuri'}
+  ],
+  'karst-drive':[
+    {time:'09:00',slug:'forest-adventure-kochi',note:'予約枠に合わせて開始。'},
+    {time:'12:30',title:'津野町周辺で昼食'},
+    {time:'13:30',slug:'karst'},
+    {time:'15:30',slug:'yusuhara'}
+  ],
+  'kochi-gourmet':[
+    {time:'17:30',slug:'myojinmaru'},
+    {time:'19:30',title:'高知市中心部を散策',note:'帯屋町・追手筋周辺を歩きながら次の店へ。'},
+    {time:'20:30',slug:'yasube',note:'日曜定休。悪天候時は臨時休業の場合あり。'}
+  ],
+  'kami-konan':[
+    {time:'08:30',slug:'ryugado'},
+    {time:'10:30',slug:'noichi-zoo'},
+    {time:'13:15',title:'香南市周辺で昼食'},
+    {time:'14:30',slug:'bentenza-backstage-experience',note:'体験実施時刻は事前予約で確認。月曜休館（祝日の場合は翌日）。'}
+  ],
+  'family':[
+    {time:'09:00',slug:'kochi-castle'},
+    {time:'11:00',slug:'makino-botanical-garden'},
+    {time:'13:15',title:'五台山〜南国方面で昼食'},
+    {time:'14:30',slug:'noichi-zoo'}
+  ],
+  'three-days':[
+    {day:'DAY 1',time:'09:00',slug:'kochi-castle'},
+    {time:'11:00',slug:'makino-botanical-garden'},
+    {time:'13:30',title:'高知市内で昼食・市街地散策'},
+    {day:'DAY 2',time:'09:30',slug:'nikobuchi'},
+    {time:'11:30',slug:'ice'},
+    {time:'13:30',slug:'nakatsu'},
+    {day:'DAY 3',time:'09:00',slug:'iokido'},
+    {time:'11:00',slug:'shirasu'},
+    {time:'13:00',slug:'noichi-zoo'}
+  ]
+};
 const coursePhotoOverrides={
   'niyodo-classic':{src:'/assets/photos/course-niyodo-sky-camp.png',name:'空と仁淀ブルーキャンプ1日コース',alt:'パラグライダー、仁淀ブルー、キャンプを組み合わせたモデルコースのコラージュ',author:'ユーザー提供画像',source:'',license:'提供画像（サイト掲載用）',licenseUrl:'',width:1456,height:1020,position:'50% 50%',checkedAt:'2026-10-02'},
   'ocean-trip':{src:'/assets/photos/course-ocean-trip-collage.png',name:'柏島・足摺 海の1泊2日コース',alt:'柏島の海、海鮮、夕日をまとめたモデルコースのコラージュ',author:'ユーザー提供画像',source:'',license:'提供画像（サイト掲載用）',licenseUrl:'',width:1448,height:1086,position:'50% 50%',checkedAt:'2026-10-02'}
 };
-export const courses=courseRows.map(([slug,name,area,theme,duration,stops],i)=>{const photo=coursePhotoOverrides[slug]||stops.map(slug=>photos[slug]).find(Boolean)||null;return {slug,name,area,theme,duration,stops,stopMinutes:Object.fromEntries(stops.map(s=>[s,courseStopMinutes[s]||90])),dayBreaks:courseDayBreaks[slug]||{},initial_rank:i+1,transport:'車＋徒歩',season:'季節・天候に応じて',audience:theme==='子連れ'?'家族':theme==='カップル'?'カップル':'友人・ひとり旅',photo,image:photo?.src||''};});
+export const courses=courseRows.map(([slug,name,area,theme,duration,stops],i)=>{const photo=coursePhotoOverrides[slug]||stops.map(slug=>photos[slug]).find(Boolean)||null;return {slug,name,area,theme,duration,stops,schedule:courseSchedules[slug]||[],stopMinutes:Object.fromEntries(stops.map(s=>[s,courseStopMinutes[s]||90])),dayBreaks:courseDayBreaks[slug]||{},initial_rank:i+1,transport:'車＋徒歩',season:'季節・天候に応じて',audience:theme==='子連れ'?'家族':theme==='カップル'?'カップル':'友人・ひとり旅',photo,image:photo?.src||''};});
 export const eventCategories=['祭り・花火','グルメ','マルシェ','自然・アウトドア','文化・展覧会','子ども向け','スポーツ','期間限定体験'];
 export const events=[
   {
