@@ -1,4 +1,4 @@
-import {access} from 'node:fs/promises';import {constants} from 'node:fs';import {resolve} from 'node:path';import test from 'node:test';import assert from 'node:assert/strict';import {render,routes} from '../render.mjs';import {isIndexablePath} from '../site.mjs';import {homeSlides} from '../home-content.mjs';import {spots,courses,events,sortSpots} from '../data.mjs';
+import {access,readFile} from 'node:fs/promises';import {constants} from 'node:fs';import {resolve} from 'node:path';import test from 'node:test';import assert from 'node:assert/strict';import {render,routes} from '../render.mjs';import {isIndexablePath} from '../site.mjs';import {homeSlides} from '../home-content.mjs';import {spots,courses,events,sortSpots} from '../data.mjs';
 test('all requested routes render and internal links resolve',()=>{for(const route of routes){const {html,status}=render(route);assert.equal(status,200,route);for(const [,href]of html.matchAll(/<a\b[^>]*\bhref="(\/[^"?#]*)(?:[?#][^"]*)?"/g)){assert.ok(href==='/styles.css'||href==='/favicon.svg'||href.startsWith('/assets/icons/')||routes.includes(href),`${route}: ${href}`)}assert.ok(!html.includes('undefined'),route)}});
 test('real vote sorting, then initial rank; no fictitious seed counts',()=>{assert.ok(spots.every(s=>s.recommend_count===0));assert.deepEqual(sortSpots([{slug:'a',initial_rank:1,recommend_count:0},{slug:'b',initial_rank:5,recommend_count:1},{slug:'c',initial_rank:2,recommend_count:0}]).map(s=>s.slug),['b','a','c']);assert.deepEqual(sortSpots(spots.filter(s=>s.category==='sightseeing')).slice(0,3).map(s=>s.slug),['ryugado','nikobuchi','iokido']);assert.equal(courses.length,10)});
 test('unknown routes return 404 and SEO metadata is per-page',()=>{assert.equal(render('/no-such-route/').status,404);const html=render('/spots/nikobuchi/','https://kochi.example').html;assert.match(html,/<title>にこ淵/);assert.match(html,/rel="canonical" href="https:\/\/kochi.example\/spots\/nikobuchi\/"/);assert.match(html,/noindex,nofollow/);assert.match(render('/','https://kochi.example',true).html,/index,follow/)});
@@ -66,6 +66,7 @@ test('Organization and breadcrumbs are valid JSON-LD with consistent names and U
   }
   assert.equal(structured(render('/missing/',seoOrigin).html).length,0);
 });
+test('build emits browser cache rules for static assets',async()=>{const source=await readFile(resolve('scripts/build.mjs'),'utf8');assert.match(source,/assets\/photos\/\*/);assert.match(source,/max-age=86400/);assert.match(source,/app\.mjs/);assert.match(source,/max-age=3600/)});
 test('canonical, verification and robots remain correct for every route in both indexing modes',()=>{
   for(const path of routes)for(const enabled of [false,true]){
     const html=render(path,seoOrigin,enabled).html;
