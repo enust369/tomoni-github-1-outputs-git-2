@@ -1,5 +1,15 @@
 import {spots,courses,events,areas,categories,sortSpots} from './data.mjs';
-import {render,spotGrid,courseGrid,eventCard,featuredCategoryTop3} from './render.mjs';
+
+
+const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const photoImage=(photo,name)=>`<img src="${esc(photo?.src||'/assets/photos/unset.svg')}" alt="${esc(photo?.alt||name+'：写真未設定')}" width="${photo?.width||1280}" height="${photo?.height||800}" style="object-position:${esc(photo?.position||'50% 50%')}" loading="lazy">`;
+const photoCredit=photo=>{if(!photo?.author&&!photo?.license)return '';const subject=photo.source?`<a href="${esc(photo.source)}" target="_blank" rel="noopener">${esc(photo.name)} / ${esc(photo.author)}</a>`:`${esc(photo.name)} / ${esc(photo.author)}`;const license=photo.licenseUrl?`<a href="${esc(photo.licenseUrl)}" target="_blank" rel="noopener">${esc(photo.license)}</a>`:esc(photo.license||'');return `<p class="photo-credit">写真：${subject}${license?' · '+license:''}</p>`};
+const spotCard=(s,i)=>`<article class="card spot-card ${i!==undefined?'rank-card':''}"><a href="/spots/${esc(s.slug)}/">${photoImage(s.photo,s.name)}${i!==undefined?`<span class="badge ${['gold','silver','bronze','other','other'][i]||'other'}">${i+1}</span>`:''}<div class="card-body"><span class="label">${esc(areas[s.area])} · ${esc(categories[s.category])}</span><h3>${esc(s.name)}</h3><p>${esc(s.catchphrase)}</p></div></a>${photoCredit(s.photo)}<div class="card-body vote-container"><button class="vote" data-vote="${esc(s.id)}" aria-pressed="false">♡ おすすめ <span>${Number(s.recommend_count)||0}</span></button></div></article>`;
+const spotGrid=(items,rank=false)=>items.length?`<div class="grid spots-grid ${rank?'rank-grid':''}">${items.map((s,i)=>spotCard(s,rank?i:undefined)).join('')}</div>`:'<div class="empty"><h3>条件に合うスポットはありません。</h3><p>条件を変えて探すか、あなたのおすすめスポットを教えてください。</p><a class="button" href="/search/">条件を変えて探す</a> <a class="button" href="/suggest/">スポットを提案する</a></div>';
+const courseCard=c=>`<article class="card course-card"><a href="/courses/${esc(c.slug)}/">${photoImage(c.photo,c.name)}<div class="card-body"><span class="label">${esc(areas[c.area])} · ${esc(c.duration)}</span><h3>${esc(c.name)}</h3><p>${esc(c.theme)} / ${esc(c.transport)}</p></div></a>${photoCredit(c.photo)}</article>`;
+const courseGrid=items=>`<div class="grid course-grid">${items.filter(Boolean).map(courseCard).join('')}</div>`;
+const eventCard=e=>`<article class="card event-card">${e.image?`<a class="event-image-wrap" href="/events/${esc(e.slug)}/"><img class="event-image" src="${esc(e.image)}" alt="${esc(e.image_alt||e.name)}" loading="lazy">${e.image_note?`<span class="event-image-note">${esc(e.image_note)}</span>`:''}</a>`:''}<div class="card-body"><span class="label">${esc(e.category)} · ${esc(areas[e.area])}</span><h3><a href="/events/${esc(e.slug)}/">${esc(e.name)}</a></h3><p class="event-date">${esc(e.start_date)}${e.end_date!==e.start_date?' ～ '+esc(e.end_date):''}</p>${e.venue?`<p class="muted event-venue">${esc(e.venue)}</p>`:''}</div></article>`;
+const featuredCategoryTop3=items=>{const top=items.slice(0,3);if(!top.length)return '<div class="empty"><h3>条件に合うスポットはありません。</h3><p>条件を変えて探してみてください。</p></div>';return `<div class="category-top3 count-${top.length}"><article class="category-top3-card category-top3-first"><a href="/spots/${esc(top[0].slug)}/">${photoImage(top[0].photo,top[0].name)}<span class="category-top3-rank rank-1">1</span><div class="category-top3-body"><span>${esc(areas[top[0].area])}</span><h3>${esc(top[0].name)}</h3><p>${esc(top[0].catchphrase)}</p></div></a>${photoCredit(top[0].photo)}<button class="vote" data-vote="${esc(top[0].id)}" aria-pressed="false">♡ おすすめ <span>${Number(top[0].recommend_count)||0}</span></button></article>${top.length>1?`<div class="category-top3-side">${top.slice(1).map((spot,i)=>`<article class="category-top3-card category-top3-small"><a href="/spots/${esc(spot.slug)}/">${photoImage(spot.photo,spot.name)}<span class="category-top3-rank rank-${i+2}">${i+2}</span><div class="category-top3-body"><span>${esc(areas[spot.area])}</span><h3>${esc(spot.name)}</h3><p>${esc(spot.catchphrase)}</p></div></a>${photoCredit(spot.photo)}<button class="vote" data-vote="${esc(spot.id)}" aria-pressed="false">♡ おすすめ <span>${Number(spot.recommend_count)||0}</span></button></article>`).join('')}</div>`:''}</div>`};
 
 const live=!['localhost','127.0.0.1'].includes(location.hostname);
 let voted=new Set(),ready=false,anonymousId='',savedSpots=new Set(),savedCourses=new Set();
@@ -124,10 +134,6 @@ async function start(){
      const counts=new Map((state.counts||[]).map(x=>[x.spot_id,Number(x.recommend_count||0)]));
      spots.forEach(s=>s.recommend_count=counts.get(s.id)||0);
      voted=new Set(state.voted||[]);
-     const doc=new DOMParser().parseFromString(render(location.pathname,'').html,'text/html');
-     document.querySelector('main').innerHTML=doc.querySelector('main').innerHTML;
-     document.title=doc.title;
-     bind();
    }else{
      voted=new Set(readLocal('kochi-demo-votes',[]));spots.forEach(s=>s.recommend_count=voted.has(s.id)?1:0);
      const note=document.createElement('div');note.className='notice wrap';note.textContent='プレビュー：投票・申請はこのブラウザ内の体験用です。';document.querySelector('main').prepend(note);
