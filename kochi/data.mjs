@@ -175,7 +175,7 @@ const spotInfo={
   'muroto-dolphin':{address:'高知県室戸市室戸岬町字鯨浜6810-162',opening_hours:'10:00〜17:00（最終入場16:30）',closed_days:'水曜日（4〜6月、10月〜翌年3月。祝日・春休み等は営業の場合あり）',price_text:'入場料：大人550円、4歳〜小学生440円、3歳以下無料。体験プログラムは別料金',phone:'0887-22-1245',official_url:'https://www.muroto-dc.net/',parking_text:'駐車場あり',access:'高知市内から国道55号で約2時間。奈半利駅からバス約50分＋徒歩約10分。',last_verified_at:'2026-10-02',description:'イルカのトレーニング見学や餌やり、ドルフィンスイムなどの体験プログラムを実施しています。天候やイルカの状態により内容変更・休園となる場合があります。'},
   'forest-adventure-kochi':{address:'高知県高岡郡津野町芳生野乙5422',opening_hours:'9:00〜14:30（予約時間）',closed_days:'不定休',price_text:'アドベンチャーコース 大人4,100円・小人3,800円、キャノピー3,100円、キッズ1,500円、ジップトリップ2,500円',phone:'080-2347-3318',official_url:'https://kochi-tabi.jp/search_spot.html?id=15818',parking_text:'無料駐車場30台',access:'高知自動車道・須崎東ICから車で約1時間。',last_verified_at:'2026-10-03',description:'森の地形を活かしたアドベンチャーコースやキャノピーコース、キッズコース、ジップ系コースを楽しめる体験施設です。各コースに身長・年齢等の利用条件があります。'},
   'niyodo-buggy':{address:'高知県高岡郡日高村本村226番地1',opening_hours:'9:00〜16:00（完全予約制）',closed_days:'定休日なし。予約受付は月曜・第2・第4日曜を除く',price_text:'ネイチャーバギーツアー 90分5,500円／人（要普通免許）',phone:'0889-39-1857',official_url:'https://nozu-nat.com/nature-buggy/',parking_text:'無料駐車場あり。大型車・団体は事前相談',access:'高知自動車道・伊野ICから車で約25分。',last_verified_at:'2026-10-03',description:'日高村能津地区の仁淀川沿いを、ガイド付きで4輪ATVバギー走行する約90分のツアーです。完全予約制・普通自動車免許が必要です。'},
-  'agawa-paragliding':{address:'高知県吾川郡仁淀川町上名野川563',opening_hours:'4月〜11月。体験時間は予約時に確認',closed_days:'冬季（12月1日〜3月31日）',price_text:'半日体験5,700円、タンデム9,000円、タンデム＋半日体験14,000円、ショート4,000円',phone:'089-971-3190（ウィンドパルESD）',official_url:'https://kochi-tabi.jp/search_spot_activity.html?id=856',parking_text:'無料駐車場あり',access:'高知自動車道・伊野ICから車で約1時間30分。',last_verified_at:'2026-10-02',description:'標高約750mの吾川スカイパークで楽しむパラグライダー体験。タンデムなら初心者でも参加できます。天候条件によりフライトできない場合があります。'},
+  'agawa-paragliding':{address:'高知県吾川郡仁淀川町上名野川563',opening_hours:'4月〜11月。体験時間は予約時に確認',closed_days:'冬季（12月1日〜3月31日）',price_text:'半日体験5,700円、タンデム9,000円、タンデム＋半日体験14,000円、ショート4,000円',phone:'089-971-3190（ウィンドパルESD）',official_url:'https://kochi-tabi.jp/search_spot_activity.html?id=856',parking_text:'無料駐車場あり',access:'高知自動車道・伊野ICから車で約1時間30分。',last_verified_at:'2026-10-02',description:'標高約750mの吾川スカイパークで楽しむパラグライダー体験。タンデムなら初心者でも参加できます。園内ではキャンプも可能で、キャンプ場は予約不要ですが当日の混雑状況により利用できない場合があります。12月1日〜3月31日はキャンプ場・トイレ・炊事棟が冬季閉鎖されます。天候条件によりフライトできない場合があります。'},
   'ino-papermaking':{address:'高知県吾川郡いの町幸町110-1',opening_hours:'紙漉き体験 9:00〜11:45・13:00〜16:00',closed_days:'月曜日（祝日の場合は翌日）。2026年11月16日〜2027年3月31日は改修工事のため臨時休館',price_text:'紙漉き体験500円（別途入館料）',phone:'088-893-0886',official_url:'https://kamihaku.com/experience',parking_text:'無料。普通車50台・大型3台',access:'伊野ICから車で約10分。JR伊野駅・とさでん交通「伊野」から徒歩約10分。',last_verified_at:'2026-10-02',description:'伝統工芸の土佐和紙を実際に漉く約1時間の体験です。開館日は毎日開催し、少人数は予約不要です。2026年11月16日〜2027年3月31日は改修工事のため臨時休館します。'},
   'yosakoi-naruko':{address:'高知県高知市はりまや町1-10-1',opening_hours:'10:00〜18:30（最終入館18:00）',closed_days:'水曜日、12月29日〜1月1日',price_text:'白木鳴子1,500円、カラー鳴子2,000円（2本1組）',phone:'088-880-4351',official_url:'https://kochi-tabi.jp/search_ryoma_pass.html?id=3271',parking_text:'専用駐車場なし',access:'高知ICから車で約10分。高知駅から徒歩約10分。',last_verified_at:'2026-10-02',description:'よさこい祭りに欠かせない鳴子を自分で作る体験です。高知市中心部で、雨の日にも立ち寄りやすい文化体験です。'},
   'katsuo-waraya':{address:'高知県幡多郡黒潮町佐賀374-9',opening_hours:'11:00〜15:00',closed_days:'火曜日（祝祭日の場合は営業）、11月末〜2月。水揚げ状況により変動あり',price_text:'本格体験4,000円／名、お手軽体験3,000円／名（いずれも2名〜・要事前予約）',phone:'0880-55-3680',official_url:'https://kochi-tabi.jp/search_spot_activity.html?id=1054',parking_text:'無料。普通車10台・大型5台',access:'四万十町中央ICから車で約30分。土佐佐賀駅から徒歩約20分。',last_verified_at:'2026-10-02',description:'カツオを捌くところから挑戦する本格体験と、藁で焼くところから楽しむお手軽体験があります。体験希望日の3日前までの予約が必要です。'},
@@ -269,21 +269,31 @@ const spotInfo={
 const rank={};
 export const spots=rows.map(([slug,name,category,area,municipality,tags,catchphrase],i)=>({id:`00000000-0000-4000-8000-${String(i+1).padStart(12,'0')}`,slug,name,category,area,municipality,tags:tags.split(','),catchphrase,initial_rank:rank[category]=(rank[category]||0)+1,recommend_count:0,is_published:true,is_demo:false,photo:photos[slug]||null,main_image_url:photos[slug]?.src||'',description:'',created_at:`2026-09-${String(i+1).padStart(2,'0')}T00:00:00Z`,...(spotInfo[slug]||{})}));
 const courseRows=[
-['kochi-classic','高知市内 王道1日コース','kochi_city','王道','1日',['kochi-castle','myojinmaru','yasube']],
-['niyodo-classic','空と仁淀ブルーキャンプ1日コース','north_niyodo','アクティブ','1日',['nikobuchi','yasui','ice','nakatsu']],
-['niyodo-active','仁淀川 アクティブ満喫1日コース','north_niyodo','アクティブ','1日',['kayak','sauna','ice','nakatsu']],
-['east-drive','東部絶景＆しらすグルメ1日コース','east','グルメ','1日',['shirasu','iokido','monet','muroto']],
-['ocean-trip','柏島・足摺 海の1泊2日コース','west','カップル','1泊2日',['kashiwajima','ashizuri']],
-['karst-drive','四国カルスト・梼原 絶景ドライブ','west','ドライブ','1日',['karst','yusuhara']],
+['kochi-classic','高知市内 王道1日コース','kochi_city','王道','1日',['kochi-castle-history-museum','kochi-castle','makino-botanical-garden','myojinmaru','yasube']],
+['niyodo-classic','空と仁淀ブルーキャンプ1日コース','north_niyodo','アクティブ','1日',['agawa-paragliding','nikobuchi','ice']],
+['niyodo-active','仁淀川 カヤック＆渓谷1日コース','north_niyodo','アクティブ','1日',['kayak','ice','nakatsu']],
+['east-drive','東部 洞窟・しらす・動物園1日コース','east','グルメ','1日',['iokido','shirasu','noichi-zoo']],
+['ocean-trip','柏島・足摺 海の1泊2日コース','west','カップル','1泊2日',['kashiwajima','kashiwajima-diving-aquas','tatsukushi-minokoshi-tour','ashizuri']],
+['karst-drive','四国カルスト・梼原 絶景ドライブ','west','ドライブ','1日',['forest-adventure-kochi','karst','yusuhara']],
 ['kochi-gourmet','高知市内 グルメ満喫1日コース','kochi_city','グルメ','1日',['myojinmaru','yasube']],
-['kami-konan','龍河洞・香美香南 1日コース','east','雨の日','1日',['ryugado']],
-['family','高知 子連れ1日コース','kochi_city','子連れ','1日',['kochi-castle','myojinmaru']],
-['three-days','高知満喫2泊3日コース','north_niyodo','王道','2泊3日',['kochi-castle','nikobuchi','iokido']]];
+['kami-konan','龍河洞・香美香南 1日コース','east','アクティブ','1日',['ryugado','noichi-zoo','yasea-sup-kayak']],
+['family','高知 子連れ1日コース','kochi_city','子連れ','1日',['makino-botanical-garden','kochi-castle','noichi-zoo']],
+['three-days','高知満喫2泊3日コース','north_niyodo','王道','2泊3日',['kochi-castle','makino-botanical-garden','nikobuchi','ice','iokido','shirasu','noichi-zoo']]];
+const courseStopMinutes={
+  'kochi-castle-history-museum':60,'kochi-castle':90,'makino-botanical-garden':120,'myojinmaru':90,'yasube':45,
+  'agawa-paragliding':180,'nikobuchi':60,'ice':45,'kayak':150,'nakatsu':120,'iokido':60,'shirasu':60,'noichi-zoo':150,
+  'kashiwajima':120,'kashiwajima-diving-aquas':180,'tatsukushi-minokoshi-tour':120,'ashizuri':90,
+  'forest-adventure-kochi':180,'karst':90,'yusuhara':120,'ryugado':90,'yasea-sup-kayak':120
+};
+const courseDayBreaks={
+  'ocean-trip':{0:'DAY 1',2:'DAY 2'},
+  'three-days':{0:'DAY 1',2:'DAY 2',4:'DAY 3'}
+};
 const coursePhotoOverrides={
   'niyodo-classic':{src:'/assets/photos/course-niyodo-sky-camp.png',name:'空と仁淀ブルーキャンプ1日コース',alt:'パラグライダー、仁淀ブルー、キャンプを組み合わせたモデルコースのコラージュ',author:'ユーザー提供画像',source:'',license:'提供画像（サイト掲載用）',licenseUrl:'',width:1456,height:1020,position:'50% 50%',checkedAt:'2026-10-02'},
   'ocean-trip':{src:'/assets/photos/course-ocean-trip-collage.png',name:'柏島・足摺 海の1泊2日コース',alt:'柏島の海、海鮮、夕日をまとめたモデルコースのコラージュ',author:'ユーザー提供画像',source:'',license:'提供画像（サイト掲載用）',licenseUrl:'',width:1448,height:1086,position:'50% 50%',checkedAt:'2026-10-02'}
 };
-export const courses=courseRows.map(([slug,name,area,theme,duration,stops],i)=>{const photo=coursePhotoOverrides[slug]||stops.map(slug=>photos[slug]).find(Boolean)||null;return {slug,name,area,theme,duration,stops,initial_rank:i+1,transport:'車＋徒歩',season:'季節・天候に応じて',audience:theme==='子連れ'?'家族':theme==='カップル'?'カップル':'友人・ひとり旅',photo,image:photo?.src||''};});
+export const courses=courseRows.map(([slug,name,area,theme,duration,stops],i)=>{const photo=coursePhotoOverrides[slug]||stops.map(slug=>photos[slug]).find(Boolean)||null;return {slug,name,area,theme,duration,stops,stopMinutes:Object.fromEntries(stops.map(s=>[s,courseStopMinutes[s]||90])),dayBreaks:courseDayBreaks[slug]||{},initial_rank:i+1,transport:'車＋徒歩',season:'季節・天候に応じて',audience:theme==='子連れ'?'家族':theme==='カップル'?'カップル':'友人・ひとり旅',photo,image:photo?.src||''};});
 export const eventCategories=['祭り・花火','グルメ','マルシェ','自然・アウトドア','文化・展覧会','子ども向け','スポーツ','期間限定体験'];
 export const events=[
   {

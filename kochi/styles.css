@@ -810,3 +810,6 @@ body:has(.page-home) .home-slide:first-child .home-slide-content .eyebrow{max-wi
     height:210px;
   }
 }
+
+.course-day-label{margin:22px 0 8px;padding:7px 10px;border-left:4px solid var(--blue);background:var(--pale);font-size:12px;font-weight:800;letter-spacing:.12em;color:#174c63}
+.timeline>.course-day-label:first-child{margin-top:8px}
