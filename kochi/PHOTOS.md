@@ -618,3 +618,9 @@ CC BY 2.0/2.5は著作者・出典・ライセンス・変更を表示。写真�
 ### 写真差し替え実施 第36弾（2026-10-03）
 
 - `bentenza-backstage-experience`：よさこい系の汎用画像から、日本の芝居小屋の廻り舞台実景 `bentenza-backstage-experience.jpg` へ差し替え。Unknown author / Wikimedia Commons / CC BY-SA 4.0。弁天座そのものの実写ではないため、バックヤード見学で体験する廻り舞台の内容イメージとして扱う。
+
+### 写真差し替え実施 第37弾（2026-10-03）
+
+- `iwayagawa-irimochi-hike`：中津渓谷の共通写真から、別カットの秋の中津渓谷実景 `iwayagawa-irimochi-hike.jpg` へ差し替え。Hiroaki Kaneko / Wikimedia Commons / CC BY-SA 3.0。岩屋川渓谷そのものの実写ではないが、同じ仁淀川町の渓谷景観として使用。
+- `sakawa-makino-sacred-walk`：牧野公園ガイドと共通だった写真から、佐川町・青山文庫実景 `sakawa-makino-sacred-walk.jpg` へ差し替え。Lumi iori / Wikimedia Commons / CC BY-SA 4.0。南山麓コース全体の実写ではないが、同じ佐川町の牧野博士ゆかりの文化エリア写真として使用。
+- `muroto-aqua-farm`：室戸岬の共通写真から、室戸海洋深層水を使用した商品の実景 `muroto-aqua-farm.jpg` へ差し替え。Mark Mrwizard / Wikimedia Commons / CC BY 2.0。アクア・ファーム施設自体の実写ではないため、海洋深層水の内容イメージとして扱う。

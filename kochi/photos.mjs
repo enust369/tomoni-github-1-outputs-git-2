@@ -567,15 +567,15 @@ export const photos={
     "width": 1600, "height": 1200, "position": "50% 50%", "checkedAt": "2026-10-03"
   },
   "iwayagawa-irimochi-hike": {
-    "src": "/assets/photos/nakatsu.jpg",
+    "src": "/assets/photos/iwayagawa-irimochi-hike.jpg",
     "name": "岩屋川渓谷ハイキング＋郷土茶菓いりもち",
-    "alt": "仁淀川町の渓谷地形をイメージした中津渓谷の清流と岩場",
-    "author": "Koda6029",
-    "source": "https://commons.wikimedia.org/wiki/File:%E4%B8%AD%E6%B4%A5%E6%B8%93%E8%B0%B7%EF%BC%92.jpg",
-    "title": "中津渓谷２.jpg",
-    "license": "CC BY-SA 4.0",
-    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
-    "width": 1280, "height": 853, "position": "50% 50%", "checkedAt": "2026-10-03"
+    "alt": "仁淀川町・中津渓谷の秋の清流と岩場の実景",
+    "author": "Hiroaki Kaneko",
+    "source": "https://commons.wikimedia.org/wiki/File:%E7%A7%8B%E3%81%AE%E4%B8%AD%E6%B4%A5%E6%B8%93%E8%B0%B7_(Nakatsu_Gorge_in_autumn)_23_Nov,_2014_-_panoramio.jpg",
+    "title": "秋の中津渓谷 (Nakatsu Gorge in autumn) 23 Nov, 2014 - panoramio.jpg",
+    "license": "CC BY-SA 3.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0/",
+    "width": 1600, "height": 1200, "position": "50% 50%", "checkedAt": "2026-10-03"
   },
   "shimanto-fisher-firefly": {
     "src": "/assets/photos/shimanto-fisher-firefly.jpg",
@@ -1056,15 +1056,15 @@ export const photos={
     "width": 1600, "height": 900, "position": "50% 50%", "checkedAt": "2026-10-03"
   },
   "sakawa-makino-sacred-walk": {
-    "src": "/assets/photos/sakawa-makino-park.jpg",
+    "src": "/assets/photos/sakawa-makino-sacred-walk.jpg",
     "name": "牧野博士の聖地を歩く（南山麓コース）",
-    "alt": "高知県佐川町・牧野公園の桜と町並みの実景",
-    "author": "アラツク",
-    "source": "https://commons.wikimedia.org/wiki/File:Makino_park_Sakura.JPG",
-    "title": "Makino park Sakura.JPG",
+    "alt": "佐川町・青山文庫の実景",
+    "author": "Lumi iori",
+    "source": "https://commons.wikimedia.org/wiki/File:Aoyama_bunko.jpg",
+    "title": "Aoyama bunko.jpg",
     "license": "CC BY-SA 4.0",
     "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
-    "width": 1600, "height": 900, "position": "50% 50%", "checkedAt": "2026-10-03"
+    "width": 1600, "height": 1066, "position": "50% 50%", "checkedAt": "2026-10-03"
   },
   "katsurahama-guide": {
     "src": "/assets/photos/katsurahama-guide.jpg",
@@ -1299,18 +1299,18 @@ export const photos={
     "checkedAt": "2026-10-03"
   },
   "muroto-aqua-farm": {
-    "src": "/assets/photos/muroto.jpg",
+    "src": "/assets/photos/muroto-aqua-farm.jpg",
     "name": "室戸海洋深層水アクア・ファーム",
-    "alt": "室戸岬の海岸風景",
-    "author": "Rsa",
-    "source": "https://commons.wikimedia.org/wiki/File:Cape-Muroto-20100526.jpg",
-    "title": "Cape-Muroto-20100526.jpg",
-    "license": "CC BY-SA 3.0",
-    "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0/",
-    "width": 1280,
-    "height": 960,
+    "alt": "室戸海洋深層水を使用した商品の実景",
+    "author": "Mark Mrwizard",
+    "source": "https://commons.wikimedia.org/wiki/File:%E5%AE%A4%E6%88%B8_%E6%B5%B7%E6%B4%8B%E6%B7%B1%E5%B1%A4%E6%B0%B4_%E4%BD%BF%E7%94%A8_(14105807326).jpg",
+    "title": "室戸 海洋深層水 使用 (14105807326).jpg",
+    "license": "CC BY 2.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by/2.0/",
+    "width": 1600,
+    "height": 1200,
     "position": "50% 50%",
-    "checkedAt": "2026-10-02"
+    "checkedAt": "2026-10-03"
   },
   "muroto-geo-guide": {
     "src": "/assets/photos/muroto-geopark-center.jpg",
