@@ -1631,5 +1631,89 @@ export const photos={
     "position": "50% 50%",
     "checkedAt": "2026-10-03"
   }
+  ,"yutorisuto-otoyo": {
+    "src": "/assets/photos/yutorisuto-otoyo.jpg",
+    "name": "ゆとりすとパークおおとよ",
+    "alt": "ゆとりすとパークおおとよの園内を上空から見た実景",
+    "author": "国土地理院",
+    "source": "https://commons.wikimedia.org/wiki/File:Yutorisuto_Park_Otoyo_-_aerial.jpg",
+    "title": "Yutorisuto Park Otoyo - aerial.jpg",
+    "license": "Attribution",
+    "licenseUrl": "",
+    "width": 1600,
+    "height": 1200,
+    "position": "50% 50%",
+    "checkedAt": "2026-10-03"
+  },
+  "shimanto-river-camp": {
+    "src": "/assets/photos/shimanto-river-camp.jpg",
+    "name": "四万十川キャンプ場",
+    "alt": "四万十川の流れと周辺の緑（キャンプ場周辺地域のイメージ）",
+    "author": "Ray Swi-hymn",
+    "source": "https://commons.wikimedia.org/wiki/File:Shimanto_River_(5279082249).jpg",
+    "title": "Shimanto River (5279082249).jpg",
+    "license": "CC BY-SA 2.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/2.0",
+    "width": 1600,
+    "height": 1200,
+    "position": "50% 50%",
+    "checkedAt": "2026-10-03"
+  },
+  "kuroshio-honjin": {
+    "src": "/assets/photos/kuroshio-honjin.jpg",
+    "name": "黒潮本陣",
+    "alt": "土佐湾の海景色（黒潮本陣周辺の海のイメージ）",
+    "author": "Yobito KAYANUMA",
+    "source": "https://commons.wikimedia.org/wiki/File:%E5%9C%9F%E4%BD%90%E6%B9%BE_-_panoramio.jpg",
+    "title": "土佐湾 - panoramio.jpg",
+    "license": "CC BY-SA 3.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0",
+    "width": 1600,
+    "height": 902,
+    "position": "50% 50%",
+    "checkedAt": "2026-10-03"
+  },
+  "musasabi-onsen": {
+    "src": "/assets/photos/musasabi-onsen.jpg",
+    "name": "天然の湯 吾北むささび温泉",
+    "alt": "仁淀川の流れと山並み（吾北エリアの水辺イメージ）",
+    "author": "Reggaeman",
+    "source": "https://commons.wikimedia.org/wiki/File:Niyodo_river_01.jpg",
+    "title": "Niyodo river 01.jpg",
+    "license": "CC BY-SA 3.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0",
+    "width": 1600,
+    "height": 481,
+    "position": "50% 50%",
+    "checkedAt": "2026-10-03"
+  },
+  "michinoeki-633bi": {
+    "src": "/assets/photos/michinoeki-633bi.jpg",
+    "name": "道の駅 633美の里",
+    "alt": "道の駅633美の里の施設外観",
+    "author": "As6022014",
+    "source": "https://commons.wikimedia.org/wiki/File:Roadside_Station_633bi_no_sato.jpg",
+    "title": "Roadside Station 633bi no sato.jpg",
+    "license": "Public domain",
+    "licenseUrl": "",
+    "width": 1600,
+    "height": 1200,
+    "position": "50% 50%",
+    "checkedAt": "2026-10-03"
+  },
+  "michinoeki-toowa": {
+    "src": "/assets/photos/michinoeki-toowa.jpg",
+    "name": "道の駅 四万十とおわ",
+    "alt": "道の駅四万十とおわの施設外観",
+    "author": "As6022014",
+    "source": "https://commons.wikimedia.org/wiki/File:Roadside_Station_Toowa.jpg",
+    "title": "Roadside Station Toowa.jpg",
+    "license": "Public domain",
+    "licenseUrl": "",
+    "width": 1600,
+    "height": 1200,
+    "position": "50% 50%",
+    "checkedAt": "2026-10-03"
+  }
 
 };
