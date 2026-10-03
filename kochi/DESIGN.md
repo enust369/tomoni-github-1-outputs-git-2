@@ -25,7 +25,7 @@ URL、初期順位、実票のみの原則、投票・取消、申請の保存�
 D1版のWorker、API routing、DB binding・database_idは変更しない。`app.mjs` の `/api/bootstrap`、`/api/vote`、`/api/suggest`、`/api/correction` と匿名ID処理を維持したまま、チップ表示だけを追加する。
 
 検証スクリプト:
-- `scripts/browser-check.mjs`: 全57ルートの390px表示、PC主要画面、絞り込み、ブラウザ内プレビュー動作。
+- `scripts/browser-check.mjs`: 生成ルートの390px表示、PC主要画面、絞り込み、ブラウザ内プレビュー動作。
 - `scripts/d1-browser-check.mjs`: 本番用UI分岐からローカルWorkerへ接続し、実際のローカルD1で投票0→1→0・再読み込み・両申請のpending受付を確認。
 - `scripts/fixtures/d1-test.sql`: Workerが使用するテーブル・列を再現するローカル専用fixture。本番migrationではなく、本番DBのスキーマを取得したものでもない。
 
