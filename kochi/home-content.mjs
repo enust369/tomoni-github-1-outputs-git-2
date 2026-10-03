@@ -5,7 +5,7 @@ export const homeSlides=[
   {photo:{src:'/assets/photos/hero-paragliding.jpg',alt:'青空と海を飛ぶパラグライダー',width:1672,height:941,position:'58% 50%'},title:'パラグライダー',description:'空から眺める、海岸線と山々の大パノラマ。',href:'/activity/',label:'アクティビティを見る'},
   {photo:{src:'/assets/photos/hero-buggy.jpg',alt:'森の道を走るバギー',width:1448,height:1086,position:'50% 50%'},title:'バギー',description:'森の中を駆け抜ける、爽快な高知の冒険。',href:'/activity/',label:'アクティビティを見る'},
   {photo:{src:'/assets/photos/hero-forest-adventure.jpg',alt:'森の空中アスレチックを楽しむ人々',width:1672,height:941,position:'65% 50%'},title:'フォレストアドベンチャー',description:'木々の間を渡り、森の高さを楽しむ時間。',href:'/activity/',label:'アクティビティを見る'},
-  {photo:{src:'/assets/photos/hero-camping.jpg',alt:'湖畔のテントと焚き火を囲むキャンプ',width:1672,height:941,position:'58% 50%'},title:'キャンプ',description:'焚き火を囲み、山と湖の夜をゆっくり味わう。',href:'/courses/niyodo-classic/',label:'キャンプを楽しむモデルコースを見る'},
+  {photo:{src:'/assets/photos/hero-camping.jpg',alt:'湖畔のテントと焚き火を囲むキャンプ',width:1672,height:941,position:'58% 50%'},title:'キャンプ',description:'焚き火を囲み、川と山の夜をゆっくり味わう。',href:'/courses/niyodo-camp-stay/',label:'キャンプを楽しむモデルコースを見る'},
   {photo:{src:'/assets/photos/hero-rafting.jpg',alt:'急流を下るラフティングのボート',width:1448,height:1086,position:'50% 50%'},title:'ラフティング',description:'仲間と力を合わせて、清流の急流へ。',href:'/activity/',label:'アクティビティを見る'},
   {photo:{src:'/assets/photos/hero-ryugado.jpg',alt:'龍河洞の洞窟と階段を歩く人々',width:1672,height:941,position:'48% 50%'},title:'龍河洞',description:'地底の静けさと、悠久の時が刻んだ景色に出会う。',href:'/spots/ryugado/',label:'龍河洞を見る'}
 ];
