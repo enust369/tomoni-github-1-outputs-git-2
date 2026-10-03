@@ -57,19 +57,23 @@ function initCarousels(){
   const index=()=>Math.max(0,Math.min(slides.length-1,Math.round(track.scrollLeft/Math.max(track.clientWidth,1))));
   const numbers=[...carousel.querySelectorAll('[data-carousel-index]')];
   const active=i=>{slides.forEach((slide,n)=>slide.setAttribute('aria-hidden',String(n!==i)));dots.forEach((dot,n)=>dot.setAttribute('aria-current',String(n===i)));numbers.forEach((number,n)=>number.setAttribute('aria-current',String(n===i)));};
-  const move=delta=>{const next=(index()+delta+slides.length)%slides.length;track.scrollTo({left:slides[next].offsetLeft,behavior:reduced?'auto':'smooth'});active(next)};
+  const ensureSlide=async i=>{const img=slides[i]?.querySelector('img');if(!img||img.complete&&img.naturalWidth>0)return;img.loading='eager';img.fetchPriority='high';await Promise.race([img.decode?.().catch(()=>{}),new Promise(resolve=>{img.addEventListener('load',resolve,{once:true});img.addEventListener('error',resolve,{once:true})}),new Promise(resolve=>setTimeout(resolve,3000))])};
+  const warmNext=i=>{const next=(i+1)%slides.length;ensureSlide(next).then(()=>{const img=slides[next]?.querySelector('img');if(img)img.fetchPriority='low'})};
+  const go=async next=>{await ensureSlide(next);track.scrollTo({left:slides[next].offsetLeft,behavior:reduced?'auto':'smooth'});active(next);warmNext(next)};
+  const move=delta=>go((index()+delta+slides.length)%slides.length);
   let timer=0,resumeTimer=0;
   const stop=()=>{clearInterval(timer);timer=0;clearTimeout(resumeTimer);};
   const start=()=>{if(!reduced&&!timer)timer=setInterval(()=>move(1),6500);};
   const resume=()=>{stop();resumeTimer=setTimeout(start,8500)};
   carousel.querySelector('[data-carousel-prev]')?.addEventListener('click',()=>{move(-1);resume()});
   carousel.querySelector('[data-carousel-next]')?.addEventListener('click',()=>{move(1);resume()});
-  dots.forEach((dot,n)=>dot.addEventListener('click',()=>{track.scrollTo({left:slides[n].offsetLeft,behavior:reduced?'auto':'smooth'});active(n);resume()}));
+  dots.forEach((dot,n)=>dot.addEventListener('click',()=>{go(n);resume()}));
   let ticking=false;track.addEventListener('scroll',()=>{if(ticking)return;ticking=true;requestAnimationFrame(()=>{active(index());ticking=false})},{passive:true});
   carousel.addEventListener('keydown',event=>{if(event.key==='ArrowLeft'){event.preventDefault();move(-1);resume()}if(event.key==='ArrowRight'){event.preventDefault();move(1);resume()}});
   track.addEventListener('pointerdown',resume,{passive:true});
   carousel.addEventListener('mouseenter',stop);carousel.addEventListener('mouseleave',start);carousel.addEventListener('focusin',stop);carousel.addEventListener('focusout',start);
   active(0);
+  warmNext(0);
   start();
  }
 }
