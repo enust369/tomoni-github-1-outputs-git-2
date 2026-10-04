@@ -988,3 +988,19 @@ body:has(.page-home) .home-slide:first-child .home-slide-content .eyebrow{max-wi
   .ranking-guide-body>div,.ranking-guide-body>div:first-child,.ranking-guide-body>div:nth-last-child(2),.ranking-guide-body>div:last-child{border-radius:0}
   .ranking-guide-body>div:last-child{border-radius:0 0 8px 8px}
 }
+
+
+/* Compact planning facts on spot detail pages. */
+.spot-plan-summary{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,260px));gap:9px;margin:16px 0 18px}
+.spot-plan-item{display:grid;grid-template-columns:30px minmax(0,1fr);align-items:start;gap:8px;min-width:0;padding:11px 12px;border:1px solid #d8e8ed;border-radius:11px;background:#f7fbfc}
+.spot-plan-icon{display:grid;place-items:center;width:28px;height:28px;border-radius:8px;background:#e4f3f7;color:#0a779b;font-size:13px;font-weight:900}
+.spot-plan-item strong,.spot-plan-item>div>span{display:block;min-width:0}
+.spot-plan-item strong{margin-bottom:3px;color:#55717c;font-size:10px;line-height:1.3}
+.spot-plan-item>div>span{display:-webkit-box;overflow:hidden;color:#173f52;font-size:12px;font-weight:700;line-height:1.45;-webkit-box-orient:vertical;-webkit-line-clamp:2}
+@media(max-width:700px){
+  .spot-plan-summary{grid-template-columns:repeat(2,minmax(0,1fr));gap:7px;margin:12px 0 15px}
+  .spot-plan-item{grid-template-columns:25px minmax(0,1fr);gap:6px;padding:9px 8px;border-radius:9px}
+  .spot-plan-icon{width:24px;height:24px;border-radius:7px;font-size:11px}
+  .spot-plan-item strong{font-size:9px}
+  .spot-plan-item>div>span{font-size:10.5px;line-height:1.4}
+}
