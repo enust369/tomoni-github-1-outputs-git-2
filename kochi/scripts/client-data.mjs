@@ -1,4 +1,5 @@
 import {spots,courses,events,areas,categories} from '../data.mjs';
+import {spotCoordinates} from '../spot-coordinates.mjs';
 
 const photo=p=>p?{
   src:p.src||'',alt:p.alt||'',width:p.width||0,height:p.height||0,position:p.position||'',
@@ -7,6 +8,7 @@ const photo=p=>p?{
 const clientSpots=spots.map(s=>({
   id:s.id,slug:s.slug,name:s.name,category:s.category,area:s.area,municipality:s.municipality,initial_rank:s.initial_rank,
   tags:s.tags||[],catchphrase:s.catchphrase||'',description:s.description||'',recommend_count:Number(s.recommend_count)||0,
+  lat:spotCoordinates[s.slug]?.lat??null,lng:spotCoordinates[s.slug]?.lng??null,coordinate_source:spotCoordinates[s.slug]?.source||'',
   photo:photo(s.photo)
 }));
 const clientCourses=courses.map(c=>({

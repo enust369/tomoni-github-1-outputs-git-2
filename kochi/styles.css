@@ -937,3 +937,25 @@ body:has(.page-home) .home-slide:first-child .home-slide-content .eyebrow{max-wi
   .saved-order-controls{grid-column:1/-1;justify-content:flex-end}
   .saved-order-controls button{min-height:32px;padding:4px 9px}
 }
+
+
+/* List / map switcher for search and area pages. */
+.spot-view-toggle{display:inline-flex;gap:4px;margin:0 0 16px;padding:4px;border:1px solid #cfe1e7;border-radius:999px;background:#f5fafb}
+.spot-view-toggle button{min-width:92px;min-height:38px;padding:6px 14px;border:0;border-radius:999px;background:transparent;color:#476673;font-size:13px;font-weight:800}
+.spot-view-toggle button[aria-pressed="true"]{background:#0b91bd;color:#fff;box-shadow:0 2px 7px rgba(11,145,189,.2)}
+.spot-map-panel{margin-top:2px}
+.spot-map-panel[hidden]{display:none}
+.spot-map{width:100%;height:460px;overflow:hidden;border:1px solid #c8dfe6;border-radius:16px;background:#eaf4f7}
+.spot-map-note{margin:8px 2px 0;color:var(--muted);font-size:11px;line-height:1.6}
+.spot-map-note[data-count]::before{content:attr(data-count) "件を地図に表示。 "}
+.spot-map-popup{min-width:150px}
+.spot-map-popup strong,.spot-map-popup small,.spot-map-popup a{display:block}
+.spot-map-popup strong{margin-bottom:3px;color:#173f52;font-size:13px}
+.spot-map-popup small{margin-bottom:7px;color:#607883;font-size:10px}
+.spot-map-popup a{color:#087fa7;font-weight:800;text-decoration:none}
+.leaflet-container{font-family:inherit}
+@media(max-width:700px){
+  .spot-view-toggle{display:grid;grid-template-columns:1fr 1fr;width:100%;margin-bottom:12px}
+  .spot-view-toggle button{min-width:0;min-height:40px}
+  .spot-map{height:340px;border-radius:12px}
+}
