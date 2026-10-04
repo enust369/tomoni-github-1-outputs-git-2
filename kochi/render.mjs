@@ -27,7 +27,7 @@ const homeActivities=[
   ['ラフティング','仲間と楽しむ爽快体験','/assets/photos/hero-rafting.jpg','/activity/'],
   ['サーフィン','太平洋の波を感じる','/assets/photos/kashiwajima.jpg','/activity/'],
   ['テントサウナ','仁淀川の自然の中でととのう','/assets/photos/home-tent-sauna-niyodo.jpg','/spots/sauna/'],
-  ['龍河洞 冒険コース','洞窟の奥へ進むアドベンチャー','/assets/photos/ryugado.jpg','/spots/ryugado-adventure/'],
+  ['龍河洞 冒険コース','洞窟の奥へ進むアドベンチャー','/assets/photos/hero-ryugado.jpg','/spots/ryugado-adventure/'],
   ['猿田洞ケイビング','自然の洞窟をガイドと探検','/assets/photos/sarudado-caving.jpg','/spots/sarudado-caving/'],
   ['フォレストアドベンチャー','森の冒険で遊ぶ','/assets/photos/home-hero-forest-adventure.jpg','/activity/'],
   ['パラグライダー','空から高知を一望','/assets/photos/hero-paragliding.jpg','/activity/'],
@@ -53,7 +53,7 @@ function gourmetCourses(){const visual={"kochi-gourmet":['/assets/photos/course-
 function gourmetPage(){const list=sortSpots(spots.filter(s=>s.category==='gourmet'));const gourmetNotice='<div class="notice">掲載情報は2026年10月1日時点で、各店舗の公式サイトまたは公的な観光情報を確認して更新しています。営業時間・定休日・価格などは変更される場合があるため、来店前に各店舗の公式情報をご確認ください。</div>';return gourmetHero()+`<div class="wrap gourmet-page" data-ranking="gourmet"><form class="filterbar gourmet-filterbar" id="spot-filter"><label>テーマ<select name="theme">${options(filters.gourmet)}</select></label><label>エリア<select name="area">${options(areas)}</select></label><button class="primary">絞り込む</button></form>${gourmetFilterChips()}<section class="gourmet-ranking-section"><div class="section-head"><div><h2>グルメランキング</h2><div class="eyebrow">GOURMET RANKING</div></div>${link('#gourmet-vote-ranking','すべて見る →')}</div>${gourmetFeaturedRanking(list)}</section><section class="gourmet-popular-section"><div class="section-head"><div><h2>人気のグルメ</h2><div class="eyebrow">POPULAR GOURMET</div></div></div>${gourmetPopular(list)}</section><section class="gourmet-courses-section"><div class="section-head"><div><h2>おすすめのグルメ体験</h2><div class="eyebrow">MODEL COURSES</div></div>${link('/courses/','すべて見る →')}</div>${gourmetCourses()}</section><section class="gourmet-vote-section" id="gourmet-vote-ranking"><div class="section-head"><div><h2>みんなの投票ランキング</h2><div class="eyebrow">VOTE RANKING</div></div></div><p class="muted">実投票数順。既存の投票順位を表示しています。</p><div id="rank-results">${spotGrid(list.slice(0,5),true)}</div><div id="more-results" hidden>${spotGrid(list.slice(5))}</div></section>${gourmetNotice}</div>`;}
 const historyVisuals={
   'kochi-castle':['/assets/photos/kochi-castle-new.jpg','高知城の天守と石垣'],
-  ryugado:['/assets/photos/ryugado-caving.jpg','ライトアップされた龍河洞の洞内'],
+  ryugado:['/assets/photos/hero-ryugado.jpg','龍河洞の洞窟と階段を歩く人々'],
   yusuhara:['/assets/photos/yusuhara.jpg','梼原町のゆすはら座'],
   monet:['/assets/photos/monet.jpg','北川村「モネの庭」マルモッタン'],
   iokido:['/assets/photos/iokido.jpg','伊尾木洞のシダに覆われた岩壁'],
