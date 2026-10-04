@@ -908,3 +908,32 @@ body:has(.page-home) .home-slide:first-child .home-slide-content .eyebrow{max-wi
   .experience-more-actions .button{width:min(100%,280px);min-width:0}
   #experience-more-extra{margin-top:14px}
 }
+
+
+/* Saved-trip route planner. */
+.saved-planner .section-head p{margin:6px 0 0;color:var(--muted)}
+.saved-route-tools{display:flex;align-items:center;justify-content:space-between;gap:16px;margin:0 0 18px;padding:14px 16px;border:1px solid #cfe6ed;border-radius:14px;background:#f3fbfd}
+.saved-route-tools[hidden]{display:none}
+.saved-route-tools>div{display:flex;flex-direction:column;gap:2px}
+.saved-route-tools strong{font-size:20px;color:#0b5777}
+.saved-route-tools small{color:var(--muted)}
+.saved-trip-list{display:grid;gap:16px}
+.saved-trip-item{overflow:hidden;border:1px solid var(--line);border-radius:16px;background:#fff;box-shadow:0 6px 18px rgba(18,59,70,.07)}
+.saved-trip-item>.card{border:0;border-radius:0;box-shadow:none}
+.saved-trip-order{display:grid;grid-template-columns:38px minmax(0,1fr) auto;align-items:center;gap:10px;padding:10px 12px;border-bottom:1px solid var(--line);background:#f7fbfc}
+.saved-trip-number{display:grid;place-items:center;width:32px;height:32px;border-radius:50%;background:#0b91bd;color:#fff;font-weight:800}
+.saved-trip-order strong,.saved-trip-order small{display:block}
+.saved-trip-order strong{font-size:14px;color:#173f52}
+.saved-trip-order small{margin-top:2px;font-size:10px;color:var(--muted)}
+.saved-order-controls{display:flex;gap:6px}
+.saved-order-controls button{min-height:34px;padding:5px 9px;border:1px solid #bddbe5;border-radius:9px;background:#fff;color:#0b6988;font-size:11px;font-weight:700}
+.saved-order-controls button:disabled{opacity:.35}
+@media(max-width:700px){
+  .saved-route-tools{align-items:stretch;flex-direction:column;padding:12px}
+  .saved-route-tools .button{width:100%;text-align:center}
+  .saved-trip-list{gap:12px}
+  .saved-trip-order{grid-template-columns:32px minmax(0,1fr);padding:8px 9px}
+  .saved-trip-number{width:28px;height:28px;font-size:13px}
+  .saved-order-controls{grid-column:1/-1;justify-content:flex-end}
+  .saved-order-controls button{min-height:32px;padding:4px 9px}
+}
