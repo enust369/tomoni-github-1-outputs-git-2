@@ -861,3 +861,39 @@ body:has(.page-home) .home-slide:first-child .home-slide-content .eyebrow{max-wi
 
 .course-quick{padding-top:36px}.course-quick h2{margin-bottom:10px}.course-quick .chips{margin-top:12px}
 @media(max-width:700px){.course-quick{padding-top:24px}.course-quick h2{font-size:20px}}
+
+/* 2026-10-04: compact mobile category finder to roughly half the vertical height. */
+@media (max-width:480px){
+  .home-category-search{padding:8px 10px 12px}
+  .home-category-keyword{height:44px;margin:5px auto 7px;padding:2px 4px 2px 11px;border-width:2px;border-radius:22px}
+  .home-category-keyword span{font-size:20px}
+  .home-category-keyword input{padding:6px 5px;font-size:13px}
+  .home-category-keyword button{width:76px;min-width:76px;height:38px;border-radius:19px;font-size:14px}
+
+  .home-category-main{grid-template-columns:repeat(3,minmax(0,1fr));gap:6px;margin-bottom:6px}
+  .home-category-card:nth-child(n){
+    display:grid;
+    grid-template-columns:24px minmax(0,1fr) 15px;
+    min-height:48px;
+    padding:5px 6px;
+    gap:4px;
+    border-radius:11px
+  }
+  .home-category-card:nth-child(5){min-height:48px}
+  .home-category-icon{width:24px;height:24px;flex-basis:24px;border-radius:8px;font-size:17px}
+  .home-category-card strong{font-size:11px;line-height:1.15;white-space:normal}
+  .home-category-arrow{width:15px;height:15px;font-size:14px;background:transparent}
+
+  .home-category-sub{grid-template-columns:repeat(3,minmax(0,1fr));gap:6px}
+  .home-category-subcard{min-height:36px;padding:4px 6px;gap:4px;border-radius:10px}
+  .home-category-subicon{width:22px;height:22px;font-size:13px}
+  .home-category-subcard strong{font-size:10.5px;line-height:1.15;white-space:normal}
+  .home-category-subcard>span:last-child{font-size:12px}
+
+  .home-category-travel-head{margin:7px 0 5px;gap:7px}
+  .home-category-travel-head span{font-size:8px}
+  .home-category-travel-head strong{font-size:11px}
+  .home-category-travel{grid-template-columns:repeat(3,minmax(0,1fr));gap:6px}
+  .home-category-travel .home-travel-card:last-child{grid-column:span 1}
+  .home-travel-card{min-height:36px;padding:4px 6px}
+}
