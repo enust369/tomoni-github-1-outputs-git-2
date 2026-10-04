@@ -959,3 +959,32 @@ body:has(.page-home) .home-slide:first-child .home-slide-content .eyebrow{max-wi
   .spot-view-toggle button{min-width:0;min-height:40px}
   .spot-map{height:340px;border-radius:12px}
 }
+
+
+/* Ranking rules disclosure. */
+.ranking-explain-row{display:flex;align-items:center;justify-content:space-between;gap:16px;margin:12px 0 22px}
+.ranking-explain-row>.muted{margin:0;font-size:12px}
+.ranking-guide{position:relative;min-width:190px}
+.ranking-guide summary{display:flex;align-items:center;justify-content:center;gap:7px;min-height:38px;padding:7px 14px;border:1px solid #c9e1e8;border-radius:999px;background:#f5fafb;color:#176179;font-size:12px;font-weight:800;cursor:pointer;list-style:none}
+.ranking-guide summary::-webkit-details-marker{display:none}
+.ranking-guide summary::before{content:'?';display:grid;place-items:center;width:19px;height:19px;border-radius:50%;background:#0b91bd;color:#fff;font-size:11px;font-weight:900}
+.ranking-guide[open] summary{border-radius:14px 14px 0 0;background:#eaf6f9}
+.ranking-guide-body{position:absolute;z-index:20;right:0;top:calc(100% - 1px);width:min(620px,90vw);display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:1px;padding:1px;border:1px solid #c9e1e8;border-radius:14px 0 14px 14px;background:#dbeaf0;box-shadow:0 12px 28px rgba(18,59,70,.16)}
+.ranking-guide-body>div{padding:12px 13px;background:#fff}
+.ranking-guide-body>div:first-child{border-radius:12px 0 0 0}
+.ranking-guide-body>div:nth-child(2){border-radius:0 0 0 0}
+.ranking-guide-body>div:nth-last-child(2){border-radius:0 0 0 12px}
+.ranking-guide-body>div:last-child{border-radius:0 0 12px 0}
+.ranking-guide-body strong,.ranking-guide-body span{display:block}
+.ranking-guide-body strong{margin-bottom:4px;color:#153f50;font-size:12px}
+.ranking-guide-body span{color:#617680;font-size:10.5px;line-height:1.55}
+@media(max-width:700px){
+  .ranking-explain-row{align-items:stretch;flex-direction:column;gap:8px;margin:8px 0 16px}
+  .ranking-explain-row>.muted{font-size:10.5px}
+  .ranking-guide{width:100%;min-width:0}
+  .ranking-guide summary{justify-content:flex-start;width:100%;min-height:36px;padding:7px 11px}
+  .ranking-guide[open] summary{border-radius:10px 10px 0 0}
+  .ranking-guide-body{position:static;width:100%;grid-template-columns:1fr;border-radius:0 0 10px 10px;box-shadow:none}
+  .ranking-guide-body>div,.ranking-guide-body>div:first-child,.ranking-guide-body>div:nth-last-child(2),.ranking-guide-body>div:last-child{border-radius:0}
+  .ranking-guide-body>div:last-child{border-radius:0 0 8px 8px}
+}
