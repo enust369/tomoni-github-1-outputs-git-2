@@ -1257,3 +1257,96 @@ body:has(.page-home) .home-slide:first-child .home-slide-content .eyebrow{max-wi
 @media(max-width:700px){
   .mobile-menu-backdrop:hover,.mobile-menu-backdrop:active{border:0;background:rgba(4,25,36,.48)}
 }
+
+
+/* 2026-10-05: unify the site brand on subpages and simplify spot rank display. */
+@media(min-width:701px){
+  header .site-brand:not(.home-brand){
+    display:flex;
+    align-items:center;
+    gap:9px;
+    color:#0b3c69;
+  }
+  header .site-brand:not(.home-brand) .site-brand-mark{
+    display:block;
+    width:40px;
+    height:40px;
+    flex:0 0 40px;
+  }
+  header .site-brand:not(.home-brand) .site-brand-copy{
+    display:block;
+    min-width:0;
+    font-family:"Noto Serif JP","Yu Mincho","Hiragino Mincho ProN",serif;
+    font-size:19px;
+    font-weight:600;
+    line-height:1.08;
+    letter-spacing:.03em;
+  }
+  header .site-brand:not(.home-brand) .site-brand-copy small{
+    margin-bottom:4px;
+    color:#0b3c69;
+    font-family:inherit;
+    font-size:9px;
+    line-height:1.05;
+    letter-spacing:.13em;
+  }
+}
+@media(max-width:700px){
+  header .site-brand{
+    display:flex;
+    align-items:center;
+    gap:7px;
+  }
+  header .site-brand .site-brand-mark{
+    display:block;
+    width:32px;
+    height:32px;
+    flex:0 0 32px;
+  }
+  header .site-brand .site-brand-copy{
+    display:block;
+    min-width:0;
+    overflow:hidden;
+    color:#0b3c69;
+    font-family:"Noto Serif JP","Yu Mincho","Hiragino Mincho ProN",serif;
+    font-size:15px;
+    font-weight:600;
+    line-height:1.08;
+    letter-spacing:.015em;
+    text-overflow:ellipsis;
+    white-space:nowrap;
+  }
+  header .site-brand .site-brand-copy small{
+    display:block;
+    margin-bottom:3px;
+    color:#0b6f8d;
+    font-family:inherit;
+    font-size:7.5px;
+    line-height:1;
+    letter-spacing:.11em;
+  }
+}
+.spot-rank-summary{
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+  margin:5px 0 13px;
+  padding:7px 11px;
+  border:1px solid #cce4eb;
+  border-radius:999px;
+  background:#f4fafc;
+  color:#456975;
+  font-size:11px;
+  line-height:1;
+}
+.spot-rank-summary>span{
+  font-weight:700;
+}
+.spot-rank-summary strong{
+  color:#086f93;
+  font-size:14px;
+  line-height:1;
+}
+.spot-rank-summary strong #current-rank{
+  font-variant-numeric:tabular-nums;
+}
