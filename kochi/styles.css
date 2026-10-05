@@ -1511,3 +1511,35 @@ body:has(.page-home) .home-slide:first-child .home-slide-content .eyebrow{max-wi
   .home-pickup-card img{transition:none}
   .home-pickup-card:hover img{transform:none}
 }
+
+/* 2026-10-06: compact mobile PICK UP to roughly one-third of its former height. */
+@media(max-width:700px){
+  .home-pickup-section{margin:18px 0 24px}
+  .home-pickup-head{margin-bottom:8px}
+  .home-pickup-head .eyebrow{font-size:9px}
+  .home-pickup-head h2{margin-top:3px;font-size:21px;line-height:1.25}
+  .home-pickup-head p{margin-top:4px;font-size:10px;line-height:1.4}
+
+  .home-pickup-grid{
+    grid-template-columns:repeat(2,minmax(0,1fr));
+    grid-template-rows:105px 90px;
+    gap:7px
+  }
+  .home-pickup-card,
+  .home-pickup-card.featured{
+    min-height:0;
+    border-radius:11px
+  }
+  .home-pickup-card.featured{grid-column:1/-1}
+  .home-pickup-copy{padding:9px 11px}
+  .home-pickup-copy small{margin-bottom:2px;font-size:7px;letter-spacing:.12em}
+  .home-pickup-copy strong,
+  .home-pickup-card.featured .home-pickup-copy strong{
+    font-size:14px;
+    line-height:1.25
+  }
+  .home-pickup-card.featured .home-pickup-copy strong{font-size:17px}
+  .home-pickup-copy>span{display:none}
+  .home-pickup-copy b{margin-top:4px;font-size:8px}
+  .home-pickup-credit{top:4px;right:4px;max-width:65%;font-size:6.5px;padding:2px 4px}
+}
