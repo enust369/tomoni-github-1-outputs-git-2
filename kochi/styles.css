@@ -1004,3 +1004,256 @@ body:has(.page-home) .home-slide:first-child .home-slide-content .eyebrow{max-wi
   .spot-plan-item strong{font-size:9px}
   .spot-plan-item>div>span{font-size:10.5px;line-height:1.4}
 }
+
+
+/* 2026-10-05: compact mobile global navigation with slide-in menu. */
+.mobile-header-actions,.mobile-site-menu{display:none}
+@media(max-width:700px){
+  body.mobile-menu-open{overflow:hidden}
+  header,
+  body:has(.page-home) header{
+    display:block;
+    min-height:64px;
+    height:auto;
+    padding:0 12px;
+    background:#fff;
+    border-bottom:1px solid #dce8ef;
+  }
+  header .topbar,
+  body:has(.page-home) header .topbar{
+    display:flex;
+    align-items:center;
+    width:100%;
+    min-height:64px;
+    gap:8px;
+  }
+  header>.nav,
+  body:has(.page-home) header .nav{display:none!important}
+  header .topbar>.button,
+  body:has(.page-home) header .topbar>.button{display:none!important}
+  header .brand{
+    flex:1 1 auto;
+    min-width:0;
+    max-width:calc(100% - 128px);
+    font-size:15px;
+    line-height:1.15;
+    letter-spacing:.02em;
+    white-space:nowrap;
+    overflow:hidden;
+    text-overflow:ellipsis;
+  }
+  header .brand small{
+    font-size:8px;
+    line-height:1.05;
+    letter-spacing:.12em;
+    margin-bottom:3px;
+  }
+  body:has(.page-home) header .home-brand{
+    flex:1 1 auto;
+    min-width:0;
+    max-width:calc(100% - 128px);
+    height:auto;
+    gap:7px;
+  }
+  body:has(.page-home) header .home-brand-mark{
+    width:32px;
+    height:32px;
+    flex:0 0 32px;
+  }
+  body:has(.page-home) header .home-brand-copy{
+    min-width:0;
+    overflow:hidden;
+    text-overflow:ellipsis;
+  }
+  .mobile-header-actions{
+    display:flex;
+    align-items:center;
+    justify-content:flex-end;
+    flex:0 0 auto;
+    gap:2px;
+    margin-left:auto;
+  }
+  .mobile-header-icon,
+  .mobile-menu-button{
+    display:grid;
+    place-items:center;
+    width:38px;
+    height:40px;
+    min-width:38px;
+    min-height:40px;
+    margin:0;
+    padding:0;
+    border:0;
+    border-radius:10px;
+    background:transparent;
+    color:#0b3c69;
+    font-size:22px;
+    line-height:1;
+  }
+  .mobile-menu-button{font-size:21px}
+  .mobile-header-icon:active,
+  .mobile-menu-button:active{background:#edf7fa}
+  .mobile-site-menu{
+    position:fixed;
+    inset:0;
+    z-index:1000;
+    display:block;
+  }
+  .mobile-menu-backdrop{
+    position:absolute;
+    inset:0;
+    width:100%;
+    height:100%;
+    min-height:0;
+    padding:0;
+    border:0;
+    border-radius:0;
+    background:rgba(4,25,36,.48);
+  }
+  .mobile-menu-drawer{
+    position:absolute;
+    top:0;
+    right:0;
+    width:min(88vw,370px);
+    height:100dvh;
+    overflow-y:auto;
+    overscroll-behavior:contain;
+    padding:0 20px calc(22px + env(safe-area-inset-bottom));
+    background:#fff;
+    box-shadow:-12px 0 32px rgba(3,37,52,.18);
+    animation:mobile-menu-in .22s ease-out both;
+  }
+  .mobile-menu-head{
+    position:sticky;
+    top:0;
+    z-index:2;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:12px;
+    min-height:76px;
+    padding:10px 0;
+    border-bottom:1px solid #dce8ef;
+    background:#fff;
+  }
+  .mobile-menu-brand{
+    display:flex;
+    align-items:center;
+    min-width:0;
+    gap:9px;
+    color:#0b3c69;
+  }
+  .mobile-menu-brand img{
+    width:38px;
+    height:38px;
+    flex:0 0 38px;
+  }
+  .mobile-menu-brand span{display:block;min-width:0}
+  .mobile-menu-brand small{
+    display:block;
+    margin-bottom:2px;
+    color:#0b6f8d;
+    font-size:8px;
+    line-height:1.1;
+    letter-spacing:.12em;
+  }
+  .mobile-menu-brand strong{
+    display:block;
+    font-family:"Noto Serif JP","Yu Mincho","Hiragino Mincho ProN",serif;
+    color:#0b3c69;
+    font-size:16px;
+    line-height:1.2;
+    white-space:nowrap;
+  }
+  .mobile-menu-close{
+    display:grid;
+    place-items:center;
+    width:40px;
+    height:40px;
+    min-width:40px;
+    min-height:40px;
+    padding:0;
+    border:0;
+    border-radius:50%;
+    background:#f1f7f9;
+    color:#0b3c69;
+    font-size:27px;
+    font-weight:300;
+    line-height:1;
+  }
+  .mobile-menu-primary{
+    display:grid;
+    margin:10px 0 0;
+    border-top:1px solid #e1ecef;
+  }
+  .mobile-menu-primary a{
+    position:relative;
+    display:block;
+    min-height:53px;
+    padding:16px 32px 14px 4px;
+    border-bottom:1px solid #e1ecef;
+    color:#123b55;
+    font-size:15px;
+    font-weight:750;
+    line-height:1.4;
+  }
+  .mobile-menu-primary a::after{
+    content:'›';
+    position:absolute;
+    top:50%;
+    right:5px;
+    transform:translateY(-52%);
+    color:#0796bf;
+    font-size:24px;
+    font-weight:400;
+  }
+  .mobile-menu-account{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:8px;
+    margin:18px 0 22px;
+  }
+  .mobile-menu-account a{
+    display:grid;
+    place-items:center;
+    min-height:48px;
+    padding:9px 10px;
+    border:1px solid #cfe3e9;
+    border-radius:12px;
+    background:#f5fafb;
+    color:#0b5777;
+    font-size:12px;
+    font-weight:800;
+    text-align:center;
+  }
+  .mobile-menu-support{
+    display:grid;
+    gap:0;
+    padding-top:4px;
+    border-top:1px solid #e1ecef;
+  }
+  .mobile-menu-support small{
+    padding:14px 0 7px;
+    color:#6f8791;
+    font-size:8px;
+    font-weight:800;
+    letter-spacing:.18em;
+  }
+  .mobile-menu-support a{
+    padding:10px 3px;
+    color:#526d78;
+    font-size:12px;
+    font-weight:650;
+  }
+}
+@keyframes mobile-menu-in{
+  from{transform:translateX(100%)}
+  to{transform:translateX(0)}
+}
+@media(prefers-reduced-motion:reduce){
+  .mobile-menu-drawer{animation:none}
+}
+
+@media(max-width:700px){
+  .mobile-menu-backdrop:hover,.mobile-menu-backdrop:active{border:0;background:rgba(4,25,36,.48)}
+}

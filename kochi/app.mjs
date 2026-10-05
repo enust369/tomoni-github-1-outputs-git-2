@@ -107,7 +107,10 @@ function bind(){
  syncButtons();
 }
 
+function closeMobileMenu(returnFocus=true){const menu=document.querySelector('[data-mobile-menu]'),button=document.querySelector('[data-mobile-menu-open]');if(!menu||menu.hidden)return;menu.hidden=true;document.body.classList.remove('mobile-menu-open');button?.setAttribute('aria-expanded','false');if(returnFocus)button?.focus()}
 document.addEventListener('click',async e=>{
+ const openMenu=e.target.closest('[data-mobile-menu-open]');if(openMenu){e.preventDefault();const menu=document.querySelector('[data-mobile-menu]');if(menu){menu.hidden=false;document.body.classList.add('mobile-menu-open');openMenu.setAttribute('aria-expanded','true');menu.querySelector('.mobile-menu-close')?.focus()}return}
+ const closeMenu=e.target.closest('[data-mobile-menu-close]');if(closeMenu){e.preventDefault();closeMobileMenu(e.detail===0);return}
  const openSearch=e.target.closest('[data-search-open]');
  if(openSearch){
    e.preventDefault();
@@ -138,7 +141,10 @@ document.addEventListener('click',async e=>{
 });
 
 document.addEventListener('keydown',e=>{
+ const menu=document.querySelector('[data-mobile-menu]');
+ if(menu&&!menu.hidden&&e.key==='Tab'){const focusable=[...menu.querySelectorAll('a[href],button:not([disabled])')].filter(el=>getComputedStyle(el).display!=='none');if(focusable.length){const first=focusable[0],last=focusable.at(-1);if(e.shiftKey&&document.activeElement===first){e.preventDefault();last.focus()}else if(!e.shiftKey&&document.activeElement===last){e.preventDefault();first.focus()}}}
  if(e.key!=='Escape')return;
+ if(menu&&!menu.hidden)closeMobileMenu();
  const modal=document.querySelector('#home-search-modal');
  if(modal&&!modal.hidden){modal.hidden=true;document.body.classList.remove('search-modal-open');document.querySelector('[data-search-open]')?.focus()}
 });
