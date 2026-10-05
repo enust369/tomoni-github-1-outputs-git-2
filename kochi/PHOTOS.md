@@ -59,7 +59,7 @@ R: https://visitkochijapan.com/image/rendering/article_image/1948/keep/640/640/d
 | にこ淵 | R | `nikobuchi.jpg`（にこ淵の青い滝つぼと滝） | [かるちる / Wikimedia Commons](https://commons.wikimedia.org/wiki/File:Niko_Buchi_deep_water_No.1.jpg) | [CC0](https://creativecommons.org/publicdomain/zero/1.0/deed.en)・表示／縮小・トリミング明記 |
 | 伊尾木洞 | R | `iokido.jpg`（伊尾木洞のシダに覆われた岩壁） | [Saigen Jiro / Wikimedia Commons](https://commons.wikimedia.org/wiki/File:Iokido_Cave-2.jpg) | [CC0](https://creativecommons.org/publicdomain/zero/1.0/deed.en)・表示／縮小・トリミング明記 |
 | 高知城 | R | `kochi-castle-new.jpg`（青空の下にそびえる高知城の天守と石垣） | ユーザー提供画像を加工 | 提供画像（サイト掲載用） |
-| 柏島 | R | `kashiwajima.jpg`（柏島の集落と青い海を見渡す全景） | [Saigen Jiro / Wikimedia Commons](https://commons.wikimedia.org/wiki/File:Kashiwajima_(Otsuki),_zenkei-1.jpg) | [CC0](https://creativecommons.org/publicdomain/zero/1.0/deed.en)・表示／縮小・トリミング明記 |
+| 柏島 | R | `kashiwajima-pickup.webp`（透明な海・白い砂浜・岩場・緑の山） | ユーザー提供画像 | 提供画像（サイト掲載用） |
 | 中津渓谷 | R | `nakatsu.jpg`（中津渓谷の清流と岩場） | [Koda6029 / Wikimedia Commons](https://commons.wikimedia.org/wiki/File:%E4%B8%AD%E6%B4%A5%E6%B8%93%E8%B0%B7%EF%BC%92.jpg) | [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0)・表示／縮小・トリミング明記・写真の派生物は同一ライセンス |
 | 北川村「モネの庭」マルモッタン | R | `monet.jpg`（北川村「モネの庭」マルモッタンの水の庭） | [Earthboud1960 / Wikimedia Commons](https://commons.wikimedia.org/wiki/File:Monet-Marumottan-mizu02.jpg) | [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0)・表示／縮小・トリミング明記・写真の派生物は同一ライセンス |
 | 室戸岬 | R | `muroto.jpg`（室戸岬の岩礁と太平洋） | [Rsa / Wikimedia Commons](https://commons.wikimedia.org/wiki/File:Cape-Muroto-20100526.jpg) | [CC BY-SA 3.0](https://creativecommons.org/licenses/by-sa/3.0/)・表示／縮小・トリミング明記・写真の派生物は同一ライセンス |
@@ -287,7 +287,7 @@ CC BY 2.0/2.5は著作者・出典・ライセンス・変更を表示。写真�
 
 ### アクティビティ追加 第9弾（2026-10-02）
 
-- 柏島 体験ダイビング（AQUAS）：既存の `kashiwajima.jpg` を柏島エリアの実景として再利用。Saigen Jiro / Wikimedia Commons / CC0。AQUASの体験中実写ではない。
+- 柏島 体験ダイビング（AQUAS）：`kashiwajima-pickup.webp` のユーザー提供写真へ統一。柏島の海の実景で、AQUASの体験中実写ではない。
 - 竜串 体験ダイビング（竜串ダイビングセンター）：既存の `tatsukushi-fishing.jpg` を竜串海岸の実景として再利用。Reggaeman / Wikimedia Commons / CC BY-SA 3.0。ダイビング中の実写ではない。
 
 ### 体験ページ追加 第10弾（2026-10-02）
@@ -315,7 +315,7 @@ CC BY 2.0/2.5は著作者・出典・ライセンス・変更を表示。写真�
 - 四万十天文台 天体観望会：既存の `course-classic-camping.png` を夜のアウトドアイメージとして使用。天文台の実写ではない。
 - 竜串観光汽船 グラスボート：既存の `tatsukushi-fishing.jpg` を竜串海岸の実景として再利用。Reggaeman / Wikimedia Commons / CC BY-SA 3.0。グラスボート実写ではない。
 - 見残し奇岩パークツアー＋グラスボート：同じく `tatsukushi-fishing.jpg` を竜串海岸の実景として使用。
-- グラスボートゆうばり：既存の `kashiwajima.jpg` を柏島エリアの実景として再利用。Saigen Jiro / Wikimedia Commons / CC0。グラスボート実写ではない。
+- グラスボートゆうばり：`kashiwajima-pickup.webp` のユーザー提供写真へ統一。柏島の海の実景で、グラスボート実船の写真ではない。
 
 ### 体験・アクティビティ追加 第14弾（2026-10-02）
 

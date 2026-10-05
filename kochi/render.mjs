@@ -32,7 +32,7 @@ const homeActivities=[
   ['SUP','仁淀川で水上散歩','/assets/photos/kochi-sup-hero.jpg','/activity/'],
   ['シーカヤック','海・川の景色を巡る','/assets/photos/home-sea-kayak.jpg','/activity/'],
   ['ラフティング','仲間と楽しむ爽快体験','/assets/photos/hero-rafting.jpg','/activity/'],
-  ['サーフィン','太平洋の波を感じる','/assets/photos/kashiwajima.jpg','/activity/'],
+  ['サーフィン','太平洋の波を感じる','/assets/photos/kashiwajima-pickup.webp','/activity/'],
   ['テントサウナ','仁淀川の自然の中でととのう','/assets/photos/home-tent-sauna-niyodo.jpg','/spots/sauna/'],
   ['龍河洞 冒険コース','洞窟の奥へ進むアドベンチャー','/assets/photos/hero-ryugado.jpg','/spots/ryugado-adventure/'],
   ['猿田洞ケイビング','自然の洞窟をガイドと探検','/assets/photos/sarudado-caving.jpg','/spots/sarudado-caving/'],

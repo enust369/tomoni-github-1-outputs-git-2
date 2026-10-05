@@ -956,15 +956,17 @@ export const photos={
     "width": 1600, "height": 1062, "position": "50% 50%", "checkedAt": "2026-10-03"
   },
   "otsuki-glassboat-yubari": {
-    "src": "/assets/photos/otsuki-glassboat-yubari.jpg",
+    "src": "/assets/photos/kashiwajima-pickup.webp",
     "name": "グラスボートゆうばり",
-    "alt": "柏島の海岸と透明度の高い海の実景",
-    "author": "Reggaeman",
-    "source": "https://commons.wikimedia.org/wiki/File:Kashiwajima_02.jpg",
-    "title": "Kashiwajima 02.jpg",
-    "license": "CC BY-SA 3.0",
-    "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0/",
-    "width": 1600, "height": 1057, "position": "50% 50%", "checkedAt": "2026-10-03"
+    "alt": "柏島の透明な海と白い砂浜、岩場と緑の山の実景",
+    "author": "ユーザー提供画像",
+    "source": "",
+    "license": "提供画像（サイト掲載用）",
+    "licenseUrl": "",
+    "width": 500,
+    "height": 500,
+    "position": "50% 50%",
+    "checkedAt": "2026-10-05"
   },
   "tosa-kokubunji-culture": {
     "src": "/assets/photos/tosa-kokubunji-culture.jpg",
@@ -1088,32 +1090,30 @@ export const photos={
     "width": 1600, "height": 1066, "position": "50% 50%", "checkedAt": "2026-10-03"
   },
   "kashiwajima-diving-aquas": {
-    "src": "/assets/photos/kashiwajima-diving-aquas.jpg",
+    "src": "/assets/photos/kashiwajima-pickup.webp",
     "name": "柏島 体験ダイビング（AQUAS）",
-    "alt": "柏島の海岸と青い海の実景",
-    "author": "Reggaeman",
-    "source": "https://commons.wikimedia.org/wiki/File:Kashiwajima_01.jpg",
-    "title": "Kashiwajima 01.jpg",
-    "license": "CC BY-SA 3.0",
-    "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0/",
-    "width": 1600,
-    "height": 1062,
+    "alt": "柏島の透明な海と白い砂浜、岩場と緑の山の実景",
+    "author": "ユーザー提供画像",
+    "source": "",
+    "license": "提供画像（サイト掲載用）",
+    "licenseUrl": "",
+    "width": 500,
+    "height": 500,
     "position": "50% 50%",
-    "checkedAt": "2026-10-03"
+    "checkedAt": "2026-10-05"
   },
   "kashiwajima": {
-    "src": "/assets/photos/kashiwajima.jpg",
+    "src": "/assets/photos/kashiwajima-pickup.webp",
     "name": "柏島",
-    "alt": "柏島の集落と青い海を見渡す全景",
-    "author": "Saigen Jiro",
-    "source": "https://commons.wikimedia.org/wiki/File:Kashiwajima_(Otsuki),_zenkei-1.jpg",
-    "title": "Kashiwajima (Otsuki), zenkei-1.jpg",
-    "license": "CC0",
-    "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/deed.en",
-    "width": 1280,
-    "height": 851,
+    "alt": "柏島の透明な海と白い砂浜、岩場と緑の山の実景",
+    "author": "ユーザー提供画像",
+    "source": "",
+    "license": "提供画像（サイト掲載用）",
+    "licenseUrl": "",
+    "width": 500,
+    "height": 500,
     "position": "50% 50%",
-    "checkedAt": "2026-09-21"
+    "checkedAt": "2026-10-05"
   },
   "nakatsu": {
     "src": "/assets/photos/nakatsu.jpg",
@@ -1801,7 +1801,7 @@ export const photos={
   "kashiwajima-pickup": {
     "src": "/assets/photos/kashiwajima-pickup.webp",
     "name": "柏島 PICK UP",
-    "alt": "柏島の透明な海と白い砂浜",
+    "alt": "柏島の透明な海と白い砂浜、岩場と緑の山の実景",
     "author": "ユーザー提供画像",
     "source": "",
     "license": "提供画像（サイト掲載用）",
