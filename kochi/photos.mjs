@@ -1785,4 +1785,30 @@ export const photos={
     "checkedAt": "2026-10-03"
   }
 
+  ,"niyodo-blue-pickup": {
+    "src": "/assets/photos/niyodo-blue-pickup.webp",
+    "name": "仁淀ブルー PICK UP",
+    "alt": "仁淀ブルーの青い水面と滝",
+    "author": "Nobuyuki Takahashi",
+    "source": "ユーザー提供画像",
+    "license": "提供画像（サイト掲載用）",
+    "licenseUrl": "",
+    "width": 600,
+    "height": 384,
+    "position": "50% 50%",
+    "checkedAt": "2026-10-05"
+  },
+  "kashiwajima-pickup": {
+    "src": "/assets/photos/kashiwajima-pickup.webp",
+    "name": "柏島 PICK UP",
+    "alt": "柏島の透明な海と白い砂浜",
+    "author": "ユーザー提供画像",
+    "source": "",
+    "license": "提供画像（サイト掲載用）",
+    "licenseUrl": "",
+    "width": 500,
+    "height": 500,
+    "position": "50% 50%",
+    "checkedAt": "2026-10-05"
+  }
 };
