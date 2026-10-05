@@ -1350,3 +1350,164 @@ body:has(.page-home) .home-slide:first-child .home-slide-content .eyebrow{max-wi
 .spot-rank-summary strong #current-rank{
   font-variant-numeric:tabular-nums;
 }
+
+
+/* 2026-10-05: editorial PICK UP block on the home page. */
+.home-pickup-section{
+  margin:58px 0 72px;
+}
+.home-pickup-head{
+  align-items:end;
+  margin-bottom:18px;
+}
+.home-pickup-head p{
+  margin:7px 0 0;
+  color:#657984;
+  font-size:13px;
+}
+.home-pickup-grid{
+  display:grid;
+  grid-template-columns:minmax(0,1.45fr) minmax(300px,1fr);
+  grid-template-rows:repeat(2,220px);
+  gap:14px;
+}
+.home-pickup-card{
+  position:relative;
+  display:block;
+  min-width:0;
+  overflow:hidden;
+  border-radius:18px;
+  background:#173f52;
+  box-shadow:0 10px 28px rgba(13,53,69,.10);
+  color:#fff;
+  isolation:isolate;
+}
+.home-pickup-card.featured{
+  grid-row:1 / 3;
+}
+.home-pickup-card img{
+  position:absolute;
+  inset:0;
+  z-index:-3;
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  transition:transform .45s ease;
+}
+.home-pickup-card:hover img{
+  transform:scale(1.025);
+}
+.home-pickup-shade{
+  position:absolute;
+  inset:0;
+  z-index:-2;
+  background:linear-gradient(180deg,rgba(3,24,35,.02) 22%,rgba(3,24,35,.74) 100%);
+}
+.home-pickup-card.featured .home-pickup-shade{
+  background:linear-gradient(90deg,rgba(3,24,35,.58) 0%,rgba(3,24,35,.14) 58%,rgba(3,24,35,.08) 100%),linear-gradient(180deg,rgba(3,24,35,.02) 36%,rgba(3,24,35,.58) 100%);
+}
+.home-pickup-copy{
+  position:absolute;
+  left:0;
+  right:0;
+  bottom:0;
+  display:block;
+  padding:22px 24px;
+  text-shadow:0 1px 3px rgba(0,0,0,.25);
+}
+.home-pickup-copy small,
+.home-pickup-copy strong,
+.home-pickup-copy>span,
+.home-pickup-copy b{
+  display:block;
+}
+.home-pickup-copy small{
+  margin-bottom:6px;
+  color:rgba(255,255,255,.82);
+  font-size:9px;
+  font-weight:800;
+  letter-spacing:.16em;
+}
+.home-pickup-copy strong{
+  font-family:"Noto Serif JP","Yu Mincho","Hiragino Mincho ProN",serif;
+  font-size:21px;
+  line-height:1.35;
+  letter-spacing:.02em;
+}
+.home-pickup-card.featured .home-pickup-copy strong{
+  font-size:30px;
+}
+.home-pickup-copy>span{
+  max-width:540px;
+  margin-top:7px;
+  color:rgba(255,255,255,.92);
+  font-size:11.5px;
+  line-height:1.65;
+}
+.home-pickup-copy b{
+  margin-top:11px;
+  font-size:10px;
+  letter-spacing:.04em;
+}
+.home-pickup-credit{
+  position:absolute;
+  z-index:2;
+  right:8px;
+  top:8px;
+  max-width:75%;
+  border-radius:5px;
+  background:rgba(0,0,0,.55);
+  color:#fff;
+}
+@media(max-width:700px){
+  .home-pickup-section{
+    margin:30px 0 42px;
+  }
+  .home-pickup-head{
+    margin-bottom:12px;
+  }
+  .home-pickup-head h2{
+    font-size:25px;
+  }
+  .home-pickup-head p{
+    font-size:11px;
+  }
+  .home-pickup-grid{
+    display:grid;
+    grid-template-columns:1fr;
+    grid-template-rows:none;
+    gap:9px;
+  }
+  .home-pickup-card,
+  .home-pickup-card.featured{
+    grid-row:auto;
+    min-height:165px;
+    border-radius:13px;
+  }
+  .home-pickup-card.featured{
+    min-height:245px;
+  }
+  .home-pickup-copy{
+    padding:16px 17px;
+  }
+  .home-pickup-copy strong,
+  .home-pickup-card.featured .home-pickup-copy strong{
+    font-size:20px;
+  }
+  .home-pickup-card.featured .home-pickup-copy strong{
+    font-size:23px;
+  }
+  .home-pickup-copy>span{
+    margin-top:5px;
+    font-size:10.5px;
+    line-height:1.55;
+  }
+  .home-pickup-copy b{
+    margin-top:8px;
+    font-size:9.5px;
+  }
+}
+@media(prefers-reduced-motion:reduce){
+  .home-pickup-card img{transition:none}
+  .home-pickup-card:hover img{transform:none}
+}
