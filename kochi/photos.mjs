@@ -1589,18 +1589,17 @@ export const photos={
     "position": "50% 50%",
     "checkedAt": "2026-09-26"
   }  ,"snowpeak-ochi-niyodogawa": {
-    "src": "/assets/photos/snowpeak-ochi-niyodogawa.jpg",
+    "src": "/assets/photos/snowpeak-ochi-niyodogawa-main.avif",
     "name": "スノーピークおち仁淀川キャンプフィールド",
-    "alt": "仁淀川の流れと周辺の山並み（キャンプフィールド周辺地域のイメージ）",
-    "author": "Reggaeman",
-    "source": "https://commons.wikimedia.org/wiki/File:Niyodo_river_01.jpg",
-    "title": "Niyodo river 01.jpg",
-    "license": "CC BY-SA 3.0",
-    "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0",
-    "width": 1600,
-    "height": 481,
+    "alt": "スノーピークおち仁淀川キャンプフィールドの芝生サイトとテント、山の景色",
+    "author": "ユーザー提供画像",
+    "source": "",
+    "license": "提供画像（サイト掲載用）",
+    "licenseUrl": "",
+    "width": 600,
+    "height": 375,
     "position": "50% 50%",
-    "checkedAt": "2026-10-03"
+    "checkedAt": "2026-10-05"
   },
   "umaji-onsen": {
     "src": "/assets/photos/umaji-onsen.jpg",

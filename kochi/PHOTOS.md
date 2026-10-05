@@ -631,7 +631,7 @@ CC BY 2.0/2.5は著作者・出典・ライセンス・変更を表示。写真�
 
 ### 写真追加 第39弾（2026-10-03）
 
-- `snowpeak-ochi-niyodogawa`：仁淀川の実景 `snowpeak-ochi-niyodogawa.jpg` を使用。Reggaeman / Wikimedia Commons / CC BY-SA 3.0。スノーピークおち仁淀川キャンプフィールドそのものの実写ではないため、仁淀川沿いキャンプの地域イメージとして扱う。
+- `snowpeak-ochi-niyodogawa`：`snowpeak-ochi-niyodogawa-main.avif` のユーザー提供写真へ統一。スノーピークおち仁淀川キャンプフィールドの芝生サイト・テント・山の実景。提供画像（サイト掲載用）。
 - `umaji-onsen`：馬路温泉の施設実景 `umaji-onsen.jpg` を使用。ブルーノ・プラス / Wikimedia Commons / CC BY-SA 4.0。施設外観が分かる実景写真として使用。
 - `michinoeki-nakatosa`：道の駅なかとさの施設実景 `michinoeki-nakatosa.jpg` を使用。On-neko / Wikimedia Commons / CC0。施設外観が分かる実景写真として使用。
 
