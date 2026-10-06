@@ -16,7 +16,7 @@ const featuredCategoryTop3=items=>{const top=items.slice(0,3);if(!top.length)ret
 const live=!['localhost','127.0.0.1'].includes(location.hostname);
 let voted=new Set(),voteCounts=new Map(),ready=false,anonymousId='',savedSpots=new Set(),savedCourses=new Set(),savedSpotOrder=[];
 let courseListExpanded=false;
-const COURSE_MOBILE_LIMIT=8;
+const COURSE_MOBILE_LIMIT=4;
 
 const toast=message=>{const el=document.querySelector('#toast');if(!el)return;el.textContent=message;el.hidden=false;clearTimeout(toast.timer);toast.timer=setTimeout(()=>el.hidden=true,5000)};
 function readLocal(key,fallback){try{return JSON.parse(localStorage.getItem(key))??fallback}catch{return fallback}}
