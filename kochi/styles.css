@@ -1779,3 +1779,12 @@ body:has(.page-home) .home-slide:first-child .home-slide-content .eyebrow{max-wi
   .course-editorial-copy strong{font-size:16px}
   .course-editorial-copy b{font-size:9px}
 }
+
+
+/* 2026-10-06: reduce mobile course-list scroll fatigue. */
+.course-more-wrap{text-align:center;margin:18px 0 4px}
+#course-more{min-width:220px}
+@media(max-width:700px){
+  .course-more-wrap{margin-top:14px}
+  #course-more{width:100%;min-height:44px;border-radius:22px;font-weight:700}
+}
