@@ -122,7 +122,7 @@ const courseEditorialChoices=[
   ['初めての高知','まずは王道から。城・食・街を一日で。','王道','/courses/?theme=%E7%8E%8B%E9%81%93','/assets/photos/kochi-castle-new.jpg','高知城'],
   ['自然を満喫','川・海・山を、全身で楽しむ旅へ。','ACTIVE','/courses/?theme=%E3%82%A2%E3%82%AF%E3%83%86%E3%82%A3%E3%83%96','/assets/photos/home-sea-kayak.jpg','透明な水面のシーカヤック'],
   ['子連れで楽しむ','家族で無理なく、高知らしい一日を。','FAMILY','/courses/?theme=%E5%AD%90%E9%80%A3%E3%82%8C','/assets/photos/makino-botanical-garden.jpg','高知県立牧野植物園'],
-  ['雨の日も高知へ','天気を気にせず、文化と体験を楽しむ。','RAINY DAY','/courses/?theme=%E9%9B%A8%E3%81%AE%E6%97%A5','/assets/photos/ryugado-candle.jpg','雨の日にも楽しめる体験'],
+  ['雨の日も高知へ','天気を気にせず、文化と体験を楽しむ。','RAINY DAY','/courses/?theme=%E9%9B%A8%E3%81%AE%E6%97%A5','/assets/photos/kochi-castle-history-museum.jpg','高知城歴史博物館'],
   ['1泊2日でめぐる','少し遠くまで。海も川も、ゆっくり旅する。','OVERNIGHT','/courses/?duration=1%E6%B3%8A2%E6%97%A5','/assets/photos/kashiwajima-pickup.webp','柏島の透明な海と白い砂浜']
 ];
 function courseEditorialNav(){return `<section class="course-editorial"><div class="course-editorial-head"><div class="eyebrow">CHOOSE YOUR TRIP</div><h2>どんな高知を旅したい？</h2><p>旅の気分から選ぶと、あなたに合うモデルコースが見つかります。</p></div><div class="course-editorial-grid">${courseEditorialChoices.map(([title,desc,label,href,src,alt])=>`<a class="course-editorial-card" href="${href}"><img src="${src}" alt="${alt}" loading="lazy" fetchpriority="low" decoding="async">${compactPhotoCreditForSrc(src)}<span class="course-editorial-copy"><small>${label}</small><strong>${title}</strong><b>${desc}</b><i aria-hidden="true">→</i></span></a>`).join('')}</div></section>`;}
