@@ -615,7 +615,8 @@ body:has(.page-home) .home-slide:first-child .home-slide-content .eyebrow{max-wi
 .features-cta{display:flex;align-items:center;justify-content:space-between;gap:28px;padding:34px;border-radius:14px;background:#eef8fb}
 .features-cta h2{margin-bottom:6px}
 .features-cta p{margin:0}
-@media(max-width:700px){.features-grid{grid-template-columns:1fr;gap:16px}.feature-card-media img{height:190px}.feature-card-body p{min-height:0}.features-cta{display:block;padding:22px}.features-cta .button{margin-top:14px}}
+.features-more-wrap{display:none;text-align:center;margin-top:14px}
+@media(max-width:700px){.features-grid{grid-template-columns:1fr;gap:16px}.feature-card-media img{height:190px}.feature-card-body p{min-height:0}.features-page:not(.is-expanded) .features-grid .feature-card:nth-child(n+5){display:none}.features-more-wrap{display:block}.features-page.is-expanded .features-more-wrap{display:none}.features-more-wrap .button{width:100%;min-height:44px;border-radius:22px;font-weight:700}.features-cta{display:block;padding:22px}.features-cta .button{margin-top:14px}}
 
 @media(max-width:700px){.feature-card-body{min-height:160px}}
 
