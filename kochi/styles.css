@@ -1609,6 +1609,8 @@ body:has(.page-home) .home-slide:first-child .home-slide-content .eyebrow{max-wi
   .spot-engagement>div{width:auto}
   .spot-engagement .vote{margin-top:0;height:100%}
   .spot-info-head{margin-top:24px;padding-top:20px}
+  .spot-nearby-section .spots-grid{display:flex;gap:12px;overflow-x:auto;scroll-snap-type:x proximity;padding-bottom:10px;scrollbar-width:none}
+  .spot-nearby-section .spots-grid>.card{flex:0 0 78%;scroll-snap-align:start}
 }
 
 /* Editorial refinement after visual review */
