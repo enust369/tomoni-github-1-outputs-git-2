@@ -637,7 +637,7 @@ body:has(.page-home) .home-slide:first-child .home-slide-content .eyebrow{max-wi
 .area-switch-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
 .area-switch-grid a{padding:18px;border:1px solid #c9e5ed;border-radius:9px;background:#f8fcfd;font-weight:700}
 .area-switch-grid a:hover{border-color:var(--blue);color:var(--blue)}
-@media(max-width:700px){.area-guide-grid{grid-template-columns:1fr;gap:16px}.area-guide-media img{height:200px}.area-guide-body p{min-height:0}.area-intro{display:block}.area-switch-grid{grid-template-columns:1fr}.area-switch-grid a{padding:14px}}
+@media(max-width:700px){.area-guide-grid{grid-template-columns:1fr;gap:16px}.area-guide-media img{height:200px}.area-guide-body p{min-height:0}.area-intro{display:block}.area-switch-grid{grid-template-columns:1fr}.area-switch-grid a{padding:14px}.area-featured-spots .spots-grid{display:flex;gap:12px;overflow-x:auto;scroll-snap-type:x proximity;padding-bottom:10px;scrollbar-width:none}.area-featured-spots .spots-grid>.card{flex:0 0 78%;scroll-snap-align:start}}
 
 .search-page-head{margin-bottom:18px}
 .search-page-head p{margin:6px 0 0;color:var(--muted)}
@@ -653,7 +653,8 @@ body:has(.page-home) .home-slide:first-child .home-slide-content .eyebrow{max-wi
 .search-summary{margin:8px 0 6px;padding:12px 14px;border-left:3px solid var(--blue);background:#f5fafb;color:#355c68;font-size:13px}
 .search-result-section{padding-top:32px}
 .search-result-section+.search-result-section{padding-top:10px}
-@media(max-width:700px){.search-advanced{padding:16px 13px}.search-advanced-grid{grid-template-columns:1fr;gap:10px}.search-advanced .primary{width:100%}.search-quick{margin:14px 0 20px}.search-summary{font-size:12px}}
+.search-more-wrap{display:none;text-align:center;margin-top:14px}
+@media(max-width:700px){.search-advanced{padding:16px 13px}.search-advanced-grid{grid-template-columns:1fr;gap:10px}.search-advanced input,.search-advanced select{min-height:44px}.search-advanced .primary{width:100%;min-height:44px}.search-quick{margin:14px 0 20px}.search-quick a{display:inline-flex;align-items:center;min-height:40px;padding:8px 12px}.search-summary{font-size:12px}.search-result-spots:not(.is-expanded) .spots-grid>.card:nth-child(n+5){display:none}.search-more-wrap{display:block}.search-result-spots.is-expanded .search-more-wrap{display:none}.search-more-wrap .button{width:100%;min-height:44px;border-radius:22px;font-weight:700}}
 
 .guide-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px}
 .guide-card{display:flex;flex-direction:column;min-height:240px;padding:24px;border:1px solid var(--line);border-radius:12px;background:#fff;box-shadow:0 4px 14px rgba(20,70,90,.05)}
@@ -938,7 +939,13 @@ body:has(.page-home) .home-slide:first-child .home-slide-content .eyebrow{max-wi
   .saved-trip-order{grid-template-columns:32px minmax(0,1fr);padding:8px 9px}
   .saved-trip-number{width:28px;height:28px;font-size:13px}
   .saved-order-controls{grid-column:1/-1;justify-content:flex-end}
-  .saved-order-controls button{min-height:32px;padding:4px 9px}
+  .saved-order-controls button{min-height:40px;padding:6px 10px}
+  .saved-trip-item>.card>a{display:grid;grid-template-columns:112px minmax(0,1fr);align-items:stretch}
+  .saved-trip-item>.card>a>img{grid-column:1;grid-row:1;width:112px;height:112px;aspect-ratio:auto;object-fit:cover}
+  .saved-trip-item>.card>a>.card-body{grid-column:2;grid-row:1;padding:11px 12px}
+  .saved-trip-item>.card>a>.card-body p{display:none}
+  .saved-trip-item>.card>.photo-credit{margin:0;padding:6px 10px;font-size:8px;line-height:1.4}
+  .saved-trip-item>.card>.vote-container{padding:7px 10px 10px}
 }
 
 
@@ -959,7 +966,7 @@ body:has(.page-home) .home-slide:first-child .home-slide-content .eyebrow{max-wi
 .leaflet-container{font-family:inherit}
 @media(max-width:700px){
   .spot-view-toggle{display:grid;grid-template-columns:1fr 1fr;width:100%;margin-bottom:12px}
-  .spot-view-toggle button{min-width:0;min-height:40px}
+  .spot-view-toggle button{min-width:0;min-height:44px}
   .spot-map{height:340px;border-radius:12px}
 }
 
