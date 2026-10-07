@@ -46,6 +46,7 @@ await cp(resolve(projectRoot, "want-same-gender-friends"), resolve(outputDir, "w
 await cp(resolve(projectRoot, "want-nearby-friends"), resolve(outputDir, "want-nearby-friends"), { recursive: true });
 await cp(resolve(projectRoot, "lonely-want-someone-to-talk-to"), resolve(outputDir, "lonely-want-someone-to-talk-to"), { recursive: true });
 await cp(resolve(projectRoot, "friends-guide"), resolve(outputDir, "friends-guide"), { recursive: true });
+await cp(resolve(projectRoot, "about"), resolve(outputDir, "about"), { recursive: true });
 await cp(resolve(projectRoot, "site.webmanifest"), resolve(outputDir, "site.webmanifest"));
 try {
   await cp(resolve(projectRoot, "_headers"), resolve(outputDir, "_headers"));
@@ -75,3 +76,4 @@ console.log("Built TOMONI to dist/");
 // SEO intent pages deploy trigger 17 urls 2026-10-02
 // SEO performance refinement deploy trigger 2026-10-07
 // SEO friends guide deploy trigger 2026-10-07
+// SEO trust architecture deploy trigger 2026-10-07
