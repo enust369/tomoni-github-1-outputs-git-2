@@ -74,3 +74,4 @@ console.log("Built TOMONI to dist/");
 // SEO intent pages deploy trigger 2026-10-02
 // SEO intent pages deploy trigger 17 urls 2026-10-02
 // SEO performance refinement deploy trigger 2026-10-07
+// SEO friends guide deploy trigger 2026-10-07
