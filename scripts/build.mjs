@@ -77,3 +77,4 @@ console.log("Built TOMONI to dist/");
 // SEO performance refinement deploy trigger 2026-10-07
 // SEO friends guide deploy trigger 2026-10-07
 // SEO trust architecture deploy trigger 2026-10-07
+// SEO trust sitemap final deploy trigger 2026-10-07
