@@ -49,18 +49,18 @@
 
 ## 正式アイコン
 デザイン要素:
-- 青い波
-- 仁淀ブルーを想起する水
+- 仁淀ブルーを想起する青い流線
 - 緑の山
-- 金色の王冠
+- 金色の星（スパーク）
+- 白を活かしたミニマルな構成
 
 使用ファイル:
-- `kochi/assets/icons/kochi-travel-icon.svg`
-- `kochi/assets/icons/kochi-travel-icon-32.png`
-- `kochi/assets/icons/kochi-travel-icon-64.png`
-- `kochi/assets/icons/kochi-travel-icon-180.png`
-- `kochi/assets/icons/kochi-travel-icon-192.png`
-- `kochi/assets/icons/kochi-travel-icon-512.png`
+- `kochi/assets/icons/kochi-travel-icon-v3.svg`
+- `kochi/assets/icons/kochi-travel-icon-v3-32.png`
+- `kochi/assets/icons/kochi-travel-icon-v3-64.png`
+- `kochi/assets/icons/kochi-travel-icon-v3-180.png`
+- `kochi/assets/icons/kochi-travel-icon-v3-192.png`
+- `kochi/assets/icons/kochi-travel-icon-v3-512.png`
 
 サイト左上、favicon、iPhoneホーム画面、Android系アイコンで統一する。
 
